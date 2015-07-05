@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Set;
 
@@ -79,6 +80,7 @@ public class Badge
         this.description = description;
     }
 
+    @JsonIgnore
     public Set<User> getUsers()
     {
         return users;
