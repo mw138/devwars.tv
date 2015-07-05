@@ -1,0 +1,59 @@
+<div class="modCPView right">
+	<h1>Create Teams</h1>
+	<div class="modcp-content">
+        <select ng-model="selectedGame" ng-options="gameLabel(game) for game in availableGames">
+            <option value='' disabled selected>Select Game</option>
+        </select>
+
+        <div class="players-selected">
+            <div class="leaderRow leaderRow--header redplayers">
+                <span class="position">POSITION</span>
+                <span class="username">USERNAME</span>
+                <span class="cloud9">CLOUD9</span>
+            </div> <!-- .leaderRow.leaderRow--header -->
+            <div class="leaderRow" ng-repeat="player in selectedGame.teams.red.players" ng-click="removePlayer(player)">
+                <span class="position">{{ player.language }}</span>
+                <span class="username">{{ player.user.username }}</span>
+                <span class="cloud9">{{ player.user.warrior.c9Name }}</span>
+            </div> <!-- .leaderRow -->
+        </div>
+
+        <div class="players-selected">
+            <div class="leaderRow leaderRow--header blueplayers">
+                <span class="position">POSITION</span>
+                <span class="username">USERNAME</span>
+                <span class="cloud9">CLOUD9</span>
+            </div> <!-- .leaderRow.leaderRow--header -->
+            <div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players" ng-click="removePlayer(player)">
+                <span class="position">{{ player.language }}</span>
+                <span class="username">{{ player.user.username }}</span>
+                <span class="cloud9">{{ player.user.warrior.c9Name }}</span>
+            </div> <!-- .leaderRow -->
+        </div>
+
+        <div class="players-applied">
+            <div class="leaderRow leaderRow--header">
+                <span class="username">USERNAME</span>
+                <span class="cloud9">CLOUD9</span>
+                <span class="games">GAMES</span>
+                <span class="ratio">RATIO</span>
+                <span class="html">HTML</span>
+                <span class="css">CSS</span>
+                <span class="js">JS</span>
+            </div> <!-- .leaderRow.leaderRow--header -->
+
+            <div class="leaderRow" ng-repeat="user in selectedGame.appliedUsers" ng-click="addPlayer(user)">
+                <span class="username">{{ user.username }}</span>
+                <span class="cloud9">{{ user.warrior.c9Name }}</span>
+                <span class="games">{{ user.gamesPlayed }}</span>
+                <span class="ratio">{{(user.gamesWon / (user.gamesPlayed > 0.0 ? user.gamesPlayed : 1.0)) | number : 2 }}</span>
+                <span class="html">{{ user.warrior.htmlRate }}</span>
+                <span class="css">{{ user.warrior.cssRate }}</span>
+                <span class="js">{{ user.warrior.jsRate }}</span>
+            </div> <!-- .leaderRow -->
+        </div> <!-- .leaderboards -->
+
+        <button class="button" ng-click="saveGame(selectedGame)">Save and Push to Firebase</button>
+
+	</div> <!-- .modcp-content -->
+</div> <!-- modCPView.right -->

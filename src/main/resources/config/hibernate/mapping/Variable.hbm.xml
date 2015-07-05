@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        
+<hibernate-mapping>
+    <class name="com.bezman.model.Variable" table="variables">
+        <id name="id">
+            <generator class="increment"></generator>
+        </id>
+
+        <property name="key" column="var_key" type="string"></property>
+        <property name="value" column="var_value" type="text"></property>
+    </class>
+</hibernate-mapping>

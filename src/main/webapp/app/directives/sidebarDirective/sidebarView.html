@@ -1,0 +1,24 @@
+<div class="sidebarView">
+	<div class="leaderboard">
+		<h3 class="title"><i class="fa fa-trophy"></i>Leaderboards</h3>
+		<a href="#" ng-repeat="user in xpLeaderboard">
+			<div class="leaderboard__lb-row">
+				<div class="lb-row__lb-col">{{$index + 1}}</div>
+				<div class="lb-row__lb-col">{{user.username}}</div>
+				<div class="lb-row__lb-col">{{user.ranking.xp}}</div>
+			</div>
+		</a>
+	</div> <!-- .leaderboard -->
+	<a class="sidebar-box explain" href="/help#navtop">
+		<h3>FAQ</h3>
+		<span>Learn more about DevWars!</span>
+	</a>
+	<a href="https://www.twitchalerts.com/donate/devwars" class="sidebar-box donate">
+		<h3>Donate to DevWars</h3>
+		<span>Donating helps to keep this website running!</span>
+	</a> <!-- .donate -->
+    <a href="#" class="sidebar-box extension">
+		<h3>Download our Chrome extension</h3>
+		<span>Never miss a game again!</span>
+	</a> <!-- .donate -->
+</div> <!-- .sidebarView -->

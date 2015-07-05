@@ -1,0 +1,44 @@
+<div class="right settingsView">
+    <h1>Account</h1>
+
+    <div class="settings-content">
+        <div>
+			<div>
+				<label>
+					<h3 class="title">Change Email Address</h3>
+					<span class="required-field">Current Password</span>
+					<input type="password" ng-model="emailChange.currentPassword"/>
+				</label>
+				<label>
+					<span>Email Address</span>
+					<input type="text" placeholder="{{AuthService.user.email}}" ng-model="emailChange.newEmail"/>
+				</label>
+				<label>
+					<input type="button" ng-click="changeEmail(emailChange)" class="button" value="Save" />
+				</label>
+			</div>
+
+			<div>
+				<label>
+					<h3 class="title">Change Password</h3>
+					<span class="required-field">Current Password</span>
+					<input type="password" ng-model="passwordChange.currentPassword"/>
+				</label>
+				<label>
+					<span>New Password</span>
+					<input type="password" ng-init="passwordChange.newPassword1 = ''" ng-model="passwordChange.newPassword1"/>
+				</label>
+				<label>
+					<div class="confirm-password-label">
+						<span>Confirm New Password</span>
+						<span ng-hide="passwordsMatch(passwordChange)">Passwords don't match</span>
+					</div>
+					<input type="password" ng-init="passwordChange.newPassword2 = ''" ng-model="passwordChange.newPassword2"/>
+				</label>
+				<label>
+					<input type="button" ng-click="changePassword(passwordChange)" class="button" value="Save" />
+				</label>
+			</div>
+        </div>
+    </div>
+</div> <!-- .right -->

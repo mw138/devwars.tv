@@ -1,0 +1,83 @@
+body, html {
+	height: auto !important;
+	background-color: $background-color !important;
+	border-bottom: none !important;
+	color: white;
+}
+
+a {
+  text-decoration: none;
+}
+
+%clear {
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+.row {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 30px auto;
+}
+
+.inner {
+  width: $inner-width;
+  margin: 0 auto;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.mainbox {
+	min-height: 70vh;
+}
+
+// Lightbox Overlay
+.md-dialog-container {
+	background: rgba(0, 0, 0, 0.75);
+}
+
+input, textarea, select {
+	color: white !important;
+	background: $dgray;
+	border: 1px solid $gray !important;
+	&:focus {
+		border-color: $accent-color !important;
+	}
+}
+
+textarea {
+	resize: vertical;
+}
+
+.fa--no-padding {
+  padding: 0 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.gradient-bar {
+	@include gradient(left, $main-color, $accent-color);
+	width: 100%;
+	height: 1px;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+
+.flexbox {
+	display: flex;
+	justify-content: space-between;
+}
+
+.disabled {
+  cursor: default !important;
+}

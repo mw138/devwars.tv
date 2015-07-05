@@ -1,0 +1,24 @@
+<md-dialog class="addBlogPostDialogView">
+    <!-- Latest compiled and CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <div class="dialog-container">
+        <h2 class="dialog-container__title">Add a new blog post</h2>
+
+        <div class="form__group">
+            <input type="text" class="form__input form__input--text" ng-model="title" placeholder="Post Title">
+
+            <input type="text" class="form__input form__input--text" ng-model="image_url" placeholder="Image URL">
+
+            <textarea rows="5" class="descriptionArea" ng-model="description"></textarea>
+
+            <div text-angular ng-model="text"></div>
+
+            <div class="dialog-container__actions" layout="row" layout-align="space-around end">
+                <button class="button" ng-click="done()">Done</button>
+                <button class="button button--warn" ng-click="cancel()">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</md-dialog>

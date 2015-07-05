@@ -1,0 +1,69 @@
+package com.bezman.controller;
+
+import com.bezman.Reference.DatabaseManager;
+import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.annotation.PreAuthorization;
+import com.bezman.model.ShopItem;
+import com.bezman.model.User;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Created by Terence on 5/27/2015.
+ */
+@Controller
+@RequestMapping("/v1/shop")
+public class ShopController
+{
+
+    @PreAuthorization(minRole = User.Role.PENDING)
+    @RequestMapping("/purchase/custom_avatar")
+    public ResponseEntity purchaseCustomAvatar(HttpServletRequest request, HttpServletResponse response)
+    {
+        ShopItem shopItem = getShopItemByName("Custom Avatar");
+
+        User user = (User) request.getAttribute("user");
+
+        if (shopItem != null)
+        {
+            if(user.canBuyItem(shopItem))
+            {
+                user.purchaseItem(shopItem);
+
+                user.setAvatarChanges(user.getAvatarChanges() + 1);
+
+                DatabaseUtil.mergeObjects(false, user);
+
+                return new ResponseEntity("Purchased " + shopItem.getName(), HttpStatus.OK);
+            } else
+            {
+                return new ResponseEntity("Not enough to buy item", HttpStatus.CONFLICT);
+            }
+        } else
+        {
+            return new ResponseEntity("Item not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private ShopItem getShopItemByName(String name)
+    {
+        ShopItem returnItem = null;
+
+        Session session = DatabaseManager.getSession();
+        Query query = session.createQuery("from ShopItem where name = :name");
+        query.setString("name",  name);
+
+        returnItem = (ShopItem) DatabaseUtil.getFirstFromQuery(query);
+
+        session.close();
+
+        return returnItem;
+    }
+}

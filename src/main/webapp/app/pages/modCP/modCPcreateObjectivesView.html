@@ -1,0 +1,20 @@
+<div class="modCPView right">
+    <h1>Create Objectives</h1>
+    <div class="modcp-content">
+        <select ng-model="selectedGame" ng-options="gameLabel(game) for game in availableGames">
+            <option value='' disabled selected>Select Game</option>
+        </select>
+
+        <div class="theme-input">
+            <h3 class="title">Create Theme</h3>
+            <input placeholder="Enter a theme" type="text" ng-model="selectedGame.theme"/>
+        </div>
+
+        <div class="objs-input">
+            <h3 class="title">Create Objectives</h3>
+            <textarea ng-repeat="i in [0,1,2,3,4]" ng-model="selectedGame.objectives[$index].objectiveText" placeholder="Enter an objective" maxlength="110" type="text"></textarea>
+        </div>
+
+        <button class="button saveButton" ng-click="saveGame(selectedGame)">Set Objectives</button>
+    </div> <!-- .modcp-content -->
+</div> <!-- modCPView.right -->

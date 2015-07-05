@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bezman.model">
+
+    <class name="com.bezman.model.User" table="accounts" lazy="false">
+        <id name="id" column="id">
+            <generator class="increment"></generator>
+        </id>
+        
+        <property name="username" column="username" type="string" not-null="true"></property>
+        <property name="email" column="email" type="string"></property>
+        <property name="password" column="password" type="string" not-null="false"></property>
+        <property name="role" type="string"></property>
+        <property name="provider" type="string"></property>
+        <property name="providerID" type="string" not-null="false"></property>
+        <property name="referredUsers" column="referred_users" type="integer"></property>
+        <property name="avatarChanges" column="avatar_changes" type="integer"></property>
+        <property name="location" type="string"></property>
+        <property name="url" type="string"></property>
+        <property name="company" type="string"></property>
+        <property name="usernameChanges" column="username_changes" type="integer"></property>
+        <property name="veteran" column="veteran" type="boolean"></property>
+
+        <one-to-one name="session" class="com.bezman.model.UserSession" lazy="false"></one-to-one>
+        <one-to-one name="ranking" class="com.bezman.model.Ranking" lazy="false" cascade="all"></one-to-one>
+        <one-to-one name="passwordReset" class="UserReset" lazy="false"></one-to-one>
+        <one-to-one name="warrior" class="Warrior" lazy="false"></one-to-one>
+
+        <set name="appliedGames" table="gamesignup" lazy="false">
+            <key column="user"></key>
+            <element column="game" type="integer"></element>
+        </set>
+
+        <set name="connectedAccounts" table="connected_accounts" lazy="false">
+            <key column="user"></key>
+            <one-to-many class="ConnectedAccount"></one-to-many>
+        </set>
+
+        <set name="activityLog" table="activity" order-by="timestamp desc" lazy="true">
+            <key column="user_affected"></key>
+            <one-to-many class="Activity"></one-to-many>
+        </set>
+
+        <set name="badges" table="users_badges" lazy="true">
+            <key column="user_id"></key>
+            <many-to-many column="badge_id" class="Badge"></many-to-many>
+        </set>
+    </class>
+    
+</hibernate-mapping>

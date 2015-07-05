@@ -1,0 +1,207 @@
+.settingsView {
+
+
+  .left, .right {
+	height: auto;
+	margin-top: 60px;
+  }
+
+  .left {
+	width: calc(25% - 40px);
+	float: left;
+  }
+  .right {
+	width: calc(75% - 40px);
+	float: right;
+
+	h1 {
+	  width: 100%;
+	  display: block;
+	  background: $background-color;
+	  padding-bottom: 20px;
+	}
+  }
+
+  ul.settings-nav {
+	list-style: none;
+	display: block;
+	margin-top: 20px;
+
+	li {
+	  display: block;
+	  padding: 10px;
+	  margin: 10px 0;
+
+	  &:hover {
+		background: $accent-color;
+		color: white;
+		cursor: pointer;
+	  }
+	}
+
+	.selected {
+	  background: $accent-color;
+	  color: white;
+	}
+  }
+
+  form {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+  }
+
+  label {
+	width: 100%;
+	display: block;
+	margin-bottom: 10px;
+
+	span, input {
+	  text-align: left;
+	  display: inline-block;
+	}
+
+	span {
+	  width: 100%;
+	  padding: 7px 0;
+
+	  &.required-field:after {
+		content: "*";
+		color: color($red, dark);
+		padding-left: 5px;
+	  }
+	}
+	input {
+	  width: 60%;
+	  padding: 10px;
+
+	  &.button {
+		width: 20%;
+		margin: 10px 0 20px 0;
+		text-align: center;
+		margin-bottom: 40px;
+	  }
+	}
+  }
+
+  .avatar-upload {
+	width: calc(60% - 100px - 10px);
+	height: auto;
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 10px;
+
+	.button {
+	  width: 50%;
+	  background: $dgray;
+	  display: inline-block;
+	  text-align: center;
+	  &:hover { background: $accent-color; }
+	}
+
+  }
+
+  .settings-content {
+	.tooltip {
+	  position: relative;
+	  display: inline-block;;
+	  height: 40px;
+	  background-color: #363636;
+	  border-top-right-radius: 10px;
+	  border-bottom-right-radius: 10px;
+	  vertical-align: top;
+	  margin-left: 35px;
+	  :before {
+		position: absolute;
+		content: "";
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 20px 20px 20px 0;
+		border-color: transparent #363636 transparent transparent;
+		left: -20px;
+	  }
+	  span {
+		display: inline-block;
+		line-height: 40px;
+		vertical-align: top;
+		color: #FFFFFF;
+		margin-left: 8px;
+		  font-size: 16px;
+		  vertical-align: middle;
+	  }
+	  img {
+		width: 30px;
+		height: auto;
+		  vertical-align: middle;
+		padding: 7px 7px 7px 3px;
+		  margin-right: 10px;
+	  }
+	}
+
+	.connect-social-button:hover + .tooltip {
+	  background-color: color($orange);
+	  span:before {
+		  border-color: rgba(0, 0, 0, 0) color($orange) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+	  }
+	}
+
+	ul.connect-social {
+	  @include user-select(none);
+	  display: inline-block;
+	  list-style-type: none;
+	  li {
+		margin: 30px;
+	  }
+	  i {
+		display: inline-block;
+		width: 40px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		color: #FFFFFF;
+	  }
+	  .connect-social-button {
+		display: inline-block;
+		width: 252px;
+		cursor: pointer;
+		span {
+		  color: #FFFFFF;
+		  display: inline-block;
+		  width: 210px;
+		  text-align: center;
+		}
+		 
+		  &.connect-social-button--disconnect {
+			  border: 1px solid color($red, light);
+			  background-color: transparent;
+			  i, span { color: color($red, light); }
+			
+			  &:hover {
+				  background-color: color($red, light);
+				  i, span { color: $white; }
+			  }
+		  }
+	  }
+	}
+  } /* settings-content */
+
+  $social-names: twitter, facebook, gplus, reddit, twitch, github;
+  $social-colors: $twitter-color, $facebook-color, $gplus-color, $reddit-color, $twitch-color, $github-color;
+  @each $current-color in $social-colors {
+	$i: index($social-colors, $current-color);
+	.connect-social li:nth-child(#{$i}) .connect-social-button {
+	  background-color: nth($social-colors, $i);
+	}
+  }
+
+  $social-names: twitter, facebook, gplus, reddit, twitch, github;
+  $social-active: $twitter-active, $facebook-active, $gplus-active, $reddit-active, $twitch-active, $github-active;
+  @each $current-color in $social-active {
+	$i: index($social-active, $current-color);
+	.connect-social li:nth-child(#{$i}) .connect-social-button:active {
+	  background-color: nth($social-active, $i);
+	}
+  }
+
+} /* .settingsView */

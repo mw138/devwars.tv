@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.bezman.model.Badge" table="badges">
+        <id name="id">
+            <generator class="increment"></generator>
+        </id>
+
+        <property name="name" type="string"></property>
+        <property name="description" type="text"></property>
+        <property name="bitsAwarded" type="integer"></property>
+        <property name="xpAwarded" type="integer"></property>
+
+        <set name="users" table="users_badges" lazy="true">
+            <key column="badge_id"></key>
+            <many-to-many column="user_id" class="com.bezman.model.User"></many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

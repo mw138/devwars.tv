@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.bezman.model.Access" table="access">
+        <id name="id" type="int">
+            <generator class="increment"></generator>
+        </id>
+
+        <property name="route" type="string"></property>
+
+        <many-to-one name="user" class="com.bezman.model.User"></many-to-one>
+    </class>
+</hibernate-mapping>

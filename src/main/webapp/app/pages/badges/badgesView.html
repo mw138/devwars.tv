@@ -1,0 +1,20 @@
+<div class="badgesView inner">
+    <div class="badges-container">
+        <div class="badge-box" title="{{ badge.description }}" ng-repeat="badge in badges">
+            <div class="badge-properties">
+                <span class="who-earned"><i class="fa fa-group"></i>0%</span>
+            </div> <!-- .badge-properties -->
+            <img ng-src="/assets/img/badges/{{ imageNameFromName(badge.name) }}.png" onerror="this.src='/assets/img/badges/mystery.png'"/>
+            <h2>{{ badge.name }}</h2>
+            <div class="badge-progress">
+                <div style="width: 0%;" class="badge-progress__bar"></div>
+                <span>0%</span>
+            </div> <!-- .badge-progress -->
+            <div class="reward-amount">
+                <span>+{{ badge.bitsAwarded }}</span>
+                <img src="../../../assets/img/devbit.png" />
+            </div> <!-- reward-amount -->
+        </div> <!-- .badge-box -->
+    </div> <!-- .badges-container -->
+</div> <!-- .col-2--dashboard -->
+</div> <!-- .badgesView.inner -->

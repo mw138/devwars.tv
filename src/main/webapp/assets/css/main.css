@@ -1,0 +1,302 @@
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/base/_reset.scss */
+html {
+  box-sizing: border-box;
+}
+
+/* line 5, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/base/_reset.scss */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/base/_typography.scss */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* line 11, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/base/_typography.scss */
+p,
+a,
+label {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_navigation.scss */
+.navBar {
+  width: 100%;
+  height: 65px;
+  background-color: #252525;
+}
+
+/* line 8, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_navigation.scss */
+.logo {
+  margin: 10px;
+  cursor: pointer;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__overlay {
+  display: block;
+  margin: 0 auto;
+  color: #fff;
+}
+
+/* line 7, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__group {
+  padding: 20px 0 0 0;
+}
+
+/* line 11, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__group--border {
+  padding-bottom: 25px;
+  border-bottom: 1px solid #fff;
+}
+
+/* line 16, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form--blue,
+.form--red {
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+  padding: 50px;
+}
+
+/* line 24, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form--blue {
+  background-color: #03a9f4;
+}
+
+/* line 28, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form--red {
+  background-color: #e91e63;
+}
+
+/* line 32, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__input {
+  margin: 15px 0;
+}
+
+/* line 36, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__input--inline {
+  overflow: hidden;
+}
+
+/* line 40, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__input--text {
+  border: none;
+  padding: 15px;
+  color: #e91e63;
+  width: 100%;
+}
+
+/* line 50, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__label--text {
+  display: block;
+  padding-bottom: 5px;
+}
+
+/* line 55, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__label--radio {
+  display: inline-block;
+  min-width: 50px;
+}
+
+/* line 60, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__submit {
+  padding: 25px 0;
+  text-align: center;
+  width: 100%;
+}
+
+/* line 66, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__submit-button,
+.form__submit-button--inline {
+  text-transform: uppercase;
+  border: none;
+  outline: none;
+  padding: 15px 30px;
+  background: #03a9f4;
+  transition: background-color .2s ease-out;
+}
+/* line 74, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__submit-button:hover,
+.form__submit-button--inline:hover {
+  background-color: #e91e63;
+}
+
+/* line 79, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/layout/_forms.scss */
+.form__submit-button--inline {
+  float: right;
+  clear: both;
+}
+
+/* Do not modify */
+/* line 6, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--small {
+  height: 50px;
+  width: 250px;
+}
+
+/* line 11, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--medium {
+  height: 70px;
+  width: 280px;
+}
+
+/* line 16, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--large {
+  height: 100px;
+  width: 400px;
+}
+
+/* line 20, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo-icon,
+.logo-title {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* line 26, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--small .logo-icon {
+  height: 50px;
+  width: 50px;
+  margin-right: 15px;
+}
+
+/* line 32, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--medium .logo-icon {
+  height: 70px;
+  width: 70px;
+  margin-right: 21px;
+}
+
+/* line 38, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--large .logo-icon {
+  height: 100px;
+  width: 100px;
+  margin-right: 30px;
+}
+
+/* line 44, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo-icon__symbol {
+  fill: currentColor;
+}
+
+/* line 48, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--small .logo-title {
+  font-size: 25px;
+}
+
+/* line 52, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--medium .logo-title {
+  font-size: 35px;
+}
+
+/* line 56, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--large .logo-title {
+  font-size: 50px;
+}
+
+/* line 60, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo-title {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  margin: 0;
+}
+
+/* line 66, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--small .logo-title--uppercase {
+  font-size: 30px;
+}
+
+/* line 70, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--medium .logo-title--uppercase {
+  font-size: 42px;
+}
+
+/* line 74, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--large .logo-title--uppercase {
+  font-size: 60px;
+}
+
+/* line 78, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_logo.scss */
+.logo--white {
+  color: white;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/components/_buttons.scss */
+.button {
+  width: 80px;
+  height: 40px;
+  background-color: rgba(21, 21, 21, 0.73);
+  color: white;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_home.scss */
+body {
+  height: 100vh;
+  border-bottom: 5px solid #e91e63;
+  background: url("../img/pattern.png") repeat;
+}
+
+/* line 7, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_home.scss */
+.notice {
+  background-color: #191919;
+  color: white;
+  max-width: 500px;
+  max-height: 475px;
+  padding: 25px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* line 19, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_home.scss */
+.notice__announcement {
+  text-align: right;
+  position: relative;
+  top: -10px;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_loginDialog.scss */
+.dialog-container {
+  background-color: rgba(56, 56, 56, 0.98);
+  width: 500px;
+}
+
+/* line 7, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_loginDialog.scss */
+.dialog-container .title {
+  text-align: center;
+  color: white;
+}
+
+/* line 12, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_loginDialog.scss */
+.dialog-container .form__group {
+  padding: 10px;
+}
+
+/* line 16, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_loginDialog.scss */
+.dialog-container .form__group input {
+  margin-bottom: 10px;
+}
+
+/* line 20, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/pages/_loginDialog.scss */
+.dialog-container .form__group input:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* line 1, ../../../../../IdeaProjects/Dev Wars Hibernate/web/assets/sass/themes/_theme.scss */
+body {
+  background-color: #191919;
+}

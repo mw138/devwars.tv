@@ -1,0 +1,37 @@
+<div class="profileView inner">
+
+	<div class="left">
+		<div class="profile-basic">
+			<h2>{{user.username}}</h2>
+			<span class="user-title">{{user.company}}</span>
+			<img class="profile-image" ng-src="/v1/user/{{user.username}}/avatar"/>
+			
+			<div class="rank-showcase">
+				<div class="rank--no-name" rank="user.rank"></div>
+				<span>{{user.rank.rank}}</span>
+			</div> <!-- .rank-showcase -->
+			
+			<div class="profile-actions">
+				<span>Tip User</span>
+				<span>Message</span>
+			</div> <!-- .profile-actions -->
+		</div> <!-- .profile-basic -->
+
+
+		<!--<div class="badge-showcase">-->
+			<!--<img src="/assets/img/badges/VerifyEmail.png" />-->
+			<!--<img src="/assets/img/badges/BugReport.png" />-->
+			<!--<img src="/assets/img/badges/ConnectSocial-One.png" />-->
+			<!--<img src="/assets/img/badges/ConnectSocial-All.png" />-->
+			<!--<img src="/assets/img/badges/1Twitch.png" />-->
+			<!--<img src="/assets/img/badges/10Twitch.png" />-->
+		<!--</div> &lt;!&ndash; .badge-showcase &ndash;&gt;-->
+		
+		
+
+	</div> <!-- .left -->
+	<div class="right">
+		<h4>Modules Coming Soon...</h4>
+	</div> <!-- .right -->
+
+</div> <!-- .profileView -->

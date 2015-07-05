@@ -1,0 +1,39 @@
+<md-dialog class="md-dialog-container--addPlayerDialog">
+	<i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i> <!-- .closeDialog -->
+    <div class="dialog-container">
+        <h2 class="dialog-container__title">Add a new player</h2>
+
+        <div class="form__group">
+            <md-autocomplete
+                    md-items="user in pendingPlayersQuery()"
+                    md-selected-item="selectedUser"
+                    md-selected-item-change="selectedUserChange()"
+                    md-search-text="searchText"
+                    placeholder="Username Search"
+                    class="dialog-container__playerSearch">
+
+                <span layout="row" layout-align="space-between center">
+                    <span>{{user.username}}</span>
+                    <div ng-hide="user.provider" class="logo logo-icon"></div>
+                    <i ng-show="user.provider" class="fa fa-{{user.provider | lowercase}}"></i>
+                </span>
+
+            </md-autocomplete>
+
+            <input type="text" ng-model="selectedLanguage" class="form__input form__input--text" placeholder="Language">
+
+            <md-radio-group ng-model="selectedTeam">
+                <md-radio-button class="teamRadioButton" ng-value="team" ng-repeat="team in game.teams">
+                    {{team.name}}
+                </md-radio-button>
+            </md-radio-group>
+
+
+            <div class="dialog-container__actions" layout="row" layout-align="space-around end">
+                <button class="button" ng-click="done()">Done</button>
+                <button class="button button--warn" ng-click="cancel()">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</md-dialog>

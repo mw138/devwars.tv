@@ -1,0 +1,388 @@
+<div class="gamesView inner">
+
+<div class="gamesView--desktop">
+	<h1 class="header__title"><i class="fa fa-gamepad"></i>Hall of Games</h1>
+
+		<div class="gameContent row">
+			<div class="gamesListColumn">
+				<div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
+					<div class="gameDate">
+						<span>{{upcomingGame.timestamp | date : 'MMM'}}</span>
+						<span>{{upcomingGame.timestamp | date : 'dd'}}</span>
+					</div> <!-- .gameDate -->
+					<div class="gameName">
+						<span>Coming Up...</span>
+						<span>{{upcomingGame.name}}</span>
+					</div>
+					<div class="gameMedia" layout="row" layout-align="start center">
+						<button ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
+						<i ng-show="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="fa fa-calendar"></i>
+						<a href="/modCP/createteams?game={{upcomingGame.id}}" ng-if="AuthService.isAdmin()"><button class="button"><i class="fa fa-cog fa--no-padding"></i></button></a>
+					</div>
+				</div> <!-- .game -->
+
+				<div class="game" ng-click="setSelectedGame(game)" ng-class="{'game--active' : isGameSelected(game)}" ng-repeat="game in pastGames">
+					<div class="gameDate">
+						<span>{{game.timestamp | date : 'MMM'}}</span>
+						<span>{{game.timestamp | date : 'dd'}}</span>
+					</div> <!-- .gameDate -->
+					<div class="gameName">
+						<span>Game {{game.id}}</span>
+						<span>{{game.name}}</span>
+					</div>
+
+					<div class="gameMedia" layout="row" layout-align="space-around center">
+						<a href="/modCP/createteams?game={{game.id}}"><button class="button moderateButton" ng-if="AuthService.isAdmin()"><i class="fa fa-cog fa--no-padding"></i></button></a>
+						<a ng-href="{{game.youtubeURL}}" target="_blank" ng-if="game.youtubeURL"><i class="fa fa-youtube-play youtube--active"></i></a>
+					</div>
+				</div> <!-- .game -->
+
+			</div>
+
+
+			<div class="gameStat" ng-if="selectedGame">
+				<div class="gameBanner gameBanner--classic">
+					<div class="scanlines"></div>
+					<h2>
+						{{selectedGame.name}}
+						<span>
+							<span ng-repeat="team in selectedGame.teams">
+								{{team.players.length}}
+								<span ng-if="!$last"> VS </span>
+							</span>
+						</span>
+					</h2>
+					<a href="{{selectedGame.youtubeURL}}" ng-if="selectedGame.youtubeURL" target="_blank" class="interactButton watchGame active"><i class="fa fa-youtube-play"></i></a>
+				</div>
+
+
+
+				<div class="scoreBox">
+					<div class="scoreRow scoreRow--{{team.name}}" ng-repeat="team in selectedGame.teams">
+						<div class="scoreSlot totalPoints">
+							<h2>{{team.completedObjectives.length + getVotePointsEarned(team.name, selectedGame)}}</h2>
+							<span ng-show="team.completedObjectives.length > 1">points</span>
+							<span ng-show="team.completedObjectives.length <= 1">point</span>
+						</div>
+
+						<div class="scoreSlot totalObjectives">
+							<span>Objectives</span>
+							<ul class="tallyBar">
+								<li ng-class="{active: $index < team.completedObjectives.length}" ng-repeat="objective in selectedGame.objectives"></li>
+							</ul>
+						</div>
+
+						<div class="scoreSlot totalVotes">
+							<span>Votes</span>
+							<ul class="tallyBar">
+								<li ng-show="team.designVotes > 0 && getOtherTeam(team, selectedGame).designVotes > 0" ng-class="{active: team.designVotes >= getOtherTeam(team, selectedGame).designVotes}"></li>
+								<li ng-show="team.funcVotes > 0 && getOtherTeam(team, selectedGame).funcVotes > 0" ng-class="{active: team.funcVotes >= getOtherTeam(team, selectedGame).funcVotes}"></li>
+								<li ng-show="team.codeVotes > 0 && getOtherTeam(team, selectedGame).codeVotes > 0" ng-class="{active: team.codeVotes >= getOtherTeam(team, selectedGame).codeVotes}"></li>
+							</ul>
+						</div>
+					</div> <!-- .scoreRow -->
+				</div>
+
+				<div class="teamBox">
+					<div class="team team--{{team.name}}" ng-class="{'team--win': team.win, 'team--lose': !team.win}" ng-repeat="team in selectedGame.teams">
+						<div class="teamHeader">
+							<div class="arrow">
+								<div class="arrow__inner"></div>
+							</div>
+							<h3>Team {{team.name}}</h3>
+							<span ng-if="team.win" class="event">WIN</span>
+							<span ng-if="!team.win" class="event">LOSE</span>
+						</div>
+
+						<a href="#" class="teamPlayer" ng-repeat="player in team.players">
+							<span class="role">{{player.language}}</span>
+							<span class="player">{{player.user.username}}</span>
+							<span class="score">
+								<span ng-if="player.xpChanged > 0">+</span>
+								<span ng-if="player.xpChanged < 0">-</span>
+								{{player.xpChanged > -1 ? player.xpChanged : 0 | number}}
+							</span>
+						</a> <!-- .teamPlayer -->
+					</div> <!-- .team .team--blue -->
+
+					<div class="teamFiles">
+						<div class="fileBox" ng-repeat="team in selectedGame.teams">
+							<a href="{{team.websiteUrl}}" target="_blank" class="button button-blue">View Website</a>
+							<a href="{{team.codeUrl}}" target="_blank" class="button button-blue">View Code</a>
+						</div>
+					</div>
+				</div> <!-- .teamBox -->
+
+				<div class="objBox">
+					<div class="gameHeader">
+						<div class="objPoint objPoint--{{team.name}}" ng-repeat="team in selectedGame.teams">{{team.completedObjectives.length}}
+							<span ng-show="team.completedObjectives.length === selectedGame.objectives.length" class="bonusPoint active">ACE</span></div>
+						<span>Objectives</span>
+					</div>
+					<ul class="objList">
+						<li ng-repeat="objective in selectedGame.objectives">
+							<div class="objSquare objSquare--{{team.name}}" ng-class="{active: teamHasObjective(team, objective)}" ng-repeat="team in selectedGame.teams"></div>
+							<span>{{objective.objectiveText}}</span>
+						</li>
+					</ul>
+				</div> <!-- .objBox -->
+
+				<div class="voteBox">
+					<div class="gameHeader">
+						<div class="objPoint objPoint--{{team.name}}" ng-repeat="team in selectedGame.teams"><span class="bonusPoint">ACE</span>
+							{{team.designVotes + team.funcVotes + team.codeVotes}}
+
+						</div>
+						<span>Votes</span>
+					</div>
+
+					<div class="chartsContainer" layout="row" layout-align="space-around center">
+						<div class="chartContainer">
+							<div class="innerPie">
+								<span>ROUND 1</span>
+								<h3>DESIGN</h3>
+								<span>{{ selectedGame.teams.red.designVotes + selectedGame.teams.designVotes }} VOTES</span>
+							</div>
+							<pie-chart data="designData" options="options"></pie-chart>
+						</div>
+
+						<div class="chartContainer" ng-if="dataForGameCategory(selectedGame, 'func').length > 0">
+							<div class="innerPie">
+								<span>ROUND 2</span>
+								<h3>FUNC</h3>
+								<span>{{ selectedGame.teams.red.funcVotes + selectedGame.teams.funcVotes }} VOTES</span>
+							</div>
+							<pie-chart data="funcData" options="options"></pie-chart>
+						</div>
+
+						<div class="chartContainer" ng-if="dataForGameCategory(selectedGame, 'code').length > 0">
+							<div class="innerPie">
+								<span>ROUND 3</span>
+								<h3>CODE</h3>
+								<span>{{ selectedGame.teams.red.codeVotes + selectedGame.teams.codeVotes }} VOTES</span>
+							</div>
+							<pie-chart data="codeData" options="options"></pie-chart>
+						</div>
+					</div>
+				</div>
+
+			</div> <!-- .gameStat -->
+		</div> <!-- .gameContent.row -->
+	</div> <!-- .gamesViews--desktop -->
+
+	
+
+
+
+
+
+	
+	<div class="gamesView--mobile">
+		<div class="gamesView__header" layout="row" layout-align="space-between">
+			<h2 class="header__title">Hall of Games</h2>
+		</div>
+
+
+		<div class="gameContent row">
+			<div class="gamesListColumn">
+				<div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
+						<div class="gameDate">
+							<span>{{upcomingGame.timestamp | date : 'MMM'}}</span>
+							<span>{{upcomingGame.timestamp | date : 'dd'}}</span>
+						</div> <!-- .gameDate -->
+						<div class="gameName">
+							<span>Coming Up...</span>
+							<span>{{upcomingGame.name}}</span>
+						</div>
+						<div class="gameMedia" layout="row" layout-align="start center">
+							<button ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
+							<i ng-show="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="fa fa-calendar"></i>
+							<a href="/modCP/createteams?game={{upcomingGame.id}}" ng-if="AuthService.isAdmin()"><button class="button"><i class="fa fa-cog fa--no-padding"></i></button></a>
+						</div>
+					</div> <!-- .game -->
+					
+				<div class="gameMobile" ng-repeat="game in pastGames">
+					<div class="game game{{$index}}" ng-click="setSelectedGame(game, $index)" ng-class="{'game--active' : isGameSelected(game)}">
+						<div class="gameDate">
+							<span>{{game.timestamp | date : 'MMM'}}</span>
+							<span>{{game.timestamp | date : 'dd'}}</span>
+						</div> <!-- .gameDate -->
+						<div class="gameName">
+							<span>Game {{game.id}}</span>
+							<span>{{game.name}}</span>
+						</div>
+
+						<div class="gameMedia" layout="row" layout-align="space-around center">
+							<a href="/modCP/createteams?game={{game.id}}"><button class="button moderateButton" ng-if="AuthService.isAdmin()"><i class="fa fa-cog fa--no-padding"></i></button></a>
+							<a ng-href="{{game.youtubeURL}}" target="_blank" ng-if="game.youtubeURL"><i class="fa fa-youtube-play youtube--active"></i></a>
+						</div>
+					</div> <!-- .game -->
+					<div class="gameStat">
+							<div class="gameBanner gameBanner--classic">
+								<div class="scanlines"></div>
+								<h2>
+									{{game.name}}
+								<span>
+									<span ng-repeat="team in game.teams">
+										{{team.players.length}}
+										<span ng-if="!$last"> VS </span>
+									</span>
+								</span>
+								</h2>
+								<a href="{{game.youtubeURL}}" ng-if="game.youtubeURL" target="_blank" class="interactButton watchGame active"><i class="fa fa-youtube-play"></i></a>
+							</div>
+
+
+
+							<div class="scoreBox">
+								<div class="scoreRow scoreRow--{{team.name}}" ng-repeat="team in game.teams">
+									<div class="scoreSlot totalPoints">
+										<h2>{{team.completedObjectives.length + getVotePointsEarned(team.name, game)}}</h2>
+										<span ng-show="team.completedObjectives.length > 1">points</span>
+										<span ng-show="team.completedObjectives.length <= 1">point</span>
+									</div>
+
+									<div class="scoreSlot totalObjectives">
+										<span>Objectives</span>
+										<ul class="tallyBar">
+											<li ng-class="{active: $index < team.completedObjectives.length}" ng-repeat="objective in game.objectives"></li>
+										</ul>
+									</div>
+
+									<div class="scoreSlot totalVotes">
+										<span>Votes</span>
+										<ul class="tallyBar">
+											<li ng-show="team.designVotes > 0 && getOtherTeam(team, game).designVotes > 0" ng-class="{active: team.designVotes >= getOtherTeam(team, game).designVotes}"></li>
+											<li ng-show="team.funcVotes > 0 && getOtherTeam(team, game).funcVotes > 0" ng-class="{active: team.funcVotes >= getOtherTeam(team, game).funcVotes}"></li>
+											<li ng-show="team.codeVotes > 0 && getOtherTeam(team, game).codeVotes > 0" ng-class="{active: team.codeVotes >= getOtherTeam(team, game).codeVotes}"></li>
+										</ul>
+									</div>
+								</div> <!-- .scoreRow -->
+							</div>
+
+							<div class="teamBox">
+								<div class="team team--{{team.name}}" ng-class="{'team--win': team.win, 'team--lose': !team.win}" ng-repeat="team in game.teams">
+									<div class="teamHeader">
+										<div class="arrow">
+											<div class="arrow__inner"></div>
+										</div>
+										<h3>Team {{team.name}}</h3>
+										<span ng-if="team.win" class="event">WIN</span>
+										<span ng-if="!team.win" class="event">LOSE</span>
+									</div>
+
+									<a href="#" class="teamPlayer" ng-repeat="player in team.players">
+										<span class="role">{{player.language}}</span>
+										<span class="player">{{player.user.username}}</span>
+									<span class="score">
+										<span ng-if="player.xpChanged > 0">+</span>
+										<span ng-if="player.xpChanged < 0">-</span>
+										{{player.xpChanged > -1 ? player.xpChanged : 0 | number}}
+									</span>
+									</a> <!-- .teamPlayer -->
+								</div> <!-- .team .team--blue -->
+
+								<div class="teamFiles">
+									<div class="fileBox" ng-repeat="team in game.teams">
+										<a href="{{team.websiteUrl}}" target="_blank" class="button button-red">View Website</a>
+										<a href="{{team.codeUrl}}" target="_blank" class="button button-red">View Code</a>
+									</div>
+								</div> <!-- .teamFiles -->
+							</div> <!-- .teamBox -->
+
+							<div class="objBox">
+								<div class="gameHeader">
+									<div class="objPoint objPoint--{{team.name}}" ng-repeat="team in game.teams">{{team.completedObjectives.length}}
+										<span ng-show="team.completedObjectives.length === game.objectives.length" class="bonusPoint active">ACE</span></div>
+									<span>Objectives</span>
+								</div>
+								<ul class="objList">
+									<li ng-repeat="objective in game.objectives">
+										<div class="objSquare objSquare--{{team.name}}" ng-class="{active: teamHasObjective(team, objective)}" ng-repeat="team in game.teams"></div>
+										<span>{{objective.objectiveText}}</span>
+									</li>
+								</ul>
+							</div> <!-- .objBox -->
+
+							<div class="voteBox">
+								<div class="gameHeader">
+									<div class="objPoint objPoint--{{team.name}}" ng-repeat="team in game.teams"><span class="bonusPoint">ACE</span>
+										{{team.designVotes + team.funcVotes + team.codeVotes}}
+
+									</div>
+									<span>Votes</span>
+								</div>
+
+								<div class="chartsContainer">
+									<div class="chartContainer">
+										<div class="innerPie">
+											<span>ROUND 1</span>
+											<h3>DESIGN</h3>
+											<span>{{ game.teams.red.designVotes + game.teams.designVotes }} VOTES</span>
+										</div>
+										<pie-chart data="designData" options="options"></pie-chart>
+									</div>
+
+									<div class="chartContainer" ng-if="dataForGameCategory(game, 'func').length > 0">
+										<div class="innerPie">
+											<span>ROUND 2</span>
+											<h3>FUNC</h3>
+											<span>{{ game.teams.red.funcVotes + game.teams.funcVotes }} VOTES</span>
+										</div>
+										<pie-chart data="funcData" options="options"></pie-chart>
+									</div>
+
+									<div class="chartContainer" ng-if="dataForGameCategory(game, 'code').length > 0">
+										<div class="innerPie">
+											<span>ROUND 3</span>
+											<h3>CODE</h3>
+											<span>{{ game.teams.red.codeVotes + game.teams.codeVotes }} VOTES</span>
+										</div>
+										<pie-chart data="codeData" options="options"></pie-chart>
+									</div>
+								</div>
+							</div>
+
+</div> <!-- .gameStat -->
+				</div> <!-- .gameMobile -->
+		
+	
+			</div> <!-- .gamesListColumn -->
+		</div> <!-- .gameContent.row -->
+	</div> <!-- .gamesView--mobile -->
+
+</div> <!-- .gamesView -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

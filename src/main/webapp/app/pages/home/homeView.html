@@ -1,0 +1,74 @@
+<div class="homeView">
+	<div class="featured">
+		<div class="scanlines"></div>
+		<video autoplay poster="../../../assets/vid/tunnel.jpg" id="bgvid" loop>
+			<source src="../../../assets/vid/tunnel.webm" type="video/webm">
+			<source src="../../../assets/vid/tunnel.mp4" type="video/mp4">
+		</video>
+		<div class="inner">
+			<img src="../../../assets/img/featuredinner.png" class="featuredInner" />
+			<div class="featuredText" ng-hide="AuthService.user">
+				<h1>DevWars</h1>
+				<span>S2</span>
+				<p>Sign Up With:</p>
+				<div class="featured-links__social">
+					<i class="socialConnect fa fa-facebook" oauth provider="facebook"><a href="/v1/oauth/facebook"></a></i>
+					<i class="socialConnect fa fa-twitter" oauth provider="twitter"><a href="/v1/oauth/twitter"></a></i>
+					<i class="socialConnect fa fa-google-plus" oauth provider="google"><a href="/v1/oauth/google"></a></i>
+					<i class="socialConnect fa fa-reddit" oauth provider="reddit"><a href="/v1/oauth/reddit"></a></i>
+					<i class="socialConnect fa fa-twitch" oauth provider="twitch"><a href="/v1/oauth/twitch"></a></i>
+					<i class="socialConnect fa fa-github-alt" oauth provider="github"><a href="/v1/oauth/github"></a></i>
+				</div>
+				<div class="or-seperator">OR</div>
+				<div class="button signup" ng-click="DialogService.signup($event)">Sign Up With DevWars</div>
+			</div>
+		</div>
+
+		<div class="featured__stats">
+			<div class="inner">
+				<div class="stats__stat">
+					<h3>Games Played</h3>
+					<span>{{info.gameCount}}</span>
+				</div>
+				<div class="stats__stat">
+					<h3>Total Users</h3>
+					<span>{{info.userCount | number}}</span>
+				</div>
+				<div class="stats__stat">
+					<h3>Blog Posts</h3>
+					<span>{{info.blogPostCount | number}}</span>
+				</div>
+				<div class="stats__stat">
+					<h3>Points Earned</h3>
+					<span>{{info.pointsEarned | number}}</span>
+				</div>
+			</div> <!-- .inner -->
+		</div> <!-- .featured__stats -->
+	</div> <!-- .featured -->
+
+	<div class="inner">
+		<div class="row main-content__play">
+			<span class="play__text">Want to play in the next DevWars?</span>
+			<button type="button" class="button play__button" tabindex="0" ng-click="DialogService.applyForNearestGame($event)">Apply Now</button>
+		</div>
+
+		<div class="col-2">
+			<div class="left">
+				<h3 class="title"><span>Latest News</span></h3>
+				<div class="blogpost__preview" ng-repeat="post in posts" layout="row">
+					<div flex="25" class="blogpost__image" flex style="background-image: url('{{post.image_url}}')"></div>
+					<div layout="column" flex>
+						<h3 class="blogpost__header">{{post.title}}</h3>
+						<h6>By {{post.user.username}} - {{post.timestamp | date}}</h6>
+						<p class="blogpost__content">{{post.description}}</p>
+						<a class="readMoreLink" ng-click="scrollToBlogPost(post.id)">Read More</a>
+					</div>
+				</div>
+			</div> <!-- .left -->
+
+			<div class="right">
+				<sidebar></sidebar>
+			</div> <!-- .right -->
+		</div> <!-- .col-2 -->
+	</div> <!-- .inner -->
+</div> <!-- .homeView -->

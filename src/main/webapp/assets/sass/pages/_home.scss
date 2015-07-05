@@ -1,0 +1,242 @@
+.homeView {
+	.featured {
+		height: auto;
+		position: relative;
+		background: url('http://i.imgur.com/TJuHgJY.jpg');
+		margin-bottom: 30px;
+		overflow: hidden;
+
+		.inner { 
+		  position: relative;
+			z-index: 2;
+		}
+
+		.signup {
+			font-size: 16px;
+			text-align: center;
+			padding: 10px 0;
+			display: block;
+		}
+
+		video#bgvid {
+			position: absolute;
+			top: -200px;
+			right: 0;
+			bottom: 0;
+			min-width: 100%;
+			min-height: 100%;
+			width: auto;
+			height: auto;
+			background: url('../../../assets/vid/tunnel.jpg') fixed;
+			background-size: cover;
+
+			@include transition(opacity, 1s, linear);
+		}
+
+		.scanlines {
+			background-image: url("../../../assets/img/overlay.png");
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			background-color: rgba(0, 0, 0, 0.75);
+		}
+	}
+
+	.featuredInner {
+	  width: 100%;
+	  max-width: 80%;
+	  margin-left: -5%;
+	  height: auto;
+	  //margin: 0 auto;
+	  display: block;
+
+	}
+
+	.featuredText {
+		position: absolute;
+		width: 30%;
+		padding: 40px 0 0 40px;
+		height: auto;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		font-size: 50px;
+		text-align: center;
+		h1 { 
+			font-weight: 200;
+			font-size: 41px;
+			display: inline-block;
+			vertical-align: middle;
+		}
+		span {
+			font-size: 24px;
+			color: $accent-color;
+			border: 1px solid $accent-color;
+			vertical-align: middle;
+			padding: 3px;
+			display: inline-block;
+		}
+		p {
+			font-size: 13px;
+			padding: 10px 0;
+		}
+
+	}
+
+	.featured__stats {
+	  width: 100%;
+	  height: auto;
+	  position: absolute;
+	  background-color: rgba(0, 0, 0, 0.9);
+	  bottom: 0;
+	  left: 0;
+	  right: 0;
+	  text-align: center;
+	  color: white;
+	  padding: 20px 0;
+		z-index: 2;
+		
+		.inner { 
+			@include flex;
+			justify-content: space-around;
+		}
+	}
+
+	.or-seperator {
+		color: $lgray;
+		display: block;
+		text-align: center;
+		padding: 10px 0;
+		font-size: 14px;
+		position: relative;
+		&:before, &:after {
+			content: "";
+			border-top: 1px solid $lgray;
+			position: absolute;
+			top: 50%;
+			width: 40%;
+		}
+		&:before { left: 0; }
+		&:after { right: 0; }
+	}
+
+	.featured-links__social {
+		text-align: center;
+		font-size: 0;
+		i {
+			display: inline-block;
+			font-size: 20px;
+			width: calc(16.66% - 8px);
+			margin: 0 4px;
+			border: 1px solid white;
+			padding: 10px 0;
+			cursor: pointer;
+			&.fa-facebook { margin-left: 0; }
+			&.fa-github-alt { margin-right: 0; }
+		}
+	}
+
+	$social-names: facebook, twitter, gplus, reddit, twitch, github;
+	$social-colors: $facebook-color, $twitter-color, $gplus-color, $reddit-color, $twitch-color, $github-color;
+	@each $current-color in $social-colors {
+		$i: index($social-colors, $current-color);
+		.featured-links__social i:nth-child(#{$i}):hover {
+			background: nth($social-colors, $i);
+			border-color: white;
+		}
+	}
+
+	.stats__stat {
+	  display: inline-block;
+	  margin: 0 4%;
+	}
+
+	.stats__stat h3 {
+	  display: block;
+	  font-weight: 200;
+	  font-size: 0.9em;
+	}
+
+	.stats__stat span {
+	  display: block;
+	  font-size: 1.4em;
+	  font-weight: 400;
+	}
+
+	.main-content {
+	  width: 50%;
+	  margin: 0 auto;
+	}
+
+	.main-content__play {
+	  width: 100%;
+	  border: 1px solid $gray;
+	  margin-top: 20px;
+	  padding: 20px 40px;
+	  font-size: 0;
+	}
+
+	.play__text, .play__button {
+	  display: inline-block;
+	  vertical-align: middle;
+		padding: 10px 0;
+	}
+
+	.play__text {
+	  font-size: 26px;
+	  width: 80%;
+	  letter-spacing: 1px;
+	  text-transform: uppercase;
+	}
+
+	.play__button {
+	  text-align: center;
+	  font-size: 14px;
+	  width: 20%;
+	}
+
+
+	/* Blog Element Styling */
+
+	.blogpost__preview {
+	  padding-bottom: 20px;
+	  h6 {
+		margin: 0;
+		padding: 2px;
+		font-weight: 200;
+	  }
+
+	  height: 158px;
+	}
+
+	.blogpost__header {
+	  font-weight: 300;
+	  font-size: 24px;
+	}
+
+	.blogpost__image {
+	  width: 100%;
+	  margin: 5px;
+	  margin-right: 20px;
+	  background-image: url('http://i.imgur.com/TJuHgJY.jpg');
+	  background-size: contain;
+	  background-repeat: no-repeat !important;
+	  padding: 30px 0 30px 0;
+	}
+
+	.readMoreLink {
+	  color: $main-color;
+	  font-weight: 600;
+	  cursor: pointer;
+	}
+
+	.blogpost__content {
+	  display: inline;
+	  line-height: 24px;
+	  word-break: break-word;
+	  font-size: 15px;
+	}
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bezman.model">
+    
+    <class name="com.bezman.model.UserSession" table="sessions">
+        <id name="id" column="id"></id>
+        
+        <property name="sessionID" column="sessionID"></property>
+
+        <one-to-one name="user" class="User"></one-to-one>
+    </class>
+    
+</hibernate-mapping>

@@ -1,0 +1,20 @@
+<div class="modCPView inner">
+
+    <div class="left">
+        <h1>Mod Panel</h1>
+        <ul class="modCP-nav">
+            <li ui-sref="modCP.createGameView" ui-sref-active="selected">Create Game</li>
+            <li ui-sref="modCP.createTeamsView" ui-sref-active="selected">Create Teams</li>
+            <li ui-sref="modCP.createObjectiveView" ui-sref-active="selected">Create Objectives</li>
+            <li ui-sref="modCP.liveGameView" ui-sref-active="selected">Live Game</li>
+            <li ui-sref="modCP.PostGameView" ui-sref-active="selected">Post Game</li>
+        </ul>
+        <!-- ul.modCP-nav -->
+    </div>
+    <!-- .left -->
+
+    <div ui-view="modCPInner"></div>
+    <!-- .modCPInner -->
+
+</div>
+<!-- .modCPView.inner -->
