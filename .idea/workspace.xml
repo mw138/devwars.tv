@@ -2,9 +2,130 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="482d36da-9de6-4b82-932d-91080e96d730" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/spring/application-config.xml" afterPath="$PROJECT_DIR$/src/main/resources/spring/application-config.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Access.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Activity.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/annotation/AllowCrossOrigin.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/util/AngularServiceBuilder.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/annotation/AuthedUser.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Badge.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/BadgeController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/BaseController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/BaseModel.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/BaseQuery.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/BlogController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/BlogPost.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/service/BlogService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/CompletedObjective.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/ConnectedAccount.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Contact.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/ContactController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/DatabaseManager.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/util/DatabaseUtil.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/DevBits.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/DevBitsController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/EmailConfirmation.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/EmailThread$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/EmailThread.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/exclusion/ExclusionStrategy.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/FacebookProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Game.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/GameController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/service/GameService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/GameSignup.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/GithubProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/GoogleProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/exclusion/GsonExclude.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/hibernate/interceptor/HibernateInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/adapters/HibernateProxyAdapter.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/HttpMessages.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/IProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/InfoController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/annotation/JSONParam.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/resolver/JSONParamResolver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/MailingListController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/service/MailingListService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/OAuthController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Objective.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/ObjectiveItem.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/ObjectiveItemController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Player.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/service/PlayerService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/interceptor/PreAuthInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/annotation/PreAuthorization.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Rank.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Ranking.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/RedditProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/RedirectLinks.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/servlet/other/RedirectServlet.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/Reference.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/Request.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/SecretKey.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/service/Security.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/resolver/SessionResolver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Settings.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/ShopController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/ShopItem.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/servlet/other/StartupServlet$1.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/servlet/other/StartupServlet$2.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/servlet/other/StartupServlet.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Team.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/adapters/TimestampAdapter.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/annotation/Transactional.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/interceptor/TransactionalInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/TwitchPointStorage.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/TwitchProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/oauth/TwitterProvider.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/annotation/UnitOfWork.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/interceptor/UnitOfWorkInterceptor.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/User$Role.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/User.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/UserConnectionController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/UserController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/UserReset.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/resolver/UserResolver.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/service/UserService.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/UserSession.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/Reference/util/Util.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Variable.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/model/Warrior.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/com/bezman/controller/WarriorController.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Access.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Activity.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Badge.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Blog.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/CompletedObjective.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/ConnectedAccount.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Contact.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Email_Confirmation.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Game.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/GameSignup.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Objective.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/ObjectiveItem.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Player.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Rank.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Ranking.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/SecretKey.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Session.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Settings.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/ShopItem.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Team.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/TwitchPointStorage.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/User.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/UserReset.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Variable.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/config/hibernate/mapping/Warrior.hbm.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/tomcat/logs/access_log.2015-07-04" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/tomcat/logs/access_log.2015-07-05" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/spring/application-config.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/hibernate.cfg.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/log4j2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/tomcat/conf/logging.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/classes/spring/mvc-config.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/tomcat/conf/tomcat-users.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/target/tomcat/conf/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
     </list>
     <ignored path="DevWars.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,8 +220,8 @@
       <file leaf-file-name="application-config.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/spring/application-config.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13915417">
-              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.092769444">
+              <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -689,16 +810,16 @@
       <created>1436067781495</created>
       <option name="number" value="Default" />
       <updated>1436067781495</updated>
-      <workItem from="1436067792742" duration="5044000" />
+      <workItem from="1436067792742" duration="5198000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5044000" />
+    <option name="totallyTimeSpent" value="5198000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -708,7 +829,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14479166" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16957863" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16957863" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -881,8 +1002,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/spring/application-config.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13915417">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.092769444">
+          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
           <folding />
         </state>
       </provider>

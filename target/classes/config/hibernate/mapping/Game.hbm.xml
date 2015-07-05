@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.bezman.model">
+
+    <class name="com.bezman.model.Game" table="games">
+        <id name="id" type="int" column="id">
+            <generator class="increment"></generator>
+        </id>
+        
+        <property name="timestamp" type="timestamp" column="date"></property>
+        <property name="name" type="string" column="name"></property>
+        <property name="theme" type="string" column="theme"></property>
+        <property name="active" type="boolean" column="active"></property>
+        <property name="done" type="boolean" column="done"></property>
+        <property name="status" type="string" column="status"></property>
+
+        <property name="youtubeURL" type="string"></property>
+
+        <map name="teams" lazy="false" cascade="all">
+            <key column="game_id"></key>
+            <map-key type="string" column="name"></map-key>
+            <one-to-many class="com.bezman.model.Team"></one-to-many>
+        </map>
+        
+        <set name="objectives" lazy="false" order-by="order_id asc" cascade="all,delete,delete-orphan">
+            <key column="game"></key>
+            <one-to-many class="com.bezman.model.Objective"></one-to-many>
+        </set>
+    </class>
+
+</hibernate-mapping>

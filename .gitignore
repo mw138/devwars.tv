@@ -6,4 +6,3 @@ bower_components/
 /src/main/webapp/.sass-cache/
 /src/main/webapp/.tmp/
 ./idea
-/target

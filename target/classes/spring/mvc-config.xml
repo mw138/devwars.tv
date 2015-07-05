@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		                            http://www.springframework.org/schema/context
+                                    http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <beans:bean class="com.bezman.resolver.UserResolver"></beans:bean>
+            <beans:bean class="com.bezman.resolver.SessionResolver"></beans:bean>
+            <beans:bean class="com.bezman.resolver.JSONParamResolver"></beans:bean>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+
+    <context:component-scan base-package="com.bezman.controller"/>
+    <context:component-scan base-package="com.bezman.servlet"/>
+    <context:component-scan base-package="com.bezman.interceptor"/>
+    <context:component-scan base-package="config.spring"/>
+
+    <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView"/>
+        <beans:property name="prefix" value="/"/>
+        <beans:property name="suffix" value=".html"/>
+    </beans:bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <beans:bean class="com.bezman.interceptor.PreAuthInterceptor"></beans:bean>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <beans:bean class="com.bezman.interceptor.UnitOfWorkInterceptor"></beans:bean>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <beans:bean class="com.bezman.interceptor.TransactionalInterceptor"></beans:bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:resources mapping="/**" location="/" />
+
+</beans:beans>
