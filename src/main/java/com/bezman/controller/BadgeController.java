@@ -31,6 +31,7 @@ public class BadgeController
     @RequestMapping("/all")
     public ResponseEntity getAll(HttpServletRequest request, HttpServletResponse response)
     {
+        //Comment
         return new ResponseEntity(BaseModel.all(Badge.class), HttpStatus.OK);
     }
 
