@@ -3,6 +3,7 @@ package com.bezman.Reference.util;
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.controller.GameController;
+import com.bezman.controller.UserController;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ public class AngularServiceBuilder
 
         Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
 
+        controllers.add(UserController.class);
         controllers.add(GameController.class);
 
         for(Class controller : controllers)

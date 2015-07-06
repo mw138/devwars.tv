@@ -23,8 +23,7 @@ public class UserResolver implements HandlerMethodArgumentResolver
     @Override
     public boolean supportsParameter(MethodParameter methodParameter)
     {
-        System.out.println(methodParameter.getParameterType().getName());
-        return methodParameter.getParameterType().equals(User.class) && methodParameter.getMethodAnnotation(AuthedUser.class) != null;
+        return methodParameter.getParameterType().equals(User.class) && methodParameter.getParameterAnnotation(AuthedUser.class) != null;
     }
 
     @Override

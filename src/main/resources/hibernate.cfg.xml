@@ -62,6 +62,7 @@
         <mapping resource="config/hibernate/mapping/ShopItem.hbm.xml"/>
         <mapping resource="config/hibernate/mapping/Warrior.hbm.xml"/>
         <mapping resource="config/hibernate/mapping/Badge.hbm.xml"/>
+        <mapping resource="config/hibernate/mapping/Notification.hbm.xml"/>
 
 
         <mapping resource="config/hibernate/mapping/Access.hbm.xml"/>

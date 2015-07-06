@@ -3,8 +3,7 @@ package com.bezman.controller;
 import com.bezman.Reference.*;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
-import com.bezman.annotation.PreAuthorization;
-import com.bezman.annotation.UnitOfWork;
+import com.bezman.annotation.*;
 import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
@@ -18,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.metamodel.relational.Database;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,9 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
@@ -38,10 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.sql.Ref;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Terence on 1/26/2015.
@@ -545,8 +541,8 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeemail")
     public ResponseEntity changeEmail(HttpServletRequest request, HttpServletResponse response,
-                                         @RequestParam("currentPassword") String currentPassword,
-                                         @RequestParam("newEmail") String newEmail)
+                                      @RequestParam("currentPassword") String currentPassword,
+                                      @RequestParam("newEmail") String newEmail)
     {
         User user = (User) request.getAttribute("user");
 
@@ -888,8 +884,8 @@ public class UserController extends BaseController
 
     @RequestMapping("/testemail")
     public ResponseEntity testEmail(HttpServletRequest request, HttpServletResponse response,
-                           @RequestParam("email") String email,
-                           @RequestParam("uid") String uid) throws UnirestException
+                                    @RequestParam("email") String email,
+                                    @RequestParam("uid") String uid) throws UnirestException
     {
         String html = Unirest.get(Reference.rootURL + "/assets/email/verification.html")
                 .asString()
@@ -902,9 +898,44 @@ public class UserController extends BaseController
         return null;
     }
 
+    @UnitOfWork
+    @PreAuthorization(minRole = User.Role.PENDING)
+    @RequestMapping("/notifications")
+    public ResponseEntity getUnreadNotifications(@AuthedUser User user, SessionImpl session)
+    {
+        List results = session.createCriteria(Notification.class)
+                .add(Restrictions.eq("user.id", user.getId()))
+                .add(Restrictions.eq("hasRead", false))
+                .list();
+
+        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+    }
+
+    @PreAuthorization(minRole = User.Role.PENDING)
+    @Transactional
+    @RequestMapping(value = "/notifications/read", method = RequestMethod.POST)
+    public ResponseEntity markNotificationsAsRead(@JSONParam("notifications") Notification[] notificationList, @AuthedUser User user, SessionImpl session)
+    {
+        List notificationIDs = Arrays.asList(notificationList).stream()
+                .map(a -> a.getId())
+                .collect(Collectors.toList());
+
+        List<Notification> notifications = session.createCriteria(Notification.class)
+                .add(Restrictions.eq("user.id", user.getId()))
+                .add(Restrictions.in("id", notificationIDs))
+                .list();
+
+        notifications.stream()
+                .forEach(a -> a.setHasRead(true));
+//
+        return new ResponseEntity(Reference.gson.toJson(notificationList), HttpStatus.OK);
+    }
+
+
+
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/badges")
-    public ResponseEntity getBadges(HttpServletRequest request, HttpServletResponse response, User user)
+    public ResponseEntity getBadges(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user)
     {
         return new ResponseEntity(Reference.gson.toJson(user.getBadges()), HttpStatus.OK);
     }
