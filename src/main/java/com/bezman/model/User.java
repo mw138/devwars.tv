@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.Reference.DatabaseManager;
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.exclusion.GsonExclude;
@@ -9,10 +10,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.expression.spel.ast.QualifiedIdentifier;
 
 import javax.xml.crypto.Data;
 import java.beans.Transient;
+import java.sql.Ref;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,6 +52,8 @@ public class User extends BaseModel
     public UserReset passwordReset;
 
     public Ranking ranking;
+
+    public EmailConfirmation emailConfirmation;
 
     public Role role;
 
@@ -336,6 +345,16 @@ public class User extends BaseModel
         this.score = score;
     }
 
+    public EmailConfirmation getEmailConfirmation()
+    {
+        return emailConfirmation;
+    }
+
+    public void setEmailConfirmation(EmailConfirmation emailConfirmation)
+    {
+        this.emailConfirmation = emailConfirmation;
+    }
+
     public Set<Badge> getBadges()
     {
         return badges;
@@ -421,5 +440,98 @@ public class User extends BaseModel
         Activity activity = new Activity(this, this, "Purchased : " + item.getName(), -1 * item.getPrice(), 0);
         DatabaseUtil.saveObjects(false, activity);
         DatabaseUtil.updateObjects(false, this.getRanking());
+    }
+
+    public void tryAllBadges()
+    {
+        List<Badge> badgesToAward = new ArrayList<>();
+
+        if (this.getEmailConfirmation() == null)
+        {
+            badgesToAward.add(Badge.badgeForName("Authentic"));
+        }
+
+        if (this.getConnectedAccounts().size() > 0)
+        {
+            badgesToAward.add(Badge.badgeForName("Making Links"));
+        }
+
+        if (this.getConnectedAccounts().size() >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Full Coverage"));
+        }
+
+        if (this.getRanking().getPoints() >= 5000)
+        {
+            badgesToAward.add(Badge.badgeForName("Feed The Pig"));
+        }
+
+        if (this.getRanking().getPoints() >= 25000)
+        {
+            badgesToAward.add(Badge.badgeForName("Penny-Pincher"));
+        }
+
+        Session session = DatabaseManager.getSession();
+
+        Query allObjectivesQuery = session.createQuery("select player.user from Player player where player.user.id = :id AND SIZE(player.team.completedObjectives) = size(player.team.game.objectives) AND size(player.team.game.objectives) > 0 ");
+        allObjectivesQuery.setInteger("id", this.getId());
+
+        User user = (User) allObjectivesQuery.uniqueResult();
+
+        session.close();
+
+        if (user != null)
+        {
+            badgesToAward.add(Badge.badgeForName("Ace High"));
+        }
+
+        if(this.gamesWon >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Victorious"));
+        }
+
+        if (this.gamesWon >= 10)
+        {
+            badgesToAward.add(Badge.badgeForName("Hotshot"));
+        }
+
+        if (this.gamesWon >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Steamroller"));
+        }
+
+        System.out.println(Reference.gson.toJson(badgesToAward));
+    }
+
+    public boolean awardBadgeForName(String name)
+    {
+        return this.awardBadge(Badge.badgeForName(name));
+    }
+
+    public boolean awardBadge(Badge badge)
+    {
+        if(!this.hasBadge(badge))
+        {
+            this.getBadges().add(badge);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean hasBadge(Badge badge)
+    {
+        for (Badge currentBadge : this.getBadges())
+        {
+            if (currentBadge.getId() == badge.getId()) return true;
+        }
+
+        return false;
+    }
+
+    public void giveBadge(Badge badge)
+    {
+
     }
 }

@@ -1,7 +1,10 @@
 package com.bezman.model;
 
+import com.bezman.Reference.DatabaseManager;
 import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.Set;
 
@@ -89,5 +92,18 @@ public class Badge
     public void setUsers(Set<User> users)
     {
         this.users = users;
+    }
+
+    public static Badge badgeForName(String name)
+    {
+        Session session = DatabaseManager.getSession();
+
+        Badge badge = (Badge) session.createCriteria(Badge.class)
+                .add(Restrictions.eq("name", name))
+                .uniqueResult();
+
+        session.close();
+
+        return badge;
     }
 }

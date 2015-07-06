@@ -28,6 +28,7 @@
         <one-to-one name="ranking" class="com.bezman.model.Ranking" lazy="false" cascade="all"></one-to-one>
         <one-to-one name="passwordReset" class="UserReset" lazy="false"></one-to-one>
         <one-to-one name="warrior" class="Warrior" lazy="false"></one-to-one>
+        <one-to-one name="emailConfirmation" class="EmailConfirmation"></one-to-one>
 
         <set name="appliedGames" table="gamesignup" lazy="false">
             <key column="user"></key>

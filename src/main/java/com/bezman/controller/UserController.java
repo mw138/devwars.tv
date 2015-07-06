@@ -33,6 +33,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.sql.Ref;
@@ -70,6 +71,16 @@ public class UserController extends BaseController
                 session.getTransaction().commit();
                 session.close();
             }
+
+            Session session = DatabaseManager.getSession();
+            session.beginTransaction();
+
+            currentUser = (User) session.get(User.class, currentUser.getId());
+
+            currentUser.tryAllBadges();
+
+            session.getTransaction().commit();
+            session.close();
         } else {
             return new ResponseEntity(HttpMessages.FORBIDDEN, HttpStatus.FORBIDDEN);
         }
@@ -920,13 +931,16 @@ public class UserController extends BaseController
                 .map(a -> a.getId())
                 .collect(Collectors.toList());
 
-        List<Notification> notifications = session.createCriteria(Notification.class)
-                .add(Restrictions.eq("user.id", user.getId()))
-                .add(Restrictions.in("id", notificationIDs))
-                .list();
+        if(notificationList.length > 0)
+        {
+            List<Notification> notifications = session.createCriteria(Notification.class)
+                    .add(Restrictions.eq("user.id", user.getId()))
+                    .add(Restrictions.in("id", notificationIDs))
+                    .list();
 
-        notifications.stream()
-                .forEach(a -> a.setHasRead(true));
+            notifications.stream()
+                    .forEach(a -> a.setHasRead(true));
+        }
 //
         return new ResponseEntity(Reference.gson.toJson(notificationList), HttpStatus.OK);
     }
