@@ -9,14 +9,98 @@ angular.module("app.badges", [])
                 });
 
         }])
-    .controller("BadgesController", ["$scope", "$http", "BadgeService", function ($scope, $http, BadgeService) {
+    .controller("BadgesController", ["$scope", "$http", "BadgeService", "AuthService", function ($scope, $http, BadgeService, AuthService) {
 
         $scope.imageNameFromName = function (name) {
             return name.toLowerCase().replace(/\s+/g, "-");
-        }
+        };
+
+        $scope.userHasBadge = function (badge) {
+            if(AuthService.user) {
+                for(var badgeKey in AuthService.user.badges) {
+                    var currentBadge = AuthService.user.badges[badgeKey];
+
+                    if(badge.id === currentBadge.id) return true;
+                }
+            }
+
+            return false;
+        };
+
+        $scope.badgeForName = function (name) {
+            for(var badgeKey in $scope.badges) {
+                var badge = $scope.badges[badgeKey];
+
+                if (badge.name === name) return badge;
+            }
+
+            return null;
+        };
 
         BadgeService.getAll(function (success) {
             $scope.badges = success.data;
         }, angular.noop);
+
+        $scope.badgePercentCalculators = {
+            "Authentic" : function () {
+                return AuthService.user.role == "PENDING" ? 0 : 100;
+            },
+
+            "Making Links" : function () {
+                return Math.min(AuthService.user.connectedAccounts.length > 0 ? 100 : 0, 100);
+            },
+
+            "Full Coverage" : function () {
+                return Math.min((AuthService.user.connectedAccounts.length / 5.0) * 100, 100);
+            },
+
+            "Feed The Pig" : function () {
+                return Math.min((AuthService.user.ranking.points / 5000.0) * 100, 100);
+            },
+
+            "Penny-Pincher": function () {
+                return Math.min((AuthService.user.ranking.points / 25000.0) * 100, 100);
+            },
+
+            "Follow Me": function () {
+                return Math.min((AuthService.user.referredUsers / 5.0) * 100, 100);
+            },
+
+            "Influential": function () {
+                return Math.min((AuthService.user.referredUsers / 25.0) * 100, 100);
+            },
+
+            "Natural Leader": function () {
+                return Math.min((AuthService.user.referredUsers / 50.0) * 100, 100);
+            },
+
+            "Ace High": function () {
+                return $scope.userHasBadge($scope.badgeForName("Ace High")) ? 100 : 0;
+            },
+
+            "Beginner's Luck": function () {
+                return AuthService.user.gamesWon > 0 ? 100 : 0;
+            },
+
+            "Victorious" : function () {
+                return Math.min((AuthService.user.gamesWon / 5.0) * 100, 100);
+            },
+
+            "Hotshot" : function () {
+                return Math.min((AuthService.user.gamesWon / 10.0) * 100, 100);
+            },
+
+            "Steamroller" : function () {
+                return Math.min((AuthService.user.gamesWon / 25.0) * 100, 100);
+            },
+
+            "Hot Streak": function () {
+                return Math.min(AuthService.user.gameStreak / 3.0 * 100, 100);
+            },
+
+            "Cake Day": function () {
+                return $scope.userHasBadge($scope.badgeForName("Cake Day")) ? 100 : 0;
+            }
+        }
 
     }]);

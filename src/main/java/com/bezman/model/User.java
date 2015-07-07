@@ -18,9 +18,7 @@ import org.springframework.expression.spel.ast.QualifiedIdentifier;
 import javax.xml.crypto.Data;
 import java.beans.Transient;
 import java.sql.Ref;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Terence on 12/22/2014.
@@ -64,7 +62,6 @@ public class User extends BaseModel
     @GsonExclude
     public Set<Activity> activityLog;
 
-    @GsonExclude
     public Set<Badge> badges;
 
     public String getEmail()
@@ -81,6 +78,8 @@ public class User extends BaseModel
     public Integer gamesPlayed = 0;
     public Integer gamesWon = 0;
     public Integer gamesLost = 0;
+
+    public Integer gameStreak;
 
     public Warrior warrior;
 
@@ -442,7 +441,7 @@ public class User extends BaseModel
         DatabaseUtil.updateObjects(false, this.getRanking());
     }
 
-    public void tryAllBadges()
+    public List<Badge> tryAllBadges()
     {
         List<Badge> badgesToAward = new ArrayList<>();
 
@@ -485,6 +484,11 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Ace High"));
         }
 
+        if(this.gamesWon > 0)
+        {
+            badgesToAward.add(Badge.badgeForName("Beginner's Luck"));
+        }
+
         if(this.gamesWon >= 5)
         {
             badgesToAward.add(Badge.badgeForName("Victorious"));
@@ -500,7 +504,74 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Steamroller"));
         }
 
-        System.out.println(Reference.gson.toJson(badgesToAward));
+        session = DatabaseManager.getSession();
+
+        Query playersWonQuery = session.createQuery("from Player player where player.user.id = :id order by player.team.game.timestamp desc");
+        playersWonQuery.setInteger("id", this.getId());
+
+        List<Player> playersWon = playersWonQuery.list();
+
+        for(int i = 0; i < playersWon.size(); i++)
+        {
+            if (i < playersWon.size() - 2)
+            {
+                Player firstPlayer = playersWon.get(i);
+                Player secondPlayer = playersWon.get(i + 1);
+                Player thirdPlayer = playersWon.get(i + 2);
+
+
+                System.out.println(firstPlayer.getTeam().getGame().getId());
+                System.out.println(secondPlayer.getTeam().getGame().getId());
+                System.out.println(thirdPlayer.getTeam().getGame().getId());
+
+                if (firstPlayer.getTeam().isWin() && secondPlayer.getTeam().isWin() && thirdPlayer.getTeam().isWin())
+                {
+                    badgesToAward.add(Badge.badgeForName("Hot Streak"));
+                }
+            }
+        }
+
+        session.close();
+
+        if (this.getWarrior().getDob() != null)
+        {
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(this.getWarrior().getDob());
+
+            Calendar today = Calendar.getInstance();
+            today.setTime(new Date());
+
+            if (dob.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
+            {
+                badgesToAward.add(Badge.badgeForName("Cake Day"));
+            }
+        }
+
+        session = DatabaseManager.getSession();
+
+        Query pastPlayersQuery = session.createQuery("from Player p where p.user.id = :id order by p.team.game.timestamp desc");
+        pastPlayersQuery.setInteger("id", this.getId());
+
+        List<Player> pastPlayers = pastPlayersQuery.list();
+
+        int streak = 0;
+
+        for(Player player : pastPlayers)
+        {
+            if (player.getTeam().isWin())
+            {
+                streak++;
+            } else
+            {
+                break;
+            }
+        }
+
+        this.gameStreak = streak;
+
+        session.close();
+
+        return badgesToAward;
     }
 
     public boolean awardBadgeForName(String name)
@@ -528,10 +599,5 @@ public class User extends BaseModel
         }
 
         return false;
-    }
-
-    public void giveBadge(Badge badge)
-    {
-
     }
 }

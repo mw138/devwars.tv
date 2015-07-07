@@ -72,15 +72,29 @@ public class UserController extends BaseController
                 session.close();
             }
 
-            Session session = DatabaseManager.getSession();
-            session.beginTransaction();
+            try
+            {
+                Session session = DatabaseManager.getSession();
+                session.beginTransaction();
 
-            currentUser = (User) session.get(User.class, currentUser.getId());
+                User theUser = (User) session.get(User.class, currentUser.getId());
 
-            currentUser.tryAllBadges();
+                List<Badge> badgesToAward = currentUser.tryAllBadges();
 
-            session.getTransaction().commit();
-            session.close();
+                badgesToAward.stream()
+                        .filter(a -> !currentUser.hasBadge(a))
+                        .forEach(badge -> {
+                            theUser.awardBadge(badge);
+                            session.save(new Notification(theUser, "Badge Get : " + badge.getName(), false));
+                        });
+
+
+                session.getTransaction().commit();
+                session.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         } else {
             return new ResponseEntity(HttpMessages.FORBIDDEN, HttpStatus.FORBIDDEN);
         }
@@ -114,7 +128,7 @@ public class UserController extends BaseController
                                      @RequestParam("email") String email,
                                      @RequestParam("password") String password,
                                      @RequestParam("captchaResponse") String rcResponse,
-                                     @RequestParam(value = "referral", required = false, defaultValue = "-1") int referral)
+                                     @RequestParam(value = "referral", required = false) String referral)
     {
         ResponseEntity responseEntity = null;
         String uid = Util.randomText(32);
@@ -203,30 +217,16 @@ public class UserController extends BaseController
 
             session.close();
 
-            if(referral != -1)
+            if(referral != null)
             {
-                User referrer = UserService.getUser(referral);
+                User referrer = UserService.userForUsername(referral);
 
                 if (referrer != null)
                 {
                     referrer.setReferredUsers(referrer.getReferredUsers() + 1);
 
-                    Integer referrerDevBits = -1;
-                    switch(referrer.getReferredUsers())
-                    {
-                        case 1: referrerDevBits = 285; break;
-                        case 5: referrerDevBits = 570; break;
-                        case 10: referrerDevBits = 855; break;
-                        case 25: referrerDevBits = 1710; break;
-                        case 50: referrerDevBits = 2850; break;
-                    }
-
-                    if (referrerDevBits != -1)
-                    {
-                        referrer.getRanking().addPoints(referrerDevBits);
-                        Activity activity = new Activity(referrer, user, "You earned " + referrerDevBits + " DevBits by referring " + referrer.getReferredUsers() + " users", referrerDevBits, 0);
-                        DatabaseUtil.saveObjects(false, activity);
-                    }
+                    Activity activity = new Activity(referrer, user, "You referred " + username, 0, 0);
+                    DatabaseUtil.saveObjects(false, activity);
 
                     DatabaseUtil.saveOrUpdateObjects(false, referrer, referrer.getRanking());
                 }

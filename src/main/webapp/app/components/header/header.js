@@ -41,5 +41,5 @@ angular.module("app.header", ['ngCookies'])
             });
 
             UserService.markNotificationsAsRead(JSON.stringify(success.data), angular.noop, angular.noop);
-        });
+        }, angular.noop);
     }]);
