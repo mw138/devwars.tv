@@ -93,6 +93,8 @@ public class User extends BaseModel
 
     public Integer bettingBitsEarned;
 
+    public Integer gamesWatched;
+
     public void setEmail(String email)
     {
         this.email = email;
@@ -374,6 +376,16 @@ public class User extends BaseModel
     public void setBettingBitsEarned(Integer bettingBitsEarned)
     {
         this.bettingBitsEarned = bettingBitsEarned;
+    }
+
+    public Integer getGamesWatched()
+    {
+        return gamesWatched == null ? 0 : gamesWatched;
+    }
+
+    public void setGamesWatched(Integer gamesWatched)
+    {
+        this.gamesWatched = gamesWatched;
     }
 
     @JsonIgnore

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.Authenticator;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Terence on 5/15/2015.
@@ -163,6 +165,27 @@ public class DevBitsController
         }
 
         return null;
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/watched", method = RequestMethod.POST)
+    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("usernames") String[] usernames)
+    {
+        List<User> updatedUsers = new ArrayList<>();
+
+        for (String username : usernames)
+        {
+            User user = UserService.userForTwitchUsername(username);
+
+            if (user != null)
+            {
+                user.setGamesWatched(user.getGamesWatched() + 1);
+                updatedUsers.add(user);
+            }
+        }
+
+        return new ResponseEntity(Reference.gson.toJson(updatedUsers), HttpStatus.OK);
     }
 
 }

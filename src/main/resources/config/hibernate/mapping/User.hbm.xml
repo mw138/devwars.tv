@@ -24,6 +24,7 @@
         <property name="usernameChanges" column="username_changes" type="integer"></property>
         <property name="veteran" column="veteran" type="boolean"></property>
         <property name="bettingBitsEarned" column="betting_bits_earned" type="integer"></property>
+        <property name="gamesWatched" column="games_watched" type="integer"></property>
 
         <one-to-one name="session" class="com.bezman.model.UserSession" lazy="false"></one-to-one>
         <one-to-one name="ranking" class="com.bezman.model.Ranking" lazy="false" cascade="all"></one-to-one>
