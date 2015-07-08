@@ -607,6 +607,8 @@ public class User extends BaseModel
     {
         if(!this.hasBadge(badge))
         {
+            this.getRanking().addPoints(badge.getBitsAwarded());
+            this.getRanking().addXP(badge.getXpAwarded());
             this.getBadges().add(badge);
 
             return true;

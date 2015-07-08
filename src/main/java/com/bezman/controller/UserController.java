@@ -86,6 +86,7 @@ public class UserController extends BaseController
                         .forEach(badge -> {
                             theUser.awardBadge(badge);
                             session.save(new Notification(theUser, "Badge Get : " + badge.getName(), false));
+                            session.save(new Activity(theUser, theUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
                         });
 
 
