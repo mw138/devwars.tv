@@ -91,6 +91,8 @@ public class User extends BaseModel
 
     public Boolean veteran;
 
+    public Integer bettingBitsEarned;
+
     public void setEmail(String email)
     {
         this.email = email;
@@ -362,6 +364,16 @@ public class User extends BaseModel
     public void setBadges(Set<Badge> badges)
     {
         this.badges = badges;
+    }
+
+    public Integer getBettingBitsEarned()
+    {
+        return bettingBitsEarned == null ? 0 : bettingBitsEarned;
+    }
+
+    public void setBettingBitsEarned(Integer bettingBitsEarned)
+    {
+        this.bettingBitsEarned = bettingBitsEarned;
     }
 
     @JsonIgnore
