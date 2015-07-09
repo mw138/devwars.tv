@@ -28,6 +28,8 @@ var browserSync = require('browser-sync');
 var pagespeed = require('psi');
 var reload = browserSync.reload;
 var concat = require('gulp-concat');
+var ngmin = require('gulp-ngmin');
+var uglify = require('gulp-uglify');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -52,6 +54,8 @@ gulp.task('jshint', function () {
 
 gulp.task('concat', function () {
    return gulp.src(['app/**/*.js', 'app/*.js'])
+       .pipe(ngmin())
+       .pipe(uglify())
        .pipe(concat('all.js'))
        .pipe(gulp.dest('app/'))
 });
