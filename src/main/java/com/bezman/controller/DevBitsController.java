@@ -3,11 +3,17 @@ package com.bezman.controller;
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.annotation.JSONParam;
+import com.bezman.annotation.PreAuthorization;
+import com.bezman.annotation.Transactional;
 import com.bezman.model.Ranking;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
+import com.bezman.request.model.EarnedBet;
+import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.Authenticator;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Terence on 5/15/2015.
@@ -137,4 +145,47 @@ public class DevBitsController
 
         return responseEntity;
     }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/earnedbets", method = RequestMethod.POST)
+    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("bets") EarnedBet[] earnedBets)
+    {
+        for (EarnedBet earnedBet : earnedBets)
+        {
+            Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
+            userQuery.setString("username", earnedBet.getTwitchUsername().toLowerCase());
+
+            User user = (User) userQuery.uniqueResult();
+
+            if (user != null)
+            {
+                user.setBettingBitsEarned(user.getBettingBitsEarned() + earnedBet.getPointsEarned());
+            }
+        }
+
+        return null;
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/watched", method = RequestMethod.POST)
+    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("usernames") String[] usernames)
+    {
+        List<User> updatedUsers = new ArrayList<>();
+
+        for (String username : usernames)
+        {
+            User user = UserService.userForTwitchUsername(username);
+
+            if (user != null)
+            {
+                user.setGamesWatched(user.getGamesWatched() + 1);
+                updatedUsers.add(user);
+            }
+        }
+
+        return new ResponseEntity(Reference.gson.toJson(updatedUsers), HttpStatus.OK);
+    }
+
 }

@@ -5,9 +5,11 @@ import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.metamodel.relational.Database;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -110,4 +112,19 @@ public class UserService
 
         return returnUser;
     }
+
+    public static User userForTwitchUsername(String username)
+    {
+        Session session = DatabaseManager.getSession();
+
+        Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
+        userQuery.setString("username",username.toLowerCase());
+
+        User user = (User) userQuery.uniqueResult();
+
+        session.close();
+
+        return user;
+    }
+
 }

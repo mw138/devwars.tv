@@ -91,6 +91,10 @@ public class User extends BaseModel
 
     public Boolean veteran;
 
+    public Integer bettingBitsEarned;
+
+    public Integer gamesWatched;
+
     public void setEmail(String email)
     {
         this.email = email;
@@ -364,6 +368,26 @@ public class User extends BaseModel
         this.badges = badges;
     }
 
+    public Integer getBettingBitsEarned()
+    {
+        return bettingBitsEarned == null ? 0 : bettingBitsEarned;
+    }
+
+    public void setBettingBitsEarned(Integer bettingBitsEarned)
+    {
+        this.bettingBitsEarned = bettingBitsEarned;
+    }
+
+    public Integer getGamesWatched()
+    {
+        return gamesWatched == null ? 0 : gamesWatched;
+    }
+
+    public void setGamesWatched(Integer gamesWatched)
+    {
+        this.gamesWatched = gamesWatched;
+    }
+
     @JsonIgnore
     public boolean isNative()
     {
@@ -583,6 +607,8 @@ public class User extends BaseModel
     {
         if(!this.hasBadge(badge))
         {
+            this.getRanking().addPoints(badge.getBitsAwarded());
+            this.getRanking().addXP(badge.getXpAwarded());
             this.getBadges().add(badge);
 
             return true;

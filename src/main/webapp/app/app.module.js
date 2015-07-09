@@ -1,7 +1,7 @@
 var app = angular.module('app', [
 // modules
     'app.coming',
-    'app.auth',
+    'app.AuthService',
     'app.header',
     'app.home',
     'app.signup',

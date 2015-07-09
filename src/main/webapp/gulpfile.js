@@ -27,6 +27,9 @@ var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var pagespeed = require('psi');
 var reload = browserSync.reload;
+var concat = require('gulp-concat');
+var ngmin = require('gulp-ngmin');
+var uglify = require('gulp-uglify');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -47,6 +50,14 @@ gulp.task('jshint', function () {
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
+});
+
+gulp.task('concat', function () {
+   return gulp.src(['app/**/*.js', 'app/*.js'])
+       .pipe(ngmin())
+       .pipe(uglify())
+       .pipe(concat('all.js'))
+       .pipe(gulp.dest('app/'))
 });
 
 // Optimize Images
@@ -155,16 +166,16 @@ gulp.task('serve', ['styles'], function () {
     });
 
     gulp.watch(['app/**/*.html'], reload);
-    gulp.watch(['app/**/*.js'], reload);
-    gulp.watch(['app/**/**/*.js'], reload);
-    gulp.watch(['assets/sass/**/*.scss'], ['styles', reload]);
+    gulp.watch(['app/**/*.js'], ['concat', reload]);
+    gulp.watch(['app/**/**/*.js'], ['concat', reload]);
+    gulp.watch(['assets/sass/**/*.scss'],['styles', reload]);
     gulp.watch(['app/images/**/*'], reload);
 });
 
 gulp.task('watch', function(){
 	    gulp.watch(['app/**/*.html'], reload);
-    gulp.watch(['app/**/*.js'], reload);
-    gulp.watch(['app/**/**/*.js'], reload);
+    gulp.watch(['app/**/*.js'], ['concat', reload]);
+    gulp.watch(['app/**/**/*.js'], ['concat', reload]);
     gulp.watch(['assets/sass/**/*.scss'], ['styles', reload]);
     gulp.watch(['app/images/**/*'], reload);
 });
@@ -193,8 +204,8 @@ gulp.task('pagespeed', pagespeed.bind(null, {
     // free (no API key) tier. You can use a Google
     // Developer API key if you have one. See
     // http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
-    url: 'https://example.com',
-    strategy: 'mobile'
+    url: 'http://devwars.tv',
+    strategy: 'desktop'
 }));
 
 // Load custom tasks from the `tasks` directory

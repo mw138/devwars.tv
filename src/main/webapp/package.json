@@ -35,6 +35,8 @@
   },
   "dependencies": {
     "angular-recaptcha": "^1.0.1",
-    "gulp-concat": "^2.5.2"
+    "gulp-concat": "^2.6.0",
+    "gulp-ngmin": "^0.3.0",
+    "gulp-uglify": "^1.2.0"
   }
 }

@@ -1,7 +1,7 @@
 /**
  * Created by Terence on 3/22/2015.
  */
-angular.module("app.auth", [])
+angular.module("app.AuthService", [])
     .factory("AuthService", ["$http", function ($http) {
         var AuthService = {};
 
