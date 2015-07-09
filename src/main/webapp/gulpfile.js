@@ -27,6 +27,7 @@ var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var pagespeed = require('psi');
 var reload = browserSync.reload;
+var concat = require('gulp-concat');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -47,6 +48,12 @@ gulp.task('jshint', function () {
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
+});
+
+gulp.task('concat', function () {
+   return gulp.src(['app/**/*.js', 'app/*.js'])
+       .pipe(concat('all.js'))
+       .pipe(gulp.dest('app/'))
 });
 
 // Optimize Images
@@ -193,8 +200,8 @@ gulp.task('pagespeed', pagespeed.bind(null, {
     // free (no API key) tier. You can use a Google
     // Developer API key if you have one. See
     // http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
-    url: 'https://example.com',
-    strategy: 'mobile'
+    url: 'http://devwars.tv',
+    strategy: 'desktop'
 }));
 
 // Load custom tasks from the `tasks` directory
