@@ -2,9 +2,6 @@
     <h1>Live Game</h1>
 
     <div class="modcp-content">
-        <select ng-model="selectedGame" ng-options="gameLabel(game) for game in availableGames">
-            <option value='' disabled selected>Select Game</option>
-        </select>
 
        <div>
            <button class="button" ng-if="!selectedGame.active" ng-click="activateGame(selectedGame)">Activate Game</button>

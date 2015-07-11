@@ -13,6 +13,10 @@
     </div>
     <!-- .left -->
 
+    <select ng-model="selectedGame" ng-options="gameLabel(game) for game in availableGames">
+        <option value='' disabled selected>Select Game</option>
+    </select>
+
     <div ui-view="modCPInner"></div>
     <!-- .modCPInner -->
 
