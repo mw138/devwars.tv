@@ -905,7 +905,7 @@ public class UserController extends BaseController
         String message = html.replace("{{verifyLink}}", Reference.rootURL + "/v1/user/validate?uid=" + uid);
 
 
-        Util.sendEmail(Security.emailUsername, Security.emailPassword, "test", message, email);
+        Util.sendEmailHTML(Security.emailUsername, Security.emailPassword, "test", message, email);
 
         return null;
     }
