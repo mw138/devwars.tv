@@ -900,7 +900,7 @@ public class UserController extends BaseController
     @RequestMapping("/testemail")
     public ResponseEntity testEmail(HttpServletRequest request, HttpServletResponse response,
                                     @RequestParam("email") String email,
-                                    @RequestParam("uid") String uid) throws UnirestException
+                                    @RequestParam("uid") String uid) throws UnirestException, MessagingException
     {
         String html = Unirest.get(Reference.rootURL + "/assets/email/verification.html")
                 .asString()
@@ -927,18 +927,13 @@ public class UserController extends BaseController
         });
 
         MimeMessage emailMessage = new MimeMessage(session);
-        try
-        {
-            emailMessage.setFrom(new InternetAddress(Security.emailUsername));
-            emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            emailMessage.setSubject("test");
-            emailMessage.setText(message);
 
-            Transport.send(emailMessage);
-        } catch (MessagingException e)
-        {
-            e.printStackTrace();
-        }
+        emailMessage.setFrom(new InternetAddress(Security.emailUsername));
+        emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+        emailMessage.setSubject("test");
+        emailMessage.setText(message);
+
+        Transport.send(emailMessage);
 
         return null;
     }
