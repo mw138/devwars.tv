@@ -29,6 +29,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -905,7 +908,37 @@ public class UserController extends BaseController
         String message = html.replace("{{verifyLink}}", Reference.rootURL + "/v1/user/validate?uid=" + uid);
 
 
-        Util.sendEmailHTML(Security.emailUsername, Security.emailPassword, "test", message, email);
+        Properties properties = new Properties();
+
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.user", Security.emailUsername);
+        properties.put("mail.smtp.password", Security.emailPassword);
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", 587);
+
+        javax.mail.Session session = javax.mail.Session.getInstance(properties, new Authenticator()
+        {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication()
+            {
+                return new PasswordAuthentication(Security.emailUsername, Security.emailPassword);
+            }
+        });
+
+        MimeMessage emailMessage = new MimeMessage(session);
+        try
+        {
+            emailMessage.setFrom(new InternetAddress(Security.emailUsername));
+            emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+            emailMessage.setSubject("test");
+            emailMessage.setText(message);
+
+            Transport.send(emailMessage);
+        } catch (MessagingException e)
+        {
+            e.printStackTrace();
+        }
 
         return null;
     }
