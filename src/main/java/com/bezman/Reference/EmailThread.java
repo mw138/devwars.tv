@@ -13,13 +13,16 @@ public class EmailThread extends Thread
 
     public String username, password, subject, message, recipient;
 
-    public EmailThread(String username, String password, String subject, String message, String recipient)
+    public boolean html;
+
+    public EmailThread(String username, String password, String subject, String message, String recipient, boolean html)
     {
         this.username = username;
         this.password = password;
         this.subject = subject;
         this.message = message;
         this.recipient = recipient;
+        this.html = html;
     }
 
     @Override
@@ -44,13 +47,18 @@ public class EmailThread extends Thread
             }
         });
 
-        Message emailMessage = new MimeMessage(session);
+        MimeMessage emailMessage = new MimeMessage(session);
         try
         {
             emailMessage.setFrom(new InternetAddress(username));
             emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             emailMessage.setSubject(subject);
             emailMessage.setText(message);
+
+            if (html)
+            {
+                emailMessage.setText(message, "utf-8", "html");
+            }
 
             Transport.send(emailMessage);
         } catch (MessagingException e)
