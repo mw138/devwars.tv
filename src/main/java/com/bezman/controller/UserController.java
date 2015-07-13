@@ -602,11 +602,6 @@ public class UserController extends BaseController
             {
                 File file = new File(Reference.PROFILE_PICTURE_PATH + currentUser.getId() + File.separator + "avatar.jpeg");
 
-                if(true)
-                {
-                    return new ResponseEntity(file.getAbsolutePath(), HttpStatus.BAD_REQUEST);
-                }
-
                 if (!file.exists())
                 {
                     file.getParentFile().mkdirs();
