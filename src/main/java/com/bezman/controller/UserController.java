@@ -589,7 +589,7 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeavatar")
     public ResponseEntity changeAvatar(HttpServletRequest request, HttpServletResponse response,
-                                       @RequestParam("file") MultipartFile image) throws IOException
+                                       @RequestParam("file") MultipartFile image)
     {
         if (image.isEmpty())
         {
@@ -602,15 +602,21 @@ public class UserController extends BaseController
             {
                 File file = new File(Reference.PROFILE_PICTURE_PATH + currentUser.getId() + File.separator + "avatar.jpeg");
 
-                if (!file.exists())
+                try
                 {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                }
+                    if (!file.exists())
+                    {
+                        file.getParentFile().mkdirs();
+                        file.createNewFile();
+                    }
 
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-                bufferedOutputStream.write(image.getBytes());
-                bufferedOutputStream.close();
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
+                    bufferedOutputStream.write(image.getBytes());
+                    bufferedOutputStream.close();
+                }catch (IOException e)
+                {
+                    return new ResponseEntity(file.getAbsolutePath(), HttpStatus.OK);
+                }
 
                 currentUser.setAvatarChanges(currentUser.getAvatarChanges() - 1);
 
