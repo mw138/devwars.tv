@@ -44,19 +44,20 @@
     <link rel="icon" type="image/ico" href="/assets/img/favicon.ico"/>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/bower_components/normalize-scss/normalize.css"/>
-    <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,400italic,300|Montserrat' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-    <!--jQuery -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+    <!-- build:js dist/all.js -->
     <script src="/bower_components/angular/angular.js"></script>
-    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
 
-    <script type="text/javascript" src="/app/all.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
     <script src="/bower_components/angular-aria/angular-aria.js"></script>
     <script src="/bower_components/angular-animate/angular-animate.js"></script>
@@ -66,15 +67,8 @@
     <script src="/assets/vendor/ngstorage/ngStorage.min.js"></script>
 
     <script src="/bower_components/vc-angular-recaptcha/release/angular-recaptcha.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
-
-    <!-- Bootstrap -->
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <!-- End Bootstrap -->
 
     <!--Text Angular WYSIWYG -->
-    <link rel='stylesheet' href='/bower_components/textAngular/src/textAngular.css'>
     <script src='/bower_components/textAngular/dist/textAngular-rangy.min.js'></script>
     <script src='/bower_components/textAngular/dist/textAngular-sanitize.min.js'></script>
     <script src='/bower_components/textAngular/dist/textAngular.min.js'></script>
@@ -86,13 +80,96 @@
     <!-- End Angular Charts -->
 
     <!-- NgImgCrop -->
-    <link rel="stylesheet" href="/bower_components/ngImgCrop/compile/minified/ng-img-crop.css">
     <script src="/bower_components/ngImgCrop/compile/minified/ng-img-crop.js"></script>
 
-    <!-- Angular Cookies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-cookies.min.js"></script>
+    <!--Poll-->
+    <script src="/app/components/poll/poll.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
 
+    <!-- Date Picker -->
+
+    <script src="/bower_components/pickadate/lib/picker.js"></script>
+    <script src="/bower_components/pickadate/lib/picker.date.js"></script>
+    <script src="/bower_components/pickadate/lib/picker.time.js"></script>
+    <script src="/bower_components/ng-pickadate/ng-pickadate.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="/assets/js/sidebarscroll.js"></script>
+
+    <script src="/app/app.module.js"></script>
+
+    <!-- Dialogs -->
+    <script src="/app/components/dialogs/loginDialog/loginDialog.js"></script>
+    <script src="/app/components/dialogs/signupDialog/signupDialog.js"></script>
+    <script src="/app/components/dialogs/confirmGameSignupDialog/confirmGameSignupDialog.js"></script>
+    <script src="/app/components/dialogs/editPlayerDialog/editPlayerDialog.js"></script>
+    <script src="/app/components/dialogs/addPlayerDialog/addPlayerDialog.js"></script>
+    <script src="/app/components/dialogs/addBlogPostDialog/addBlogPostDialog.js"></script>
+    <script src="/app/components/dialogs/inputDialog/inputDialog.js"></script>
+    <script src="/app/components/dialogs/editAvatarImageDialog/editAvatarImageDialog.js"></script>
+    <script src="/app/components/dialogs/confirmDialog/confirmDialog.js"></script>
+    <script src="/app/components/dialogs/addSelectedPlayerDialog/addSelectedPlayerDialog.js"></script>
+
+    <!-- Toasts -->
+    <script src="/app/components/toasts/devwarsToast/devwarsToast.js"></script>
+
+    <!--Directives -->
+    <script src="app/directives/enterDirective.js"></script>
+    <script src="app/directives/subscribeDirective.js"></script>
+    <script src="app/directives/OAuthDirective.js"></script>
+    <script src="app/directives/sidebarDirective/sidebar.js"></script>
+    <script src="app/directives/FileReadDirective.js"></script>
+    <script src="app/directives/rank/rank.js"></script>
+    <script src="app/directives/dashnavDirective/dashnav.js"></script>
+
+    <!--Pages-->
+    <script src="app/pages/coming/coming.js"></script>
+    <script src="app/pages/home/home.js"></script>
+    <script src="app/pages/gameControlPanel/gameControlPanel.js"></script>
+    <script src="app/pages/games/games.js"></script>
+    <script src="app/pages/blog/blog.js"></script>
+    <script src="app/pages/contact/contact.js"></script>
+    <script src="app/pages/about/about.js"></script>
+    <script src="app/pages/dashboard/dashboard.js"></script>
+    <script src="app/pages/badges/badges.js"></script>
+    <script src="app/pages/warriorReg/warriorReg.js"></script>
+    <script src="app/pages/settings/settings.js"></script>
+    <script src="app/pages/help/help.js"></script>
+    <script src="app/pages/verify/verify.js"></script>
+    <script src="app/pages/livegame/livegame.js"></script>
+    <script src="app/pages/shop/shop.js"></script>
+    <script src="app/pages/profile/profile.js"></script>
+    <script src="app/pages/leaderboards/leaderboards.js"></script>
+    <script src="app/pages/modCP/modCP.js"></script>
+
+    <!--Components-->
+    <script src="app/components/header/header.js"></script>
+    <script src="app/components/user/user.js"></script>
+
+    <!--Services-->
+    <script src="/app/services/AuthService.js"></script>
+    <script src="/app/services/GameService.js"></script>
+    <script src="/app/services/ToastService.js"></script>
+    <script src="/app/services/BlogService.js"></script>
+    <script src="/app/services/InfoService.js"></script>
+    <script src="/app/services/UserService.js"></script>
+    <script src="/app/services/DialogService.js"></script>
+    <script src="/app/services/ContactService.js"></script>
+    <script src="/app/services/WarriorService.js"></script>
+    <script src="/app/services/BadgeService.js"></script>
+    <!-- endbuild -->
+
+
+    <!-- build:css dist/all.css -->
+    <link rel="stylesheet" href="/bower_components/normalize-scss/normalize.css"/>
+    <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
+    <link rel='stylesheet' href='/bower_components/textAngular/src/textAngular.css'>
+    <link rel="stylesheet" href="/bower_components/ngImgCrop/compile/minified/ng-img-crop.css">
+    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.css"/>
+    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.date.css"/>
+    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.time.css"/>
     <link rel="stylesheet" href="/assets/sass/main.css">
+    <!-- endbuild -->
 
     <base href="/">
 
@@ -116,26 +193,6 @@
 	<!--Footer Include-->
 	<div ng-include src="'/app/components/footer/footerView.html'"></div>
 </body>
-
-<!--Poll-->
-<script src="/app/components/poll/poll.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
-
-<!-- Date Picker -->
-<link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.css"/>
-<link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.date.css"/>
-<link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.time.css"/>
-
-<script src="/bower_components/pickadate/lib/picker.js"></script>
-<script src="/bower_components/pickadate/lib/picker.date.js"></script>
-<script src="/bower_components/pickadate/lib/picker.time.js"></script>
-<script src="/bower_components/ng-pickadate/ng-pickadate.js"></script>
-
-<!-- End Date Picker -->
-
-<!-- Custom Scripts -->
-<script src="/assets/js/sidebarscroll.js"></script>
-
 
 <!-- Google Analytics -->
 <script>
