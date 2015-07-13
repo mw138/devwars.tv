@@ -69,7 +69,7 @@ public class UserController extends BaseController
                 Session session = DatabaseManager.getSession();
                 session.beginTransaction();
 
-                session.createQuery("update ConnectedAccount set disconnected = true where username = ''");
+                session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
 
                 session.getTransaction().commit();
                 session.close();
@@ -604,7 +604,7 @@ public class UserController extends BaseController
 
                 if(true)
                 {
-                    return new ResponseEntity(file.getAbsolutePath(), HttpStatus.OK);
+                    return new ResponseEntity("Path : " + file.getAbsolutePath(), HttpStatus.OK);
                 }
 
                 if (!file.exists())
