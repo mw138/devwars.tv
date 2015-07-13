@@ -604,7 +604,7 @@ public class UserController extends BaseController
 
                 if(true)
                 {
-                    return new ResponseEntity("Path : " + file.getAbsolutePath(), HttpStatus.OK);
+                    return new ResponseEntity(file.getAbsolutePath(), HttpStatus.BAD_REQUEST);
                 }
 
                 if (!file.exists())
