@@ -2,7 +2,7 @@
     <div class="badges-container">
         <div class="badge-box" ng-class="{'badge-box--complete': userHasBadge(badge)}" title="{{ badge.description }}" ng-repeat="badge in badges">
             <div class="badge-properties">
-                <span class="who-earned"><i class="fa fa-group"></i>0%</span>
+                <span class="who-earned"><i class="fa fa-group"></i>{{ badge.userCount * 1.0 / userCount  * 100 | number : 0 }}%</span>
             </div> <!-- .badge-properties -->
             <img ng-src="/assets/img/badges/{{ imageNameFromName(badge.name) }}.png" onerror="this.src='/assets/img/badges/mystery.png'"/>
             <h2>{{ badge.name }}</h2>

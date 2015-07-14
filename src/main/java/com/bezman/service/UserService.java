@@ -127,4 +127,17 @@ public class UserService
         return user;
     }
 
+    public static Integer userCount()
+    {
+        Long count = null;
+
+        Session session = DatabaseManager.getSession();
+
+        count = (Long) session.createQuery("select count(*) from User").uniqueResult();
+
+        session.close();
+
+        return count.intValue();
+    }
+
 }

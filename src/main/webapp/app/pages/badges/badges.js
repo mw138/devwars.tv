@@ -38,7 +38,8 @@ angular.module("app.badges", [])
         };
 
         BadgeService.getAll(function (success) {
-            $scope.badges = success.data;
+            $scope.badges = success.data.badges;
+            $scope.userCount = success.data.userCount;
         }, angular.noop);
 
         $scope.badgePercentCalculators = {
