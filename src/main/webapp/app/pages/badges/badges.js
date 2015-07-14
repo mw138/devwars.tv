@@ -100,6 +100,10 @@ angular.module("app.badges", [])
 
             "Cake Day": function () {
                 return $scope.userHasBadge($scope.badgeForName("Cake Day")) ? 100 : 0;
+            },
+
+            "High Roller": function () {
+                return Math.min(AuthService.user.bettingBitsEarned / 10000.0 * 100, 100);
             }
         }
 
