@@ -77,6 +77,8 @@ public class GameController
     {
         List<Game> pastGames = null;
 
+        count = count > 8 ? 8 : count;
+
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from Game where done = :done order by id desc");
         query.setFirstResult(offset);
