@@ -615,7 +615,7 @@ public class UserController extends BaseController
                     bufferedOutputStream.close();
                 }catch (IOException e)
                 {
-                    return new ResponseEntity(file.getAbsolutePath(), HttpStatus.OK);
+                    return new ResponseEntity(file.getAbsolutePath() + " : " +  e.toString(), HttpStatus.OK);
                 }
 
                 currentUser.setAvatarChanges(currentUser.getAvatarChanges() - 1);
