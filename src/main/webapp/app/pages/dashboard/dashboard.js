@@ -5,6 +5,7 @@ angular.module("app.dashboard", [])
                 .state('dashboard', {
                     name: "dashboard",
                     url: "/dashboard",
+                    abstract: true,
 
                     templateUrl: '/app/pages/dashboard/dashboardView.html',
                     controller: "DashboardController"
