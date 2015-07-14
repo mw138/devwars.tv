@@ -11,7 +11,7 @@
 						<span>{{upcomingGame.timestamp | date : 'dd'}}</span>
 					</div> <!-- .gameDate -->
 					<div class="gameName">
-						<span>Coming Up...</span>
+                        <span>{{ upcomingGame.timestamp | date : 'shortTime'}} {{ timezone() }}</span>
 						<span>{{upcomingGame.name}}</span>
 					</div>
 					<div class="gameMedia" layout="row" layout-align="start center">
@@ -191,8 +191,8 @@
 							<span>{{upcomingGame.timestamp | date : 'dd'}}</span>
 						</div> <!-- .gameDate -->
 						<div class="gameName">
-							<span>Coming Up...</span>
-							<span>{{upcomingGame.name}}</span>
+                            <span>{{ upcomingGame.timestamp | date : 'shortTime'}} {{ timezone() }}</span>
+                            <span>{{upcomingGame.name}}</span>
 						</div>
 						<div class="gameMedia" layout="row" layout-align="start center">
 							<button ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
