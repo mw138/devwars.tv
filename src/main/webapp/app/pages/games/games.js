@@ -191,6 +191,24 @@ angular.module("app.games", [])
             });
         };
 
+        $scope.timezone = function () {
+            var timeString = new Date().toString();
+
+            var words = timeString.split('(')[timeString.split('(').length -1];
+            words = words.split(')')[0];
+            words = words.split(' ');
+
+            var returnString = "";
+
+            for(var wordKey in words) {
+                var word = words[wordKey];
+
+                returnString += word.charAt(0);
+            }
+
+            return returnString;
+        };
+
         GameService.nearestGame(function (success) {
             $scope.games.push(success.data);
 

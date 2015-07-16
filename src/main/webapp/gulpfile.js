@@ -30,6 +30,7 @@ var reload = browserSync.reload;
 var concat = require('gulp-concat');
 var ngmin = require('gulp-ngmin');
 var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -150,6 +151,17 @@ gulp.task('html', function () {
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
+
+gulp.task('dist', function () {
+    var assets = $.useref.assets();
+
+    return gulp.src('index.html')
+        .pipe(rename('index.min.html'))
+        .pipe(assets)
+        .pipe(assets.restore())
+        .pipe($.useref())
+        .pipe(gulp.dest('./'));
+});
 
 // Watch Files For Changes & Reload
 gulp.task('serve', ['styles'], function () {

@@ -73,12 +73,16 @@ public class GameController
     }
 
     @RequestMapping("/pastgames")
-    public ResponseEntity pastGames(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity pastGames(@RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
     {
         List<Game> pastGames = null;
 
+        count = count > 8 ? 8 : count;
+
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from Game where done = :done order by id desc");
+        query.setFirstResult(offset);
+        query.setMaxResults(count);
         query.setBoolean("done", true);
 
         pastGames = query.list();

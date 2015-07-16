@@ -15,7 +15,7 @@ angular.module('app.modCP', [
                 })
 
                 .state('modCP.createGameView', {
-                    url: '/creategame',
+                    url: '/creategames',
                     parent: "modCP",
 
                     views : {

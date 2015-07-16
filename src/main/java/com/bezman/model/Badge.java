@@ -3,6 +3,7 @@ package com.bezman.model;
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -11,14 +12,14 @@ import java.util.Set;
 /**
  * Created by Terence on 6/28/2015.
  */
-public class Badge
+public class Badge extends BaseModel
 {
 
     public int id;
 
     public String name, description;
 
-    public Integer bitsAwarded, xpAwarded;
+    public Integer bitsAwarded, xpAwarded, userCount;
 
     @GsonExclude
     public Set<User> users;
@@ -92,6 +93,16 @@ public class Badge
     public void setUsers(Set<User> users)
     {
         this.users = users;
+    }
+
+    @JsonIgnore
+    public void updateUsersCount()
+    {
+        Session session = DatabaseManager.getSession();
+
+        this.userCount = this.getUsers().size();
+
+        session.close();
     }
 
     public static Badge badgeForName(String name)

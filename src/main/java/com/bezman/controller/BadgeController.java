@@ -8,6 +8,7 @@ import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.Badge;
 import com.bezman.model.BaseModel;
 import com.bezman.model.User;
+import com.bezman.service.UserService;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,9 +31,21 @@ public class BadgeController
 {
 
     @RequestMapping("/all")
-    public ResponseEntity getAll(HttpServletRequest request, HttpServletResponse response)
+    @UnitOfWork
+    public ResponseEntity getAll(SessionImpl session)
     {
-        return new ResponseEntity(BaseModel.all(Badge.class), HttpStatus.OK);
+        List<Badge> badges = session.createCriteria(Badge.class)
+                                        .list();
+
+        badges.stream()
+                .forEach(b -> b.updateUsersCount());
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("badges", badges);
+        map.put("userCount", UserService.userCount());
+
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @RequestMapping("/{id}")

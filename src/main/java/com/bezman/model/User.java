@@ -494,6 +494,11 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Penny-Pincher"));
         }
 
+        if(this.getBettingBitsEarned() > 10000)
+        {
+            badgesToAward.add(Badge.badgeForName("High Roller"));
+        }
+
         Session session = DatabaseManager.getSession();
 
         Query allObjectivesQuery = session.createQuery("select player.user from Player player where player.user.id = :id AND SIZE(player.team.completedObjectives) = size(player.team.game.objectives) AND size(player.team.game.objectives) > 0 ");

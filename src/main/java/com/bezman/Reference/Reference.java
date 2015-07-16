@@ -22,14 +22,14 @@ import java.sql.*;
  */
 public class Reference
 {
-        public static String rootURL = "http://devwars.tv";
-//    public static String rootURL = "http://bezcode.com:9090";
+    public static String rootURL = "http://devwars.tv";
+    //    public static String rootURL = "http://bezcode.com:9090";
 //    public static String rootURL = "http://localhost:8080";
     public static String[] allowedHosts = new String[]{"localhost:8080", "localhost:81", "devwars.tv", "bezcode.com:9090"};
 
     public static Firebase firebase;
 
-    public static String PROFILE_PICTURE_PATH = File.separator + "home" + File.separator + "ec2-user" + File.separator;
+    public static String PROFILE_PICTURE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator;
 
     public static Gson gson;
 

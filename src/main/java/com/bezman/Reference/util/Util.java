@@ -41,7 +41,14 @@ public class Util
 
     public static void sendEmail(String username, String password, String subject, String message, String recipient)
     {
-        EmailThread emailThread = new EmailThread(username, password, subject, message, recipient);
+        EmailThread emailThread = new EmailThread(username, password, subject, message, recipient, false);
+
+        emailThread.start();
+    }
+
+    public static void sendEmailHTML(String username, String password, String subject, String message, String recipient)
+    {
+        EmailThread emailThread = new EmailThread(username, password, subject, message, recipient, true);
 
         emailThread.start();
     }

@@ -29,6 +29,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +69,7 @@ public class UserController extends BaseController
                 Session session = DatabaseManager.getSession();
                 session.beginTransaction();
 
-                session.createQuery("update ConnectedAccount set disconnected = true where username = ''");
+                session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
 
                 session.getTransaction().commit();
                 session.close();
@@ -586,7 +589,7 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeavatar")
     public ResponseEntity changeAvatar(HttpServletRequest request, HttpServletResponse response,
-                                       @RequestParam("file") MultipartFile image) throws IOException
+                                       @RequestParam("file") MultipartFile image)
     {
         if (image.isEmpty())
         {
@@ -599,15 +602,21 @@ public class UserController extends BaseController
             {
                 File file = new File(Reference.PROFILE_PICTURE_PATH + currentUser.getId() + File.separator + "avatar.jpeg");
 
-                if (!file.exists())
+                try
                 {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                }
+                    if (!file.exists())
+                    {
+                        file.getParentFile().mkdirs();
+                        file.createNewFile();
+                    }
 
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-                bufferedOutputStream.write(image.getBytes());
-                bufferedOutputStream.close();
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
+                    bufferedOutputStream.write(image.getBytes());
+                    bufferedOutputStream.close();
+                }catch (IOException e)
+                {
+                    return new ResponseEntity(file.getAbsolutePath() + " : " +  e.toString(), HttpStatus.BAD_REQUEST);
+                }
 
                 currentUser.setAvatarChanges(currentUser.getAvatarChanges() - 1);
 
@@ -897,7 +906,7 @@ public class UserController extends BaseController
     @RequestMapping("/testemail")
     public ResponseEntity testEmail(HttpServletRequest request, HttpServletResponse response,
                                     @RequestParam("email") String email,
-                                    @RequestParam("uid") String uid) throws UnirestException
+                                    @RequestParam("uid") String uid) throws UnirestException, MessagingException
     {
         String html = Unirest.get(Reference.rootURL + "/assets/email/verification.html")
                 .asString()
@@ -905,7 +914,32 @@ public class UserController extends BaseController
         String message = html.replace("{{verifyLink}}", Reference.rootURL + "/v1/user/validate?uid=" + uid);
 
 
-        Util.sendEmail(Security.emailUsername, Security.emailPassword, "test", message, email);
+        Properties properties = new Properties();
+
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.user", Security.emailUsername);
+        properties.put("mail.smtp.password", Security.emailPassword);
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", 587);
+
+        javax.mail.Session session = javax.mail.Session.getInstance(properties, new Authenticator()
+        {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication()
+            {
+                return new PasswordAuthentication(Security.emailUsername, Security.emailPassword);
+            }
+        });
+
+        MimeMessage emailMessage = new MimeMessage(session);
+
+        emailMessage.setFrom(new InternetAddress(Security.emailUsername));
+        emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+        emailMessage.setSubject("test");
+        emailMessage.setText(message);
+
+        Transport.send(emailMessage);
 
         return null;
     }
