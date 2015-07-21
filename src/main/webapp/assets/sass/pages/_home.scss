@@ -129,7 +129,7 @@
 		i {
 			display: inline-block;
 			font-size: 20px;
-			width: calc(16.66% - 8px);
+			width: calc(20% - 8px);
 			margin: 0 4px;
 			border: 1px solid white;
 			padding: 10px 0;
@@ -139,8 +139,8 @@
 		}
 	}
 
-	$social-names: facebook, twitter, gplus, reddit, twitch, github;
-	$social-colors: $facebook-color, $twitter-color, $gplus-color, $reddit-color, $twitch-color, $github-color;
+	$social-names: facebook, twitter, gplus, twitch, github;
+	$social-colors: $facebook-color, $twitter-color, $gplus-color, $twitch-color, $github-color;
 	@each $current-color in $social-colors {
 		$i: index($social-colors, $current-color);
 		.featured-links__social i:nth-child(#{$i}):hover {
