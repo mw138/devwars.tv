@@ -474,7 +474,7 @@ public class UserConnectionController
         ConnectedAccount connectedAccount = new ConnectedAccount();
         connectedAccount.setUser(signedInUser);
         connectedAccount.setProvider(provider);
-        connectedAccount.setUsername(user.username.substring(0, user.username.length() - 4));
+        connectedAccount.setUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
         return connectedAccount;
     }

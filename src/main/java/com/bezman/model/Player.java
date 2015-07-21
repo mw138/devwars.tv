@@ -8,17 +8,17 @@ import com.bezman.exclusion.GsonExclude;
 public class Player extends BaseModel
 {
 
-    public int id;
+    private int id;
 
     @GsonExclude
-    public Team team;
+    private Team team;
 
-    public User user;
-    public String language;
+    private User user;
+    private String language;
 
-    public Integer pointsChanged;
+    private Integer pointsChanged;
 
-    public Integer xpChanged;
+    private Integer xpChanged;
 
     public String getLanguage()
     {

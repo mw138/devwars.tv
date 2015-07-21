@@ -15,14 +15,14 @@ import java.util.Set;
 public class Badge extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String name, description;
+    private String name, description;
 
-    public Integer bitsAwarded, xpAwarded, userCount;
+    private Integer bitsAwarded, xpAwarded, userCount;
 
     @GsonExclude
-    public Set<User> users;
+    private Set<User> users;
 
     public Badge(){}
 

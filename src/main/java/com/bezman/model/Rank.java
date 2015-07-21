@@ -6,13 +6,13 @@ package com.bezman.model;
 public class Rank extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public int level, rankLevel;
+    private int level, rankLevel;
 
-    public String rank, levelName;
+    private String rank, levelName;
 
-    public int xpRequired;
+    private int xpRequired;
 
     public int getId()
     {

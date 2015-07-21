@@ -10,16 +10,16 @@ import java.util.Date;
 public class Warrior extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String firstName, favFood, favTool, about, c9Name, company, location;
+    private String firstName, favFood, favTool, about, c9Name, company, location;
 
-    public Integer htmlRate, cssRate, jsRate;
+    private Integer htmlRate, cssRate, jsRate;
 
-    public Date dob;
+    private Date dob;
 
     @GsonExclude
-    public User user;
+    private User user;
 
     public Warrior(){}
 

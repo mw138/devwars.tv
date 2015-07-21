@@ -6,8 +6,8 @@ package com.bezman.model;
 public class SecretKey extends BaseModel
 {
 
-    public int id;
-    public String uid;
+    private int id;
+    private String uid;
 
     public int getId()
     {

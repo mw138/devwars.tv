@@ -17,14 +17,14 @@ import java.sql.Ref;
 public class Ranking extends BaseModel
 {
 
-    public int id;
-    public Double points;
-    public Double xp;
+    private int id;
+    private Double points;
+    private Double xp;
 
-    public int rank;
+    private int rank;
 
     @GsonExclude
-    public User user;
+    private User user;
 
     public int getId()
     {

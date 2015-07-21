@@ -11,26 +11,26 @@ import java.util.Set;
  */
 public class Team extends BaseModel
 {
-    public String name;
+    private String name;
 
-    public int id;
+    private int id;
 
-    public String embedLink;
-    public String status;
-    public String endGame;
+    private String embedLink;
+    private String status;
+    private String endGame;
 
-    public boolean win = false;
+    private boolean win = false;
 
-    public String codeUrl, websiteUrl;
+    private String codeUrl, websiteUrl;
 
     @GsonExclude
-    public Game game;
+    private Game game;
 
-    public Set<Player> players;
+    private Set<Player> players;
 
-    public Set<CompletedObjective> completedObjectives;
+    private Set<CompletedObjective> completedObjectives;
 
-    public Integer designVotes, funcVotes, codeVotes;
+    private Integer designVotes, funcVotes, codeVotes;
 
     public String getEmbedLink()
     {

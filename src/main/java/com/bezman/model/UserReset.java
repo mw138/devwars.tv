@@ -8,12 +8,12 @@ import com.bezman.exclusion.GsonExclude;
 public class UserReset extends BaseModel
 {
 
-    public int id;
+    private int id;
 
     @GsonExclude
-    public User user;
+    private User user;
 
-    public String uid;
+    private String uid;
 
     public int getId()
     {

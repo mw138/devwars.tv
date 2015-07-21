@@ -6,10 +6,10 @@ package com.bezman.model;
 public class GameSignup extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public User user;
-    public Game game;
+    private User user;
+    private Game game;
 
     public int getId()
     {

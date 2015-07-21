@@ -9,14 +9,14 @@ import com.google.gson.annotations.Expose;
 public class Objective extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public Integer orderID;
+    private Integer orderID;
 
     @GsonExclude
-    public Game game;
+    private Game game;
 
-    public String objectiveText;
+    private String objectiveText;
 
     public int getId()
     {

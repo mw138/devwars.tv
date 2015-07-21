@@ -8,11 +8,11 @@ import com.bezman.exclusion.GsonExclude;
 public class UserSession extends BaseModel
 {
 
-    public int id;
-    public String sessionID;
+    private int id;
+    private String sessionID;
 
     @GsonExclude
-    public User user;
+    private User user;
 
     public int getId()
     {
