@@ -54,11 +54,11 @@ gulp.task('jshint', function () {
 });
 
 gulp.task('concat', function () {
-   return gulp.src(['app/**/*.js', 'app/*.js'])
-       .pipe(ngmin())
-       .pipe(uglify())
-       .pipe(concat('all.js'))
-       .pipe(gulp.dest('app/'))
+    return gulp.src(['app/**/*.js', 'app/*.js'])
+        .pipe(ngmin())
+        .pipe(uglify())
+        .pipe(concat('all.js'))
+        .pipe(gulp.dest('app/'))
 });
 
 // Optimize Images
@@ -185,7 +185,7 @@ gulp.task('serve', ['styles'], function () {
 });
 
 gulp.task('watch', function(){
-	    gulp.watch(['app/**/*.html'], reload);
+    gulp.watch(['app/**/*.html'], reload);
     gulp.watch(['app/**/*.js'], ['concat', reload]);
     gulp.watch(['app/**/**/*.js'], ['concat', reload]);
     gulp.watch(['assets/sass/**/*.scss'], ['styles', reload]);
