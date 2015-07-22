@@ -64,6 +64,8 @@ public class User extends BaseModel
 
     private Set<Badge> badges;
 
+    private Set<Team> teams;
+
     private String providerID;
 
     private Integer referredUsers;
@@ -386,6 +388,16 @@ public class User extends BaseModel
     public void setGamesWatched(Integer gamesWatched)
     {
         this.gamesWatched = gamesWatched;
+    }
+
+    public Set<Team> getTeams()
+    {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams)
+    {
+        this.teams = teams;
     }
 
     @JsonIgnore

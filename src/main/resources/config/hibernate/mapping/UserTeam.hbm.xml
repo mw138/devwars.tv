@@ -17,5 +17,10 @@
             <key column="team_id"></key>
             <many-to-many class="com.bezman.model.User" column="user_id"></many-to-many>
         </set>
+
+        <set name="invites" table="team_invites">
+            <key column="team_id"></key>
+            <many-to-many class="com.bezman.model.User" column="user_id"></many-to-many>
+        </set>
     </class>
 </hibernate-mapping>

@@ -16,6 +16,16 @@ public class UserTeam extends BaseModel
 
     private Set<User> members;
 
+    private Set<User> invites;
+
+    public UserTeam(){}
+
+    public UserTeam(String name, User owner)
+    {
+        this.name = name;
+        this.owner = owner;
+    }
+
     public int getId()
     {
         return id;
@@ -55,4 +65,33 @@ public class UserTeam extends BaseModel
     {
         this.name = name;
     }
+
+    public Set<User> getInvites()
+    {
+        return invites;
+    }
+
+    public void setInvites(Set<User> invites)
+    {
+        this.invites = invites;
+    }
+
+
+    public boolean inviteUser(User user)
+    {
+        for(User currentUser : this.getMembers())
+        {
+            if(currentUser.getId() == user.getId()) return false;
+        }
+
+        for(User currentUser : this.getInvites())
+        {
+            if(currentUser.getId() == user.getId()) return false;
+        }
+
+        this.getInvites().add(user);
+
+        return true;
+    }
 }
+
