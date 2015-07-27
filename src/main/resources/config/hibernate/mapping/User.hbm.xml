@@ -52,7 +52,7 @@
             <many-to-many column="badge_id" class="Badge"></many-to-many>
         </set>
 
-       <set name="teams" table="user_teams">
+       <set name="teams" table="user_teams" lazy="true">
            <key column="owner"></key>
            <one-to-many class="UserTeam"></one-to-many>
        </set>

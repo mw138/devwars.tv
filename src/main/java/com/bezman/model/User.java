@@ -64,7 +64,8 @@ public class User extends BaseModel
 
     private Set<Badge> badges;
 
-    private Set<Team> teams;
+    @GsonExclude
+    private Set<UserTeam> teams;
 
     private String providerID;
 
@@ -390,12 +391,13 @@ public class User extends BaseModel
         this.gamesWatched = gamesWatched;
     }
 
-    public Set<Team> getTeams()
+    @JsonIgnore
+    public Set<UserTeam> getTeams()
     {
         return teams;
     }
 
-    public void setTeams(Set<Team> teams)
+    public void setTeams(Set<UserTeam> teams)
     {
         this.teams = teams;
     }
