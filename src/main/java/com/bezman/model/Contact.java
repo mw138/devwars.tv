@@ -8,11 +8,11 @@ import java.util.Date;
 public class Contact extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String text, type, name, email;
+    private String text, type, name, email;
 
-    public Date timestamp;
+    private Date timestamp;
 
     public Contact(){}
 

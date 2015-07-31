@@ -6,9 +6,9 @@ package com.bezman.model;
 public class Variable extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String key, value;
+    private String key, value;
 
     public int getId()
     {

@@ -36,7 +36,7 @@ public class BlogController
         return new ResponseEntity(Reference.gson.toJson(allPosts), HttpStatus.OK);
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
+    @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/create")
     public ResponseEntity createBlog(HttpServletRequest request, HttpServletResponse response,
                                      @RequestParam("title") String title,
@@ -72,7 +72,7 @@ public class BlogController
         }
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
+    @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/update")
     public ResponseEntity updateBlog(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id,
                                      @RequestParam("title") String title,
@@ -98,7 +98,7 @@ public class BlogController
         }
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
+    @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/delete")
     public ResponseEntity deleteBlog(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
     {

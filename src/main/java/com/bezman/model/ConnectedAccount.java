@@ -8,14 +8,14 @@ import com.bezman.exclusion.GsonExclude;
 public class ConnectedAccount extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String username, provider;
+    private String username, provider;
 
     @GsonExclude
-    public User user;
+    private User user;
 
-    public Boolean disconnected;
+    private Boolean disconnected;
 
     public int getId()
     {

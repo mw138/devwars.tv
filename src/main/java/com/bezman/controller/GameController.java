@@ -282,7 +282,7 @@ public class GameController
         for (Team team : game.getTeams().values())
         {
             //Participation
-            team.players.stream().forEach(p -> {
+            team.getPlayers().stream().forEach(p -> {
                 p.setXpChanged(p.getXpChanged() + 50);
                 p.setPointsChanged(p.getPointsChanged() + 222);
 
@@ -296,7 +296,7 @@ public class GameController
             if (team.didCompleteAllObjectives())
             {
                 System.out.println(team.getName() + " has completed all objectives.");
-                team.players.stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p -> {
                     p.setXpChanged(p.getXpChanged() + 150);
 
                     p.getUser().getRanking().addXP(150);
@@ -307,7 +307,7 @@ public class GameController
             if (team.isWin())
             {
                 System.out.println(team.getName() + " has won");
-                team.players.stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p -> {
                     p.setXpChanged(p.getXpChanged() + 250);
                     p.setPointsChanged(p.getPointsChanged() + 444);
 
@@ -426,9 +426,9 @@ public class GameController
 
         if (game != null)
         {
-            for (Team team : game.teams.values())
+            for (Team team : game.getTeams().values())
             {
-                for (Player player : team.players)
+                for (Player player : team.getPlayers())
                 {
                     if (player.getId() == playerID)
                     {
@@ -470,7 +470,7 @@ public class GameController
 
         if (game != null)
         {
-            for (Team team : game.teams.values())
+            for (Team team : game.getTeams().values())
             {
                 if (team.getId() == teamID)
                 {
@@ -500,7 +500,7 @@ public class GameController
 
                 session.refresh(newPlayer);
 
-                String message = "You were added to the game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.timestamp.getTime()));
+                String message = "You were added to the game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime()));
                 Activity activity = new Activity(newPlayer.getUser(), (User) request.getAttribute("user"), message, 0, 0);
 
                 session.save(activity);
@@ -512,7 +512,7 @@ public class GameController
                 if (newPlayer.getUser().getEmail() != null)
                 {
                     String subject = "Accepted to play a game of DevWars";
-                    String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(game.timestamp.getTime()).toString();
+                    String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(game.getTimestamp().getTime()).toString();
                     Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, activityMessage, newPlayer.getUser().getEmail());
                 }
 
@@ -576,7 +576,7 @@ public class GameController
                     gameSignup.setUser(user);
                     gameSignup.setGame(game);
 
-                    Activity activity = new Activity(user, user, "Signed up for game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.timestamp.getTime())), 0, 0);
+                    Activity activity = new Activity(user, user, "Signed up for game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime())), 0, 0);
 
                     DatabaseUtil.saveObjects(false, gameSignup, activity);
 

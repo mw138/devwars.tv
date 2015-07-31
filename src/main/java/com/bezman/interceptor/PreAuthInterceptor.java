@@ -91,7 +91,7 @@ public class PreAuthInterceptor implements HandlerInterceptor
 
                             if (user != null)
                             {
-                                User.Role userRole = user.role;
+                                User.Role userRole = User.Role.valueOf(user.getRole());
 
                                 System.out.println(requiredRole.toString() + ", " + requiredRole.ordinal());
                                 System.out.println(userRole.toString() + ", " + userRole.ordinal());

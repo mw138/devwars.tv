@@ -11,16 +11,16 @@ import java.util.Date;
 public class BlogPost extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String title;
-    public String description;
-    public String text;
-    public String image_url;
+    private String title;
+    private String description;
+    private String text;
+    private String image_url;
 
-    public User user;
+    private User user;
 
-    public Timestamp timestamp;
+    private Timestamp timestamp;
 
     public int getId()
     {

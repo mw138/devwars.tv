@@ -55,8 +55,8 @@ public class GameService
         redTeam.setStatus("Waiting");
         redTeam.setWin(false);
 
-        game.teams.put(blueTeam.getName(), blueTeam);
-        game.teams.put(redTeam.getName(), redTeam);
+        game.getTeams().put(blueTeam.getName(), blueTeam);
+        game.getTeams().put(redTeam.getName(), redTeam);
 
         System.out.println(game.toString());
 

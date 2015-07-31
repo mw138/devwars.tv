@@ -69,6 +69,10 @@ angular.module("app.dashboard", [])
             UserService.getActivities(function (success) {
                 AuthService.user.activityLog = success.data;
             }, angular.noop);
+
+            UserService.getBadges(function (success) {
+                AuthService.user.badges = success.data;
+            }, angular.noop);
         };
 
         if(!AuthService.user) {

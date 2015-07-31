@@ -186,8 +186,8 @@
 	}
   } /* settings-content */
 
-  $social-names: twitter, facebook, gplus, reddit, twitch, github;
-  $social-colors: $twitter-color, $facebook-color, $gplus-color, $reddit-color, $twitch-color, $github-color;
+  $social-names: twitter, facebook, gplus, twitch, github;
+  $social-colors: $twitter-color, $facebook-color, $gplus-color, $twitch-color, $github-color;
   @each $current-color in $social-colors {
 	$i: index($social-colors, $current-color);
 	.connect-social li:nth-child(#{$i}) .connect-social-button {
@@ -195,8 +195,8 @@
 	}
   }
 
-  $social-names: twitter, facebook, gplus, reddit, twitch, github;
-  $social-active: $twitter-active, $facebook-active, $gplus-active, $reddit-active, $twitch-active, $github-active;
+  $social-names: twitter, facebook, gplus, twitch, github;
+  $social-active: $twitter-active, $facebook-active, $gplus-active, $twitch-active, $github-active;
   @each $current-color in $social-active {
 	$i: index($social-active, $current-color);
 	.connect-social li:nth-child(#{$i}) .connect-social-button:active {

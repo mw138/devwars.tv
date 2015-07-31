@@ -1,9 +1,10 @@
-package com.bezman.controller;
+package com.bezman.controller.user;
 
 import com.bezman.Reference.*;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
+import com.bezman.controller.BaseController;
 import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
@@ -411,7 +412,7 @@ public class UserController extends BaseController
 
         if (user != null && user.getUnencryptedPassword().equals(password))
         {
-            if (user.role != User.Role.PENDING)
+            if (User.Role.valueOf(user.getRole()) != User.Role.PENDING)
             {
                 String newToken = user.newSession();
                 Cookie cookie = new Cookie("token", newToken);

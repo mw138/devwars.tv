@@ -28,72 +28,72 @@ public class User extends BaseModel
 
     public enum Role
     {
-        NONE, PENDING, USER, ADMIN
+        NONE, PENDING, USER, BLOGGER, ADMIN
     }
 
-    public int id;
+    private int id;
 
-    public Rank rank;
+    private Rank rank;
 
-    public Rank nextRank;
+    private Rank nextRank;
 
-    public String username;
+    private String username;
 
-    public String email;
+    private String email;
 
-    public String provider;
+    private String provider;
 
     private transient String password;
 
     public transient UserSession session;
 
-    public UserReset passwordReset;
+    private UserReset passwordReset;
 
-    public Ranking ranking;
+    private Ranking ranking;
 
-    public EmailConfirmation emailConfirmation;
+    private EmailConfirmation emailConfirmation;
 
-    public Role role;
+    private Role role;
 
-    public Set<Integer> appliedGames;
+    private Set<Integer> appliedGames;
 
-    public Set<ConnectedAccount> connectedAccounts;
+    private Set<ConnectedAccount> connectedAccounts;
 
     @GsonExclude
-    public Set<Activity> activityLog;
+    private Set<Activity> activityLog;
 
-    public Set<Badge> badges;
+    private Set<Badge> badges;
+
+    private String providerID;
+
+    private Integer referredUsers;
+
+    private Integer avatarChanges;
+
+    private Integer gamesPlayed = 0;
+    private Integer gamesWon = 0;
+    private Integer gamesLost = 0;
+
+    private Integer gameStreak;
+
+    private Warrior warrior;
+
+    private String location, url, company;
+
+    private Integer usernameChanges;
+
+    private Integer score;
+
+    private Boolean veteran;
+
+    private Integer bettingBitsEarned;
+
+    private Integer gamesWatched;
 
     public String getEmail()
     {
         return email;
     }
-
-    public String providerID;
-
-    public Integer referredUsers;
-
-    public Integer avatarChanges;
-
-    public Integer gamesPlayed = 0;
-    public Integer gamesWon = 0;
-    public Integer gamesLost = 0;
-
-    public Integer gameStreak;
-
-    public Warrior warrior;
-
-    public String location, url, company;
-
-    public Integer usernameChanges;
-
-    public Integer score;
-
-    public Boolean veteran;
-
-    public Integer bettingBitsEarned;
-
-    public Integer gamesWatched;
 
     public void setEmail(String email)
     {

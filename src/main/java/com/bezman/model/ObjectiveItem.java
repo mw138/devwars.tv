@@ -6,9 +6,9 @@ package com.bezman.model;
 public class ObjectiveItem extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String objectiveText;
+    private String objectiveText;
 
     public ObjectiveItem(){}
 

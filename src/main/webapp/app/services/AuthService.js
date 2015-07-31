@@ -7,6 +7,13 @@ angular.module("app.AuthService", [])
 
         AuthService.callbacks = [];
 
+        AuthService.roles = [
+            "PENDING",
+            "USER",
+            "BLOGGER",
+            "ADMIN"
+        ];
+
         AuthService.init = function () {
             $http({
                 method: "GET",
@@ -49,7 +56,7 @@ angular.module("app.AuthService", [])
                 }, function (error) {
                     errorCallback(error);
                 })
-        }
+        };
 
         AuthService.logout = function () {
             return $http({
@@ -69,6 +76,17 @@ angular.module("app.AuthService", [])
 
         AuthService.isAdmin = function () {
             return AuthService.user ? AuthService.user.role === "ADMIN" : false;
+        };
+
+        AuthService.isAtLeast = function (min) {
+            if(!AuthService.user) return false;
+
+            var minIndex = AuthService.roles.indexOf(min);
+            var userIndex = AuthService.roles.indexOf(AuthService.user.role);
+
+            if(minIndex < 0) return false;
+
+            return userIndex >= minIndex;
         };
 
         AuthService.hasProvider = function (provider) {
