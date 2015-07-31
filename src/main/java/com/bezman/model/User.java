@@ -28,7 +28,7 @@ public class User extends BaseModel
 
     public enum Role
     {
-        NONE, PENDING, USER, ADMIN
+        NONE, PENDING, USER, BLOGGER, ADMIN
     }
 
     private int id;
