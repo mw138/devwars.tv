@@ -257,6 +257,7 @@ public class GameController
             if (team != null)
             {
                 game.setDone(true);
+                game.setActive(false);
 
                 for(Team otherTeam : game.getTeams().values())
                 {
