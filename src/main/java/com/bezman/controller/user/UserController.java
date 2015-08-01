@@ -70,13 +70,13 @@ public class UserController extends BaseController
 
 
             //Make sure the disconnected account thing doesn't happen
-            Session session = DatabaseManager.getSession();
-            session.beginTransaction();
+            Session disconnectedSession = DatabaseManager.getSession();
+            disconnectedSession.beginTransaction();
 
-            session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
+            disconnectedSession.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
 
-            session.getTransaction().commit();
-            session.close();
+            disconnectedSession.getTransaction().commit();
+            disconnectedSession.close();
 
             try
             {
