@@ -115,12 +115,14 @@ angular.module('app.modCP', [
             GameService.allGames(0, 10, function (success) {
                 $scope.availableGames = success.data;
 
-                console.log($location.search());
                 if($location.search().game) {
                     var game = parseInt($location.search().game);
 
                     $scope.availableGames.forEach(function (a) {
-                        if(a.id === game) $scope.selectedGame = a;
+                        if(a.id === game && !$scope.hasInit) {
+                            $scope.hasInit = true;
+                            $scope.selectedGame = a;
+                        }
                     });
                 };
             }, angular.noop);
