@@ -66,15 +66,17 @@ public class UserController extends BaseController
                 currentUser.setRanking(ranking);
 
                 DatabaseUtil.saveObjects(true, ranking);
-
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
-
-                session.getTransaction().commit();
-                session.close();
             }
+
+
+            //Make sure the disconnected account thing doesn't happen
+            Session session = DatabaseManager.getSession();
+            session.beginTransaction();
+
+            session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
+
+            session.getTransaction().commit();
+            session.close();
 
             try
             {
