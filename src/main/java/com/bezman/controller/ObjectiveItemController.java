@@ -33,7 +33,7 @@ public class ObjectiveItemController extends BaseController
 
         DatabaseUtil.saveObjects(true, objectiveItem);
 
-        return new ResponseEntity(Reference.gson.toJson(objectiveItem), HttpStatus.OK);
+        return new ResponseEntity(objectiveItem, HttpStatus.OK);
     }
 
     @PreAuthorization(minRole = User.Role.ADMIN)

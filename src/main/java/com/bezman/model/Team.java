@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class Team extends BaseModel
 
     private String codeUrl, websiteUrl;
 
-    @GsonExclude
+    @JsonIgnore
     private Game game;
 
     private Set<Player> players;

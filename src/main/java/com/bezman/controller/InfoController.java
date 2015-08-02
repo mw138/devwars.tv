@@ -72,7 +72,7 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     @RequestMapping("/xpleaderboard")
@@ -88,7 +88,7 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     @RequestMapping("/leaderboard")
@@ -119,7 +119,7 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
 
     /*@RequestMapping("/leaderboard/seed")

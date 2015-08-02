@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by root on 4/25/15.
@@ -12,7 +13,7 @@ public class ConnectedAccount extends BaseModel
 
     private String username, provider;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     private Boolean disconnected;

@@ -112,7 +112,7 @@ public class DevBitsController
 
                 DatabaseUtil.saveOrUpdateObjects(false, ranking);
 
-                responseEntity = new ResponseEntity(Reference.gson.toJson(ranking), HttpStatus.OK);
+                responseEntity = new ResponseEntity(ranking, HttpStatus.OK);
             } else
             {
                 System.out.println("Not found");
@@ -137,7 +137,7 @@ public class DevBitsController
                 System.out.println("UPDATING POINT STORAGE FOR " + pointStorage.getUsername());
                 DatabaseUtil.saveOrUpdateObjects(false, pointStorage);
 
-                responseEntity = new ResponseEntity(Reference.gson.toJson(pointStorage), HttpStatus.OK);
+                responseEntity = new ResponseEntity(pointStorage, HttpStatus.OK);
             }
         }
 
@@ -185,7 +185,7 @@ public class DevBitsController
             }
         }
 
-        return new ResponseEntity(Reference.gson.toJson(updatedUsers), HttpStatus.OK);
+        return new ResponseEntity(updatedUsers, HttpStatus.OK);
     }
 
 }

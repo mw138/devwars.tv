@@ -43,9 +43,11 @@ public class User extends BaseModel
 
     private String provider;
 
-    private transient String password;
+    @JsonIgnore
+    private String password;
 
-    public transient UserSession session;
+    @JsonIgnore
+    public UserSession session;
 
     private UserReset passwordReset;
 
@@ -59,7 +61,7 @@ public class User extends BaseModel
 
     private Set<ConnectedAccount> connectedAccounts;
 
-    @GsonExclude
+    @JsonIgnore
     private Set<Activity> activityLog;
 
     private Set<Badge> badges;

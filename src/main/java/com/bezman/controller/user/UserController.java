@@ -106,7 +106,7 @@ public class UserController extends BaseController
             return new ResponseEntity(HttpMessages.FORBIDDEN, HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity(Reference.gson.toJson(currentUser), HttpStatus.OK);
+        return new ResponseEntity(currentUser, HttpStatus.OK);
     }
 
     @RequestMapping("/activity")
@@ -125,7 +125,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
 
 
@@ -421,7 +421,7 @@ public class UserController extends BaseController
                 cookie.setPath("/");
 
                 response.addCookie(cookie);
-                responseObject = new ResponseEntity(Reference.gson.toJson(user), HttpStatus.OK);
+                responseObject = new ResponseEntity(user, HttpStatus.OK);
             } else
             {
                 responseObject = new ResponseEntity("You must validate your email before signing in", HttpStatus.CONFLICT);
@@ -460,7 +460,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(games), HttpStatus.OK);
+        return new ResponseEntity(games, HttpStatus.OK);
     }
 
 //    @RequestMapping("/initreset")
@@ -957,7 +957,7 @@ public class UserController extends BaseController
                 .add(Restrictions.eq("hasRead", false))
                 .list();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
 
     @PreAuthorization(minRole = User.Role.PENDING)
@@ -980,7 +980,7 @@ public class UserController extends BaseController
                     .forEach(a -> a.setHasRead(true));
         }
 //
-        return new ResponseEntity(Reference.gson.toJson(notificationList), HttpStatus.OK);
+        return new ResponseEntity(notificationList, HttpStatus.OK);
     }
 
 
@@ -989,7 +989,7 @@ public class UserController extends BaseController
     @RequestMapping("/badges")
     public ResponseEntity getBadges(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user)
     {
-        return new ResponseEntity(Reference.gson.toJson(user.getBadges()), HttpStatus.OK);
+        return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
 
 

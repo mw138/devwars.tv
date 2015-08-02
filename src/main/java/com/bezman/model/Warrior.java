@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
@@ -18,7 +19,7 @@ public class Warrior extends BaseModel
 
     private Date dob;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     public Warrior(){}
