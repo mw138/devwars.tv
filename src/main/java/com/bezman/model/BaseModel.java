@@ -102,9 +102,4 @@ public class BaseModel
     {
         DatabaseUtil.deleteObjects(this);
     }
-
-    public String toJSON()
-    {
-        return Reference.gson.toJson(this);
-    }
 }

@@ -3,6 +3,7 @@ package com.bezman.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.model.SecretKey;
 import com.bezman.service.Security;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -34,6 +35,8 @@ public class Reference
     public static Gson gson;
 
     public static Connection connection;
+
+    public static ObjectMapper objectMapper;
 
     public static Cookie getCookieFromArray(Cookie[] cookies, String key)
     {

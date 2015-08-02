@@ -4,9 +4,13 @@ import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
+import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.exclusion.GsonExclude;
+import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.bezman.service.Security;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -23,6 +27,7 @@ import java.util.*;
 /**
  * Created by Terence on 12/22/2014.
  */
+@JsonSerialize(using = UserPermissionSerializer.class)
 public class User extends BaseModel
 {
 
@@ -64,6 +69,7 @@ public class User extends BaseModel
     @JsonIgnore
     private Set<Activity> activityLog;
 
+    @JsonIgnore
     private Set<Badge> badges;
 
     private String providerID;
@@ -200,6 +206,7 @@ public class User extends BaseModel
         this.provider = provider;
     }
 
+    @JsonIgnore
     public Set<Integer> getAppliedGames()
     {
         return appliedGames;
@@ -240,6 +247,7 @@ public class User extends BaseModel
         this.providerID = providerID;
     }
 
+    @JsonIgnore
     public Set<Activity> getActivityLog()
     {
         return activityLog;
@@ -360,6 +368,7 @@ public class User extends BaseModel
         this.emailConfirmation = emailConfirmation;
     }
 
+    @JsonIgnore
     public Set<Badge> getBadges()
     {
         return badges;
