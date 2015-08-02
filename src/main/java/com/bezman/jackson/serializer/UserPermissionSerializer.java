@@ -14,7 +14,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.ContextualSerializer;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -24,33 +27,58 @@ import java.util.stream.Collectors;
 /**
  * Created by Terence on 8/2/2015.
  */
-public class UserPermissionSerializer extends JsonSerializer<User> implements ContextualSerializer
+public class UserPermissionSerializer extends JsonSerializer<Object> implements ContextualSerializer
 {
 
     String userFieldName;
 
     @Override
-    public void serialize(User user, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException
+    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException
     {
-        ArrayList<Field> fields = new ArrayList<Field>(Arrays.asList(user.getClass().getDeclaredFields()));
+        ArrayList<Field> fields = new ArrayList<Field>(Arrays.asList(o.getClass().getDeclaredFields()));
+
+        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = sra.getRequest();
 
         jsonGenerator.writeStartObject();
+
+        boolean hasSecretKey = (boolean) request.getAttribute("hasSecretKey");
+        User currentUser = (User) request.getAttribute("user");
 
         fields.forEach(field -> {
             try
             {
                 JsonIgnore jsonIgnore = field.getAnnotation(JsonIgnore.class);
+                UserPermissionFilter userPermissionFilter = field.getAnnotation(UserPermissionFilter.class);
+
                 field.setAccessible(true);
 
-                if (jsonIgnore == null && field.get(user) != null)
+                if(userPermissionFilter == null)
                 {
-                    jsonGenerator.writeObjectField(field.getName(), field.get(user));
+                    if(jsonIgnore == null && field.get(o) != null)
+                        jsonGenerator.writeObjectField(field.getName(), field.get(o));
+                } else
+                {
+                    String fieldName = userPermissionFilter.userField();
+                    User user;
+
+                    if (!fieldName.isEmpty())
+                    {
+                        Field userField = o.getClass().getDeclaredField(fieldName);
+                        userField.setAccessible(true);
+
+                        user = (User) userField.get(o);
+                    } else user = (User) o;
+
+                    if (jsonIgnore == null && field.get(o) != null)
+                    {
+                        if (hasSecretKey || currentUser.getId() == user.getId() || User.Role.valueOf(currentUser.getRole()) == User.Role.ADMIN || userPermissionFilter == null)
+                        {
+                            jsonGenerator.writeObjectField(field.getName(), field.get(o));
+                        }
+                    }
                 }
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            } catch (IllegalAccessException e)
-            {
+            } catch (Exception e){
                 e.printStackTrace();
             }
         });

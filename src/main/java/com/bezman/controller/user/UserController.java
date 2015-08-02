@@ -70,13 +70,13 @@ public class UserController extends BaseController
 
 
             //Make sure the disconnected account thing doesn't happen
-            Session session = DatabaseManager.getSession();
-            session.beginTransaction();
+            Session userUpdateSession = DatabaseManager.getSession();
+            userUpdateSession.beginTransaction();
 
-            session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
+            userUpdateSession.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
 
-            session.getTransaction().commit();
-            session.close();
+            userUpdateSession.getTransaction().commit();
+            userUpdateSession.close();
 
             try
             {
@@ -268,7 +268,7 @@ public class UserController extends BaseController
 
         if (user != null)
         {
-            responseEntity = new ResponseEntity(user.toString(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(user, HttpStatus.OK);
         } else
         {
             responseEntity = new ResponseEntity(HttpMessages.NO_USER_FOUND, HttpStatus.NOT_FOUND);

@@ -14,14 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.expression.spel.ast.QualifiedIdentifier;
 
-import javax.xml.crypto.Data;
-import java.beans.Transient;
-import java.sql.Ref;
 import java.util.*;
 
 /**
@@ -44,6 +37,7 @@ public class User extends BaseModel
 
     private String username;
 
+    @UserPermissionFilter
     private String email;
 
     private String provider;
@@ -58,6 +52,7 @@ public class User extends BaseModel
 
     private Ranking ranking;
 
+    @JsonIgnore
     private EmailConfirmation emailConfirmation;
 
     private Role role;

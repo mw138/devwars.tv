@@ -15,6 +15,6 @@ import java.lang.annotation.Target;
 public @interface UserPermissionFilter
 {
 
-    String userField();
+    String userField() default "";
 
 }
