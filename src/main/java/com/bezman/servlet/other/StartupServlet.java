@@ -4,6 +4,7 @@ import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.AngularServiceBuilder;
 import com.bezman.adapters.HibernateProxyAdapter;
+import com.bezman.adapters.ObjectSerializationStrategy;
 import com.bezman.adapters.TimestampAdapter;
 import com.bezman.exclusion.ExclusionStrategy;
 import com.bezman.model.Activity;
@@ -44,12 +45,7 @@ public class StartupServlet
             builder.registerTypeAdapter(Timestamp.class, new TimestampAdapter());
             builder.registerTypeAdapter(HibernateProxy.class, new HibernateProxyAdapter());
 
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-                {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
+            builder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong()));
 
             builder.setExclusionStrategies(new ExclusionStrategy());
 

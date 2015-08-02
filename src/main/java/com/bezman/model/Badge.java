@@ -21,7 +21,7 @@ public class Badge extends BaseModel
 
     private Integer bitsAwarded, xpAwarded, userCount;
 
-    @GsonExclude
+    @JsonIgnore
     private Set<User> users;
 
     public Badge(){}

@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Terence Bezman on 12/27/2014.
@@ -10,7 +11,7 @@ public class Player extends BaseModel
 
     private int id;
 
-    @GsonExclude
+    @JsonIgnore
     private Team team;
 
     private User user;

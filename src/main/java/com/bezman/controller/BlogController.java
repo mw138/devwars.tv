@@ -33,7 +33,7 @@ public class BlogController
     {
         List<BlogPost> allPosts = BlogService.getPosts(10, 0);
 
-        return new ResponseEntity(Reference.gson.toJson(allPosts), HttpStatus.OK);
+        return new ResponseEntity(allPosts, HttpStatus.OK);
     }
 
     @PreAuthorization(minRole = User.Role.BLOGGER)
@@ -55,7 +55,7 @@ public class BlogController
 
         DatabaseUtil.saveObjects(true, blogPost);
 
-        return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+        return new ResponseEntity(blogPost, HttpStatus.OK);
     }
 
     @RequestMapping("/{id}")
@@ -65,7 +65,7 @@ public class BlogController
 
         if (blogPost != null)
         {
-            return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+            return new ResponseEntity(blogPost, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
@@ -91,7 +91,7 @@ public class BlogController
 
             DatabaseUtil.saveOrUpdateObjects(true, blogPost);
 
-            return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+            return new ResponseEntity(blogPost, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
@@ -108,7 +108,7 @@ public class BlogController
         {
             DatabaseUtil.deleteObjects(blogPost);
 
-            return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+            return new ResponseEntity(blogPost, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);

@@ -11,7 +11,7 @@ public class Notification extends BaseModel
 
     private int id;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     private String notificationText;

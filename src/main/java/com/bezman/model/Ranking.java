@@ -3,6 +3,7 @@ package com.bezman.model;
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -23,7 +24,7 @@ public class Ranking extends BaseModel
 
     private int rank;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     public int getId()

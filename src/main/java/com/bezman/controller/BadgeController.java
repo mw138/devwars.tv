@@ -52,7 +52,7 @@ public class BadgeController
     @UnitOfWork
     public ResponseEntity getBadge(@PathVariable("id") int id, SessionImpl session)
     {
-        return new ResponseEntity(Reference.gson.toJson(session.get(Badge.class, id)), HttpStatus.OK);
+        return new ResponseEntity(session.get(Badge.class, id), HttpStatus.OK);
     }
 
 

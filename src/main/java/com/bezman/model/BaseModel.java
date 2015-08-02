@@ -14,11 +14,6 @@ import java.util.List;
  */
 public class BaseModel
 {
-    public String toString()
-    {
-        return Reference.gson.toJson(this);
-    }
-
     public static BaseModel byID(Class hibernateClass, int id)
     {
         BaseModel obj = null;
@@ -101,10 +96,5 @@ public class BaseModel
     public void delete()
     {
         DatabaseUtil.deleteObjects(this);
-    }
-
-    public String toJSON()
-    {
-        return Reference.gson.toJson(this);
     }
 }

@@ -47,7 +47,7 @@ public class GameController
     {
         count = count > 50 ? 50 : count;
 
-        return new ResponseEntity(Reference.gson.toJson(GameService.allGames(count, offset)), HttpStatus.OK);
+        return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
     }
 
     @RequestMapping("/upcoming")
@@ -65,7 +65,7 @@ public class GameController
 
         if (upcomingGames != null || (upcomingGames != null && upcomingGames.size() > 0))
         {
-            return new ResponseEntity(Reference.gson.toJson(upcomingGames), HttpStatus.OK);
+            return new ResponseEntity(upcomingGames, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
@@ -91,7 +91,7 @@ public class GameController
 
         if (pastGames != null || (pastGames != null && pastGames.size() > 0))
         {
-            return new ResponseEntity(Reference.gson.toJson(pastGames), HttpStatus.OK);
+            return new ResponseEntity(pastGames, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
@@ -134,8 +134,7 @@ public class GameController
 
         if (game != null)
         {
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(Reference.gson.toJson(game));
-            return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.OK);
+            return new ResponseEntity(game, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Could not find game for given ID", HttpStatus.NOT_FOUND);
@@ -158,8 +157,6 @@ public class GameController
         } else
         {
             Game game = Reference.gson.fromJson(json, Game.class);
-
-            System.out.println(Reference.gson.toJson(game));
 
             session = DatabaseManager.getSession();
             session.beginTransaction();
@@ -208,7 +205,7 @@ public class GameController
             session.getTransaction().commit();
             session.close();
 
-            return new ResponseEntity(Reference.gson.toJson(game), HttpStatus.OK);
+            return new ResponseEntity(game, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
@@ -233,7 +230,7 @@ public class GameController
             session.getTransaction().commit();
             session.close();
 
-            return new ResponseEntity(Reference.gson.toJson(game), HttpStatus.OK);
+            return new ResponseEntity(game, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
@@ -359,7 +356,7 @@ public class GameController
 
         if (currentGame != null)
         {
-            return new ResponseEntity(Reference.gson.toJson(currentGame), HttpStatus.OK);
+            return new ResponseEntity(currentGame, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_CURRENT_GAME, HttpStatus.NOT_FOUND);
@@ -387,7 +384,7 @@ public class GameController
 
         if (nearestGame != null)
         {
-            return new ResponseEntity(Reference.gson.toJson(nearestGame), HttpStatus.OK);
+            return new ResponseEntity(nearestGame, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
@@ -409,7 +406,7 @@ public class GameController
 
         if (users.size() > 0)
         {
-            return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+            return new ResponseEntity(users, HttpStatus.OK);
         }
 
         return new ResponseEntity("No players signed up for that game", HttpStatus.NOT_FOUND);
@@ -448,7 +445,7 @@ public class GameController
                 session.getTransaction().commit();
                 session.close();
 
-                return new ResponseEntity(Reference.gson.toJson(playerFound), HttpStatus.OK);
+                return new ResponseEntity(playerFound, HttpStatus.OK);
             }
         } else
         {
@@ -519,7 +516,7 @@ public class GameController
 
                 session.close();
 
-                return new ResponseEntity(Reference.gson.toJson(newPlayer), HttpStatus.OK);
+                return new ResponseEntity(newPlayer, HttpStatus.OK);
             }
         } else
         {
@@ -543,7 +540,7 @@ public class GameController
 
         session.delete(player);
 
-        return new ResponseEntity(Reference.gson.toJson(player), HttpStatus.OK);
+        return new ResponseEntity(player, HttpStatus.OK);
     }
 
 
@@ -552,8 +549,6 @@ public class GameController
     public ResponseEntity signupForGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
     {
         Game game = GameService.getGame(id);
-
-        System.out.println(Reference.gson.toJson(game));
 
         if (game != null)
         {
@@ -623,7 +618,7 @@ public class GameController
             session.persist(team);
             session.getTransaction().commit();
 
-            responseEntity = new ResponseEntity(Reference.gson.toJson(team), HttpStatus.OK);
+            responseEntity = new ResponseEntity(team, HttpStatus.OK);
         } else
         {
             responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
@@ -677,9 +672,7 @@ public class GameController
             session.getTransaction().commit();
             session.refresh(team);
 
-            System.out.println(Reference.gson.toJson(team.getGame()));
-
-            responseEntity = new ResponseEntity(Reference.gson.toJson(team.getGame()).toString(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(team.getGame(), HttpStatus.OK);
         } else
         {
             responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
@@ -721,7 +714,7 @@ public class GameController
 
                     session.close();
 
-                    return new ResponseEntity(Reference.gson.toJson(player), HttpStatus.OK);
+                    return new ResponseEntity(player, HttpStatus.OK);
                 }
             }
         }

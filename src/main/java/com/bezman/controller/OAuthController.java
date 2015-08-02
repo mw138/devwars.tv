@@ -266,8 +266,6 @@ public class OAuthController
                     ranking.setPoints((double) twitchPointStorage.getPoints());
                     ranking.setId(user.getId());
 
-                    System.out.println(Reference.gson.toJson(ranking));
-
                     DatabaseUtil.saveOrUpdateObjects(false, ranking);
                     DatabaseUtil.deleteObjects(twitchPointStorage);
                 }

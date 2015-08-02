@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Terence on 4/17/2015.
@@ -10,7 +11,7 @@ public class UserReset extends BaseModel
 
     private int id;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     private String uid;

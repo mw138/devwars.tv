@@ -33,7 +33,7 @@ public class ObjectiveItemController extends BaseController
 
         DatabaseUtil.saveObjects(true, objectiveItem);
 
-        return new ResponseEntity(Reference.gson.toJson(objectiveItem), HttpStatus.OK);
+        return new ResponseEntity(objectiveItem, HttpStatus.OK);
     }
 
     @PreAuthorization(minRole = User.Role.ADMIN)
@@ -45,7 +45,7 @@ public class ObjectiveItemController extends BaseController
 
         if (objectiveItem != null)
         {
-            return new ResponseEntity(objectiveItem.toJSON(), HttpStatus.OK);
+            return new ResponseEntity(objectiveItem, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Objective Not found", HttpStatus.NOT_FOUND);
@@ -61,7 +61,7 @@ public class ObjectiveItemController extends BaseController
         if (objectiveItem != null)
         {
             DatabaseUtil.deleteObjects(objectiveItem);
-            return new ResponseEntity(objectiveItem.toJSON(), HttpStatus.OK);
+            return new ResponseEntity(objectiveItem, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Objective Not found", HttpStatus.NOT_FOUND);

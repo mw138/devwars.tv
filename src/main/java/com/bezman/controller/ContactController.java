@@ -43,7 +43,7 @@ public class ContactController
 
             DatabaseUtil.saveObjects(true, contact);
 
-            return new ResponseEntity(Reference.gson.toJson(contact), HttpStatus.OK);
+            return new ResponseEntity(contact, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Enquiry is too long", HttpStatus.BAD_REQUEST);

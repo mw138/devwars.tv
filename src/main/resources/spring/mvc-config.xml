@@ -18,7 +18,17 @@
             <beans:bean class="com.bezman.resolver.SessionResolver"></beans:bean>
             <beans:bean class="com.bezman.resolver.JSONParamResolver"></beans:bean>
         </mvc:argument-resolvers>
+
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper" />
+            </bean>
+        </mvc:message-converters>
     </mvc:annotation-driven>
+
+    <bean id="jacksonObjectMapper" class="com.bezman.jackson.DevWarsObjectMapper" />
 
 
     <context:component-scan base-package="com.bezman.controller"/>

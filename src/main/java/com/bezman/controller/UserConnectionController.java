@@ -356,8 +356,6 @@ public class UserConnectionController
         com.bezman.model.User user = FacebookProvider.userForCode2(code);
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "FACEBOOK", currentUser);
 
-        System.out.println(Reference.gson.toJson(user));
-
         if (user != null && !connectedAccountExists)
         {
             Activity activity = new Activity(currentUser, currentUser, "Connected your Facebook account", DevBits.ACCOUNT_CONNECTION, 0);
@@ -410,8 +408,6 @@ public class UserConnectionController
 
         com.bezman.model.User user = GithubProvider.userForCode2(code);
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "GITHUB", currentUser);
-
-        System.out.println(Reference.gson.toJson(user));
 
         if (user != null && !connectedAccountExists)
         {
