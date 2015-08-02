@@ -59,6 +59,7 @@ public class User extends BaseModel
 
     private Set<Integer> appliedGames;
 
+    @UserPermissionFilter
     private Set<ConnectedAccount> connectedAccounts;
 
     @JsonIgnore
