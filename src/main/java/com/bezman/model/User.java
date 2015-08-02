@@ -68,6 +68,7 @@ public class User extends BaseModel
     @JsonIgnore
     private Set<Badge> badges;
 
+    @UserPermissionFilter
     private String providerID;
 
     private Integer referredUsers;
