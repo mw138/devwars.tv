@@ -31,6 +31,7 @@ public class Reference
     public static Firebase firebase;
 
     public static String PROFILE_PICTURE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator;
+    public static String PROFILE_PICTURE_PATH_NO_END = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics";
 
     public static Gson gson;
 

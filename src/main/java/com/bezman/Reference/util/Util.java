@@ -85,8 +85,6 @@ public class Util
     {
         for(File file : directory.listFiles())
         {
-            System.out.println(file.getName());
-
             if (file.isDirectory())
             {
                 zipFolder(file, zipOutputStream);
