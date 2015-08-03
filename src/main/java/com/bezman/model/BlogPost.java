@@ -74,7 +74,7 @@ public class BlogPost extends BaseModel
 
     public String getText()
     {
-        return StringEscapeUtils.escapeHtml(text);
+        return StringEscapeUtils.unescapeHtml(text);
     }
 
     public void setText(String text)
