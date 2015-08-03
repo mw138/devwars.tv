@@ -3,11 +3,14 @@ package com.bezman.controller;
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.annotation.Transactional;
 import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,24 +39,24 @@ public class BlogController
         return new ResponseEntity(allPosts, HttpStatus.OK);
     }
 
+    @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/create")
-    public ResponseEntity createBlog(HttpServletRequest request, HttpServletResponse response,
-                                     @RequestParam("title") String title,
+    public ResponseEntity createBlog(@RequestParam("title") String title,
                                      @RequestParam("description") String description,
                                      @RequestParam("text") String text,
-                                     @RequestParam("image_url") String image_url)
+                                     @RequestParam("image_url") String image_url,
+                                     @AuthedUser User user,
+                                     SessionImpl session)
     {
-        User currentUser = (User) request.getAttribute("user");
-
         BlogPost blogPost = new BlogPost();
         blogPost.setTitle(title);
         blogPost.setDescription(description);
-        blogPost.setUser(currentUser);
+        blogPost.setUser(user);
         blogPost.setText(text);
         blogPost.setImage_url(image_url);
 
-        DatabaseUtil.saveObjects(true, blogPost);
+        session.save(blogPost);
 
         return new ResponseEntity(blogPost, HttpStatus.OK);
     }
