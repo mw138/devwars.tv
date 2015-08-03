@@ -37,9 +37,11 @@ public class AdminController
         ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
 
         File zipDir = new File(Reference.PROFILE_PICTURE_PATH_NO_END);
+//                File zipDir = new File("C:\\Users\\Terence\\IdeaProjects\\DevWars Maven\\src\\main\\java");
 
         Util.zipFolder(zipDir, zipOutputStream);
 
+        zipOutputStream.finish();
         zipOutputStream.close();
 
         return null;
