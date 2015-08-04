@@ -94,7 +94,7 @@
 							<span ng-if="!team.win" class="event">LOSE</span>
 						</div>
 
-						<a href="#" class="teamPlayer" ng-repeat="player in team.players">
+						<a href="#" class="teamPlayer" ng-repeat="player in team.players" ng-if="player">
 							<span class="role">{{player.language}}</span>
 							<span class="player">{{player.user.username}}</span>
 							<span class="score">
@@ -271,7 +271,7 @@
 										<span ng-if="!team.win" class="event">LOSE</span>
 									</div>
 
-									<a href="#" class="teamPlayer" ng-repeat="player in team.players">
+									<a href="#" class="teamPlayer" ng-repeat="player in team.players" ng-if="player">
 										<span class="role">{{player.language}}</span>
 										<span class="player">{{player.user.username}}</span>
 									<span class="score">
