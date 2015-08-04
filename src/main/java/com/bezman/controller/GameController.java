@@ -50,6 +50,7 @@ public class GameController
         return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
     }
 
+    @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
     public ResponseEntity upcomingGames(HttpServletRequest request, HttpServletResponse response)
     {
