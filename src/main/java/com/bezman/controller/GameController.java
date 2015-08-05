@@ -726,12 +726,21 @@ public class GameController
         return new ResponseEntity("Could not edit player", HttpStatus.CONFLICT);
     }
 
-    @RequestMapping("/pullcurrentsite")
-    public ResponseEntity resetVeteranGames(HttpServletRequest request, HttpServletResponse response) throws UnirestException, IOException
+    @RequestMapping("/{id}/sitepull")
+    public ResponseEntity resetVeteranGames(@PathVariable("id") int id) throws UnirestException, IOException
     {
-        GameService.downloadCurrentGame(GameService.getGame(11));
+        Game game = GameService.getGame(id);
 
-        return null;
+        if (game != null)
+        {
+            GameService.downloadCurrentGame(game);
+
+            return new ResponseEntity("Successfully downloaded and stored Cloud Nine Site", HttpStatus.OK);
+
+        } else
+        {
+            return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
+        }
     }
 
 }

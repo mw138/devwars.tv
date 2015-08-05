@@ -11,6 +11,8 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -154,11 +156,50 @@ public class GameService
         downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
     }
 
-    public static void downloadSiteAtDirectory(String site, String path) throws IOException
+    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException
     {
+        Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
+
+        document.getElementsByTag("script")
+                .forEach(tag -> {
+                    String source = tag.attr("src");
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    if(source.indexOf("http") == 0 ||source.indexOf("//") == 0) return;
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
+        document.getElementsByTag("link")
+                .forEach(tag -> {
+                    String source = tag.attr("href");
+
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
         downloadURLToFile(site + "/index.html", new File(path + File.separator + "index.html"));
-        downloadURLToFile(site + "/main.js", new File(path + File.separator + "main.js"));
-        downloadURLToFile(site + "/style.css", new File(path + File.separator + "style.css"));
     }
 
     public static void downloadURLToFile(String urlLink, File file) throws IOException
@@ -168,8 +209,11 @@ public class GameService
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
 
-        IOUtils.copy(urlConnection.getInputStream(), new FileOutputStream(file));
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
 
+        IOUtils.copy(urlConnection.getInputStream(), fileOutputStream);
+
+        fileOutputStream.close();
         urlConnection.getInputStream().close();
     }
 

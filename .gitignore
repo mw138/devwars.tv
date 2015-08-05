@@ -13,4 +13,4 @@ src/main/webapp/dist/*
 /src/main/webapp/app/all.js
 /target
 /.idea
-*.iml
+DevWars.iml
