@@ -326,7 +326,14 @@
             <version>1.8.3</version>
         </dependency>
 
-		<!-- SFTP Connection via JSch -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
+        <!-- SFTP Connection via JSch -->
 		<!-- dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
