@@ -7,11 +7,11 @@
             <div class="gamesListColumn">
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
-                        <span>{{upcomingGame.timestamp | date : 'MMM'}}</span>
-                        <span>{{upcomingGame.timestamp | date : 'dd'}}</span>
+                        <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
+                        <span>{{upcomingGame.timestamp | date : 'dd' : 'UTC'}}</span>
                     </div> <!-- .gameDate -->
                     <div class="gameName">
-                        <span>{{ upcomingGame.timestamp | date : 'shortTime'}} {{ timezone() }}</span>
+                        <span>{{ upcomingGame.timestamp | date : 'shortTime' : 'UTC' }}</span>
                         <span>{{upcomingGame.name}}</span>
                     </div>
                     <div class="gameMedia" layout="row" layout-align="start center">
@@ -23,8 +23,8 @@
 
                 <div class="game" ng-click="setSelectedGame(game)" ng-class="{'game--active' : isGameSelected(game)}" ng-repeat="game in pastGames">
                     <div class="gameDate">
-                        <span class="gameDate__month">{{game.timestamp | date : 'MMM'}}</span>
-                        <span class="gameDate__day">{{game.timestamp | date : 'dd'}}</span>
+                        <span class="gameDate__month">{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
+                        <span class="gameDate__day">{{game.timestamp | date : 'dd' : 'UTC'}}</span>
                     </div> <!-- .gameDate -->
                     <div class="gameName">
                         <span>Game {{game.id}}</span>
@@ -187,11 +187,11 @@
             <div class="gamesListColumn">
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
-                        <span>{{upcomingGame.timestamp | date : 'MMM'}}</span>
-                        <span>{{upcomingGame.timestamp | date : 'dd'}}</span>
+                        <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
+                        <span>{{upcomingGame.timestamp | date : 'dd' : 'UTC'}}</span>
                     </div> <!-- .gameDate -->
                     <div class="gameName">
-                        <span>{{ upcomingGame.timestamp | date : 'shortTime'}} {{ timezone() }}</span>
+                        <span>{{ upcomingGame.timestamp | date : 'shortTime' : 'UTC'}}</span>
                         <span>{{upcomingGame.name}}</span>
                     </div>
                     <div class="gameMedia" layout="row" layout-align="start center">
@@ -204,8 +204,8 @@
                 <div class="gameMobile" ng-repeat="game in pastGames">
                     <div class="game game{{$index}}" ng-click="setSelectedGame(game, $index)" ng-class="{'game--active' : isGameSelected(game)}">
                         <div class="gameDate">
-                            <span>{{game.timestamp | date : 'MMM'}}</span>
-                            <span>{{game.timestamp | date : 'dd'}}</span>
+                            <span>{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
+                            <span>{{game.timestamp | date : 'dd' : 'UTC'}}</span>
                         </div> <!-- .gameDate -->
                         <div class="gameName">
                             <span>Game {{game.id}}</span>

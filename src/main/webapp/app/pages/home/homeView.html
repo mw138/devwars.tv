@@ -58,7 +58,7 @@
 					<div flex="25" class="blogpost__image" flex style="background-image: url('{{post.image_url}}')"></div>
 					<div layout="column" flex>
 						<h3 class="blogpost__header">{{post.title}}</h3>
-						<h6>By {{post.user.username}} - {{post.timestamp | date}}</h6>
+						<h6>By {{post.user.username}} - {{post.timestamp | date : 'mediumDate' : 'UTC'}}</h6>
 						<p class="blogpost__content">{{post.description}}</p>
 						<a class="readMoreLink" ng-click="scrollToBlogPost(post.id)">Read More</a>
 					</div>

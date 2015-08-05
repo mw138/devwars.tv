@@ -1,13 +1,27 @@
 package com.bezman.service;
 
 import com.bezman.Reference.DatabaseManager;
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.model.Game;
 import com.bezman.model.Player;
 import com.bezman.model.Team;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.Ref;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -125,6 +139,82 @@ public class GameService
         session.close();
 
         return game;
+    }
+
+    public static void downloadCurrentGame(Game game) throws UnirestException, IOException
+    {
+        String redPath = Reference.SITE_STORAGE_PATH + File.separator + game.getId() + File.separator + "red";
+        String bluePath = Reference.SITE_STORAGE_PATH + File.separator + game.getId() + File.separator + "blue";
+
+        File redDirectory = new File(redPath);
+        File blueDirectory = new File(bluePath);
+
+        redDirectory.mkdirs();
+        blueDirectory.mkdirs();
+
+        downloadSiteAtDirectory("https://red-devwars-1.c9.io", redPath);
+        downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
+    }
+
+    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException
+    {
+        Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
+
+        document.getElementsByTag("script")
+                .forEach(tag -> {
+                    String source = tag.attr("src");
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    if(source.indexOf("http") == 0 ||source.indexOf("//") == 0) return;
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
+        document.getElementsByTag("link")
+                .forEach(tag -> {
+                    String source = tag.attr("href");
+
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
+        downloadURLToFile(site + "/index.html", new File(path + File.separator + "index.html"));
+    }
+
+    public static void downloadURLToFile(String urlLink, File file) throws IOException
+    {
+        URL url = new URL(urlLink);
+
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("GET");
+
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+        IOUtils.copy(urlConnection.getInputStream(), fileOutputStream);
+
+        fileOutputStream.close();
+        urlConnection.getInputStream().close();
     }
 
 }
