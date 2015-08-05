@@ -60,7 +60,7 @@ public class ConnectedAccount extends BaseModel
 
     public Boolean getDisconnected()
     {
-        return disconnected == null ? false : true;
+        return disconnected == null ? false : disconnected;
     }
 
     public void setDisconnected(Boolean disconnected)

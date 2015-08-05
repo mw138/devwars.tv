@@ -570,7 +570,7 @@ public class User extends BaseModel
 
         session.close();
 
-        if (this.getWarrior().getDob() != null)
+        if (this.getWarrior() != null && this.getWarrior().getDob() != null)
         {
             Calendar dob = Calendar.getInstance();
             dob.setTime(this.getWarrior().getDob());
@@ -622,6 +622,7 @@ public class User extends BaseModel
         {
             this.getRanking().addPoints(badge.getBitsAwarded());
             this.getRanking().addXP(badge.getXpAwarded());
+
             this.getBadges().add(badge);
 
             return true;

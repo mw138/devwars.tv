@@ -93,8 +93,6 @@ public class DevBitsController
 
             User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
-            System.out.println("Current username is " + username);
-            System.out.println(user);
 
             if (user != null)
             {
@@ -180,12 +178,32 @@ public class DevBitsController
 
             if (user != null)
             {
+                user = (User) session.merge(user);
+
                 user.setGamesWatched(user.getGamesWatched() + 1);
                 updatedUsers.add(user);
             }
         }
 
         return new ResponseEntity(updatedUsers, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/allin", method = RequestMethod.POST)
+    public ResponseEntity allIn(SessionImpl session, @JSONParam("usernames") String[] usernames)
+    {
+        for (String username : usernames)
+        {
+            User user = UserService.userForTwitchUsername(username);
+
+            if (user != null)
+            {
+                user.awardBadgeForName("I'm All In");
+            }
+        }
+
+        return new ResponseEntity(usernames, HttpStatus.OK);
     }
 
 }
