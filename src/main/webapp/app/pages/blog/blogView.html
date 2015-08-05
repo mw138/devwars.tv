@@ -9,7 +9,7 @@
 					<a href="#" ng-if="AuthService.isAtLeast('BLOGGER')" ng-click="deletePost(post)"><i class="fa fa-times"></i></a>
 				</div>
 				<h3 class="blog__post--title">{{post.title}}</h3>
-				<p class="blog__post--poster">By {{post.user.username}} - {{post.timestamp | date}}</p>
+				<p class="blog__post--poster">By {{post.user.username}} - {{post.timestamp | date : 'mediumDate' : 'UTC'}}</p>
 				<img src="{{post.image_url}}"/>
 				<p class="blog__post--summary">{{post.description}}</p>
 				<p class="blog__post--content" ng-bind-html="post.text"></p>

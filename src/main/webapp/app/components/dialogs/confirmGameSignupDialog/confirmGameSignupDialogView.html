@@ -4,11 +4,11 @@
         <h2 class="dialog-container__header">You are registering for the game on:</h2>
         <div class="dialog-container__dateBox">
                 <div class="dateBox-date">
-                        <span>{{game.timestamp | date : 'MMM'}}</span>
-                        <span>{{game.timestamp | date : 'dd'}}</span>
+                        <span>{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
+                        <span>{{game.timestamp | date : 'dd' : 'UTC'}}</span>
                 </div>
                 <div class="dateBox-time">
-                        <span>{{game.timestamp | date : 'shortTime'}}</span>
+                        <span>{{game.timestamp | date : 'shortTime' : 'UTC'}}</span>
                 </div>
         </div>
         <h2 class="dialog-container__header">By clicking confirm I verify that:</h2>
