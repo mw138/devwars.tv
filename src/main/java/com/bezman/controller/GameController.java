@@ -14,6 +14,7 @@ import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Response;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Ref;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -723,30 +726,10 @@ public class GameController
         return new ResponseEntity("Could not edit player", HttpStatus.CONFLICT);
     }
 
-    @RequestMapping("/resetVeteranGames")
-    public ResponseEntity resetVeteranGames(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping("/pullcurrentsite")
+    public ResponseEntity resetVeteranGames(HttpServletRequest request, HttpServletResponse response) throws UnirestException, IOException
     {
-        Session session = DatabaseManager.getSession();
-        Query query = session.createQuery("from Game where id < 11");
-
-        List<Game> games = query.list();
-
-        session.close();
-
-        for(Game game : games)
-        {
-            Team winner = null;
-
-            for(Team team : game.getTeams().values())
-            {
-                if (team.isWin()) winner = team;
-            }
-
-            if (winner != null)
-            {
-                endGame(request, response, game.getId(), winner.getId());
-            }
-        }
+        GameService.downloadCurrentGame(GameService.getGame(11));
 
         return null;
     }
