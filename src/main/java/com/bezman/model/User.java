@@ -541,6 +541,26 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Steamroller"));
         }
 
+        if (this.gamesWon > 0)
+        {
+            badgesToAward.add(Badge.badgeForName("First Timer"));
+        }
+
+        if (this.gamesWon >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Hobbyist"));
+        }
+
+        if (this.gamesWon >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Biggest Fan"));
+        }
+
+        if (this.gamesWon >= 50)
+        {
+            badgesToAward.add(Badge.badgeForName("Obsessed"));
+        }
+
         session = DatabaseManager.getSession();
 
         Query playersWonQuery = session.createQuery("from Player player where player.user.id = :id order by player.team.game.timestamp desc");
