@@ -3,7 +3,42 @@ angular.module('app.BlogService', [])
         var BlogService = {};
 
         /*
-         Required Role : ADMIN
+         */
+        BlogService.allPosts = function(successCallback, errorCallback){
+            $http({
+                method: 'GET',
+                url: '/v1/blog/all',
+                params: {}
+            })
+                .then(function(success){
+                    successCallback(success)
+                },
+                function(error){
+                    errorCallback(error)
+                });
+
+        };
+
+        /*
+         Required Role : BLOGGER
+         */
+        BlogService.createBlog = function(post, successCallback, errorCallback){
+            $http({
+                method: 'GET',
+                url: '/v1/blog/create',
+                params: {post : post}
+            })
+                .then(function(success){
+                    successCallback(success)
+                },
+                function(error){
+                    errorCallback(error)
+                });
+
+        };
+
+        /*
+         Required Role : BLOGGER
          Path Variable {id} : int
          */
         BlogService.deleteBlog = function(id, successCallback, errorCallback){
@@ -22,6 +57,25 @@ angular.module('app.BlogService', [])
         };
 
         /*
+         Required Role : BLOGGER
+         Path Variable {id} : int
+         */
+        BlogService.updateBlog = function(id, post, successCallback, errorCallback){
+            $http({
+                method: 'GET',
+                url: '/v1/blog/' + id + '/update',
+                params: {post : post}
+            })
+                .then(function(success){
+                    successCallback(success)
+                },
+                function(error){
+                    errorCallback(error)
+                });
+
+        };
+
+        /*
          Path Variable {id} : int
          */
         BlogService.getBlog = function(id, successCallback, errorCallback){
@@ -29,68 +83,6 @@ angular.module('app.BlogService', [])
                 method: 'GET',
                 url: '/v1/blog/' + id + '',
                 params: {}
-            })
-                .then(function(success){
-                    successCallback(success)
-                },
-                function(error){
-                    errorCallback(error)
-                });
-
-        };
-
-        /*
-         Required Role : ADMIN
-         Path Variable {id} : int
-         Query Parameter {image_url} : java.lang.String
-         Query Parameter {description} : java.lang.String
-         Query Parameter {text} : java.lang.String
-         Query Parameter {title} : java.lang.String
-         */
-        BlogService.updateBlog = function(id, image_url, description, text, title, successCallback, errorCallback){
-            $http({
-                method: 'GET',
-                url: '/v1/blog/' + id + '/update',
-                params: {image_url : image_url,description : description,text : text,title : title}
-            })
-                .then(function(success){
-                    successCallback(success)
-                },
-                function(error){
-                    errorCallback(error)
-                });
-
-        };
-
-        /*
-         */
-        BlogService.allPosts = function(successCallback, errorCallback){
-            $http({
-                method: 'GET',
-                url: '/v1/blog/all',
-                params: {}
-            })
-                .then(function(success){
-                    successCallback(success)
-                },
-                function(error){
-                    errorCallback(error)
-                });
-
-        };
-
-        /*
-         Required Role : ADMIN
-         Query Parameter {image_url} : java.lang.String
-         Query Parameter {description} : java.lang.String
-         Query Parameter {text} : java.lang.String
-         Query Parameter {title} : java.lang.String
-         */
-        BlogService.createBlog = function(image_url, description, text, title, successCallback, errorCallback){
-            $http({
-                method: 'GET',
-                url: '/v1/blog/create',
-                params: {image_url : image_url,description : description,text : text,title : title}
             })
                 .then(function(success){
                     successCallback(success)

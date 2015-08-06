@@ -541,6 +541,26 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Steamroller"));
         }
 
+        if (this.gamesWon > 0)
+        {
+            badgesToAward.add(Badge.badgeForName("First Timer"));
+        }
+
+        if (this.gamesWon >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Hobbyist"));
+        }
+
+        if (this.gamesWon >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Biggest Fan"));
+        }
+
+        if (this.gamesWon >= 50)
+        {
+            badgesToAward.add(Badge.badgeForName("Obsessed"));
+        }
+
         session = DatabaseManager.getSession();
 
         Query playersWonQuery = session.createQuery("from Player player where player.user.id = :id order by player.team.game.timestamp desc");
@@ -570,7 +590,7 @@ public class User extends BaseModel
 
         session.close();
 
-        if (this.getWarrior().getDob() != null)
+        if (this.getWarrior() != null && this.getWarrior().getDob() != null)
         {
             Calendar dob = Calendar.getInstance();
             dob.setTime(this.getWarrior().getDob());
@@ -622,6 +642,7 @@ public class User extends BaseModel
         {
             this.getRanking().addPoints(badge.getBitsAwarded());
             this.getRanking().addXP(badge.getXpAwarded());
+
             this.getBadges().add(badge);
 
             return true;

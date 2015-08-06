@@ -14,7 +14,7 @@
         <property name="bitsAwarded" type="integer"></property>
         <property name="xpAwarded" type="integer"></property>
 
-        <set name="users" table="users_badges" lazy="true">
+        <set name="users" table="users_badges" lazy="true" inverse="true">
             <key column="badge_id"></key>
             <many-to-many column="user_id" class="com.bezman.model.User"></many-to-many>
         </set>

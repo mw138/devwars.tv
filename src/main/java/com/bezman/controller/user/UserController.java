@@ -51,62 +51,34 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/v1/user")
 public class UserController extends BaseController
 {
+    @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/")
-    public ResponseEntity user(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity user(SessionImpl session, @AuthedUser User user)
     {
-        User currentUser = (User) request.getAttribute("user");
+        User currentUser = (User) session.merge(user);
 
-        if(currentUser != null)
+        if(currentUser.getRanking() == null)
         {
-            if(currentUser.getRanking() == null)
-            {
-                Ranking ranking = new Ranking();
-                ranking.setId(currentUser.getId());
-                currentUser.setRanking(ranking);
+            Ranking ranking = new Ranking();
+            ranking.setId(currentUser.getId());
 
-                DatabaseUtil.saveObjects(true, ranking);
-            }
+            currentUser.setRanking(ranking);
 
-
-            //Make sure the disconnected account thing doesn't happen
-            Session disconnectedSession = DatabaseManager.getSession();
-            disconnectedSession.beginTransaction();
-
-            disconnectedSession.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
-
-            disconnectedSession.getTransaction().commit();
-            disconnectedSession.close();
-
-            try
-            {
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                User theUser = (User) session.get(User.class, currentUser.getId());
-
-                List<Badge> badgesToAward = currentUser.tryAllBadges();
-
-                badgesToAward.stream()
-                        .filter(a -> !currentUser.hasBadge(a))
-                        .forEach(badge -> {
-                            theUser.awardBadge(badge);
-                            session.save(new Notification(theUser, "Badge Get : " + badge.getName(), false));
-                            session.save(new Activity(theUser, theUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
-                        });
-
-
-                session.getTransaction().commit();
-                session.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        } else {
-            return new ResponseEntity(HttpMessages.FORBIDDEN, HttpStatus.FORBIDDEN);
+            session.save(ranking);
         }
 
-        return new ResponseEntity(currentUser, HttpStatus.OK);
+        List<Badge> badgesToAward = currentUser.tryAllBadges();
+
+        badgesToAward.stream()
+                .filter(a -> !currentUser.hasBadge(a))
+                .forEach(badge -> {
+                    currentUser.awardBadge(badge);
+                    session.save(new Notification(currentUser, "Badge Get : " + badge.getName(), false));
+                    session.save(new Activity(currentUser, currentUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
+                });
+
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @RequestMapping("/activity")

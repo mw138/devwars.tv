@@ -3,10 +3,7 @@ package com.bezman.controller;
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.annotation.AuthedUser;
-import com.bezman.annotation.PreAuthorization;
-import com.bezman.annotation.Transactional;
-import com.bezman.annotation.UnitOfWork;
+import com.bezman.annotation.*;
 import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
@@ -32,8 +29,9 @@ import java.util.List;
 public class BlogController
 {
 
+    @UnitOfWork
     @RequestMapping("/all")
-    public ResponseEntity allPosts(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity allPosts(SessionImpl session)
     {
         List<BlogPost> allPosts = BlogService.getPosts(10, 0);
 
@@ -43,19 +41,11 @@ public class BlogController
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/create")
-    public ResponseEntity createBlog(@RequestParam("title") String title,
-                                     @RequestParam("description") String description,
-                                     @RequestParam("text") String text,
-                                     @RequestParam("image_url") String image_url,
+    public ResponseEntity createBlog(@JSONParam("post") BlogPost blogPost,
                                      @AuthedUser User user,
                                      SessionImpl session)
     {
-        BlogPost blogPost = new BlogPost();
-        blogPost.setTitle(title);
-        blogPost.setDescription(description);
         blogPost.setUser(user);
-        blogPost.setText(text);
-        blogPost.setImage_url(image_url);
 
         session.save(blogPost);
 
@@ -82,19 +72,15 @@ public class BlogController
     @RequestMapping("/{id}/update")
     public ResponseEntity updateBlog(SessionImpl session,
                                      @PathVariable("id") int id,
-                                     @RequestParam("title") String title,
-                                     @RequestParam("description") String description,
-                                     @RequestParam("text") String text,
-                                     @RequestParam("image_url") String image_url)
+                                     @JSONParam("post") BlogPost blogPost)
     {
-        BlogPost blogPost = (BlogPost) session.get(BlogPost.class, id);
+        BlogPost oldPost = (BlogPost) session.get(BlogPost.class, id);
 
-        if (blogPost != null)
+        if (oldPost != null)
         {
-            blogPost.setTitle(title);
-            blogPost.setDescription(description);
-            blogPost.setText(text);
-            blogPost.setImage_url(image_url);
+            blogPost.setId(id);
+
+            session.merge(blogPost);
 
             return new ResponseEntity(blogPost, HttpStatus.OK);
         } else

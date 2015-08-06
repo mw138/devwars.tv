@@ -275,7 +275,7 @@ public class UserConnectionController
             Session session = DatabaseManager.getSession();
 
             Query pointsQuery = session.createQuery("from TwitchPointStorage s where s.username = :username");
-            pointsQuery.setString("username", user.getUsername().substring(0, user.getUsername().length() - 4));
+            pointsQuery.setString("username", user.getUsername());
 
             TwitchPointStorage twitchPointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(pointsQuery);
 
