@@ -1,8 +1,10 @@
 package com.bezman.controller;
 
 import com.bezman.Reference.Reference;
+import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.Team;
+import com.bezman.model.User;
 import com.bezman.service.GameService;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -28,6 +30,7 @@ import java.util.zip.GZIPInputStream;
 public class TeamController extends BaseController
 {
 
+    @PreAuthorization(minRole = User.Role.ADMIN)
     @UnitOfWork
     @RequestMapping(value = "/{id}/upload", method = RequestMethod.POST)
     public ResponseEntity uploadSite(SessionImpl session, @PathVariable("id") int id, @RequestPart("zip") MultipartFile zipFile) throws IOException
