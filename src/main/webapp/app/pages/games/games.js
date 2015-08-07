@@ -25,7 +25,7 @@ angular.module("app.games", [])
 
         $scope.DialogService = DialogService;
 
-        GameService.pastGames(function (success) {
+        GameService.pastGames(0, 8, function (success) {
             $scope.pastGames = success.data;
 
             for(var key in $scope.pastGames) {
