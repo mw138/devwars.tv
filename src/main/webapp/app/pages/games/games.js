@@ -25,7 +25,7 @@ angular.module("app.games", [])
 
         $scope.DialogService = DialogService;
 
-        GameService.pastGames(function (success) {
+        GameService.pastGames(10, 0, function (success) {
             $scope.pastGames = success.data;
 
             for(var key in $scope.pastGames) {
@@ -69,6 +69,16 @@ angular.module("app.games", [])
                     ToastService.showDevwarsErrorToast("fa-envelope-o", "Error", "Please confirm your email before applying for games.")
                 }
             }
+        };
+
+        $scope.resignFromGame = function (game, $event) {
+            DialogService.getConfirmationDialog("Confirmation", "Are you sure you would like to resign?", "Yes", "No", $event)
+                .then(function () {
+                    GameService.resignFromGame(game.id, function (success) {
+                        ToastService.showDevwarsToast("fa-check-circle", "Success", "Resigned from game");
+                        AuthService.init();
+                    }, angular.noop);
+                },  angular.noop);
         };
 
         $scope.setSelectedGame = function (game, $index) {

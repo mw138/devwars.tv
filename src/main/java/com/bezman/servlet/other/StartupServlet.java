@@ -71,7 +71,7 @@ public class StartupServlet
                 }
             });
 
-            AngularServiceBuilder.buildServicesFromPackage("com.bezman.controller", "C:\\Users\\Terence\\IdeaProjects\\Dev Wars Hibernate\\out\\services\\", Reference.rootURL, "app");
+            AngularServiceBuilder.buildServicesFromPackage("com.bezman.controller", "C:\\Users\\teren\\IdeaProjects\\DevWars Maven\\target\\services\\", Reference.rootURL, "app");
         } catch (Exception e)
         {
             e.printStackTrace();

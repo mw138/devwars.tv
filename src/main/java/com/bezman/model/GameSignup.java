@@ -11,6 +11,13 @@ public class GameSignup extends BaseModel
     private User user;
     private Game game;
 
+    public GameSignup() {}
+
+    public GameSignup(User user, Game game) {
+        this.user = user;
+        this.game = game;
+    }
+
     public int getId()
     {
         return id;
