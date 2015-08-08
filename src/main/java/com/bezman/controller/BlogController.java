@@ -4,11 +4,18 @@ import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.*;
+import com.bezman.hibernate.expression.DayCriterion;
+import com.bezman.hibernate.expression.MonthCriterion;
+import com.bezman.hibernate.expression.YearCriterion;
 import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.crypto.Data;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -31,11 +39,25 @@ public class BlogController
 
     @UnitOfWork
     @RequestMapping("/all")
-    public ResponseEntity allPosts(SessionImpl session)
+    public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day)
     {
-        List<BlogPost> allPosts = BlogService.getPosts(10, 0);
+        Criteria criteria = session.createCriteria(BlogPost.class)
+                .setMaxResults(10)
+                .setFirstResult(0);
 
-        return new ResponseEntity(allPosts, HttpStatus.OK);
+        if (year != null) {
+            criteria.add(new YearCriterion("timestamp", year));
+        }
+
+        if (month != null) {
+            criteria.add(new MonthCriterion("timestamp", month));
+        }
+
+        if (day != null) {
+            criteria.add(new DayCriterion("timestamp", day));
+        }
+
+        return new ResponseEntity(criteria.list(), HttpStatus.OK);
     }
 
     @Transactional
