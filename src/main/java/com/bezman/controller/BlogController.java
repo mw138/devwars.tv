@@ -12,6 +12,7 @@ import com.bezman.model.User;
 import com.bezman.service.BlogService;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.type.IntegerType;
@@ -43,7 +44,8 @@ public class BlogController
     {
         Criteria criteria = session.createCriteria(BlogPost.class)
                 .setMaxResults(10)
-                .setFirstResult(0);
+                .setFirstResult(0)
+                .addOrder(Order.desc("timestamp"));
 
         if (year != null) {
             criteria.add(new YearCriterion("timestamp", year));
