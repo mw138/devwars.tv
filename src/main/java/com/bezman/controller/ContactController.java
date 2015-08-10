@@ -28,6 +28,15 @@ import javax.servlet.http.HttpServletResponse;
 public class ContactController
 {
 
+    /**
+     * Feedback for users : Puts new contact row in DB and sends email
+     * @param session
+     * @param name Name of the user
+     * @param email Email of the user
+     * @param text Text we should see
+     * @param type Type of feedback
+     * @return
+     */
     @Transactional
     @RequestMapping("/create")
     public ResponseEntity create(SessionImpl session,

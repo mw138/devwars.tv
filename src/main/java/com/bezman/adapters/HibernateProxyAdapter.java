@@ -8,7 +8,7 @@ import org.hibernate.proxy.HibernateProxy;
 import java.io.IOException;
 
 /**
- * Created by Terence on 1/20/2015.
+ * Simple Class to make sure that the hibernate proxies don't get serialized
  */
 public class HibernateProxyAdapter extends TypeAdapter<HibernateProxy>
 {

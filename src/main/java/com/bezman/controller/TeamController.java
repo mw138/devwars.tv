@@ -30,6 +30,14 @@ import java.util.zip.GZIPInputStream;
 public class TeamController extends BaseController
 {
 
+    /**
+     * Upload for the teams data straight from cloud nine
+     * @param session
+     * @param id ID of team to set
+     * @param zipFile tar.gz file from Cloud Nine
+     * @return
+     * @throws IOException
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @UnitOfWork
     @RequestMapping(value = "/{id}/upload", method = RequestMethod.POST)

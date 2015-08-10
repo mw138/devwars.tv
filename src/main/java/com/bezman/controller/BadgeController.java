@@ -30,6 +30,10 @@ import java.util.List;
 public class BadgeController
 {
 
+    /**
+     * @param session
+     * @return All available badges
+     */
     @RequestMapping("/all")
     @UnitOfWork
     public ResponseEntity getAll(SessionImpl session)
@@ -48,6 +52,11 @@ public class BadgeController
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
+    /**
+     * @param id of badge requested
+     * @param session
+     * @return The badge
+     */
     @RequestMapping("/{id}")
     @UnitOfWork
     public ResponseEntity getBadge(@PathVariable("id") int id, SessionImpl session)

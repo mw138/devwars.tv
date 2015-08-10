@@ -36,6 +36,13 @@ import java.util.List;
 public class DevBitsController
 {
 
+    /**
+     * Gets devbits of twitch user
+     * @param request
+     * @param response
+     * @param twitchUsername Twitch user's Twitch Username
+     * @return
+     */
     @RequestMapping("/{twitchUsername}")
     public ResponseEntity getTwitchUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("twitchUsername") String twitchUsername)
     {
@@ -73,6 +80,14 @@ public class DevBitsController
         return responseEntity;
     }
 
+    /**
+     * Awards a twitch user with bits or xp
+     * @param request
+     * @param usernames Comma separated list of twitch users
+     * @param points How many points to add to user (Can be negative)
+     * @param xp How much xp to add to user (Can be negative)
+     * @return
+     */
     @RequestMapping(value = "/{twitchUsernames}/{amount}", method = {RequestMethod.PUT})
     public ResponseEntity addToTwitchUser(HttpServletRequest request, @PathVariable("twitchUsernames") String usernames,
                                           @PathVariable(value = "amount") int points,
@@ -144,6 +159,12 @@ public class DevBitsController
         return responseEntity;
     }
 
+    /**
+     * Updates users earned bets so we can see how much they've won from betting
+     * @param session
+     * @param earnedBets The amount of Devbits earned
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/earnedbets", method = RequestMethod.POST)
@@ -165,6 +186,12 @@ public class DevBitsController
         return null;
     }
 
+    /**
+     * Adds a watched game to a user
+     * @param session
+     * @param usernames JSON Array of twitch usernames
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/watched", method = RequestMethod.POST)
@@ -188,6 +215,12 @@ public class DevBitsController
         return new ResponseEntity(updatedUsers, HttpStatus.OK);
     }
 
+    /**
+     * Gives user badge for going all in
+     * @param session
+     * @param usernames JSON Array of twitch usernames to award
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/allin", method = RequestMethod.POST)

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 /**
- * Created by Terence on 1/19/2015.
+ * Adapter to make sure timestamps get adapted to SQL Timestamps
  */
 public class TimestampAdapter extends TypeAdapter<Timestamp>
 {
