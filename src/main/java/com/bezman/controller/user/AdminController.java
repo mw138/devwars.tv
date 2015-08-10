@@ -27,6 +27,12 @@ import java.util.zip.ZipOutputStream;
 public class AdminController
 {
 
+    /**
+     * Archives all photos
+     * @param response
+     * @return null (File)
+     * @throws IOException
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/photoarchive")
     public ResponseEntity archivePhotos(HttpServletResponse response) throws IOException

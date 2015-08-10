@@ -43,6 +43,14 @@ import java.util.Optional;
 @RequestMapping(value = "/v1/game")
 public class GameController
 {
+    /**
+     * Retrieved all games with criteria
+     * @param request
+     * @param response
+     * @param count Number of games wanted
+     * @param offset How many games to skip in DB
+     * @return
+     */
     @RequestMapping(value = "/")
     public ResponseEntity allGames(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "count", defaultValue = "5", required = false) int count, @RequestParam(value = "offset", defaultValue = "0", required = false) int offset)
     {
@@ -52,6 +60,12 @@ public class GameController
     }
 
     @UnitOfWork
+    /**
+     * Retrieves upcoming DevWars games
+     * @param request
+     * @param response
+     * @return
+     */
     @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
     public ResponseEntity upcomingGames(SessionImpl session)
@@ -71,6 +85,12 @@ public class GameController
     }
 
     @UnitOfWork
+    /**
+     * Retrieves games that have been done in the past
+     * @param count
+     * @param offset
+     * @return
+     */
     @RequestMapping("/pastgames")
     public ResponseEntity pastGames(SessionImpl session, @RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
     {
@@ -92,6 +112,14 @@ public class GameController
     }
 
     @Transactional
+    /**
+     * Creates a game with the default information
+     * @param request
+     * @param response
+     * @param timestamp The time in UTC which the game will start
+     * @param name Name of the game (Classic or Zen Garden)
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
     public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
@@ -113,6 +141,13 @@ public class GameController
         return new ResponseEntity(game.toString(), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a game with a given ind
+     * @param request
+     * @param response
+     * @param id ID of the game to get
+     * @return
+     */
     @RequestMapping("/{id}")
     public ResponseEntity getGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
     {
@@ -128,6 +163,14 @@ public class GameController
 
     }
 
+    /**
+     * Edits a game with new information
+     * @param request
+     * @param response
+     * @param id The ID of the game to update
+     * @param json JSON to update the game with
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method =  RequestMethod.POST)
     public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json)
@@ -171,6 +214,13 @@ public class GameController
     }
 
     @Transactional
+    /**
+     * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
+     * @param request
+     * @param response
+     * @param id ID of game to activate
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/activate")
     public ResponseEntity activateGame(SessionImpl session, @PathVariable("id") int id)
@@ -192,6 +242,13 @@ public class GameController
     }
 
     @Transactional
+    /**
+     * Sets the game to inactive
+     * @param request
+     * @param response
+     * @param id ID of game to deactivate
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/deactivate")
     public ResponseEntity deactivateGame(SessionImpl session, @PathVariable("id") int id)
@@ -209,6 +266,14 @@ public class GameController
         }
     }
 
+    /**
+     * Ends the game and wards winning team
+     * @param request
+     * @param response
+     * @param gameID ID of game to end
+     * @param winnerID The ID of the winning team (Awards corresponding values)
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
@@ -302,6 +367,13 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Deletes a game
+     * @param request
+     * @param response
+     * @param id ID of game to delete
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/delete")
     public ResponseEntity deleteGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -320,6 +392,12 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Gets the current active game
+     * @param request
+     * @param response
+     * @return
+     */
     @AllowCrossOrigin(from = "*")
     @RequestMapping(value = "/currentgame")
     public ResponseEntity currentGame(HttpServletRequest request, HttpServletResponse response)
@@ -335,6 +413,12 @@ public class GameController
         }
     }
 
+    /**
+     * Gets the most recently created game
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/latestgame")
     public ResponseEntity latestGame(HttpServletRequest request, HttpServletResponse response)
     {
@@ -349,6 +433,12 @@ public class GameController
         }
     }
 
+    /**
+     * Gets the game which is nearest to the current date in the future
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/nearestgame")
     public ResponseEntity nearestGame(HttpServletRequest request, HttpServletResponse response)
     {
@@ -364,6 +454,13 @@ public class GameController
     }
 
     @UnitOfWork
+    /**
+     * Gets all signed up users for given game
+     * @param request
+     * @param response
+     * @param id ID of game to get sign ups for
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/pendingplayers")
     public ResponseEntity pendingPlayers(SessionImpl session, @PathVariable("id") int id)
@@ -378,6 +475,14 @@ public class GameController
 
     //Player Actions
     @Transactional
+    /**
+     * Removes a player from a team without penalizing
+     * @param request
+     * @param response
+     * @param gameID ID of game to remove from (Redundant)
+     * @param playerID ID of player to remove
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/player/{playerID}/remove")
     public ResponseEntity removePlayer(SessionImpl session, @PathVariable("id") int gameID, @PathVariable("playerID") int playerID)
@@ -393,6 +498,15 @@ public class GameController
         return new ResponseEntity("Player could not be found", HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Adds a player to a team
+     * @param request
+     * @param gameID ID of game to add to
+     * @param teamID ID of team to add to
+     * @param language The language that the user will be playing
+     * @param newUser The user that will be playing
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/team/{teamID}/add", method = RequestMethod.POST)
     public ResponseEntity addPlayer(HttpServletRequest request,
@@ -464,6 +578,12 @@ public class GameController
         return null;
     }
 
+    /**
+     * Removes a user from the game and penlizes them with some value
+     * @param session
+     * @param player The player to remove
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/forfeituser", method = RequestMethod.POST)
@@ -481,8 +601,14 @@ public class GameController
         return new ResponseEntity(player, HttpStatus.OK);
     }
 
-
     @Transactional
+    /**
+     * Signs a user up for a game
+     * @param request
+     * @param response
+     * @param id ID of game to sign up for
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
     public ResponseEntity signupForGame(SessionImpl session, @AuthedUser User user,  @PathVariable("id") int id)
@@ -534,6 +660,17 @@ public class GameController
         return new ResponseEntity("Sign Up not found", HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Adds votes to a team for voting part of game
+     * @param request
+     * @param response
+     * @param id ID of game
+     * @param teamID ID of team
+     * @param func How many to add on the functionality vote
+     * @param design How many to add on the design vote
+     * @param code How many to add on the code vote
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/addvotes")
     public ResponseEntity addVotes(HttpServletRequest request, HttpServletResponse response,
@@ -572,6 +709,16 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Adds points to every player in a team
+     * @param request
+     * @param response
+     * @param id ID of game
+     * @param teamID ID of team
+     * @param points How many points to add to each player
+     * @param xp How much xp to add to each player
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/addpoints")
     public ResponseEntity addPointsToTeam(HttpServletRequest request, HttpServletResponse response,
@@ -627,6 +774,14 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Edits a players information
+     * @param request
+     * @param response
+     * @param playerID ID of player to update
+     * @param json JSON of new information
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/player/{playerID}/edit")
     public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json)
@@ -666,6 +821,13 @@ public class GameController
         return new ResponseEntity("Could not edit player", HttpStatus.CONFLICT);
     }
 
+    /**
+     * Pulls the Cloud Nine website and stores it in a folder with appropiate game name
+     * @param id ID of game to correspond save to
+     * @return
+     * @throws UnirestException
+     * @throws IOException
+     */
     @RequestMapping("/{id}/sitepull")
     public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException
     {

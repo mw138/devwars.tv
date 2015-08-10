@@ -9,7 +9,7 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 
 /**
- * Created by Terence on 8/1/2015.
+ *
  */
 public class ObjectSerializationStrategy implements JsonSerializer<Object>
 {
@@ -17,8 +17,6 @@ public class ObjectSerializationStrategy implements JsonSerializer<Object>
     public JsonElement serialize(Object o, Type type, JsonSerializationContext jsonSerializationContext)
     {
         JsonObject jsonObject = (JsonObject) Reference.gson.toJsonTree(o);
-
-        System.out.println(jsonObject);
 
         return jsonObject;
     }

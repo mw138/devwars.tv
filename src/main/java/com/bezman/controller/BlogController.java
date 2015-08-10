@@ -38,6 +38,14 @@ import java.util.List;
 public class BlogController
 {
 
+    /**
+     * Gets blog posts
+     * @param session
+     * @param year (Optional) Year of blog posts wanted
+     * @param month (Optional) Month of blog posts wanted
+     * @param day (Optional) Day of blog posts wanted
+     * @return Blog posts which match criteria
+     */
     @UnitOfWork
     @RequestMapping("/all")
     public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day)
@@ -62,6 +70,13 @@ public class BlogController
         return new ResponseEntity(criteria.list(), HttpStatus.OK);
     }
 
+    /**
+     * Created new blog post
+     * @param blogPost JSON of the new post
+     * @param user
+     * @param session
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/create")
@@ -76,6 +91,11 @@ public class BlogController
         return new ResponseEntity(blogPost, HttpStatus.OK);
     }
 
+    /**
+     * @param session
+     * @param id of requested blog post
+     * @return The requested blog post
+     */
     @UnitOfWork
     @RequestMapping("/{id}")
     public ResponseEntity getBlog(SessionImpl session, @PathVariable("id") int id)
@@ -91,6 +111,13 @@ public class BlogController
         }
     }
 
+    /**
+     * Updates a blog posts with given information
+     * @param session
+     * @param id The ID of the blog post to update
+     * @param blogPost JSON of post to update with
+     * @return The new blog post
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/update")
@@ -113,6 +140,12 @@ public class BlogController
         }
     }
 
+    /**
+     * Deletes the blog post
+     * @param session
+     * @param id The ID of the blog post to delete
+     * @return The deleted blog post
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/delete")
