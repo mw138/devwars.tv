@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Terence Bezman on 12/27/2014.
@@ -8,17 +9,17 @@ import com.bezman.exclusion.GsonExclude;
 public class Player extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    @GsonExclude
-    public Team team;
+    @JsonIgnore
+    private Team team;
 
-    public User user;
-    public String language;
+    private User user;
+    private String language;
 
-    public Integer pointsChanged;
+    private Integer pointsChanged;
 
-    public Integer xpChanged;
+    private Integer xpChanged;
 
     public String getLanguage()
     {

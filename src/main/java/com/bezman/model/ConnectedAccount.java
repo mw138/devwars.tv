@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by root on 4/25/15.
@@ -8,14 +9,14 @@ import com.bezman.exclusion.GsonExclude;
 public class ConnectedAccount extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String username, provider;
+    private String username, provider;
 
-    @GsonExclude
-    public User user;
+    @JsonIgnore
+    private User user;
 
-    public Boolean disconnected;
+    private Boolean disconnected;
 
     public int getId()
     {
@@ -59,7 +60,7 @@ public class ConnectedAccount extends BaseModel
 
     public Boolean getDisconnected()
     {
-        return disconnected == null ? false : true;
+        return disconnected == null ? false : disconnected;
     }
 
     public void setDisconnected(Boolean disconnected)

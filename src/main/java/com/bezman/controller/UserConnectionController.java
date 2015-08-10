@@ -275,7 +275,7 @@ public class UserConnectionController
             Session session = DatabaseManager.getSession();
 
             Query pointsQuery = session.createQuery("from TwitchPointStorage s where s.username = :username");
-            pointsQuery.setString("username", user.getUsername().substring(0, user.getUsername().length() - 4));
+            pointsQuery.setString("username", user.getUsername());
 
             TwitchPointStorage twitchPointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(pointsQuery);
 
@@ -356,8 +356,6 @@ public class UserConnectionController
         com.bezman.model.User user = FacebookProvider.userForCode2(code);
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "FACEBOOK", currentUser);
 
-        System.out.println(Reference.gson.toJson(user));
-
         if (user != null && !connectedAccountExists)
         {
             Activity activity = new Activity(currentUser, currentUser, "Connected your Facebook account", DevBits.ACCOUNT_CONNECTION, 0);
@@ -410,8 +408,6 @@ public class UserConnectionController
 
         com.bezman.model.User user = GithubProvider.userForCode2(code);
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "GITHUB", currentUser);
-
-        System.out.println(Reference.gson.toJson(user));
 
         if (user != null && !connectedAccountExists)
         {
@@ -474,7 +470,7 @@ public class UserConnectionController
         ConnectedAccount connectedAccount = new ConnectedAccount();
         connectedAccount.setUser(signedInUser);
         connectedAccount.setProvider(provider);
-        connectedAccount.setUsername(user.username.substring(0, user.username.length() - 4));
+        connectedAccount.setUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
         return connectedAccount;
     }

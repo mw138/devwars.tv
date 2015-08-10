@@ -9,14 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Notification extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    @GsonExclude
-    public User user;
+    @JsonIgnore
+    private User user;
 
-    public String notificationText;
+    private String notificationText;
 
-    public boolean hasRead;
+    private boolean hasRead;
 
     public Notification(){}
 

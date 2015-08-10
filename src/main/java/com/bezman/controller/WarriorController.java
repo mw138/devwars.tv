@@ -24,6 +24,26 @@ import java.util.Date;
 public class WarriorController
 {
 
+    /**
+     * Cloud Nine registration
+     * @param request
+     * @param response
+     * @param firstName
+     * @param email
+     * @param month
+     * @param day
+     * @param year
+     * @param htmlRate
+     * @param cssRate
+     * @param jsRate
+     * @param c9Name
+     * @param favFood
+     * @param favTool
+     * @param location
+     * @param company
+     * @param about
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/register")
     public ResponseEntity register(HttpServletRequest request, HttpServletResponse response,

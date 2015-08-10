@@ -36,6 +36,13 @@ import java.util.List;
 public class DevBitsController
 {
 
+    /**
+     * Gets devbits of twitch user
+     * @param request
+     * @param response
+     * @param twitchUsername Twitch user's Twitch Username
+     * @return
+     */
     @RequestMapping("/{twitchUsername}")
     public ResponseEntity getTwitchUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("twitchUsername") String twitchUsername)
     {
@@ -73,6 +80,14 @@ public class DevBitsController
         return responseEntity;
     }
 
+    /**
+     * Awards a twitch user with bits or xp
+     * @param request
+     * @param usernames Comma separated list of twitch users
+     * @param points How many points to add to user (Can be negative)
+     * @param xp How much xp to add to user (Can be negative)
+     * @return
+     */
     @RequestMapping(value = "/{twitchUsernames}/{amount}", method = {RequestMethod.PUT})
     public ResponseEntity addToTwitchUser(HttpServletRequest request, @PathVariable("twitchUsernames") String usernames,
                                           @PathVariable(value = "amount") int points,
@@ -93,8 +108,6 @@ public class DevBitsController
 
             User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
-            System.out.println("Current username is " + username);
-            System.out.println(user);
 
             if (user != null)
             {
@@ -112,7 +125,7 @@ public class DevBitsController
 
                 DatabaseUtil.saveOrUpdateObjects(false, ranking);
 
-                responseEntity = new ResponseEntity(Reference.gson.toJson(ranking), HttpStatus.OK);
+                responseEntity = new ResponseEntity(ranking, HttpStatus.OK);
             } else
             {
                 System.out.println("Not found");
@@ -137,7 +150,7 @@ public class DevBitsController
                 System.out.println("UPDATING POINT STORAGE FOR " + pointStorage.getUsername());
                 DatabaseUtil.saveOrUpdateObjects(false, pointStorage);
 
-                responseEntity = new ResponseEntity(Reference.gson.toJson(pointStorage), HttpStatus.OK);
+                responseEntity = new ResponseEntity(pointStorage, HttpStatus.OK);
             }
         }
 
@@ -146,6 +159,12 @@ public class DevBitsController
         return responseEntity;
     }
 
+    /**
+     * Updates users earned bets so we can see how much they've won from betting
+     * @param session
+     * @param earnedBets The amount of Devbits earned
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/earnedbets", method = RequestMethod.POST)
@@ -167,6 +186,12 @@ public class DevBitsController
         return null;
     }
 
+    /**
+     * Adds a watched game to a user
+     * @param session
+     * @param usernames JSON Array of twitch usernames
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/watched", method = RequestMethod.POST)
@@ -180,12 +205,38 @@ public class DevBitsController
 
             if (user != null)
             {
+                user = (User) session.merge(user);
+
                 user.setGamesWatched(user.getGamesWatched() + 1);
                 updatedUsers.add(user);
             }
         }
 
-        return new ResponseEntity(Reference.gson.toJson(updatedUsers), HttpStatus.OK);
+        return new ResponseEntity(updatedUsers, HttpStatus.OK);
+    }
+
+    /**
+     * Gives user badge for going all in
+     * @param session
+     * @param usernames JSON Array of twitch usernames to award
+     * @return
+     */
+    @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/allin", method = RequestMethod.POST)
+    public ResponseEntity allIn(SessionImpl session, @JSONParam("usernames") String[] usernames)
+    {
+        for (String username : usernames)
+        {
+            User user = UserService.userForTwitchUsername(username);
+
+            if (user != null)
+            {
+                user.awardBadgeForName("I'm All In");
+            }
+        }
+
+        return new ResponseEntity(usernames, HttpStatus.OK);
     }
 
 }

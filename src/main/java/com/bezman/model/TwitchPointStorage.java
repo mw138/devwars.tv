@@ -6,11 +6,11 @@ package com.bezman.model;
 public class TwitchPointStorage extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public Integer points, xp;
+    private Integer points, xp;
 
-    public String username;
+    private String username;
 
     public int getId()
     {

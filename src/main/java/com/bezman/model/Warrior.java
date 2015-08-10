@@ -1,25 +1,48 @@
 package com.bezman.model;
 
+import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.exclusion.GsonExclude;
+import com.bezman.jackson.serializer.UserPermissionSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
 /**
  * Created by Terence on 5/27/2015.
  */
+@JsonSerialize(using = UserPermissionSerializer.class)
 public class Warrior extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String firstName, favFood, favTool, about, c9Name, company, location;
+    @UserPermissionFilter(userField = "user")
+    private String firstName;
 
-    public Integer htmlRate, cssRate, jsRate;
+    private String favFood;
 
-    public Date dob;
+    @UserPermissionFilter(userField = "user")
+    private String favTool;
 
-    @GsonExclude
-    public User user;
+    @UserPermissionFilter(userField = "user")
+    private String about;
+
+    private String c9Name;
+
+    @UserPermissionFilter(userField = "user")
+    private String company;
+
+    @UserPermissionFilter(userField = "user")
+    private String location;
+
+    private Integer htmlRate, cssRate, jsRate;
+
+    @UserPermissionFilter(userField = "user")
+    private Date dob;
+
+    @JsonIgnore
+    private User user;
 
     public Warrior(){}
 

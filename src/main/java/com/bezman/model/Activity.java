@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -11,16 +12,16 @@ import java.util.Date;
 public class Activity extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    @GsonExclude
-    public User affectedUser, user;
+    @JsonIgnore
+    private User affectedUser, user;
 
-    public String description;
+    private String description;
 
-    public Date timestamp;
+    private Date timestamp;
 
-    public Integer pointsChanged, xpChanged;
+    private Integer pointsChanged, xpChanged;
 
     public Activity(){}
 

@@ -8,11 +8,11 @@ import com.google.gson.annotations.Expose;
  */
 public class CompletedObjective extends BaseModel
 {
-    public int id;
+    private int id;
 
-    public int team_id;
+    private int team_id;
 
-    public Objective objective;
+    private Objective objective;
 
     public int getId()
     {

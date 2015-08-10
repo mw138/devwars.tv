@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Terence on 4/30/2015.
@@ -8,10 +9,10 @@ import com.bezman.exclusion.GsonExclude;
 public class Settings extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    @GsonExclude
-    public User user;
+    @JsonIgnore
+    private User user;
 
     public int getId()
     {

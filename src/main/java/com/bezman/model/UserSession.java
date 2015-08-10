@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -8,11 +9,11 @@ import com.bezman.exclusion.GsonExclude;
 public class UserSession extends BaseModel
 {
 
-    public int id;
-    public String sessionID;
+    private int id;
+    private String sessionID;
 
-    @GsonExclude
-    public User user;
+    @JsonIgnore
+    private User user;
 
     public int getId()
     {

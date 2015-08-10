@@ -9,14 +9,13 @@ angular.module("app.blog", [])
                 });
 
         }])
-    .controller("BlogController", ["$scope", "BlogService", "$mdDialog", "ToastService", "AuthService", "$anchorScroll", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll) {
+    .controller("BlogController", ["$scope", "BlogService", "$mdDialog", "ToastService", "AuthService", "$anchorScroll", "$sce", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce) {
         $scope.posts = [];
 
         $scope.AuthService = AuthService;
 
         $scope.updatePosts = function () {
             BlogService.allPosts(function (success) {
-                console.log(success.data);
                 $scope.posts = success.data;
             }, function (error) {
                 console.log(error);

@@ -6,11 +6,11 @@ package com.bezman.model;
 public class ShopItem extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String name, description;
+    private String name, description;
 
-    public Integer price, requiredLevel;
+    private Integer price, requiredLevel;
 
     public int getId()
     {

@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -9,14 +10,14 @@ import com.google.gson.annotations.Expose;
 public class Objective extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public Integer orderID;
+    private Integer orderID;
 
-    @GsonExclude
-    public Game game;
+    @JsonIgnore
+    private Game game;
 
-    public String objectiveText;
+    private String objectiveText;
 
     public int getId()
     {

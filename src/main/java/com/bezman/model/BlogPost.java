@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Terence on 4/11/2015.
@@ -11,16 +12,18 @@ import java.util.Date;
 public class BlogPost extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public String title;
-    public String description;
-    public String text;
-    public String image_url;
+    private String title;
+    private String description;
+    private String text;
+    private String image_url;
 
-    public User user;
+    private User user;
 
-    public Timestamp timestamp;
+    private Timestamp timestamp;
+
+    private Set<String> tags;
 
     public int getId()
     {
@@ -74,7 +77,7 @@ public class BlogPost extends BaseModel
 
     public String getText()
     {
-        return StringEscapeUtils.escapeHtml(text);
+        return StringEscapeUtils.unescapeHtml(text);
     }
 
     public void setText(String text)
@@ -90,5 +93,15 @@ public class BlogPost extends BaseModel
     public void setImage_url(String image_url)
     {
         this.image_url = image_url;
+    }
+
+    public Set<String> getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags)
+    {
+        this.tags = tags;
     }
 }

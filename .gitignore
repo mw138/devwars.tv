@@ -7,5 +7,10 @@ src/main/webapp/.sass-cache/
 src/main/webapp/.tmp/
 src/main/webapp/dist/*
 /src/main/webapp/index.min.html
+/src/main/webapp/assets/sass/main.css
+/src/main/webapp/assets/sass/main.css.map
+/src/main/webapp/dist
+/src/main/webapp/app/all.js
 /target
 /.idea
+DevWars.iml

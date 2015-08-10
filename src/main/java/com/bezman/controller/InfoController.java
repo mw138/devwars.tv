@@ -33,6 +33,12 @@ import java.util.Random;
 public class InfoController extends BaseController
 {
 
+    /**
+     * Returns Stat info (User count, game count, blog post count, DevBits earned)
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/")
     public ResponseEntity allInfo(HttpServletRequest request, HttpServletResponse response)
     {
@@ -59,6 +65,12 @@ public class InfoController extends BaseController
         return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.OK);
     }
 
+    /**
+     * Leaderboard for devbits (Just sorts users by devbit amount)
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/bitsleaderboard")
     public ResponseEntity bitsLeaderboard(HttpServletRequest request, HttpServletResponse response)
     {
@@ -72,9 +84,15 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
+    /**
+     * Leaderboard for XP (Just sorts users by xp amount)
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/xpleaderboard")
     public ResponseEntity xpLeaderboard(HttpServletRequest request, HttpServletResponse response)
     {
@@ -88,9 +106,16 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
+    /**
+     * Sorts based on weird formula Synswag wanted
+     * @param request
+     * @param response
+     * @param page Pagination if you want
+     * @return
+     */
     @RequestMapping("/leaderboard")
     public ResponseEntity leaderboard(HttpServletRequest request, HttpServletResponse response,
                                       @RequestParam(value = "page", required = false, defaultValue = "0") int page)
@@ -119,40 +144,7 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
-
-    /*@RequestMapping("/leaderboard/seed")
-    public ResponseEntity seedLeaderboard(HttpServletRequest request, HttpServletResponse response)
-    {
-
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
-
-        Query query = session.createQuery("from User ");
-
-        List<User> users = query.list();
-
-        for(User user : users)
-        {
-            if (user.getRanking() == null)
-            {
-                Ranking ranking = new Ranking();
-                ranking.setId(user.getId());
-
-                ranking.setPoints((double) new Random().nextInt(10000));
-                ranking.setXp((double) new Random().nextInt(10000));
-
-                session.save(ranking);
-            }
-        }
-
-        session.getTransaction().commit();
-        session.close();
-
-        return null;
-    }*/
-
-
 
 }

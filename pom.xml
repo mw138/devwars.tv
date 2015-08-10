@@ -25,10 +25,18 @@
 		        <artifactId>maven-compiler-plugin</artifactId>
 		        <version>3.1</version>
 		        <configuration>
-		            <source>1.8</source>
+                    <source>1.8</source>
 		            <target>1.8</target>
 		        </configuration>
-		    </plugin>			
+		    </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <warSourceExcludes>node_modules/**</warSourceExcludes>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -311,7 +319,21 @@
             <version>0.9.9</version>
         </dependency>
 
-		<!-- SFTP Connection via JSch -->
+        <dependency>
+            <!-- jsoup HTML parser library @ http://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
+        <!-- SFTP Connection via JSch -->
 		<!-- dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>

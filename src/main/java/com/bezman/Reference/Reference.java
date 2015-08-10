@@ -3,6 +3,7 @@ package com.bezman.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.model.SecretKey;
 import com.bezman.service.Security;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
@@ -30,10 +31,15 @@ public class Reference
     public static Firebase firebase;
 
     public static String PROFILE_PICTURE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator;
+    public static String PROFILE_PICTURE_PATH_NO_END = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics";
+
+    public static String SITE_STORAGE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator + "site-storage";
 
     public static Gson gson;
 
     public static Connection connection;
+
+    public static ObjectMapper objectMapper;
 
     public static Cookie getCookieFromArray(Cookie[] cookies, String key)
     {

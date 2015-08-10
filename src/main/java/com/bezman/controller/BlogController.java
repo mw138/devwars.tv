@@ -3,11 +3,20 @@ package com.bezman.controller;
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.annotation.PreAuthorization;
+import com.bezman.annotation.*;
+import com.bezman.hibernate.expression.DayCriterion;
+import com.bezman.hibernate.expression.MonthCriterion;
+import com.bezman.hibernate.expression.YearCriterion;
 import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.crypto.Data;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -28,87 +38,126 @@ import java.util.List;
 public class BlogController
 {
 
+    /**
+     * Gets blog posts
+     * @param session
+     * @param year (Optional) Year of blog posts wanted
+     * @param month (Optional) Month of blog posts wanted
+     * @param day (Optional) Day of blog posts wanted
+     * @return Blog posts which match criteria
+     */
+    @UnitOfWork
     @RequestMapping("/all")
-    public ResponseEntity allPosts(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day)
     {
-        List<BlogPost> allPosts = BlogService.getPosts(10, 0);
+        Criteria criteria = session.createCriteria(BlogPost.class)
+                .setMaxResults(10)
+                .setFirstResult(0)
+                .addOrder(Order.desc("timestamp"));
 
-        return new ResponseEntity(Reference.gson.toJson(allPosts), HttpStatus.OK);
+        if (year != null) {
+            criteria.add(new YearCriterion("timestamp", year));
+        }
+
+        if (month != null) {
+            criteria.add(new MonthCriterion("timestamp", month));
+        }
+
+        if (day != null) {
+            criteria.add(new DayCriterion("timestamp", day));
+        }
+
+        return new ResponseEntity(criteria.list(), HttpStatus.OK);
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
+    /**
+     * Created new blog post
+     * @param blogPost JSON of the new post
+     * @param user
+     * @param session
+     * @return
+     */
+    @Transactional
+    @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/create")
-    public ResponseEntity createBlog(HttpServletRequest request, HttpServletResponse response,
-                                     @RequestParam("title") String title,
-                                     @RequestParam("description") String description,
-                                     @RequestParam("text") String text,
-                                     @RequestParam("image_url") String image_url)
+    public ResponseEntity createBlog(@JSONParam("post") BlogPost blogPost,
+                                     @AuthedUser User user,
+                                     SessionImpl session)
     {
-        User currentUser = (User) request.getAttribute("user");
+        blogPost.setUser(user);
 
-        BlogPost blogPost = new BlogPost();
-        blogPost.setTitle(title);
-        blogPost.setDescription(description);
-        blogPost.setUser(currentUser);
-        blogPost.setText(text);
-        blogPost.setImage_url(image_url);
+        session.save(blogPost);
 
-        DatabaseUtil.saveObjects(true, blogPost);
-
-        return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+        return new ResponseEntity(blogPost, HttpStatus.OK);
     }
 
+    /**
+     * @param session
+     * @param id of requested blog post
+     * @return The requested blog post
+     */
+    @UnitOfWork
     @RequestMapping("/{id}")
-    public ResponseEntity getBlog(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity getBlog(SessionImpl session, @PathVariable("id") int id)
     {
         BlogPost blogPost = BlogService.getPost(id);
 
         if (blogPost != null)
         {
-            return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+            return new ResponseEntity(blogPost, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
         }
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
+    /**
+     * Updates a blog posts with given information
+     * @param session
+     * @param id The ID of the blog post to update
+     * @param blogPost JSON of post to update with
+     * @return The new blog post
+     */
+    @Transactional
+    @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/update")
-    public ResponseEntity updateBlog(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id,
-                                     @RequestParam("title") String title,
-                                     @RequestParam("description") String description,
-                                     @RequestParam("text") String text,
-                                     @RequestParam("image_url") String image_url)
+    public ResponseEntity updateBlog(SessionImpl session,
+                                     @PathVariable("id") int id,
+                                     @JSONParam("post") BlogPost blogPost)
     {
-        BlogPost blogPost = BlogService.getPost(id);
+        BlogPost oldPost = (BlogPost) session.get(BlogPost.class, id);
 
-        if (blogPost != null)
+        if (oldPost != null)
         {
-            blogPost.setTitle(title);
-            blogPost.setDescription(description);
-            blogPost.setText(text);
-            blogPost.setImage_url(image_url);
+            blogPost.setId(id);
 
-            DatabaseUtil.saveOrUpdateObjects(true, blogPost);
+            session.merge(blogPost);
 
-            return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+            return new ResponseEntity(blogPost, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
         }
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
+    /**
+     * Deletes the blog post
+     * @param session
+     * @param id The ID of the blog post to delete
+     * @return The deleted blog post
+     */
+    @Transactional
+    @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/delete")
-    public ResponseEntity deleteBlog(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity deleteBlog(SessionImpl session, @PathVariable("id") int id)
     {
-        BlogPost blogPost = BlogService.getPost(id);
+        BlogPost blogPost = (BlogPost) session.get(BlogPost.class, id);
 
         if (blogPost != null)
         {
-            DatabaseUtil.deleteObjects(blogPost);
+            session.delete(blogPost);
 
-            return new ResponseEntity(Reference.gson.toJson(blogPost), HttpStatus.OK);
+            return new ResponseEntity(blogPost, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);

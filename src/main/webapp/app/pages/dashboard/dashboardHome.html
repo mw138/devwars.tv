@@ -13,7 +13,7 @@
                     <span>BADGES</span>
                 </div> <!-- .statBox -->
                 <div class="statBox">
-                    <span>0/24</span>
+                    <span>{{ AuthService.user.badges.length || 0 }}/28</span>
                 </div> <!-- .statBox -->
             </div> <!-- .row--flexbox -->
             <div class="bar">
@@ -81,7 +81,7 @@
 
         <ul class="activityList">
             <li ng-repeat="activity in AuthService.user.activityLog">
-                <div class="activityDate">{{activity.timestamp | date}}</div>
+                <div class="activityDate">{{activity.timestamp | date : 'mediumDate' : 'UTC'}}</div>
                 <div class="activityTitle">{{activity.description}}</div>
                 <div class="activityReward">
                     <div class="xp reward--gain">{{activity.xpChanged}}</div>

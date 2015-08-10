@@ -105,6 +105,22 @@ angular.module("app.badges", [])
 
             "High Roller": function () {
                 return Math.min(AuthService.user.bettingBitsEarned / 10000.0 * 100, 100);
+            },
+
+            "First Timer" : function () {
+                return Math.min(AuthService.user.gamesWatched / 1 * 100, 100);
+            },
+
+            "Hobbyist" : function () {
+                return Math.min(AuthService.user.gamesWatched / 5 * 100, 100);
+            },
+
+            "Biggest Fan" : function () {
+                return Math.min(AuthService.user.gamesWatched / 25 * 100, 100);
+            },
+
+            "Obsessed" : function () {
+                return Math.min(AuthService.user.gamesWatched / 50 * 100, 100);
             }
         }
 

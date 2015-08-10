@@ -14,6 +14,7 @@ import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Response;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Ref;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -42,14 +45,29 @@ import java.util.List;
 @RequestMapping(value = "/v1/game")
 public class GameController
 {
+    /**
+     * Retrieved all games with criteria
+     * @param request
+     * @param response
+     * @param count Number of games wanted
+     * @param offset How many games to skip in DB
+     * @return
+     */
     @RequestMapping(value = "/")
     public ResponseEntity allGames(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "count", defaultValue = "5", required = false) int count, @RequestParam(value = "offset", defaultValue = "0", required = false) int offset)
     {
         count = count > 50 ? 50 : count;
 
-        return new ResponseEntity(Reference.gson.toJson(GameService.allGames(count, offset)), HttpStatus.OK);
+        return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves upcoming DevWars games
+     * @param request
+     * @param response
+     * @return
+     */
+    @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
     public ResponseEntity upcomingGames(HttpServletRequest request, HttpServletResponse response)
     {
@@ -65,13 +83,19 @@ public class GameController
 
         if (upcomingGames != null || (upcomingGames != null && upcomingGames.size() > 0))
         {
-            return new ResponseEntity(Reference.gson.toJson(upcomingGames), HttpStatus.OK);
+            return new ResponseEntity(upcomingGames, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Retrieves games that have been done in the past
+     * @param count
+     * @param offset
+     * @return
+     */
     @RequestMapping("/pastgames")
     public ResponseEntity pastGames(@RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
     {
@@ -91,13 +115,21 @@ public class GameController
 
         if (pastGames != null || (pastGames != null && pastGames.size() > 0))
         {
-            return new ResponseEntity(Reference.gson.toJson(pastGames), HttpStatus.OK);
+            return new ResponseEntity(pastGames, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Creates a game with the default information
+     * @param request
+     * @param response
+     * @param timestamp The time in UTC which the game will start
+     * @param name Name of the game (Classic or Zen Garden)
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
     public ResponseEntity createGame(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
@@ -125,6 +157,13 @@ public class GameController
         return new ResponseEntity(game.toString(), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves a game with a given ind
+     * @param request
+     * @param response
+     * @param id ID of the game to get
+     * @return
+     */
     @RequestMapping("/{id}")
     public ResponseEntity getGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
     {
@@ -134,8 +173,7 @@ public class GameController
 
         if (game != null)
         {
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(Reference.gson.toJson(game));
-            return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.OK);
+            return new ResponseEntity(game, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Could not find game for given ID", HttpStatus.NOT_FOUND);
@@ -143,6 +181,14 @@ public class GameController
 
     }
 
+    /**
+     * Edits a game with new information
+     * @param request
+     * @param response
+     * @param id The ID of the game to update
+     * @param json JSON to update the game with
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method =  RequestMethod.POST)
     public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json)
@@ -158,8 +204,6 @@ public class GameController
         } else
         {
             Game game = Reference.gson.fromJson(json, Game.class);
-
-            System.out.println(Reference.gson.toJson(game));
 
             session = DatabaseManager.getSession();
             session.beginTransaction();
@@ -187,6 +231,13 @@ public class GameController
         }
     }
 
+    /**
+     * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
+     * @param request
+     * @param response
+     * @param id ID of game to activate
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/activate")
     public ResponseEntity activateGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -208,13 +259,20 @@ public class GameController
             session.getTransaction().commit();
             session.close();
 
-            return new ResponseEntity(Reference.gson.toJson(game), HttpStatus.OK);
+            return new ResponseEntity(game, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Sets the game to inactive
+     * @param request
+     * @param response
+     * @param id ID of game to deactivate
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/deactivate")
     public ResponseEntity deactivateGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -233,13 +291,21 @@ public class GameController
             session.getTransaction().commit();
             session.close();
 
-            return new ResponseEntity(Reference.gson.toJson(game), HttpStatus.OK);
+            return new ResponseEntity(game, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Ends the game and wards winning team
+     * @param request
+     * @param response
+     * @param gameID ID of game to end
+     * @param winnerID The ID of the winning team (Awards corresponding values)
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
@@ -257,6 +323,7 @@ public class GameController
             if (team != null)
             {
                 game.setDone(true);
+                game.setActive(false);
 
                 for(Team otherTeam : game.getTeams().values())
                 {
@@ -282,7 +349,7 @@ public class GameController
         for (Team team : game.getTeams().values())
         {
             //Participation
-            team.players.stream().forEach(p -> {
+            team.getPlayers().stream().forEach(p -> {
                 p.setXpChanged(p.getXpChanged() + 50);
                 p.setPointsChanged(p.getPointsChanged() + 222);
 
@@ -296,7 +363,7 @@ public class GameController
             if (team.didCompleteAllObjectives())
             {
                 System.out.println(team.getName() + " has completed all objectives.");
-                team.players.stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p -> {
                     p.setXpChanged(p.getXpChanged() + 150);
 
                     p.getUser().getRanking().addXP(150);
@@ -307,7 +374,7 @@ public class GameController
             if (team.isWin())
             {
                 System.out.println(team.getName() + " has won");
-                team.players.stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p -> {
                     p.setXpChanged(p.getXpChanged() + 250);
                     p.setPointsChanged(p.getPointsChanged() + 444);
 
@@ -332,6 +399,13 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Deletes a game
+     * @param request
+     * @param response
+     * @param id ID of game to delete
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/delete")
     public ResponseEntity deleteGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -350,6 +424,12 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Gets the current active game
+     * @param request
+     * @param response
+     * @return
+     */
     @AllowCrossOrigin(from = "*")
     @RequestMapping(value = "/currentgame")
     public ResponseEntity currentGame(HttpServletRequest request, HttpServletResponse response)
@@ -358,13 +438,19 @@ public class GameController
 
         if (currentGame != null)
         {
-            return new ResponseEntity(Reference.gson.toJson(currentGame), HttpStatus.OK);
+            return new ResponseEntity(currentGame, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_CURRENT_GAME, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Gets the most recently created game
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/latestgame")
     public ResponseEntity latestGame(HttpServletRequest request, HttpServletResponse response)
     {
@@ -379,6 +465,12 @@ public class GameController
         }
     }
 
+    /**
+     * Gets the game which is nearest to the current date in the future
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/nearestgame")
     public ResponseEntity nearestGame(HttpServletRequest request, HttpServletResponse response)
     {
@@ -386,13 +478,20 @@ public class GameController
 
         if (nearestGame != null)
         {
-            return new ResponseEntity(Reference.gson.toJson(nearestGame), HttpStatus.OK);
+            return new ResponseEntity(nearestGame, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Gets all signed up users for given game
+     * @param request
+     * @param response
+     * @param id ID of game to get sign ups for
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/pendingplayers")
     public ResponseEntity pendingPlayers(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -408,13 +507,22 @@ public class GameController
 
         if (users.size() > 0)
         {
-            return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+            return new ResponseEntity(users, HttpStatus.OK);
         }
 
         return new ResponseEntity("No players signed up for that game", HttpStatus.NOT_FOUND);
     }
 
     //Player Actions
+
+    /**
+     * Removes a player from a team without penalizing
+     * @param request
+     * @param response
+     * @param gameID ID of game to remove from (Redundant)
+     * @param playerID ID of player to remove
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/player/{playerID}/remove")
     public ResponseEntity removePlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("playerID") int playerID)
@@ -426,9 +534,9 @@ public class GameController
 
         if (game != null)
         {
-            for (Team team : game.teams.values())
+            for (Team team : game.getTeams().values())
             {
-                for (Player player : team.players)
+                for (Player player : team.getPlayers())
                 {
                     if (player.getId() == playerID)
                     {
@@ -447,7 +555,7 @@ public class GameController
                 session.getTransaction().commit();
                 session.close();
 
-                return new ResponseEntity(Reference.gson.toJson(playerFound), HttpStatus.OK);
+                return new ResponseEntity(playerFound, HttpStatus.OK);
             }
         } else
         {
@@ -457,6 +565,15 @@ public class GameController
         return new ResponseEntity("Player could not be found", HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Adds a player to a team
+     * @param request
+     * @param gameID ID of game to add to
+     * @param teamID ID of team to add to
+     * @param language The language that the user will be playing
+     * @param newUser The user that will be playing
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/team/{teamID}/add", method = RequestMethod.POST)
     public ResponseEntity addPlayer(HttpServletRequest request,
@@ -470,7 +587,7 @@ public class GameController
 
         if (game != null)
         {
-            for (Team team : game.teams.values())
+            for (Team team : game.getTeams().values())
             {
                 if (team.getId() == teamID)
                 {
@@ -500,7 +617,7 @@ public class GameController
 
                 session.refresh(newPlayer);
 
-                String message = "You were added to the game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.timestamp.getTime()));
+                String message = "You were added to the game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime()));
                 Activity activity = new Activity(newPlayer.getUser(), (User) request.getAttribute("user"), message, 0, 0);
 
                 session.save(activity);
@@ -512,13 +629,13 @@ public class GameController
                 if (newPlayer.getUser().getEmail() != null)
                 {
                     String subject = "Accepted to play a game of DevWars";
-                    String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(game.timestamp.getTime()).toString();
+                    String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(game.getTimestamp().getTime()).toString();
                     Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, activityMessage, newPlayer.getUser().getEmail());
                 }
 
                 session.close();
 
-                return new ResponseEntity(Reference.gson.toJson(newPlayer), HttpStatus.OK);
+                return new ResponseEntity(newPlayer, HttpStatus.OK);
             }
         } else
         {
@@ -528,6 +645,12 @@ public class GameController
         return null;
     }
 
+    /**
+     * Removes a user from the game and penlizes them with some value
+     * @param session
+     * @param player The player to remove
+     * @return
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/forfeituser", method = RequestMethod.POST)
@@ -542,17 +665,21 @@ public class GameController
 
         session.delete(player);
 
-        return new ResponseEntity(Reference.gson.toJson(player), HttpStatus.OK);
+        return new ResponseEntity(player, HttpStatus.OK);
     }
 
-
+    /**
+     * Signs a user up for a game
+     * @param request
+     * @param response
+     * @param id ID of game to sign up for
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
     public ResponseEntity signupForGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
     {
         Game game = GameService.getGame(id);
-
-        System.out.println(Reference.gson.toJson(game));
 
         if (game != null)
         {
@@ -576,7 +703,7 @@ public class GameController
                     gameSignup.setUser(user);
                     gameSignup.setGame(game);
 
-                    Activity activity = new Activity(user, user, "Signed up for game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.timestamp.getTime())), 0, 0);
+                    Activity activity = new Activity(user, user, "Signed up for game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime())), 0, 0);
 
                     DatabaseUtil.saveObjects(false, gameSignup, activity);
 
@@ -594,6 +721,17 @@ public class GameController
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Adds votes to a team for voting part of game
+     * @param request
+     * @param response
+     * @param id ID of game
+     * @param teamID ID of team
+     * @param func How many to add on the functionality vote
+     * @param design How many to add on the design vote
+     * @param code How many to add on the code vote
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/addvotes")
     public ResponseEntity addVotes(HttpServletRequest request, HttpServletResponse response,
@@ -622,7 +760,7 @@ public class GameController
             session.persist(team);
             session.getTransaction().commit();
 
-            responseEntity = new ResponseEntity(Reference.gson.toJson(team), HttpStatus.OK);
+            responseEntity = new ResponseEntity(team, HttpStatus.OK);
         } else
         {
             responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
@@ -632,6 +770,16 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Adds points to every player in a team
+     * @param request
+     * @param response
+     * @param id ID of game
+     * @param teamID ID of team
+     * @param points How many points to add to each player
+     * @param xp How much xp to add to each player
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/addpoints")
     public ResponseEntity addPointsToTeam(HttpServletRequest request, HttpServletResponse response,
@@ -676,9 +824,7 @@ public class GameController
             session.getTransaction().commit();
             session.refresh(team);
 
-            System.out.println(Reference.gson.toJson(team.getGame()));
-
-            responseEntity = new ResponseEntity(Reference.gson.toJson(team.getGame()).toString(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(team.getGame(), HttpStatus.OK);
         } else
         {
             responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
@@ -689,6 +835,14 @@ public class GameController
         return responseEntity;
     }
 
+    /**
+     * Edits a players information
+     * @param request
+     * @param response
+     * @param playerID ID of player to update
+     * @param json JSON of new information
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/player/{playerID}/edit")
     public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json)
@@ -720,7 +874,7 @@ public class GameController
 
                     session.close();
 
-                    return new ResponseEntity(Reference.gson.toJson(player), HttpStatus.OK);
+                    return new ResponseEntity(player, HttpStatus.OK);
                 }
             }
         }
@@ -728,32 +882,28 @@ public class GameController
         return new ResponseEntity("Could not edit player", HttpStatus.CONFLICT);
     }
 
-    @RequestMapping("/resetVeteranGames")
-    public ResponseEntity resetVeteranGames(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Pulls the Cloud Nine website and stores it in a folder with appropiate game name
+     * @param id ID of game to correspond save to
+     * @return
+     * @throws UnirestException
+     * @throws IOException
+     */
+    @RequestMapping("/{id}/sitepull")
+    public ResponseEntity resetVeteranGames(@PathVariable("id") int id) throws UnirestException, IOException
     {
-        Session session = DatabaseManager.getSession();
-        Query query = session.createQuery("from Game where id < 11");
+        Game game = GameService.getGame(id);
 
-        List<Game> games = query.list();
-
-        session.close();
-
-        for(Game game : games)
+        if (game != null)
         {
-            Team winner = null;
+            GameService.downloadCurrentGame(game);
 
-            for(Team team : game.getTeams().values())
-            {
-                if (team.isWin()) winner = team;
-            }
+            return new ResponseEntity("Successfully downloaded and stored Cloud Nine Site", HttpStatus.OK);
 
-            if (winner != null)
-            {
-                endGame(request, response, game.getId(), winner.getId());
-            }
+        } else
+        {
+            return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
         }
-
-        return null;
     }
 
 }

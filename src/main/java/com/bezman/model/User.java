@@ -4,96 +4,101 @@ import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
+import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.exclusion.GsonExclude;
+import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.bezman.service.Security;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.expression.spel.ast.QualifiedIdentifier;
 
-import javax.xml.crypto.Data;
-import java.beans.Transient;
-import java.sql.Ref;
 import java.util.*;
 
 /**
  * Created by Terence on 12/22/2014.
  */
+@JsonSerialize(using = UserPermissionSerializer.class)
 public class User extends BaseModel
 {
 
     public enum Role
     {
-        NONE, PENDING, USER, ADMIN
+        NONE, PENDING, USER, BLOGGER, ADMIN
     }
 
-    public int id;
+    private int id;
 
-    public Rank rank;
+    private Rank rank;
 
-    public Rank nextRank;
+    private Rank nextRank;
 
-    public String username;
+    private String username;
 
-    public String email;
+    @UserPermissionFilter
+    private String email;
 
-    public String provider;
+    private String provider;
 
-    private transient String password;
+    @JsonIgnore
+    private String password;
 
-    public transient UserSession session;
+    @JsonIgnore
+    public UserSession session;
 
-    public UserReset passwordReset;
+    private UserReset passwordReset;
 
-    public Ranking ranking;
+    private Ranking ranking;
 
-    public EmailConfirmation emailConfirmation;
+    @JsonIgnore
+    private EmailConfirmation emailConfirmation;
 
-    public Role role;
+    private Role role;
 
-    public Set<Integer> appliedGames;
+    private Set<Integer> appliedGames;
 
-    public Set<ConnectedAccount> connectedAccounts;
+    @UserPermissionFilter
+    private Set<ConnectedAccount> connectedAccounts;
 
-    @GsonExclude
-    public Set<Activity> activityLog;
+    @JsonIgnore
+    private Set<Activity> activityLog;
 
-    public Set<Badge> badges;
+    @JsonIgnore
+    private Set<Badge> badges;
+
+    @UserPermissionFilter
+    private String providerID;
+
+    private Integer referredUsers;
+
+    private Integer avatarChanges;
+
+    private Integer gamesPlayed = 0;
+    private Integer gamesWon = 0;
+    private Integer gamesLost = 0;
+
+    private Integer gameStreak;
+
+    private Warrior warrior;
+
+    private String location, url, company;
+
+    private Integer usernameChanges;
+
+    private Integer score;
+
+    private Boolean veteran;
+
+    private Integer bettingBitsEarned;
+
+    private Integer gamesWatched;
 
     public String getEmail()
     {
         return email;
     }
-
-    public String providerID;
-
-    public Integer referredUsers;
-
-    public Integer avatarChanges;
-
-    public Integer gamesPlayed = 0;
-    public Integer gamesWon = 0;
-    public Integer gamesLost = 0;
-
-    public Integer gameStreak;
-
-    public Warrior warrior;
-
-    public String location, url, company;
-
-    public Integer usernameChanges;
-
-    public Integer score;
-
-    public Boolean veteran;
-
-    public Integer bettingBitsEarned;
-
-    public Integer gamesWatched;
 
     public void setEmail(String email)
     {
@@ -198,6 +203,7 @@ public class User extends BaseModel
         this.provider = provider;
     }
 
+    @JsonIgnore
     public Set<Integer> getAppliedGames()
     {
         return appliedGames;
@@ -238,6 +244,7 @@ public class User extends BaseModel
         this.providerID = providerID;
     }
 
+    @JsonIgnore
     public Set<Activity> getActivityLog()
     {
         return activityLog;
@@ -358,6 +365,7 @@ public class User extends BaseModel
         this.emailConfirmation = emailConfirmation;
     }
 
+    @JsonIgnore
     public Set<Badge> getBadges()
     {
         return badges;
@@ -533,6 +541,26 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Steamroller"));
         }
 
+        if (this.gamesWon > 0)
+        {
+            badgesToAward.add(Badge.badgeForName("First Timer"));
+        }
+
+        if (this.gamesWon >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Hobbyist"));
+        }
+
+        if (this.gamesWon >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Biggest Fan"));
+        }
+
+        if (this.gamesWon >= 50)
+        {
+            badgesToAward.add(Badge.badgeForName("Obsessed"));
+        }
+
         session = DatabaseManager.getSession();
 
         Query playersWonQuery = session.createQuery("from Player player where player.user.id = :id order by player.team.game.timestamp desc");
@@ -562,7 +590,7 @@ public class User extends BaseModel
 
         session.close();
 
-        if (this.getWarrior().getDob() != null)
+        if (this.getWarrior() != null && this.getWarrior().getDob() != null)
         {
             Calendar dob = Calendar.getInstance();
             dob.setTime(this.getWarrior().getDob());
@@ -614,6 +642,7 @@ public class User extends BaseModel
         {
             this.getRanking().addPoints(badge.getBitsAwarded());
             this.getRanking().addXP(badge.getXpAwarded());
+
             this.getBadges().add(badge);
 
             return true;

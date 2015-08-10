@@ -6,11 +6,11 @@ package com.bezman.model;
 public class Access extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public User user;
+    private User user;
 
-    public String route;
+    private String route;
 
     public int getId()
     {

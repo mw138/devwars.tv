@@ -95,7 +95,7 @@ angular.module('app.modCP', [
             ;
         }])
 
-    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", function($scope, GameService, ToastService, $filter, $mdDialog, $location){
+    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http){
 
         $scope.pickedDate = new Date();
         $scope.pickedTime = new Date();
@@ -115,12 +115,14 @@ angular.module('app.modCP', [
             GameService.allGames(0, 10, function (success) {
                 $scope.availableGames = success.data;
 
-                console.log($location.search());
                 if($location.search().game) {
                     var game = parseInt($location.search().game);
 
                     $scope.availableGames.forEach(function (a) {
-                        if(a.id === game) $scope.selectedGame = a;
+                        if(a.id === game && !$scope.hasInit) {
+                            $scope.hasInit = true;
+                            $scope.selectedGame = a;
+                        }
                     });
                 };
             }, angular.noop);
@@ -172,7 +174,7 @@ angular.module('app.modCP', [
         $scope.removePlayer = function (player) {
             GameService.removePlayer($scope.selectedGame.id, player.id, function (success) {
                 $scope.updateSelectedGame();
-                ToastService.showDevwarsToast("fa-check-circle", "Success", "Removed " + player.user.username);
+                ToastService.showDevwasrsToast("fa-check-circle", "Success", "Removed " + player.user.username);
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamtion-circle", "Error", "Could not remove player");
             });
@@ -299,6 +301,33 @@ angular.module('app.modCP', [
             }, angular.noop);
 
         });
+
+        $scope.uploadFiles = function(team, file) {
+            var formData = new FormData();
+
+            formData.append("zip", dataURItoBlob(file));
+
+            $http.post("/v1/team/" + team.id + "/upload", formData, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined},
+                transformRequest: angular.identity
+            })
+                .then(function (success) {
+                    ToastService.showDevwarsToast("fa-check-circle", "Success", "Uploaded files for team");
+                }, function () {
+                    ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not upload files");
+                });
+        };
+
+        var dataURItoBlob = function(dataURI) {
+            var binary = atob(dataURI.split(',')[1]);
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            var array = [];
+            for(var i = 0; i < binary.length; i++) {
+                array.push(binary.charCodeAt(i));
+            }
+            return new Blob([new Uint8Array(array)], {type: mimeString});
+        };
 
         $scope.updateGames();
     }]);

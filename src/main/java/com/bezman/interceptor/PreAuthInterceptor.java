@@ -49,6 +49,8 @@ public class PreAuthInterceptor implements HandlerInterceptor
 
             boolean hasSecretKey  = Reference.requestHasSecretKey(request);
 
+            request.setAttribute("hasSecretKey" , hasSecretKey);
+
             PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
 
             AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
@@ -58,78 +60,66 @@ public class PreAuthInterceptor implements HandlerInterceptor
                 response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
             }
 
-            if (auth != null)
+            User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
+
+            Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
+
+            if (cookie != null)
             {
-                User.Role requiredRole = auth.minRole();
+                String token = cookie.getValue();
 
-                Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
-
-                if (cookie != null)
+                if (token != null)
                 {
-                    String token = cookie.getValue();
+                    Session session = DatabaseManager.getSession();
+                    Query query = session.createQuery("from UserSession where sessionID = :session");
+                    query.setString("session", token);
 
-                    if (token != null)
+                    UserSession userSession = (UserSession) DatabaseUtil.getFirstFromQuery(query);
+
+                    if (userSession != null)
                     {
-                        Session session = DatabaseManager.getSession();
-                        Query query = session.createQuery("from UserSession where sessionID = :session");
-                        query.setString("session", token);
+                        Query userQuery = session.createQuery("from User where id = :id");
+                        userQuery.setInteger("id", userSession.getId());
 
-                        UserSession userSession = (UserSession) DatabaseUtil.getFirstFromQuery(query);
+                        User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
-                        if (userSession != null)
+                        if (requiredRole == User.Role.NONE)
                         {
-                            Query userQuery = session.createQuery("from User where id = :id");
-                            userQuery.setInteger("id", userSession.getId());
+                            request.setAttribute("user", user);
+                            return true;
+                        }
 
-                            User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
+                        if (user != null)
+                        {
+                            User.Role userRole = User.Role.valueOf(user.getRole());
 
-                            if (requiredRole == User.Role.NONE)
+                            if (userRole.ordinal() >= requiredRole.ordinal())
                             {
                                 request.setAttribute("user", user);
                                 return true;
                             }
-
-                            if (user != null)
-                            {
-                                User.Role userRole = user.role;
-
-                                System.out.println(requiredRole.toString() + ", " + requiredRole.ordinal());
-                                System.out.println(userRole.toString() + ", " + userRole.ordinal());
-
-                                if (userRole.ordinal() >= requiredRole.ordinal())
-                                {
-                                    request.setAttribute("user", user);
-                                    return true;
-                                }
-                            }
                         }
-
-                        session.close();
                     }
+
+                    session.close();
                 }
+            }
 
-                if(hasSecretKey)
-                {
-                    return true;
-                }
-
-                if (requiredRole == User.Role.NONE)
-                {
-                    return true;
-                }
-
-                response.setStatus(403);
-                response.getWriter().print("You need to be at least " + requiredRole.toString());
-
-                return false;
-            } else
+            if(hasSecretKey)
             {
                 return true;
             }
-        }catch (Exception e)
-        {
 
-        }
+            if (requiredRole == User.Role.NONE)
+            {
+                return true;
+            }
+
+            response.setStatus(403);
+            response.getWriter().print("You need to be at least " + requiredRole.toString());
+
+            return false;
+        }catch (Exception e){}
 
         return successful;
     }

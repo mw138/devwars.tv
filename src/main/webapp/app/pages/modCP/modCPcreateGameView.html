@@ -15,11 +15,11 @@
         <div class="modcp-dateBox">
             <span class="dateBox-title">Zen Garden</span>
             <div class="dateBox-date">
-                <span>{{ pickedDate | date : 'MMM' }}</span>
-                <span>{{ pickedDate | date : 'dd' }}</span>
+                <span>{{ pickedDate | date : 'MMM' : 'UTC'}}</span>
+                <span>{{ pickedDate | date : 'dd' : 'UTC' }}</span>
             </div>
             <div class="dateBox-time">
-                 <span>{{ pickedTime | date : 'shortTime' }}</span>
+                 <span>{{ pickedTime | date : 'shortTime' : 'UTC' }}</span>
             </div>
         </div>
 

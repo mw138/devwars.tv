@@ -3,6 +3,10 @@ package com.bezman.exclusion;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import org.hibernate.proxy.HibernateProxy;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Terence on 4/15/2015.

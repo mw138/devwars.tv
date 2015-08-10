@@ -47,7 +47,7 @@
             <one-to-many class="Activity"></one-to-many>
         </set>
 
-        <set name="badges" table="users_badges" lazy="false">
+        <set name="badges" table="users_badges" lazy="false" cascade="save-update" inverse="false">
             <key column="user_id"></key>
             <many-to-many column="badge_id" class="Badge"></many-to-many>
         </set>

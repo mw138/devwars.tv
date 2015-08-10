@@ -4,10 +4,13 @@ import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.annotation.Transactional;
 import com.bezman.model.Activity;
 import com.bezman.model.Contact;
 import com.bezman.model.User;
 import com.bezman.service.Security;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,8 +28,18 @@ import javax.servlet.http.HttpServletResponse;
 public class ContactController
 {
 
+    /**
+     * Feedback for users : Puts new contact row in DB and sends email
+     * @param session
+     * @param name Name of the user
+     * @param email Email of the user
+     * @param text Text we should see
+     * @param type Type of feedback
+     * @return
+     */
+    @Transactional
     @RequestMapping("/create")
-    public ResponseEntity create(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity create(SessionImpl session,
                                  @RequestParam("name") String name,
                                  @RequestParam("email") String email,
                                  @RequestParam("text") String text,
@@ -41,9 +54,9 @@ public class ContactController
 
             Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, message, "support@devwars.tv");
 
-            DatabaseUtil.saveObjects(true, contact);
+            session.save(contact);
 
-            return new ResponseEntity(Reference.gson.toJson(contact), HttpStatus.OK);
+            return new ResponseEntity(contact, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Enquiry is too long", HttpStatus.BAD_REQUEST);

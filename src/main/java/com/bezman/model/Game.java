@@ -15,17 +15,17 @@ import java.util.Set;
 public class Game extends BaseModel
 {
 
-    public int id;
+    private int id;
 
-    public Timestamp timestamp;
-    public String name, theme, status;
-    public boolean active = false, done = false;
+    private Timestamp timestamp;
+    private String name, theme, status;
+    private boolean active = false, done = false;
 
-    public String youtubeURL;
+    private String youtubeURL;
 
-    public Map<String, Team> teams = new HashMap<>();
+    private Map<String, Team> teams = new HashMap<>();
 
-    public Set<Objective> objectives;
+    private Set<Objective> objectives;
 
     public int getId()
     {
