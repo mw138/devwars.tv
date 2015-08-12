@@ -15,7 +15,7 @@ import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Terence on 6/29/2015.
+ * Handler to resolve the user from the PreAuthorization class
  */
 public class UserResolver implements HandlerMethodArgumentResolver
 {

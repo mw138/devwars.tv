@@ -12,7 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Terence on 7/2/2015.
+ * Resolver to turn a JSON object into a java object
  */
 public class JSONParamResolver implements HandlerMethodArgumentResolver
 {

@@ -22,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Terence on 8/2/2015.
+ * Bean for the Jackson Object Mapper
  */
 public class DevWarsObjectMapper extends ObjectMapper
 {

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by Terence on 6/29/2015.
+ * Class to open and close sessions on routes
  */
 public class UnitOfWorkInterceptor implements HandlerInterceptor
 {
