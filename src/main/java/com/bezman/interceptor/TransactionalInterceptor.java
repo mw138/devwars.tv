@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.crypto.Data;
 
 /**
- * Created by Terence on 6/29/2015.
+ * Class to open and close transactions on routes
  */
 public class TransactionalInterceptor implements HandlerInterceptor
 {

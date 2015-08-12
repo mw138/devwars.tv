@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
- * Created by Terence on 8/2/2015.
+ * Class to secure fields based on the current user
  */
 public class UserPermissionSerializer extends JsonSerializer<Object> implements ContextualSerializer
 {

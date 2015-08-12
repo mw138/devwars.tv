@@ -11,7 +11,7 @@ import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
 
 /**
- * Created by teren on 8/8/2015.
+ * Class to simplify the querying of date : Year
  */
 public class YearCriterion extends SQLCriterion {
 
