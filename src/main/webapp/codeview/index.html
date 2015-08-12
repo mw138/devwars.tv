@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DevWars Live Code</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/darkula.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<nav>
+	<img src="http://red.devwars.tv/logo.png">
+
+	<div class="second button-container">
+		<span class="red-team-view button red-button">Red Team</span>
+	    <span class="blue-team-view button blue-button">Blue Team</span>
+	    <span class="default-view button default-button">Default View</span>
+	</div>	
+
+    <div class="button-container">
+	    <span class="blue-html button blue-button">Blue HTML</span>
+	    <span class="blue-css button blue-button">Blue CSS</span>
+	    <span class="blue-js button blue-button">Blue JS</span>
+	    <span class="red-html button red-button">Red HTML</span>
+	    <span class="red-css button red-button">Red CSS</span>
+	    <span class="red-js button red-button">Red JS</span>
+	</div>	
+
+    <label id="reload" class="reload">
+    	<span>Auto Reload</span>
+        <input type="checkbox" class="regular-radio" onclick="toggleReload()">
+    </label>
+
+</nav>
+
+<div class="viewcode-container">
+	<div class="blue-team html blue-view__html">
+		<span class="team__html title">HTML</span>
+		<span id="blue-team__html" class="player">Waiting for Player</span>
+		<pre><code class="html" id="htmlBlue"></code></pre>
+	</div>
+
+	<div class="blue-team css blue-view__css">
+		<span class="team__css title">CSS</span>
+		<span id="blue-team__css" class="player">Waiting for Player</span>
+		<pre><code class="css" id="cssBlue"></code></pre>
+	</div>
+
+	<div class="blue-team js blue-view__js">
+		<span class="team__js title">JavaScript</span>
+		<span id="blue-team__js" class="player">Waiting for Player</span>
+		<pre><code class="javascript" id="jsBlue"></code></pre>
+	</div>
+
+	<div class="red-team html red-view__html">
+		<span class="team__html title">HTML</span>
+		<span id="red-team__html" class="player">Waiting for Player</span>
+		<pre><code class="html" id="htmlRed"></code></pre>
+	</div>
+
+	<div class="red-team css red-view__css">
+		<span class="team__css title">CSS</span>
+		<span id="red-team__css" class="player">Waiting for Player</span>
+		<pre><code class="css" id="cssRed"></code></pre>
+	</div>
+
+	<div class="red-team js red-view__js">
+		<span class="team__js title">JavaScript</span>
+		<span id="red-team__js" class="player">Waiting for Player</span>
+		<pre><code class="javascript" id="jsRed"></code></pre>
+	</div>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="main.js"></script>
+
+</body>
+</html>
