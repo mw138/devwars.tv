@@ -197,7 +197,7 @@ public class UserController extends BaseController
             User user = new User();
             user.setUsername(username);
             user.setEmail(email);
-            user.setEncryptedPassword(password);
+            user.setPassword(Security.hash(password));
             user.setRole(User.Role.PENDING.toString());
             user.setAvatarChanges(1);
 
@@ -448,7 +448,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        if (user != null && user.getUnencryptedPassword().equals(password))
+        if (user != null && user.getPassword().equals(Security.hash(password)))
         {
             if (User.Role.valueOf(user.getRole()) != User.Role.PENDING)
             {
@@ -594,11 +594,11 @@ public class UserController extends BaseController
             return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
         }
 
-        if (user.getUnencryptedPassword().equals(currentPassword))
+        if (user.getPassword().equals(Security.hash(currentPassword)))
         {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update User set password = :password where id = :id");
-            query.setString("password", Security.encrypt(newPassword));
+            query.setString("password", Security.hash(newPassword));
             query.setInteger("id", user.getId());
 
             query.executeUpdate();
@@ -628,7 +628,7 @@ public class UserController extends BaseController
     {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative() || user.getUnencryptedPassword().equals(currentPassword))
+        if (!user.isNative() || user.getPassword().equals(Security.hash(currentPassword)))
         {
             if(EmailValidator.getInstance().isValid(newEmail))
             {
@@ -1129,5 +1129,18 @@ public class UserController extends BaseController
         return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
 
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @Transactional
+    @RequestMapping("/migrate")
+    public ResponseEntity migrate(SessionImpl session)
+    {
+        List<User> users = session.createCriteria(User.class)
+            .list();
+
+        users.stream()
+                .forEach(user -> user.setPassword(Security.hash(Security.decrypt(user.getPassword()))));
+
+        return null;
+    }
 
 }

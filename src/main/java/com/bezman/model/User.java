@@ -122,17 +122,6 @@ public class User extends BaseModel
         return password;
     }
 
-    @JsonIgnore
-    public String getUnencryptedPassword()
-    {
-        return Security.decrypt(password);
-    }
-
-    public void setEncryptedPassword(String password)
-    {
-        this.password = Security.encrypt(password);
-    }
-
     public void setPassword(String password)
     {
         this.password = password;
