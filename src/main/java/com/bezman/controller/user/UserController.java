@@ -1129,18 +1129,4 @@ public class UserController extends BaseController
         return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @Transactional
-    @RequestMapping("/migrate")
-    public ResponseEntity migrate(SessionImpl session)
-    {
-        List<User> users = session.createCriteria(User.class)
-            .list();
-
-        users.stream()
-                .forEach(user -> user.setPassword(Security.hash(Security.decrypt(user.getPassword()))));
-
-        return null;
-    }
-
 }
