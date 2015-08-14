@@ -16,14 +16,14 @@ angular.module("app.header", ['ngCookies'])
         GameService.currentGame(function (success) {
             $scope.currentGame = success.data;
 
-            $scope.currentGameMessage = "We're live right now : " + $filter('date')($scope.currentGame.timestamp, "shortTime", "UTC") + " on " + $filter('date')($scope.currentGame.timestamp, "longDate", "UTC");
+            $scope.currentGameMessage = "We're live right now : " + $filter('date')($scope.currentGame.timestamp, "shortTime", "UTC") + " UTC on " + $filter('date')($scope.currentGame.timestamp, "longDate", "UTC");
         }, function (error) {
             $scope.currentGame = {}
 
             GameService.nearestGame(function (success) {
                 $scope.nearestGame = success.data;
 
-                $scope.nearestGameMessage = "Next Game @ " + $filter('date')($scope.nearestGame.timestamp, "shortTime", "UTC") + " on " + $filter('date')($scope.nearestGame.timestamp, "longDate", "UTC");
+                $scope.nearestGameMessage = "Next Game @ " + $filter('date')($scope.nearestGame.timestamp, "shortTime", "UTC") + " UTC on " + $filter('date')($scope.nearestGame.timestamp, "longDate", "UTC");
             }, function (error) {
                 $scope.currentGame = {}
             });
