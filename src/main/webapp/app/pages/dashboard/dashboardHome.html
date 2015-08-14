@@ -5,7 +5,7 @@
             <h4>Badge Statistics</h4>
         </div>
         <div class="innerLineHeight">
-            <p class="profile-badges__total">0</p>
+            <p class="profile-badges__total">{{ AuthService.user.badges.length || 0 }}</p>
             <a href="/#/badges" class="profile-view-button">View Badges</a>
 
             <div class="row--flexbox xp--row">
@@ -17,7 +17,7 @@
                 </div> <!-- .statBox -->
             </div> <!-- .row--flexbox -->
             <div class="bar">
-                <div class="barpercent"></div>
+                <div style="width: {{ (AuthService.user.badges.length / 28.0) * 100.0 }}%" class="barpercent"></div>
             </div> <!-- .bar -->
         </div> <!-- .innerLineHeight -->
     </div> <!-- .profile-badges -->

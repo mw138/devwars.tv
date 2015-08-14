@@ -5,7 +5,9 @@ angular.module("app.warriorReg", [])
                 .state('warriorReg', {
                     url: '/warrior-signup',
                     templateUrl: '/app/pages/warriorReg/warriorRegView.html',
-                    controller: "warriorRegController"
+                    controller: "warriorRegController",
+
+                    auth: true
                 });
 
         }])

@@ -18,6 +18,8 @@ angular.module('app.modCP', [
                     url: '/creategames',
                     parent: "modCP",
 
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -33,6 +35,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.createTeamsView', {
                     url: '/createteams',
+
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -48,6 +53,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.createObjectiveView', {
                     url: '/createobjectives',
+
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -63,6 +71,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.liveGameView', {
                     url: '/livegame',
+
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -78,6 +89,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.PostGameView', {
                     url: '/postgame',
+
+                    auth: true,
+
                     parent: "modCP",
 
                     views : {

@@ -105,3 +105,19 @@ app.filter("players", function () {
         return data;
     })
 });
+
+app.run(function ($rootScope, $location, AuthService) {
+    $rootScope.$on('$stateChangeStart', function (event, toState) {
+        console.log(toState);
+
+        //Is the route protected
+        if(toState.auth) {
+
+            //Are we logged in?
+            AuthService.isLoggedIn()
+                .then(angular.noop, function (error) {
+                    $location.path('/');
+                });
+        }
+    });
+});

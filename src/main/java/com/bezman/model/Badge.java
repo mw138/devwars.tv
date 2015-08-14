@@ -95,6 +95,14 @@ public class Badge extends BaseModel
         this.users = users;
     }
 
+    public Integer getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
+    }
+
     @JsonIgnore
     public void updateUsersCount()
     {

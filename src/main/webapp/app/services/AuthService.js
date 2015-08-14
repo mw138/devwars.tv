@@ -113,5 +113,12 @@ angular.module("app.AuthService", [])
             return false;
         };
 
+        AuthService.isLoggedIn = function () {
+            return $http({
+                url: "/v1/user/",
+                method: "GET"
+            })
+        };
+
         return AuthService;
     }]);
