@@ -37,6 +37,7 @@
                 <configuration>
                     <warSourceExcludes>node_modules/**</warSourceExcludes>
                     <warSourceExcludes>assets/sass/.sass-cache/**</warSourceExcludes>
+                    <warSourceExcludes>.sass-cache/**</warSourceExcludes>
                 </configuration>
             </plugin>
 		</plugins>
