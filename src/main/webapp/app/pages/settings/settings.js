@@ -18,6 +18,8 @@ angular.module('app.settings', [
 					url: '',
                     parent: "settings",
 
+                    auth: true,
+
 					views : {
 						'' : {
 							templateUrl: 'app/pages/settings/settingsView.html',
@@ -33,6 +35,9 @@ angular.module('app.settings', [
 
 				.state('settings.profileView', {
 					url: '/profile',
+
+                    auth: true,
+
 					views : {
 						'' : {
 							templateUrl: 'app/pages/settings/settingsView.html',
@@ -47,6 +52,9 @@ angular.module('app.settings', [
 				})
 				.state('settings.notificationsView', {
 					url: '/notifications',
+
+                    auth: true,
+
 					views : {
 						'' : {
 							templateUrl: 'app/pages/settings/settingsView.html',
@@ -61,6 +69,9 @@ angular.module('app.settings', [
 				})
 				.state('settings.connectView', {
 					url: '/connections',
+
+                    auth: true,
+
 					views : {
 						'' : {
 							templateUrl: 'app/pages/settings/settingsView.html',
