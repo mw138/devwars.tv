@@ -21,15 +21,15 @@ angular.module("app.games", [])
         $scope.labels = [
             'blue',
             'red'
-        ]
+        ];
 
         $scope.DialogService = DialogService;
 
         GameService.pastGames(0, 8, function (success) {
-            $scope.pastGames = success.data;
+            var games = success.data;
 
-            for(var key in $scope.pastGames) {
-                var game = $scope.pastGames[key];
+            for(var key in games) {
+                var game = games[key];
 
                 for(var teamKey in game.teams) {
                     var team = game.teams[teamKey];
@@ -45,11 +45,11 @@ angular.module("app.games", [])
                         if(player.language.toLowerCase() === "js") sortedPlayers[2] = player;
                     }
 
-                    console.log(sortedPlayers);
-
                     team.players = sortedPlayers;
                 }
             }
+
+            $scope.pastGames = games;
 
             if($(document).width() > 840)
                 $scope.setSelectedGame($scope.pastGames[0]);
