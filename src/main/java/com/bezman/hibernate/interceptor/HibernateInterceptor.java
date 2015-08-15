@@ -21,9 +21,13 @@ import java.util.Iterator;
 public class HibernateInterceptor extends EmptyInterceptor
 {
 
+
+
     @Override
     public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types)
     {
+        super.onLoad(entity, id, state, propertyNames, types);
+
         invokeMethodWithAnnotation(entity, PostLoad.class);
 
         return false;
@@ -42,7 +46,8 @@ public class HibernateInterceptor extends EmptyInterceptor
     {
     }
 
-    private void invokeMethodWithAnnotation(Object obj, Class annotation)
+    @SuppressWarnings("NullArgumentToVariableArgMethod")
+    public static void invokeMethodWithAnnotation(Object obj, Class annotation)
     {
         Method[] methods = obj.getClass().getMethods();
 
