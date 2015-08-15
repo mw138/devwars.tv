@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PostLoad;
 import java.util.*;
@@ -433,11 +435,11 @@ public class User extends BaseModel
         if(this.getRanking() != null)
         {
 
-            Query rankQuery = session.createQuery("from Rank r where r.xpRequired <= :xp order by r.xpRequired desc");
-            rankQuery.setInteger("xp", this.getRanking().getXp().intValue());
-            rankQuery.setMaxResults(1);
-
-            this.rank = (Rank) DatabaseUtil.getFirstFromQuery(rankQuery);
+            this.rank = (Rank) session.createCriteria(Rank.class)
+                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
+                    .addOrder(Order.desc("xpRequired"))
+                    .setMaxResults(1)
+                    .uniqueResult();
 
             this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
         }
