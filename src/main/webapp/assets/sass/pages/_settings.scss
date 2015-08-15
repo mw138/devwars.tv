@@ -1,36 +1,27 @@
 .settingsView {
-
-
-  .left, .right {
-	height: auto;
 	margin-top: 60px;
-  }
 
-  .left {
-	width: calc(25% - 40px);
-	float: left;
-  }
-  .right {
-	width: calc(75% - 40px);
-	float: right;
-
-	h1 {
-	  width: 100%;
-	  display: block;
-	  background: $background-color;
-	  padding-bottom: 20px;
-	}
-  }
+    .c9-register {
+      width: 90%;
+      border: 1px solid $c9-color;
+      text-align: center;
+      margin: 0 auto;
+	
+      img { height: 30px; display: block; margin: 20px auto; }
+      span { font-size: 14px; padding: 6px 0 10px 0; display: block; }
+      input { width: 60%; margin: 5px 0 30px;}
+    }
 
   ul.settings-nav {
 	list-style: none;
-	display: block;
-	margin-top: 20px;
+	border-bottom: 3px solid $accent-color;
 
 	li {
-	  display: block;
-	  padding: 10px;
-	  margin: 10px 0;
+	  display: inline-block;
+	  text-align: center;
+	  width: 20%;
+	  line-height: 40px;
+	  background: $dgray;
 
 	  &:hover {
 		background: $accent-color;
@@ -49,6 +40,18 @@
 	display: flex;
 	justify-content: space-between;
 	flex-wrap: wrap;
+  }
+
+  input {
+  	width: 100%;
+  	padding: 10px;
+
+  	&.button {
+		width: 20%;
+		margin: 10px 0 20px 0;
+		text-align: center;
+		margin-bottom: 40px;
+	  }
   }
 
   label {
@@ -71,17 +74,6 @@
 		padding-left: 5px;
 	  }
 	}
-	input {
-	  width: 60%;
-	  padding: 10px;
-
-	  &.button {
-		width: 20%;
-		margin: 10px 0 20px 0;
-		text-align: center;
-		margin-bottom: 40px;
-	  }
-	}
   }
 
   .avatar-upload {
@@ -102,6 +94,9 @@
   }
 
   .settings-content {
+	width: 60%;
+	margin: 0 0 0 50px;
+
 	.tooltip {
 	  position: relative;
 	  display: inline-block;;

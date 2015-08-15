@@ -45,6 +45,7 @@ angular.module('app.settings', [
 						}
 					}
 				})
+
 				.state('settings.notificationsView', {
 					url: '/notifications',
 					views : {
@@ -59,6 +60,7 @@ angular.module('app.settings', [
 						}
 					}
 				})
+
 				.state('settings.connectView', {
 					url: '/connections',
 					views : {
@@ -72,7 +74,23 @@ angular.module('app.settings', [
 							controller: "SettingsController"
 						}
 					}
+				})
+
+				.state('settings.warriorView', {
+					url: '/warrior',
+					views : {
+						'' : {
+							templateUrl: 'app/pages/settings/settingsView.html',
+							controller: "SettingsController"
+						},
+
+						'settingsInner@settings': {
+							templateUrl: "app/pages/settings/settingsWarriorView.html",
+							controller: "SettingsController"
+						}
+					}
 				});
+
 		}])
 	.controller("SettingsController", ["$scope", "AuthService", "$http", "$mdDialog", "ToastService", "UserService", "$location", "DialogService", function ($scope, AuthService, $http, $mdDialog, ToastService, UserService, $location, DialogService) {
 		$scope.AuthService = AuthService;
