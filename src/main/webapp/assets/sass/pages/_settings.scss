@@ -1,6 +1,10 @@
 .settingsView {
 	margin-top: 60px;
 
+	.button {
+		margin: 0 auto;
+	}
+
     .c9-register {
       width: 90%;
       border: 1px solid $c9-color;
@@ -11,6 +15,21 @@
       span { font-size: 14px; padding: 6px 0 10px 0; display: block; }
       input { width: 60%; margin: 5px 0 30px;}
     }
+
+    .split-inputs {
+      display: flex;
+      justify-content: space-between;
+	  align-content: center;
+	}
+
+		
+	.dateofbirth {
+		
+		span { width: calc(20% - 10px); align-self: center; }
+		input:nth-child(2) { width: calc(20% - 10px); }
+		input:nth-child(3) { width: calc(20% - 10px); }
+		input:nth-child(4) { width: calc(40% - 10px); }
+	}
 
   ul.settings-nav {
 	list-style: none;
@@ -44,14 +63,16 @@
 
   input {
   	width: 100%;
+  	margin: 10px 0;
   	padding: 10px;
 
-  	&.button {
-		width: 20%;
-		margin: 10px 0 20px 0;
-		text-align: center;
-		margin-bottom: 40px;
-	  }
+  }
+
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    height: 100px;
   }
 
   label {
