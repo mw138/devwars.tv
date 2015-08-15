@@ -71,6 +71,16 @@ angular.module("app.games", [])
             }
         };
 
+        $scope.resignFromGame = function (game, $event) {
+            DialogService.getConfirmationDialog("Confirmation", "Are you sure you would like to resign?", "Yes", "No", $event)
+                .then(function () {
+                    GameService.resignFromGame(game.id, function (success) {
+                        ToastService.showDevwarsToast("fa-check-circle", "Success", "Resigned from game");
+                        AuthService.init();
+                    }, angular.noop);
+                },  angular.noop);
+        };
+
         $scope.setSelectedGame = function (game, $index) {
             $scope.selectedGame = game;
 

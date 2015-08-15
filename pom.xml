@@ -25,6 +25,7 @@
 		        <artifactId>maven-compiler-plugin</artifactId>
 		        <version>3.1</version>
 		        <configuration>
+                    <fork>true</fork>
                     <source>1.8</source>
 		            <target>1.8</target>
 		        </configuration>
@@ -36,6 +37,7 @@
                 <configuration>
                     <warSourceExcludes>node_modules/**</warSourceExcludes>
                     <warSourceExcludes>assets/sass/.sass-cache/**</warSourceExcludes>
+                    <warSourceExcludes>.sass-cache/**</warSourceExcludes>
                 </configuration>
             </plugin>
 		</plugins>

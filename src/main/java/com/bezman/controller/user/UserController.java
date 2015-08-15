@@ -721,11 +721,7 @@ public class UserController extends BaseController
 
         if (currentUser != null)
         {
-            JSONObject userJSON = (JSONObject) JSONValue.parse(Reference.gson.toJson(currentUser));
-            userJSON.remove("warrior");
-            userJSON.remove("connectedAccounts");
-            userJSON.remove("email");
-            return new ResponseEntity(userJSON, HttpStatus.OK);
+            return new ResponseEntity(currentUser, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);

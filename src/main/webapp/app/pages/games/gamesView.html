@@ -17,6 +17,7 @@
                     <div class="gameMedia" layout="row" layout-align="start center">
                         <button ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
                         <i ng-show="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="fa fa-calendar"></i>
+                        <button ng-click="resignFromGame(upcomingGame, $event)" ng-show="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Resign</button>
                         <a href="/modCP/createteams?game={{upcomingGame.id}}" ng-if="AuthService.isAdmin()"><button class="button"><i class="fa fa-cog fa--no-padding"></i></button></a>
                     </div>
                 </div> <!-- .game -->

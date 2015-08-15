@@ -84,7 +84,7 @@
     @include transition(all, 250ms, ease-out);
     color: $white;
     background: $dgray;
-    width: calc(16.66% - 20px);
+    width: calc(20% - 20px);
     font-size: 18px;
     display: inline-block;
     margin: 0 10px;
@@ -95,8 +95,8 @@
 
   }
 
-  $social-names: facebook, twitter, gplus, reddit, twitch, github;
-  $social-colors: $facebook-color, $twitter-color, $gplus-color, $reddit-color, $twitch-color, $github-color;
+  $social-names: facebook, twitter, gplus, twitch, github;
+  $social-colors: $facebook-color, $twitter-color, $gplus-color, $twitch-color, $github-color;
   @each $current-color in $social-colors {
     $i: index($social-colors, $current-color);
     .socialConnect:nth-child(#{$i}) {

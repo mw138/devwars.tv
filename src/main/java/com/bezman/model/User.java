@@ -240,16 +240,6 @@ public class User extends BaseModel
         this.referredUsers = referredUsers;
     }
 
-    public Rank getRank()
-    {
-        return rank;
-    }
-
-    public void setRank(Rank rank)
-    {
-        this.rank = rank;
-    }
-
     public Integer getAvatarChanges()
     {
         return avatarChanges == null ? 1 : avatarChanges;
@@ -434,7 +424,6 @@ public class User extends BaseModel
 
         if(this.getRanking() != null)
         {
-
             this.rank = (Rank) session.createCriteria(Rank.class)
                     .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
                     .addOrder(Order.desc("xpRequired"))
@@ -449,7 +438,7 @@ public class User extends BaseModel
 
     public boolean canBuyItem(ShopItem item)
     {
-        return this.getRanking().getPoints() >= item.getPrice() && this.getRank().getLevel() >= item.getRequiredLevel();
+        return this.getRanking().getPoints() >= item.getPrice() && this.rank.getLevel() >= item.getRequiredLevel();
     }
 
     public void purchaseItem(ShopItem item)
