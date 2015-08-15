@@ -11,6 +11,8 @@ import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -173,8 +175,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method =  RequestMethod.POST)
-    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json)
-    {
+    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws JsonProcessingException, UnirestException {
         Session session = DatabaseManager.getSession();
 
         Game oldGame = GameService.getGame(id);
@@ -206,7 +207,11 @@ public class GameController
 
             if(game.isActive())
             {
-                Reference.firebase.child("frame/game").setValue(game);
+                Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
+                        .queryString("auth", Security.firebaseToken)
+                        .body(Reference.objectMapper.writeValueAsString(game))
+                        .asString()
+                        .getBody();
             }
 
             return getGame(request, response, id);
