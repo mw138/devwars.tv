@@ -81,7 +81,7 @@
 
         <ul class="activityList">
             <li ng-repeat="activity in AuthService.user.activityLog">
-                <div class="activityDate">{{activity.timestamp | date : 'mediumDate' : 'UTC'}} UTC</div>
+                <div class="activityDate">{{activity.timestamp | date : 'mediumDate' : 'UTC'}} (UTC)</div>
                 <div class="activityTitle">{{activity.description}}</div>
                 <div class="activityReward">
                     <div class="xp reward--gain">{{activity.xpChanged}}</div>
