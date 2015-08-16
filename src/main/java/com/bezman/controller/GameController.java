@@ -371,6 +371,31 @@ public class GameController
         return responseEntity;
     }
 
+    @Transactional
+    @RequestMapping("/{id}/resetwinner")
+    public ResponseEntity resetGameWinner(@PathVariable("id") int id, SessionImpl session)
+    {
+        Game game = (Game) session.get(Game.class, id);
+
+        game.getTeams().values().stream()
+                .forEach(team -> {
+                    team.setWin(false);
+
+                    team.getPlayers().stream().forEach(player -> {
+                        int xpChanged = player.getXpChanged();
+                        int pointsChanged = player.getPointsChanged();
+
+                        player.getUser().getRanking().addPoints(pointsChanged * -1);
+                        player.getUser().getRanking().addXP(xpChanged * -1);
+
+                        player.setXpChanged(0);
+                        player.setPointsChanged(0);
+                    });
+                });
+
+        return new ResponseEntity("Successfully reset game winner", HttpStatus.OK);
+    }
+
     /**
      * Deletes a game
      * @param request
