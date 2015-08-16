@@ -1,6 +1,5 @@
 var app = angular.module('app', [
 // modules
-    'app.coming',
     'app.AuthService',
     'app.header',
     'app.home',

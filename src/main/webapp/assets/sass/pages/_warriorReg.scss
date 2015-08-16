@@ -40,7 +40,7 @@
     .diamond-pattern--blue {
       left: 0;
       span {
-        color: $main-color;
+        color: $primary-color;
         animation: colorchange 3s infinite linear;
       }
       span:nth-child(odd) {
@@ -50,7 +50,7 @@
     .diamond-pattern--red {
       right: 0;
       span {
-        color: $accent-color;
+        color: $secondary-color;
         animation: colorchange 3s infinite linear;
       }
       span:nth-child(odd) {
@@ -79,8 +79,8 @@
       position: absolute;
       top: 0;
     }
-    &:before { left: 0;	background: $main-color; }
-    &:after { right: 0; background: $accent-color; }
+    &:before { left: 0;	background: $primary-color; }
+    &:after { right: 0; background: $secondary-color; }
 
     .gradient-bar {
       bottom: 0;

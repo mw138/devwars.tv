@@ -22,12 +22,12 @@
 			margin-top: 40px;
 		}
 		li:hover {
-			background-color: $accent-color;
+			background-color: $secondary-color;
 			color: $white;
 		}
 		li:last-of-type:hover {
 			background-color: transparent;
-			a { color: $accent-color; }
+			a { color: $secondary-color; }
 		}
 	}
 }
@@ -55,12 +55,12 @@
 	li {
 		display: block;
 		a {
-			color: $main-color;
+			color: $primary-color;
 			cursor: pointer;
 			padding: 5px 0 5px 0;
 			display: inline-block;
 			&:hover {
-				color: $main-color;
+				color: $primary-color;
 				text-decoration: underline;
 			}
 		}
@@ -89,9 +89,9 @@
 			font-weight: normal;
 		}
 	}
-	h3 { color: $accent-color; }
+	h3 { color: $secondary-color; }
 	a {
-		color: $main-color;
+		color: $primary-color;
 		font-weight: 700;
 		&:hover {
 			color: color($blue, light);

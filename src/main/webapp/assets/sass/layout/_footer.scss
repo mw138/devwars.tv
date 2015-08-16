@@ -6,7 +6,7 @@ footer {
 
 
 	.newsletter-box {
-	  border-top: 3px solid $accent-color;
+	  border-top: 3px solid $secondary-color;
 	  padding: 25px 0 30px 0;
 	  width: 100%;
 	  background: $dgray;
@@ -44,12 +44,12 @@ footer {
 				display: block;
 				padding-bottom: 5px;
 				margin-bottom: 10px;
-				border-bottom: 1px solid $accent-color;
+				border-bottom: 1px solid $secondary-color;
 			}
 		}
 		a {
 			color: $lgray;
-			&:hover { color: $accent-color; }
+			&:hover { color: $secondary-color; }
 		}
 		
 		ul.footer-links__social {
@@ -98,7 +98,7 @@ footer {
 				color: $gray;
 			}
 			&:first-child:before { content: ""; }
-			&:hover { color: $accent-color; }
+			&:hover { color: $secondary-color; }
 		}
 	}
 }

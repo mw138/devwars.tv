@@ -25,23 +25,6 @@
 				span { color: white; }
 			}
 			
-			&.badge-box--bronze {
-				&.badge-box--complete { border-color: $bronze; }
-				span.badge-tier { color: $bronze; }
-			}
-			&.badge-box--silver {
-				&.badge-box--complete { border-color: $silver; }
-				span.badge-tier { color: $silver; }
-			}
-			&.badge-box--gold {
-				&.badge-box--complete { border-color: $gold; }
-				span.badge-tier { color: $gold; }
-			}
-			&.badge-box--diamond {
-				&.badge-box--complete { border-color: $diamond; }
-				span.badge-tier { color: $diamond; }
-			}
-			
 			img {
 				width: 50%;
 				margin: 0 auto;
@@ -63,7 +46,7 @@
 			.badge-progress__bar {
 				width: 0%;
 				height: 100%;
-				background: $accent-color;
+				background: $secondary-color;
 				position: absolute;
 			}
 			

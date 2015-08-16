@@ -22,17 +22,19 @@
 
   form {
     display: block;
+    text-align: center;
     padding-left: 20px;
 
     label {
       display: block;
       margin: 20px 0 5px 0;
+      text-align: left;
       text-transform: uppercase;
       color: $lgray;
 
       &:after {
         content: "*";
-        color: $accent-color;
+        color: $secondary-color;
         padding-left: 5px;
       }
     }
@@ -45,7 +47,7 @@
       border: 1px solid $gray;
 
       &:focus {
-        border-color: $accent-color;
+        border-color: $secondary-color;
       }
     }
 
@@ -58,12 +60,8 @@
       background: $dgray;
     }
 
-    button {
-      font-size: 20px;
-      display: inline-block;
-      margin-top: 50px;
-      margin-left: 50%;
-      transform: translate(-50%);
+    .button {
+      margin: 50px 0;
     }
 
   }

@@ -25,14 +25,14 @@
 
 	.shop-nav {
 		display: block;
-		border-bottom: 5px solid $accent-color;
+		border-bottom: 5px solid $secondary-color;
 		span {
 			display: inline-block;
 			width: calc(25% - 3px);
 			text-align: center;
 			padding: 10px 0 10px 0;
 			&:hover, &.active {
-				background-color: $accent-color;
+				background-color: $secondary-color;
 				cursor: pointer;
 			}
 		}

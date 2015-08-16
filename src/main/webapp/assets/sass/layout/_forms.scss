@@ -22,11 +22,11 @@
 }
 
 .form--blue {
-  background-color: $main-color;
+  background-color: $primary-color;
 }
 
 .form--red {
-  background-color: $accent-color;
+  background-color: $secondary-color;
 }
 
 .form__input {
@@ -40,7 +40,7 @@
 .form__input--text {
   border: none;
   padding: 15px;
-  color: $accent-color;
+  color: $secondary-color;
   width: 100%;
 }
 
@@ -69,10 +69,10 @@
   border: none;
   outline: none;
   padding: 15px 30px;
-  background: $main-color;
+  background: $primary-color;
   transition: background-color .2s ease-out;
   &:hover {
-    background-color: $accent-color;
+    background-color: $secondary-color;
   }
 }
 

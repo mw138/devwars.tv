@@ -13,8 +13,8 @@
 			cursor: pointer;
 			&:hover { background-color: $dgray;	}
 			&.active {
-				border: 1px solid $accent-color;
-				color: $accent-color;
+				border: 1px solid $secondary-color;
+				color: $secondary-color;
 				&:hover { background-color: transparent; }
 			}
 			&.disabled {

@@ -1,9 +1,9 @@
 @mixin transition($el, $time, $type) {
-  -webkit-transition: $el $time $type;
-  -moz-transition: $el $time $type;
-  -ms-transition: $el $time $type;
-  -o-transition: $el $time $type;
-  transition: $el $time $type;
+	-webkit-transition: $el $time $type;
+	   -moz-transition: $el $time $type;
+		-ms-transition: $el $time $type;
+		 -o-transition: $el $time $type;
+			transition: $el $time $type;
 }
 
 @mixin box-shadow($top, $left, $blur, $color, $inset: false) {
@@ -19,21 +19,21 @@
 }
 
 @mixin border-radius($radius-top: $defaultradius, $radius-right: null, $radius-bottom: null, $radius-left: null) {
-	-moz-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
+	   -moz-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
 	-webkit-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
-	-ms-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
-	-o-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
-	-khtml-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
-	border-radius: $radius-top $radius-right $radius-bottom $radius-left;
+	 	-ms-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
+		 -o-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
+	 -khtml-border-radius: $radius-top $radius-right $radius-bottom $radius-left;
+			border-radius: $radius-top $radius-right $radius-bottom $radius-left;
 }
 
 @mixin user-select($property: none) {
 	-webkit-touch-callout: $property;
-	-webkit-user-select: $property;
-	-khtml-user-select: $property;
-	-moz-user-select: $property;
-	-ms-user-select: $property;
-	user-select: $property;	
+	  -webkit-user-select: $property;
+	   -khtml-user-select: $property;
+		 -moz-user-select: $property;
+		  -ms-user-select: $property;
+			  user-select: $property;	
 }
 
 @mixin gradient($direction, $from-color, $to-color) {
@@ -62,23 +62,23 @@
 }
 
 @mixin box-sizing($box) {
-	-webkit-box-sizing: $box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: $box;    /* Firefox, other Gecko */
-	box-sizing: $box;         /* Opera/IE 8+ */	
+	-webkit-box-sizing: $box; 
+	   -moz-box-sizing: $box; 
+			box-sizing: $box;      
 }
 
 @mixin appearance($value) {
 	-webkit-appearance: $value;
-	-moz-appearance:    $value;
-	appearance:         $value;
-	outline: none;
-	border: none;
+	   -moz-appearance: $value;
+			appearance: $value;
+			   outline: none;
+			    border: none;
 }
 
 @mixin rotate($value) {
-	-ms-transform: rotate(#{$value}deg); /* IE 9 */
--webkit-transform: rotate(#{$value}deg); /* Chrome, Safari, Opera */
-transform: rotate(#{$value}deg);
+		-ms-transform: rotate(#{$value}deg);
+	-webkit-transform: rotate(#{$value}deg);
+	   		transform: rotate(#{$value}deg);
 }
 
 @mixin keyframes($name) {
@@ -97,18 +97,18 @@ transform: rotate(#{$value}deg);
 }
 
 @mixin animation($name, $time, $duration, $direction) {
-	-webkit-animation: $name $time $duration $direction; /* Safari 4+ */
-	-moz-animation:    $name $time $duration $direction; /* Fx 5+ */
-	-o-animation:      $name $time $duration $direction; /* Opera 12+ */
-	animation:         $name $time $duration $direction; /* IE 10+, Fx 29+ */
+	-webkit-animation: $name $time $duration $direction; 
+	   -moz-animation: $name $time $duration $direction; 
+		 -o-animation: $name $time $duration $direction; 
+			animation: $name $time $duration $direction;
 }
 
 @mixin transform($transforms) {
-	-moz-transform: $transforms;
-	-o-transform: $transforms;
-	-ms-transform: $transforms;
+	   -moz-transform: $transforms;
+		 -o-transform: $transforms;
+		-ms-transform: $transforms;
 	-webkit-transform: $transforms;
-	transform: $transforms;
+			transform: $transforms;
 }
 
 // scale
@@ -125,11 +125,11 @@ transform: rotate(#{$value}deg);
 }
 //transform origin
 @mixin transform-origin ($origin) {
-	moz-transform-origin: $origin;
-	-o-transform-origin: $origin;
-	-ms-transform-origin: $origin;
+	   -moz-transform-origin: $origin;
+		 -o-transform-origin: $origin;
+		-ms-transform-origin: $origin;
 	-webkit-transform-origin: $origin;
-	transform-origin: $origin;
+			transform-origin: $origin;
 }
 
 @mixin flex {

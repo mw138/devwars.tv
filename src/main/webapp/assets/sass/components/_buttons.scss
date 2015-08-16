@@ -1,52 +1,150 @@
+///////////////////////////////////////////////
+// Button Variables                          //
+///////////////////////////////////////////////
+
+
+// Regular button
+$button-padding                     : 0 25px;
+$button-margin						: 0;
+$button-line-height                 : 37px;
+$button-font-size 					: 14px;
+$button-icon-padding 				: 0 7px 0 0;
+
+// Small button
+$button-small-padding 				: 0 15px;
+$button-small-margin 				: 0;
+$button-small-line-height			: 30px;
+$button-small-font-size				: 12px;
+$button-small-icon-padding 			: 0 3px 0 0;
+
+// Primary button variables
+$button-color                       : #fff;
+$button-hover-color                 : $button-color;
+$button-background                  : $primary-color;
+$button-hover-background            : $secondary-color;
+
+// Secondary button variables
+$button-secondary-color             : #fff;
+$button-secondary-hover-color       : $button-secondary-color;
+$button-secondary-background        : $secondary-color;
+$button-secondary-hover-background  : $primary-color;
+
+// Inverted buttonvariables
+$button-inverted-color              : #fff;
+$button-inverted-hover-color        : $button-inverted-color;
+$button-inverted-background         : none;
+$button-inverted-hover-background   : $primary-color;
+$button-inverted-border 			: #fff;
+$button-inverted-hover-border 		: #fff;
+
+// Clear button variables
+$button-clear-color              	: #fff;
+$button-clear-hover-color       	: #fff;
+$button-clear-background        	: none;
+$button-clear-hover-background  	: $secondary-color;
+
+// Warning button variables
+$button-warning-background 			: color($red, dark);
+$button-warning-hover-background	: darken($button-warning-background, 10%);
+
+
+///////////////////////////////////////////////
+// Button Styles - not to be modified! 		 //
+///////////////////////////////////////////////
+
+
 .button {
-  width: auto;
-  height: auto;
-	padding: 7px 14px;
-  border: 0;
-  background-color: $main-color;
-  transition: background-color 0.2s ease-out;
-  color: white;
-	cursor: pointer;
 	display: inline-block;
+	padding: $button-padding;
+	margin: $button-margin;
+	height: $button-line-height;
+	line-height: $button-line-height;
+	font-size: $button-font-size;
+	color: $button-color;
+	background: $button-background;
+	@include transition(background-color, 0.2s, ease-out);
 
-  &:hover {
-    background-color: $accent-color;
-  }
+	&:hover {
+		color: $button-hover-color;
+		background: $button-hover-background;
+	}
 
-  .fa {
-    padding-right: 7px;
-  }
-}
+	&:active {
+		background: lighten($button-hover-background, 5%);
+	}
 
-.button.button--warn {
-  background-color: color($red, dark);
+	.fa {
+		padding: $button-icon-padding;
+	}
 
-  &:hover {
-    background-color: $lgray;
-  }
-}
 
-.button.button--clear {
-  background-color: transparent;
+	&.button-small {
+		padding: $button-small-padding;
+		margin: $button-small-margin;
+		height: $button-small-line-height;
+		line-height: $button-small-line-height;
+		font-size: $button-small-font-size;
 
-  &:hover {
-    background-color: $accent-color;
-    color: white;
-  }
-}
+		.fa {
+			padding: $button-small-icon-padding;
+		}
+	}
 
-.button.button--disabled {
-  background-color: grey;
 
-  &:hover {
-    background-color: grey;
-  }
-}
+	&.button-secondary {
+		color: $button-secondary-color;
+		background: $button-secondary-background;
 
-a.button {
-  display: inline-block;
-}
+		&:hover {
+			color: $button-secondary-hover-color;
+			background: $button-secondary-hover-background;
+		}
 
-.button-primary {
-  background-color: color($blue, light);
+		&:active {
+			background: lighten($button-secondary-hover-background, 10%);
+		}
+
+	}
+
+	&.button-inverted {
+		color: $button-inverted-color;
+		background: $button-inverted-background;
+		border: 1px solid $button-inverted-border;
+
+		&:hover {
+			color: $button-inverted-hover-color;
+			background: $button-inverted-hover-background;
+			border: 1px solid $button-inverted-hover-border;
+		}
+
+		&:active {
+			background: lighten($button-inverted-hover-background, 10%);
+		}
+
+	}
+
+	&.button-clear {
+		color: $button-clear-color;
+		background: $button-clear-background;
+
+		&:hover {
+			color: $button-clear-hover-color;
+			background: $button-clear-hover-background;
+		}
+
+	}
+
+	&.button-warn {
+		background: $button-warning-background;
+
+		&:hover {
+			background: $button-warning-hover-background;
+		}
+
+		&:active {
+			background: lighten($button-warning-hover-background, 10%);
+		}
+
+	}
+
 }

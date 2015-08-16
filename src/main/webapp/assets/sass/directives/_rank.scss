@@ -1,48 +1,65 @@
+///////////////////////////////////////////////
+// Rank Variables                            //
+///////////////////////////////////////////////
+
+
+$bronze-rank						: #A57E12;
+$silver-rank						: #929A9F;
+$gold-rank							: #F9D369;
+$platinum-rank						: #E5E4E2;
+$diamond-rank						: #69CBF9;
+
+
+///////////////////////////////////////////////
+// Rank Styles                               //
+///////////////////////////////////////////////
+
+
 .bronze-rank {
-  .st0 {
-    fill: $bronze-accent;
-  }
-  .st1 {
-    fill: $bronze;
-  }
+	.st0 {
+		fill: darken($bronze-rank, 20%);
+	}
+	.st1 {
+		fill: $bronze-rank;
+	}
 }
 
 .silver-rank {
-  .st0 {
-    fill: $silver-accent;
-  }
-  .st1 {
-    fill: $silver;
-  }
+	.st0 {
+		fill: darken($silver-rank, 20%);
+	}
+	.st1 {
+		fill: $silver-rank;
+	}
 }
 
 .gold-rank {
-  .st0 {
-    fill: $gold-accent;
-  }
-  .st1 {
-    fill: $gold;
-  }
+	.st0 {
+		fill: darken($gold-rank, 20%);
+	}
+	.st1 {
+		fill: $gold-rank;
+	}
 }
 
 .platinum-rank {
-  .st0 {
-    fill: $platinum-accent;
-  }
-  .st1 {
-    fill: $platinum;
-  }
+	.st0 {
+		fill: darken($platinum-rank, 20%);
+	}
+	.st1 {
+		fill: $platinum-rank;
+	}
 }
 
 .diamond-rank {
-  .st0 {
-    fill: $diamond-accent;
-  }
-  .st1 {
-    fill: $diamond;
-  }
+	.st0 {
+		fill: darken($diamond-rank, 20%);
+	}
+	.st1 {
+		fill: $diamond-rank;
+	}
 }
 
 .rank--no-name .name{
-  display: none;
+	display: none;
 }

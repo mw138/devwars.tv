@@ -33,14 +33,14 @@
       margin: 10px 0;
 
       &:hover {
-        background: $accent-color;
+        background: $secondary-color;
         color: white;
         cursor: pointer;
       }
     }
 
     .selected {
-      background: $accent-color;
+      background: $secondary-color;
       color: white;
     }
   }
@@ -173,8 +173,8 @@
       cursor: pointer;
       border-top: none;
       &:hover {
-        color: $accent-color;
-        border-color: $accent-color;
+        color: $secondary-color;
+        border-color: $secondary-color;
         border-top: 1px solid;
         padding-top: 15px;
       }
@@ -217,18 +217,18 @@
       }
 
       &.redplayers {
-        background-color: $accent-color;
+        background-color: $secondary-color;
 
         span:hover {
-          background-color: darken($accent-color, 5%);
+          background-color: darken($secondary-color, 5%);
         }
       }
 
       &.blueplayers {
-        background-color: $main-color;
+        background-color: $primary-color;
 
         span:hover {
-          background-color: darken($main-color, 5%);
+          background-color: darken($primary-color, 5%);
         }
       }
 
@@ -252,8 +252,8 @@
     span.username { width: 35%; }
     span.cloud9 { width: 35%; }
     span.forfeit { width: 35%; }
-    a.forfeited { padding: 6px 10px; background-color: $accent-color; }
-    a.forfeited:hover { background-color: $main-color; }
+    a.forfeited { padding: 6px 10px; background-color: $secondary-color; }
+    a.forfeited:hover { background-color: $primary-color; }
   }
 
 
@@ -301,12 +301,12 @@
       .red--objective {
         @extend .list--objective;
         width: 10%;
-        background-color: $accent-color;
+        background-color: $secondary-color;
       }
       .blue--objective {
         @extend .list--objective;
         width: 10%;
-        background-color: $main-color;
+        background-color: $primary-color;
       }
     }
     .livegame--objective_row {
@@ -317,9 +317,8 @@
       &:hover {
         background-color: $gray;
       }
-      .objective-bonus {
-        color: $gold;
-      }
+
+
       .livegame_objective {
         width: 80%;
         min-height: 58px;
@@ -383,16 +382,16 @@
       right: 0;
     }
     .blue-winner:hover {
-      background-color: $main-color;
+      background-color: $primary-color;
     }
     .red-winner:hover {
-      background-color: $accent-color;
+      background-color: $secondary-color;
     }
     .blue-active {
-      background-color: $main-color;
+      background-color: $primary-color;
     }
     .red-active {
-      background-color: $accent-color;
+      background-color: $secondary-color;
     }
   }
 }

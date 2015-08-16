@@ -14,7 +14,7 @@
       }
 
       .divider {
-        background-color: $main-color;
+        background-color: $primary-color;
       }
     }
   }
@@ -102,7 +102,7 @@
       font-size: 22px;
       padding: 10px 0;
       &:hover {
-        color: $accent-color;
+        color: $secondary-color;
       }
     }
 

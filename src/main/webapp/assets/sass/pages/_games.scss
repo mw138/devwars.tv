@@ -16,7 +16,7 @@
   .tabBox {
     width: 100%;
     display: block;
-    border-bottom: 5px solid $accent-color;
+    border-bottom: 5px solid $secondary-color;
     font-size: 0;
 
     .tab {
@@ -37,7 +37,7 @@
       }
 
       &.active {
-        background: $accent-color;
+        background: $secondary-color;
         color: white;
 
         &:hover { color: white; cursor: default; }
@@ -172,11 +172,11 @@
       }
 
       .button-blue {
-          border: 1px solid $main-color;
+          border: 1px solid $primary-color;
       }
 
       .button-red {
-          border: 1px solid $accent-color;
+          border: 1px solid $secondary-color;
       }
 
       a.button {
@@ -206,7 +206,7 @@
   }
 
   .gameBanner {
-    border: 1px solid $accent-color;
+    border: 1px solid $secondary-color;
     padding: 25px;
     overflow: hidden;
     position: relative;
@@ -349,13 +349,13 @@
 
     .scoreRow--blue {
       ul.tallyBar li.active {
-        background: $main-color;
+        background: $primary-color;
       }
     }
 
     .scoreRow--red {
       ul.tallyBar li.active {
-        background: $accent-color;
+        background: $secondary-color;
       }
     }
   }
@@ -466,14 +466,14 @@
       float: left;
 
       .teamHeader {
-        color: $main-color;
+        color: $primary-color;
       }
       span.role {
-        color: $main-color;
+        color: $primary-color;
       }
 
       .arrow__inner {
-        background-color: $main-color;
+        background-color: $primary-color;
       }
     }
 
@@ -481,13 +481,13 @@
       float: right;
 
       .teamHeader {
-        color: $accent-color;
+        color: $secondary-color;
       }
       span.role {
-        color: $accent-color;
+        color: $secondary-color;
       }
       .arrow__inner {
-        background-color: $accent-color;
+        background-color: $secondary-color;
       }
     }
 
@@ -564,13 +564,13 @@
       &.objSquare--blue {
         left: 15px;
         &.active {
-          background: $main-color;
+          background: $primary-color;
         }
       }
       &.objSquare--red {
         right: 15px;
         &.active {
-          background: $accent-color;
+          background: $secondary-color;
         }
       }
     }
@@ -588,8 +588,8 @@
     .objPoint {
       position: absolute;
       font-weight: bold;
-      &.objPoint--blue { left: 20px; color: $main-color; }
-      &.objPoint--red { right: 20px; color: $accent-color; }
+      &.objPoint--blue { left: 20px; color: $primary-color; }
+      &.objPoint--red { right: 20px; color: $secondary-color; }
       .bonusPoint {
         display: none;
         color: yellow;
@@ -699,8 +699,8 @@
 			display: block;
 		}
 		
-		.scoreBox .scoreRow:nth-child(1) { color: $main-color; }
-		.scoreBox .scoreRow:nth-child(2) { color: $accent-color; }
+		.scoreBox .scoreRow:nth-child(1) { color: $primary-color; }
+		.scoreBox .scoreRow:nth-child(2) { color: $secondary-color; }
 		
 		.teamFiles {
 			.fileBox { width: 100%; }

@@ -33,7 +33,7 @@
 
   ul.settings-nav {
 	list-style: none;
-	border-bottom: 3px solid $accent-color;
+	border-bottom: 3px solid $secondary-color;
 
 	li {
 	  display: inline-block;
@@ -43,14 +43,14 @@
 	  background: $dgray;
 
 	  &:hover {
-		background: $accent-color;
+		background: $secondary-color;
 		color: white;
 		cursor: pointer;
 	  }
 	}
 
 	.selected {
-	  background: $accent-color;
+	  background: $secondary-color;
 	  color: white;
 	}
   }
@@ -109,7 +109,7 @@
 	  background: $dgray;
 	  display: inline-block;
 	  text-align: center;
-	  &:hover { background: $accent-color; }
+	  &:hover { background: $secondary-color; }
 	}
 
   }
@@ -202,22 +202,25 @@
 	}
   } /* settings-content */
 
-  $social-names: twitter, facebook, gplus, twitch, github;
-  $social-colors: $twitter-color, $facebook-color, $gplus-color, $twitch-color, $github-color;
-  @each $current-color in $social-colors {
-	$i: index($social-colors, $current-color);
-	.connect-social li:nth-child(#{$i}) .connect-social-button {
-	  background-color: nth($social-colors, $i);
-	}
-  }
+	$social-names: twitter, facebook, gplus, twitch, github;
+	$social-colors: $twitter-color, $facebook-color, $gplus-color, $twitch-color, $github-color;
 
-  $social-names: twitter, facebook, gplus, twitch, github;
-  $social-active: $twitter-active, $facebook-active, $gplus-active, $twitch-active, $github-active;
-  @each $current-color in $social-active {
-	$i: index($social-active, $current-color);
-	.connect-social li:nth-child(#{$i}) .connect-social-button:active {
-	  background-color: nth($social-active, $i);
+	@each $current-color in $social-colors {
+		$i: index($social-colors, $current-color);
+
+		.connect-social li:nth-child(#{$i}) .connect-social-button {
+	  		background: nth($social-colors, $i);
+
+	  		&:hover {
+				background: lighten(nth($social-colors, $i), 5%);
+	  		}	  		
+
+	  		&:active {
+				background: darken(nth($social-colors, $i), 5%);
+	  		}
+
+		}
+
 	}
-  }
 
 } /* .settingsView */
