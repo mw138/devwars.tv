@@ -52,7 +52,6 @@ public class BlogController
     {
         Criteria criteria = session.createCriteria(BlogPost.class)
                 .setMaxResults(10)
-                .setFirstResult(0)
                 .addOrder(Order.desc("timestamp"));
 
         if (year != null) {

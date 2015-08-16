@@ -42,10 +42,8 @@ home.controller("HomeController", ["$scope", "InfoService", "DialogService", "Bl
         })
 
         BlogService.allPosts(function (success) {
-            success.data.splice(2, success.data.length - 2);
+            success.data.splice(3, success.data.length - 3);
             $scope.posts = success.data;
-
-            console.log($scope.posts);
         }, function (error) {
             console.log(error);
         })
