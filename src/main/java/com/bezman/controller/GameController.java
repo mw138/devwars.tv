@@ -335,7 +335,6 @@ public class GameController
             //Completed All Objectives
             if (team.didCompleteAllObjectives())
             {
-                System.out.println(team.getName() + " has completed all objectives.");
                 team.getPlayers().stream().forEach(p -> {
                     p.setXpChanged(p.getXpChanged() + 150);
 

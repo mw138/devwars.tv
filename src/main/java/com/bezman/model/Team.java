@@ -178,6 +178,6 @@ public class Team extends BaseModel
         Set<Objective> gameObjectives = this.getGame().getObjectives();
         Set<CompletedObjective> completedObjectives = this.getCompletedObjectives();
 
-        return gameObjectives.size() == completedObjectives.size();
+        return gameObjectives.size() == completedObjectives.size() && gameObjectives.size() > 0;
     }
 }
