@@ -372,6 +372,7 @@ public class GameController
     }
 
     @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/resetwinner")
     public ResponseEntity resetGameWinner(@PathVariable("id") int id, SessionImpl session)
     {
