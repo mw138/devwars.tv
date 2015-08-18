@@ -1,3 +1,13 @@
+///////////////////////////////////////////////
+// DevWars Content Width Variables           //
+///////////////////////////////////////////////
+
+$container-width					: 1160px;
+$container-tablet-width 			: 940px;
+$container-mobile-width				: 768px;
+
+$header-mobile-height				: 60px;
+
 .col-2 {
 	@extend %clear;
 	width: 100%;
@@ -31,4 +41,65 @@
 		width: calc(90% - 20px);
 		float: right;
 	}
+}
+
+.full-container {
+	position: relative;
+}
+
+
+.container {
+	position: relative;
+	width: $container-width;
+	margin: 0 auto;
+}
+
+@media screen and (max-width: $container-width) {
+
+	.container {
+		width: $container-tablet-width;
+	}
+
+}
+
+@media screen and (max-width: $container-tablet-width) {
+
+	.container {
+		width: $container-mobile-width;
+	}
+
+}
+
+.row {
+	width: 100%;
+	height: auto;
+	display: block;
+	font-size: 0;
+}
+
+div[class^='span'] {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.span1  { width: 8.33%; 	}
+.span2  { width: 16.66%;	}
+.span3  { width: 25%;		}
+.span4  { width: 33.33%;	}
+.span5  { width: 8.33%; 	}
+.span6  { width: 50%;		}
+.span7  { width: 58.33%; 	}
+.span8  { width: 66.66%; 	}
+.span9  { width: 75%;		}
+.span10 { width: 83.33%; 	}
+.span11 { width: 91.66%; 	}
+.span12 { width: 100%;		}
+
+
+
+
+
+.inner {
+  width: $container-width;
+  margin: 0 auto;
 }

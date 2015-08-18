@@ -1,8 +1,14 @@
-header {
+header.full-container {
 	position: relative;
-	background-color: $foreground-color;
+	background: $foreground-color;
 
-	&.header--desktop { display: block; }
+	.span6 {
+		text-align: right;
+
+		&:first-child {
+			text-align: left;
+		}
+	}
 
 	.notification-banner {		
 		line-height: 38px;
@@ -42,28 +48,24 @@ header {
 
 	}
 
-	.info-bar {
-		font-size: 0;
-		background-color: $dgray;
+}
 
-		.left-info,
-		.right-info {
-			display: inline-block;
-			width: 50%;
+@media screen and (max-width: $container-width) {
+
+	header.full-container {
+
+		.notification-banner {
+			display: none;
 		}
 
-		.left-info {
-			text-align: left;
-		}
+	}
 
-		.right-info {
-			text-align: right;
+}
 
-			.button {
-				margin: 0 0 0 5px;
-			}
-		}
+header.full-container {
 
+	.user-bar {
+		background: $dgray;
 	}
 
 	.devbit-total {
@@ -139,145 +141,110 @@ header {
         display: block;
     }
 
-	.left-bar,
-	.right-bar {
-		position: absolute;
-		bottom: 0;
-		height: 2px;
-		width: 50%;
-	}
+	.bottom-bar {
 
-	.left-bar {
-		left: 0;
-		background-color: $primary-color;
-	}
-
-	.right-bar {
-		right: 0;
-		background-color: $secondary-color;
-	}
-
-	nav {
-		width: $inner-width;
-		height: 60px;
-		margin: 0 auto;
-
-		ul {
-			text-align: center;
-		}
-
-		li {
-			display: inline-block;
-			padding: 0 0 0 66px;
-			vertical-align: top;
-			font-size: 14px;
+		.span6 {
+			position: absolute;
+			bottom: 0;
+			height: 2px;
+			width: 50%;
+			right: 0;
+			background: $secondary-color;
 
 			&:first-child {
-				padding: 0;
-			}
-
-			&:hover a:after {
-				height: 8px;
-			}
-
-		}
-
-		.blue-nav a:after {
-			background: $primary-color;
-		}
-
-		.red-nav a:after {
-			background: $secondary-color;
-		}
-
-		a {
-			position: relative;
-			display: inline-block;
-			width: 110px;
-			line-height: 60px;
-
-			&:after {
-				content: "";
-				position: absolute;
-				right: 0;
-				bottom: 0;
+				right: auto;
 				left: 0;
-				height: 0;
-				@include transition(height, 0.3s, ease);
+				background: $primary-color;
 			}
 
-		}
-
-		.logo {
-			cursor: pointer;
-			border: 5px solid $foreground-color;
-			@include transition(background-color, 200ms, ease);
-
-
-			&:hover {
-				background-color: $gray;
-			}
-
-		}
-
-	}
-
-	&.header--mobile {
-		display: none;
-
-		.hamMenu { 
-			cursor: pointer;
-
-			&:hover {
-				color: $secondary-color;
-			}
-
-		}
-
-		.inner {
-			height: $header-mobile-height;
-			line-height: $header-mobile-height;
-			position: relative;
-		}
-
-		.header__left, 
-		.header__right {
-			position: absolute;
-			top: 0;
-		}
-
-		.header__left {
-			left: 0;
-			font-size: 2rem;
-		}
-
-		.logo {
-			display: block;
-			margin: 0 auto;
-		}
-
-		.header__right {
-			right: 0;
-			font-size: 0;
 		}
 
 	}
 
 }
 
-nav.mobileNav {
-	width: 100%;
-	text-align: center;
-	padding-top: 40px;
-	display: none;
-	border-bottom: 1px solid $dgray;
+nav.row {
+	height: 60px;
+	margin: 0 auto;
 
-	a.mobileNav__item {
-		display: block;
-		padding: 20px 0;
+	ul {
+		text-align: center;
+	}
+
+	li {
+		display: inline-block;
+		padding: 0 0 0 70px;
+		vertical-align: top;
+		font-size: 14px;
+
+		&:first-child {
+			padding: 0;
+		}
+
+		&:hover a:after {
+			height: 8px;
+		}
+
+	}
+
+	.blue-nav a:after {
+		background: $primary-color;
+	}
+
+	.red-nav a:after {
+		background: $secondary-color;
+	}
+
+	a {
+		position: relative;
+		display: inline-block;
+		width: 110px;
+		line-height: 60px;
+
+		&:after {
+			content: "";
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			height: 0;
+			@include transition(height, 0.3s, ease);
+		}
+
+	}
+
+	.logo {
+		cursor: pointer;
+		border: 5px solid $foreground-color;
+		@include transition(background-color, 200ms, ease);
+
 
 		&:hover {
 			background-color: $gray;
+		}
+
+	}
+
+}
+
+@media screen and (max-width: $container-width) {
+
+	nav.row {
+
+		li {
+			padding: 0 0 0 33px;
+		}
+
+	}
+
+}
+
+@media screen and (max-width: $container-tablet-width) {
+
+	nav.row {
+
+		li {
+			padding: 0 0 0 4px;
 		}
 
 	}

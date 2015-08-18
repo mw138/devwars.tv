@@ -35,8 +35,9 @@
 		flex-wrap: wrap;
 		list-style: none;
 		li { 
-			width: 33%;
+			width: 25%;
 			padding: 0 20px;
+			margin: 0 auto;
 			text-align: center;
 		}
 		img {
@@ -49,7 +50,6 @@
 			font-size: 24px;
 			font-weight: 200;
 			text-align: center;
-			padding: 8px;
 		}
 
         .long-name {

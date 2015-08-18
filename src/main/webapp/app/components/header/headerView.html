@@ -1,140 +1,82 @@
 <div ng-controller="HeaderController">
-    <header class="header--desktop">
-        <div id="navtop" class="info-bar">
+
+    <header class="full-container">
+
+        <div id="navtop" class="row">
             <div class="notification-banner" ng-hide="!!$cookies.seenMessage">
                 <span>Keep track of all upcoming DevWars games - <a href="https://chrome.google.com/webstore/detail/devwars-event-reminder/akfpgjacfklomgdbfiahgfhndnbggbld">download our extension now!</a></span>
                 <i class="fa fa-times notification-banner-close" ng-click="$cookies.seenMessage = true"></i>
             </div>
-            <div class="inner">
-                <div class="left-info">
-                    <a href="" class="button button-small" ui-sref="modCP.createTeamsView" class="button" ng-if="AuthService.isAdmin()">Mod Panel</a>
-                    <a href="" class="button button-small" ng-click="DialogService.applyForNearestGame($event)" class="button" ng-if="!AuthService.isAdmin()">Apply for Game</a>
-                    <span>{{currentGameMessage}}</span>
-                    <span ng-if="!currentGameMessage">{{nearestGameMessage}}</span>
-                </div>
-                <div class="right-info" ng-cloak>
-                    <a href="" class="button button-small" ng-click="DialogService.login($event)" ng-hide="AuthService.user">Sign In</a>
-                    <a href="" class="button button-small" ng-click="DialogService.signup($event)" ng-hide="AuthService.user">Register</a>
-                    <div class="devbit-total" ng-show="AuthService.user">
-                        <span>{{ AuthService.user.ranking.points }}</span>
-                    </div> <!-- .totalDevbits -->
-                <span class="button button-small button-clear info-username dropdown" ng-show="AuthService.user">
-					{{ AuthService.user.username }}<i class="fa fa-caret-down"></i>
-                    <ul class="info-username__dropdown-menu">
-                        <li ng-if="!AuthService.user" ui-sref="home"><i class="fa fa-home"></i>Home</li>
-                        <li ng-if="AuthService.user" ui-sref="dashboard.home"><i class="fa fa-server"></i>Dashboard</li>
-                        <li class="profile-link"><a href="/profile?username={{AuthService.user.username}}"><i class="fa fa-user"></i>Profile</a></li>
-                        <li ui-sref="settings.profileView"><i class="fa fa-edit"></i>Edit Profile</li>
-                        <li ui-sref="dashboard.badges"><i class="fa fa-shield"></i>Badges</li>
-                        <li ui-sref="settings.accountView"><i class="fa fa-cog"></i>Settings</li>
-                        <li ng-click="AuthService.logout()"><i class="fa fa-sign-out"></i>Log Out</li>
-                    </ul>
-                </span>
-                </div>
-            </div>
         </div>
 
-        <div class="left-bar"></div>
-        <div class="right-bar"></div>
+        <div class="row user-bar">
 
+            <div class="container">
 
-        <nav>
-            <ul>
-                <li class="blue-nav" ui-sref="home" ui-sref-active="active"><a href="">HOME</a></li>
-                <li class="blue-nav" ui-sref="games" ui-sref-active="active"><a href="">GAMES</a></li>
-                <li class="blue-nav" ui-sref="leaderboards" ui-sref-active="active"><a href="">RANKINGS</a></li>
-                <li ui-sref="home" id="logo">
-                    <span class="logo"></span>
-                </li>
-                <li class="red-nav" ui-sref="blog" ui-sref-active="active"><a href="">BLOG</a></li>
-                <li class="red-nav" ui-sref="about" ui-sref-active="active"><a href="">ABOUT</a></li>
-                <li class="red-nav" ui-sref="contact" ui-sref-active="active"><a href="">CONTACT</a></li>
-            </ul>
-        </nav>
+                <div class="row">
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("info-username").removeClass("username-select");
+                    <div class="span6">
+                        <a href="" class="button button-small" ui-sref="modCP.createTeamsView" class="button" ng-if="AuthService.isAdmin()">Mod Panel</a>
+                        <a href="" class="button button-small" ng-click="DialogService.applyForNearestGame($event)" class="button" ng-if="!AuthService.isAdmin()">Apply for game</a>
+                        <span>{{currentGameMessage}}</span>
+                        <span ng-if="!currentGameMessage">{{nearestGameMessage}}</span>
+                    </div> <!-- span6 -->
 
-                $(".info-username").click(function(event) {
-                    $(this).toggleClass("username-select");
-                    $(".info-username__dropdown-menu").toggleClass("dropdown-active");
-                    event.stopPropagation();
-                });
-            });
+                    <div class="span6" ng-cloak>
+                        <a href="" class="button button-small" ng-click="DialogService.login($event)" ng-hide="AuthService.user">Sign In</a>
+                        <a href="" class="button button-small" ng-click="DialogService.signup($event)" ng-hide="AuthService.user">Register</a>
+                        <div class="devbit-total" ng-show="AuthService.user">
+                            <span>{{ AuthService.user.ranking.points }}</span>
+                        </div> <!-- .totalDevbits -->
+                        <a href="" class="button button-small button-clear info-username dropdown" ng-show="AuthService.user">
+        					{{ AuthService.user.username }}<i class="fa fa-caret-down"></i>
 
-            $(document).click(function() {
-                $(".info-username__dropdown-menu").removeClass("dropadown-ctive");
-                $(".info-username").removeClass("username-select");
-            });
-        </script>
-    </header>
+                            <ul class="info-username__dropdown-menu">
+                                <li ng-if="!AuthService.user" ui-sref="home"><i class="fa fa-home"></i>Home</li>
+                                <li ng-if="AuthService.user" ui-sref="dashboard.home"><i class="fa fa-server"></i>Dashboard</li>
+                                <li class="profile-link"><a href="/profile?username={{AuthService.user.username}}"><i class="fa fa-user"></i>Profile</a></li>
+                                <li ui-sref="settings.profileView"><i class="fa fa-edit"></i>Edit Profile</li>
+                                <li ui-sref="dashboard.badges"><i class="fa fa-shield"></i>Badges</li>
+                                <li ui-sref="settings.accountView"><i class="fa fa-cog"></i>Settings</li>
+                                <li ng-click="AuthService.logout()"><i class="fa fa-sign-out"></i>Log Out</li>
+                            </ul>
 
+                        </a>
+                    </div> <!-- span6 -->
 
-    <header class="header--mobile">
-        <div class="inner">
-            <div class="header__left">
-                <i class="hamMenu fa fa-bars"></i>
-            </div> <!-- .header__left -->
+                </div> <!-- row -->
 
-            <div class="nav-item" ui-sref="home" id="logo">
-                <span class="logo logo--medium logo-icon"></span>
+            </div> <!-- container -->
+
+        </div> <!-- row -->
+
+        <div class="container">
+
+            <nav class="row">
+                <ul>
+                    <li class="blue-nav" ui-sref="home" ui-sref-active="active"><a href="">HOME</a></li>
+                    <li class="blue-nav" ui-sref="games" ui-sref-active="active"><a href="">GAMES</a></li>
+                    <li class="blue-nav" ui-sref="leaderboards" ui-sref-active="active"><a href="">RANKINGS</a></li>
+                    <li ui-sref="home" id="logo">
+                        <span class="logo"></span>
+                    </li>
+                    <li class="red-nav" ui-sref="blog" ui-sref-active="active"><a href="">BLOG</a></li>
+                    <li class="red-nav" ui-sref="about" ui-sref-active="active"><a href="">ABOUT</a></li>
+                    <li class="red-nav" ui-sref="contact" ui-sref-active="active"><a href="">CONTACT</a></li>
+                </ul>
+            </nav> <!-- row -->
+
+        </div> <!-- container -->
+
+        <div class="full-container bottom-bar">
+
+            <div class="row">
+                <div class="span6"></div>
+                <div class="span6"></div>
             </div>
 
-            <div class="header__right">
-                <a class="button pointer" ng-click="DialogService.login($event)" ng-hide="AuthService.user">Sign In</a>
-                <a class="button pointer" ng-click="DialogService.signup($event)" ng-hide="AuthService.user">Register</a>
-                <div class="totalDevbits" ng-show="AuthService.user">
-                    <img src="/assets/img/devbit-s.png"/>
-                    <p>{{ AuthService.user.ranking.points }}</p>
-                </div> <!-- .totalDevbits -->
-			<span class="info-username" ng-show="AuthService.user">
-				{{ AuthService.user.username }}<i class="fa fa-caret-down"></i>
-				<ul class="info-username__list">
-                    <li ng-if="!AuthService.user" ui-sref="home"><i class="fa fa-home"></i>Home</li>
-                    <li ng-if="AuthService.user" ui-sref="dashboard.home"><i class="fa fa-server"></i>Dashboard</li>
-                    <li class="profile-link"><a href="/profile?username={{AuthService.user.username}}"><i class="fa fa-user"></i>Profile</a></li>
-                    <li ui-sref="settings.profileView"><i class="fa fa-edit"></i>Edit Profile</li>
-                    <li ui-sref="dashboard.badges"><i class="fa fa-shield"></i>Badges</li>
-                    <li ui-sref="settings.accountView"><i class="fa fa-cog"></i>Settings</li>
-                    <li ng-click="AuthService.logout()"><i class="fa fa-sign-out"></i>Log Out</li>
-                </ul>
-			</span>
-            </div> <!-- .header__right -->
-        </div> <!-- .inner -->
+        </div> <!-- container -->   
 
-        <div class="left-bar"></div>
-        <div class="right-bar"></div>
-    </header>
+    </header> <!-- full-width container -->
 
-    <nav class="mobileNav">
-        <a class="mobileNav__item" ui-sref="home">HOME</a>
-        <a class="mobileNav__item" ui-sref="games">GAMES</a>
-        <a class="mobileNav__item" ui-sref="leaderboards">RANKINGS</a>
-        <a class="mobileNav__item" ui-sref="blog">BLOG</a>
-        <a class="mobileNav__item" ui-sref="about">ABOUT</a>
-        <a class="mobileNav__item" ui-sref="contact">CONTACT</a>
-    </nav>
-
-    <script type="text/javascript">
-
-        var lastTimeClicked = new Date().getTime();
-
-        $(document).ready(function () {
-            $(".hamMenu").on('vclick', function(event) {
-                $(".mobileNav").slideToggle();
-            });
-
-            $(".mobileNav__item").on('vclick', function(event) {
-                $(".mobileNav").slideToggle();
-            });
-
-            $(window).resize(function() {
-                if ($(window).width() > 840) {
-                    $('.mobileNav').slideUp();
-                }
-            });
-        });
-
-    </script>
-</div>
+</div> <!-- HeaderController -->
