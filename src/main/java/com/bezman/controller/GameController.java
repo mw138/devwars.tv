@@ -641,7 +641,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
-    public ResponseEntity signupForGame(SessionImpl session, @AuthedUser User user,  @PathVariable("id") int id)
+    public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user,  @PathVariable("id") int id)
     {
         Game game = (Game) session.get(Game.class, id);
 
@@ -667,6 +667,49 @@ public class GameController
         }
 
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
+    }
+
+
+    /**
+     * Method to sign up a twitch user (Meant for chat command)
+     * @param username Username of twitch user to apply
+     * @param id ID of game to apply user to
+     * @return Response Entity
+     */
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @Transactional
+    @RequestMapping(value = "/{id}/signuptwitchuser", method = RequestMethod.POST)
+    public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id,  SessionImpl session)
+    {
+        User theTwitchUser = UserService.userForTwitchUsername(username);
+
+        if (theTwitchUser != null) {
+            User twitchUser  = (User) session.merge(theTwitchUser);
+
+            Game game = (Game) session.get(Game.class, id);
+
+            if (game == null) {
+                return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
+            }
+
+            boolean isUserApplied = game.getSignups().stream()
+                    .anyMatch(signup -> signup.getUser().getId() == twitchUser.getId());
+
+            if (!isUserApplied)
+            {
+                if (twitchUser.getWarrior() == null)
+                {
+                    return new ResponseEntity("You are not a warrior, click http://devwars.tv/warrior-signup to sign up.", HttpStatus.CONFLICT);
+                }
+
+                GameSignup gameSignup = new GameSignup(twitchUser, game);
+
+                session.save(gameSignup);
+
+                return new ResponseEntity("Successfully signed up " + twitchUser.getUsername(), HttpStatus.OK);
+            } else return new ResponseEntity("You are already signed up for that game.", HttpStatus.CONFLICT);
+
+        } else return new ResponseEntity("Twitch user not found. Please connect your twitch account with your DevWars account.", HttpStatus.NOT_FOUND);
     }
 
     @Transactional
