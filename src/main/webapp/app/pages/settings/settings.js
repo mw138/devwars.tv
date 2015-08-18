@@ -7,16 +7,17 @@ angular.module('app.settings', [
 			$stateProvider
 				.state('settings', {
 					url: '/settings',
-                    abstract: true,
                     name: "settings",
 
                     templateUrl: 'app/pages/settings/settingsView.html',
-                    controller: "SettingsController"
-				})
+                    controller: ['$scope', '$state',
+                        function( $scope, $state) {
+                            $state.go('settings.accountView');
+                        }]
+                })
 
 				.state('settings.accountView', {
-					url: '',
-                    parent: "settings",
+					url: '/',
 
 					views : {
 						'' : {
@@ -33,6 +34,9 @@ angular.module('app.settings', [
 
 				.state('settings.profileView', {
 					url: '/profile',
+
+                    parent: 'settings',
+
 					views : {
 						'' : {
 							templateUrl: 'app/pages/settings/settingsView.html',
@@ -48,6 +52,9 @@ angular.module('app.settings', [
 
 				.state('settings.notificationsView', {
 					url: '/notifications',
+
+                    parent: "settings",
+
 					views : {
 						'' : {
 							templateUrl: 'app/pages/settings/settingsView.html',
