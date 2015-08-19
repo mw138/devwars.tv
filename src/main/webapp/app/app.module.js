@@ -7,6 +7,7 @@ var app = angular.module('app', [
     'app.signup',
     'app.gameControlPanel',
     'app.GameService',
+    'app.PlayerService',
     'app.BlogService',
     'app.InfoService',
     'app.UserService',

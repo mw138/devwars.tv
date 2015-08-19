@@ -1,8 +1,9 @@
-package com.bezman.controller;
+package com.bezman.controller.game;
 
 import com.bezman.Reference.Reference;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.UnitOfWork;
+import com.bezman.controller.BaseController;
 import com.bezman.model.Team;
 import com.bezman.model.User;
 import com.bezman.service.GameService;

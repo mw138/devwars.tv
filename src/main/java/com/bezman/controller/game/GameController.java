@@ -1,4 +1,4 @@
-package com.bezman.controller;
+package com.bezman.controller.game;
 
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.HttpMessages;
@@ -322,11 +322,10 @@ public class GameController
         for (Team team : game.getTeams().values())
         {
             //Participation
-            team.getPlayers().stream().forEach(p -> {
+            team.getPlayers().stream().forEach(p ->
+            {
                 p.setXpChanged(p.getXpChanged() + 50);
                 p.setPointsChanged(p.getPointsChanged() + 222);
-
-                System.out.println("Current User : " + p.getUser().getId() + " : " + p.getUser().getUsername());
 
                 p.getUser().getRanking().addXP(50);
                 p.getUser().getRanking().addPoints(222);
@@ -335,7 +334,8 @@ public class GameController
             //Completed All Objectives
             if (team.didCompleteAllObjectives())
             {
-                team.getPlayers().stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p ->
+                {
                     p.setXpChanged(p.getXpChanged() + 150);
 
                     p.getUser().getRanking().addXP(150);
@@ -345,8 +345,8 @@ public class GameController
             //Team won
             if (team.isWin())
             {
-                System.out.println(team.getName() + " has won");
-                team.getPlayers().stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p ->
+                {
                     p.setXpChanged(p.getXpChanged() + 250);
                     p.setPointsChanged(p.getPointsChanged() + 444);
 
@@ -424,13 +424,11 @@ public class GameController
 
     /**
      * Gets the current active game
-     * @param request
-     * @param response
-     * @return
+     * @return The only  game which is active
      */
     @AllowCrossOrigin(from = "*")
     @RequestMapping(value = "/currentgame")
-    public ResponseEntity currentGame(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity currentGame()
     {
         Game currentGame = GameService.currentGame();
 
@@ -445,12 +443,10 @@ public class GameController
 
     /**
      * Gets the most recently created game
-     * @param request
-     * @param response
-     * @return
+     * @return The most recent game
      */
     @RequestMapping(value = "/latestgame")
-    public ResponseEntity latestGame(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity latestGame()
     {
         Game currentGame = GameService.latestGame();
 
@@ -465,12 +461,10 @@ public class GameController
 
     /**
      * Gets the game which is nearest to the current date in the future
-     * @param request
-     * @param response
-     * @return
+     * @return The next game (Nearest Game)
      */
     @RequestMapping("/nearestgame")
-    public ResponseEntity nearestGame(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity nearestGame()
     {
         Game nearestGame = GameService.nearestGame();
 
@@ -483,14 +477,12 @@ public class GameController
         }
     }
 
-    @UnitOfWork
     /**
      * Gets all signed up users for given game
-     * @param request
-     * @param response
      * @param id ID of game to get sign ups for
-     * @return
+     * @return A list of players that have signed up for the game
      */
+    @UnitOfWork
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/pendingplayers")
     public ResponseEntity pendingPlayers(SessionImpl session, @PathVariable("id") int id)
@@ -501,111 +493,6 @@ public class GameController
         List<User> users = query.list();
 
         return new ResponseEntity(users, HttpStatus.OK);
-    }
-
-    //Player Actions
-    @Transactional
-    /**
-     * Removes a player from a team without penalizing
-     * @param request
-     * @param response
-     * @param gameID ID of game to remove from (Redundant)
-     * @param playerID ID of player to remove
-     * @return
-     */
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping("/{id}/player/{playerID}/remove")
-    public ResponseEntity removePlayer(SessionImpl session, @PathVariable("id") int gameID, @PathVariable("playerID") int playerID)
-    {
-        Player player = (Player) session.get(Player.class, playerID);
-
-        if (player != null) {
-            session.delete(player);
-
-            return new ResponseEntity("Successfully deleted player", HttpStatus.OK);
-        }
-
-        return new ResponseEntity("Player could not be found", HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * Adds a player to a team
-     * @param request
-     * @param gameID ID of game to add to
-     * @param teamID ID of team to add to
-     * @param language The language that the user will be playing
-     * @param newUser The user that will be playing
-     * @return
-     */
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/team/{teamID}/add", method = RequestMethod.POST)
-    public ResponseEntity addPlayer(HttpServletRequest request,
-                                    @PathVariable("id") int gameID,
-                                    @PathVariable("teamID") int teamID,
-                                    @RequestParam("language") String language,
-                                    @JSONParam("user") User newUser)
-    {
-        Game game = GameService.getGame(gameID);
-        Team teamFound = null;
-
-        if (game != null)
-        {
-            for (Team team : game.getTeams().values())
-            {
-                if (team.getId() == teamID)
-                {
-                    teamFound = team;
-
-                    for (Player player : team.getPlayers())
-                    {
-                        if (player.getUser().getId() == newUser.getId())
-                        {
-                            return new ResponseEntity("User is already apart of this team", HttpStatus.CONFLICT);
-                        }
-                    }
-                }
-            }
-
-            if (teamFound != null)
-            {
-                Player newPlayer = new Player(teamFound, newUser, language);
-
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                session.save(newPlayer);
-
-                session.getTransaction().commit();
-                session.beginTransaction();
-
-                session.refresh(newPlayer);
-
-                String message = "You were added to the game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime()));
-                Activity activity = new Activity(newPlayer.getUser(), (User) request.getAttribute("user"), message, 0, 0);
-
-                session.save(activity);
-
-                session.getTransaction().commit();
-
-                session.refresh(newPlayer);
-
-                if (newPlayer.getUser().getEmail() != null)
-                {
-                    String subject = "Accepted to play a game of DevWars";
-                    String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(game.getTimestamp().getTime()).toString();
-                    Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, activityMessage, newPlayer.getUser().getEmail());
-                }
-
-                session.close();
-
-                return new ResponseEntity(newPlayer, HttpStatus.OK);
-            }
-        } else
-        {
-            return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
-        }
-
-        return null;
     }
 
     /**
@@ -631,14 +518,12 @@ public class GameController
         return new ResponseEntity(player, HttpStatus.OK);
     }
 
-    @Transactional
     /**
      * Signs a user up for a game
-     * @param request
-     * @param response
      * @param id ID of game to sign up for
-     * @return
+     * @return Message
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
     public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user,  @PathVariable("id") int id)
@@ -735,8 +620,6 @@ public class GameController
 
     /**
      * Adds votes to a team for voting part of game
-     * @param request
-     * @param response
      * @param id ID of game
      * @param teamID ID of team
      * @param func How many to add on the functionality vote
@@ -746,8 +629,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/addvotes")
-    public ResponseEntity addVotes(HttpServletRequest request, HttpServletResponse response,
-                                   @PathVariable("id") int id,
+    public ResponseEntity addVotes(@PathVariable("id") int id,
                                    @PathVariable("teamID") int teamID,
                                    @RequestParam(value = "func", required = false, defaultValue = "0") int func,
                                    @RequestParam(value = "design", required = false, defaultValue = "0") int design,

@@ -1,4 +1,4 @@
-package com.bezman.controller;
+package com.bezman.controller.user;
 
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;

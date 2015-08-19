@@ -2,7 +2,7 @@ package com.bezman.Reference.util;
 
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
-import com.bezman.controller.GameController;
+import com.bezman.controller.game.GameController;
 import com.bezman.controller.user.UserController;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
