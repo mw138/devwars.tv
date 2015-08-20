@@ -1,6 +1,5 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.sql.Timestamp;

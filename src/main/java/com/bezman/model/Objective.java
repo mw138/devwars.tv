@@ -1,8 +1,6 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gson.annotations.Expose;
 
 /**
  * Created by Terence on 4/15/2015.

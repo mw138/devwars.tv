@@ -117,6 +117,24 @@ angular.module("app.DialogService", [])
                 }
 
             });
+
+        };
+
+        DialogService.getConfirmationDialog = function (title, message, yes, no, $event) {
+            return $mdDialog.show({
+                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                controller: "ConfirmDialogController",
+                targetEvent: $event,
+
+                locals: {
+                    title: title,
+                    message: message,
+                    yes: yes,
+                    no: no
+                }
+
+            });
+
         };
 
         return DialogService;

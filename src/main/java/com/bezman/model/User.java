@@ -1,20 +1,18 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.UserPermissionFilter;
-import com.bezman.exclusion.GsonExclude;
+import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
-import com.bezman.service.Security;
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.PostLoad;
 import java.util.*;
 
 /**
@@ -113,24 +111,11 @@ public class User extends BaseModel
     public void setId(int id)
     {
         this.id = id;
-
-        this.performCalculatedProperties(id);
     }
 
     public String getPassword()
     {
         return password;
-    }
-
-    @JsonIgnore
-    public String getUnencryptedPassword()
-    {
-        return Security.decrypt(password);
-    }
-
-    public void setEncryptedPassword(String password)
-    {
-        this.password = Security.encrypt(password);
     }
 
     public void setPassword(String password)
@@ -176,21 +161,6 @@ public class User extends BaseModel
     public void setRanking(Ranking ranking)
     {
         this.ranking = ranking;
-
-        if(ranking != null)
-        {
-            Session session = DatabaseManager.getSession();
-
-            Query rankQuery = session.createQuery("from Rank r where r.xpRequired <= :xp order by r.xpRequired desc");
-            rankQuery.setInteger("xp", this.getRanking().getXp().intValue());
-            rankQuery.setMaxResults(1);
-
-            this.rank = (Rank) DatabaseUtil.getFirstFromQuery(rankQuery);
-
-            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
-
-            session.close();
-        }
     }
 
     public String getProvider()
@@ -263,16 +233,6 @@ public class User extends BaseModel
     public void setReferredUsers(Integer referredUsers)
     {
         this.referredUsers = referredUsers;
-    }
-
-    public Rank getRank()
-    {
-        return rank;
-    }
-
-    public void setRank(Rank rank)
-    {
-        this.rank = rank;
     }
 
     public Integer getAvatarChanges()
@@ -437,7 +397,8 @@ public class User extends BaseModel
         return token;
     }
 
-    private void performCalculatedProperties(int id)
+    @PostLoad
+    public void performCalculatedProperties()
     {
         Session session = DatabaseManager.getSession();
 
@@ -456,12 +417,23 @@ public class User extends BaseModel
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
 
+        if(this.getRanking() != null)
+        {
+            this.rank = (Rank) session.createCriteria(Rank.class)
+                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
+                    .addOrder(Order.desc("xpRequired"))
+                    .setMaxResults(1)
+                    .uniqueResult();
+
+            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
+        }
+
         session.close();
     }
 
     public boolean canBuyItem(ShopItem item)
     {
-        return this.getRanking().getPoints() >= item.getPrice() && this.getRank().getLevel() >= item.getRequiredLevel();
+        return this.getRanking().getPoints() >= item.getPrice() && this.rank.getLevel() >= item.getRequiredLevel();
     }
 
     public void purchaseItem(ShopItem item)

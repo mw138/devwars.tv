@@ -1,11 +1,10 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.Ranking;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.Authenticator;
 import java.util.ArrayList;
 import java.util.List;
 

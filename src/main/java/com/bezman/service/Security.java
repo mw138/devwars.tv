@@ -1,5 +1,6 @@
 package com.bezman.service;
 
+import com.bezman.Reference.Reference;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -7,6 +8,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import java.security.MessageDigest;
 
 /**
  * Created by Terence on 12/22/2014.
@@ -14,50 +16,37 @@ import javax.crypto.spec.DESKeySpec;
 public class Security
 {
 
-    public static String encryptionKey = "thisprobablyisntaverygoodpasswordforyousyntag";
+    public static String hash(String item)
+    {
+        try
+        {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 
-    public static String emailUsername = "devwarssyntag@gmail.com";
-    public static String emailPassword = "syntagrocks";
+            messageDigest.update(item.getBytes());
 
-    public static String recaptchaPublicKey = "6LeoIgQTAAAAAMYim_-jaDVnt_0JWPH4szTzEiio";
-    public static String recaptchaPrivateKey = "6LeoIgQTAAAAAE1r5L47MCymlRNwyqAnAjz0Q10K";
+            byte[] bytes = messageDigest.digest();
 
-    public static String facebookAppID = "648751498587352";
-    public static String facebookSecret = "fe32b0ea363e0714371fe95151cebfea";
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++)
+            {
+                stringBuilder.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
 
-    public static String googleClientID = "140697828804-s9j0bcgita2s59nof7j1cg82663ug0br.apps.googleusercontent.com";
-    public static String googleSecret = "uJ_fMgcHL7XbvTfLw9qZnpLN";
+            return stringBuilder.toString();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-    public static String twitterConsumerKey = "R2PkiCrA3PcnwHeeFMUA9xNTt";
-    public static String twitterConsumerSecret = "37A18nFTUUakpgPCu4ciYruSpRRcBIEEuyQNfAWpNfwv0jbRLf";
-
-//    public static String twitterConsumerKey = "";
-//    public static String twitterConsumerSecret = "";
-
-    public static String redditAppID = "81R9jMxVCNRKeg";
-    public static String redditSecret = "qWgxOEXvxdlUU4xJnx4NMCiHMuQ";
-
-    public static String redditAppID2 = "mqDsT6du9HQOCw";
-    public static String redditSecret2 = "Z0M1NFJZloHPVrCkuBjwcIuA7fI";
-
-    public static String twitchClientID = "gb4jruphdgkp1n3un2ur1ce3xf3ci5r";
-    public static String twitchSecret = "300o2y4jiwamn5vpuihlue6a34vzawr";
-
-    public static String twitchClientID2 = "hf6dzqucv2vr9mbxhhlnipab5o5gztf";
-    public static String twitchSecret2 = "g1ywwssve3iqcyvz86y10pj2ynea54t";
-
-    public static String githubClientID = "5c1e483f1937833090f8";
-    public static String githubSecret = "ba6b9cbb06e08cb54cbb5a2991163c1ff2c58476";
-
-    public static String githubClientID2 = "614ec2f808dd0c74e506";
-    public static String githubSecret2 = "fbe1911f4cb4b9a41c2d65724a624b59533e2c7f";
-
-    public static String firebaseToken = "ifv82eGMk6Csufs8Tr01Prkf2IBMgOmHgMQDPp5k";
+        return null;
+    }
 
     public static String encrypt(String item)
     {
         try
         {
+            String encryptionKey = Reference.getEnvironmentProperty("encryptionKey");
+
             DESKeySpec keySpec = new DESKeySpec(encryptionKey.getBytes());
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
 
@@ -82,6 +71,8 @@ public class Security
     {
         try
         {
+            String encryptionKey = Reference.getEnvironmentProperty("encryptionKey");
+
             DESKeySpec keySpec = new DESKeySpec(encryptionKey.getBytes());
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
 

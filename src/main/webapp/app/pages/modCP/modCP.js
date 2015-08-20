@@ -18,6 +18,8 @@ angular.module('app.modCP', [
                     url: '/creategames',
                     parent: "modCP",
 
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -33,6 +35,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.createTeamsView', {
                     url: '/createteams',
+
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -48,6 +53,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.createObjectiveView', {
                     url: '/createobjectives',
+
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -63,6 +71,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.liveGameView', {
                     url: '/livegame',
+
+                    auth: true,
+
                     views : {
                         '' : {
                             templateUrl: 'app/pages/modCP/modCPView.html',
@@ -78,6 +89,9 @@ angular.module('app.modCP', [
 
                 .state('modCP.PostGameView', {
                     url: '/postgame',
+
+                    auth: true,
+
                     parent: "modCP",
 
                     views : {
@@ -95,7 +109,7 @@ angular.module('app.modCP', [
             ;
         }])
 
-    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http){
+    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", "PlayerService", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService){
 
         $scope.pickedDate = new Date();
         $scope.pickedTime = new Date();
@@ -130,7 +144,7 @@ angular.module('app.modCP', [
 
         $scope.gameLabel = function (game) {
             return $filter('date')(game.timestamp, 'mediumDate') + " - " + game.name;
-        }
+        };
 
         $scope.createGame = function () {
 
@@ -155,9 +169,9 @@ angular.module('app.modCP', [
                 }
             })
                 .then(function (success) {
-                    GameService.addPlayer(success.team.id, $scope.selectedGame.id, success.language, JSON.stringify(player), function (success) {
+                    PlayerService.addPlayer(success.team.id, success.language, JSON.stringify(player), function (success) {
                         $scope.updateSelectedGame();
-                    }, function (error) {
+                    }, function () {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not add player");
                     });
                 }, angular.noop);
@@ -172,9 +186,9 @@ angular.module('app.modCP', [
         };
 
         $scope.removePlayer = function (player) {
-            GameService.removePlayer($scope.selectedGame.id, player.id, function (success) {
+            PlayerService.removePlayer(player.id, function () {
                 $scope.updateSelectedGame();
-                ToastService.showDevwasrsToast("fa-check-circle", "Success", "Removed " + player.user.username);
+                ToastService.showDevwarsToast("fa-check-circle", "Success", "Removed " + player.user.username);
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamtion-circle", "Error", "Could not remove player");
             });

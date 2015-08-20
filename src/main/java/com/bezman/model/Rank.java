@@ -1,8 +1,5 @@
 package com.bezman.model;
 
-/**
- * Created by Terence on 5/20/2015.
- */
 public class Rank extends BaseModel
 {
 

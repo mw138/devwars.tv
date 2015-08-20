@@ -81,17 +81,17 @@ public class Util
         return oldMap;
     }
 
-    public static void zipFolder(File directory, ZipOutputStream zipOutputStream) throws IOException
+    public static void zipFolder(String path, File directory, ZipOutputStream zipOutputStream) throws IOException
     {
         for(File file : directory.listFiles())
         {
             if (file.isDirectory())
             {
-                zipFolder(file, zipOutputStream);
+                zipFolder(path + file.getName() + File.separator, file, zipOutputStream);
             } else
             {
                 FileInputStream fileInputStream = new FileInputStream(file);
-                zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
+                zipOutputStream.putNextEntry(new ZipEntry(path + file.getName()));
 
                 IOUtils.copy(fileInputStream, zipOutputStream);
 

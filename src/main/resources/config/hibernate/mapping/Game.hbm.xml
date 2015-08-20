@@ -24,6 +24,11 @@
             <map-key type="string" column="name"></map-key>
             <one-to-many class="com.bezman.model.Team"></one-to-many>
         </map>
+
+        <set name="signups" table="gamesignup" lazy="true">
+            <key column="game"></key>
+            <one-to-many class="GameSignup"></one-to-many>
+        </set>
         
         <set name="objectives" lazy="false" order-by="order_id asc" cascade="all,delete,delete-orphan">
             <key column="game"></key>

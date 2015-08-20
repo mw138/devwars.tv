@@ -1,15 +1,12 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
-import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
 import com.bezman.model.Game;
 import com.bezman.model.Ranking;
 import com.bezman.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Result;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Terence on 4/12/2015.

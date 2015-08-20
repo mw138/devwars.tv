@@ -1,15 +1,13 @@
 package com.bezman.service;
 
-import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.metamodel.relational.Database;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 
 /**
  * Created by Terence on 1/21/2015.

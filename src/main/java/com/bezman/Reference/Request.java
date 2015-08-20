@@ -1,7 +1,5 @@
 package com.bezman.Reference;
 
-import com.bezman.model.User;
-
 /**
  * Created by Terence on 3/22/2015.
  */

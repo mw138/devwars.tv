@@ -1,11 +1,11 @@
-package com.bezman.controller;
+package com.bezman.controller.game;
 
 import com.bezman.Reference.Reference;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.UnitOfWork;
+import com.bezman.controller.BaseController;
 import com.bezman.model.Team;
 import com.bezman.model.User;
-import com.bezman.service.GameService;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.io.IOUtils;
@@ -13,13 +13,15 @@ import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Ref;
 import java.util.zip.GZIPInputStream;
 
 /**

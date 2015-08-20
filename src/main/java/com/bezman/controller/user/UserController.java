@@ -1,33 +1,32 @@
 package com.bezman.controller.user;
 
-import com.bezman.Reference.*;
+import com.bezman.Reference.HttpMessages;
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.controller.BaseController;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.validator.Validator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.metamodel.relational.Database;
 import org.json.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.*;
@@ -37,11 +36,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.sql.Ref;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -197,7 +196,7 @@ public class UserController extends BaseController
             User user = new User();
             user.setUsername(username);
             user.setEmail(email);
-            user.setEncryptedPassword(password);
+            user.setPassword(Security.hash(password));
             user.setRole(User.Role.PENDING.toString());
             user.setAvatarChanges(1);
 
@@ -214,7 +213,7 @@ public class UserController extends BaseController
 
             String subject = "DevWars account confirmation";
             String message = "Click here to confirm your account : " + Reference.rootURL + "/v1/user/validate?uid=" + uid;
-            Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, message, email);
+            Util.sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, message, email);
 
             responseEntity = new ResponseEntity("We have sent an email to " + email, HttpStatus.OK);
 
@@ -448,7 +447,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        if (user != null && user.getUnencryptedPassword().equals(password))
+        if (user != null && user.getPassword().equals(Security.hash(password)))
         {
             if (User.Role.valueOf(user.getRole()) != User.Role.PENDING)
             {
@@ -594,11 +593,11 @@ public class UserController extends BaseController
             return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
         }
 
-        if (user.getUnencryptedPassword().equals(currentPassword))
+        if (user.getPassword().equals(Security.hash(currentPassword)))
         {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update User set password = :password where id = :id");
-            query.setString("password", Security.encrypt(newPassword));
+            query.setString("password", Security.hash(newPassword));
             query.setInteger("id", user.getId());
 
             query.executeUpdate();
@@ -628,7 +627,7 @@ public class UserController extends BaseController
     {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative() || user.getUnencryptedPassword().equals(currentPassword))
+        if (!user.isNative() || user.getPassword().equals(Security.hash(currentPassword)))
         {
             if(EmailValidator.getInstance().isValid(newEmail))
             {
@@ -721,11 +720,7 @@ public class UserController extends BaseController
 
         if (currentUser != null)
         {
-            JSONObject userJSON = (JSONObject) JSONValue.parse(Reference.gson.toJson(currentUser));
-            userJSON.remove("warrior");
-            userJSON.remove("connectedAccounts");
-            userJSON.remove("email");
-            return new ResponseEntity(userJSON, HttpStatus.OK);
+            return new ResponseEntity(currentUser, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
@@ -1049,8 +1044,8 @@ public class UserController extends BaseController
         Properties properties = new Properties();
 
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.user", Security.emailUsername);
-        properties.put("mail.smtp.password", Security.emailPassword);
+        properties.put("mail.smtp.user", Reference.getEnvironmentProperty("emailUsername"));
+        properties.put("mail.smtp.password", Reference.getEnvironmentProperty("emailPassword"));
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
@@ -1060,13 +1055,13 @@ public class UserController extends BaseController
             @Override
             protected PasswordAuthentication getPasswordAuthentication()
             {
-                return new PasswordAuthentication(Security.emailUsername, Security.emailPassword);
+                return new PasswordAuthentication(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"));
             }
         });
 
         MimeMessage emailMessage = new MimeMessage(session);
 
-        emailMessage.setFrom(new InternetAddress(Security.emailUsername));
+        emailMessage.setFrom(new InternetAddress(Reference.getEnvironmentProperty("emailUsername")));
         emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
         emailMessage.setSubject("test");
         emailMessage.setText(message);
@@ -1132,6 +1127,5 @@ public class UserController extends BaseController
     {
         return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
-
 
 }

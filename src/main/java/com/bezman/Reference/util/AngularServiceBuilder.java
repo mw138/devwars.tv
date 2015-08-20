@@ -2,7 +2,7 @@ package com.bezman.Reference.util;
 
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
-import com.bezman.controller.GameController;
+import com.bezman.controller.game.GameController;
 import com.bezman.controller.user.UserController;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,9 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**

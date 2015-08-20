@@ -1,12 +1,10 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 /**

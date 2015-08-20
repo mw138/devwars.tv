@@ -1,42 +1,35 @@
-package com.bezman.controller;
+package com.bezman.controller.game;
 
-import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.Reference.util.Util;
-import com.bezman.annotation.AllowCrossOrigin;
-import com.bezman.annotation.JSONParam;
-import com.bezman.annotation.PreAuthorization;
-import com.bezman.annotation.Transactional;
+import com.bezman.annotation.*;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
-import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.metamodel.relational.Database;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Response;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Ref;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -61,6 +54,7 @@ public class GameController
         return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
     }
 
+    @UnitOfWork
     /**
      * Retrieves upcoming DevWars games
      * @param request
@@ -69,17 +63,12 @@ public class GameController
      */
     @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
-    public ResponseEntity upcomingGames(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity upcomingGames(SessionImpl session)
     {
-        List<Game> upcomingGames = null;
-
-        Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from Game where timestamp > :time and done = false order by timestamp asc");
         query.setTimestamp("time", new Date());
 
-        upcomingGames = query.list();
-
-        session.close();
+        List<Game> upcomingGames = query.list();
 
         if (upcomingGames != null || (upcomingGames != null && upcomingGames.size() > 0))
         {
@@ -90,6 +79,7 @@ public class GameController
         }
     }
 
+    @UnitOfWork
     /**
      * Retrieves games that have been done in the past
      * @param count
@@ -97,21 +87,15 @@ public class GameController
      * @return
      */
     @RequestMapping("/pastgames")
-    public ResponseEntity pastGames(@RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
+    public ResponseEntity pastGames(SessionImpl session, @RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
     {
-        List<Game> pastGames = null;
-
         count = count > 8 ? 8 : count;
 
-        Session session = DatabaseManager.getSession();
-        Query query = session.createQuery("from Game where done = :done order by id desc");
+        Query query = session.createQuery("from Game where done = true order by id desc");
         query.setFirstResult(offset);
         query.setMaxResults(count);
-        query.setBoolean("done", true);
 
-        pastGames = query.list();
-
-        session.close();
+        List<Game> pastGames = query.list();
 
         if (pastGames != null || (pastGames != null && pastGames.size() > 0))
         {
@@ -122,6 +106,7 @@ public class GameController
         }
     }
 
+    @Transactional
     /**
      * Creates a game with the default information
      * @param request
@@ -132,7 +117,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
-    public ResponseEntity createGame(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
+    public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
     {
         Game game = GameService.defaultGame();
 
@@ -146,13 +131,7 @@ public class GameController
             game.setName(name);
         }
 
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
-
         session.save(game);
-
-        session.getTransaction().commit();
-        session.close();
 
         return new ResponseEntity(game.toString(), HttpStatus.OK);
     }
@@ -167,8 +146,6 @@ public class GameController
     @RequestMapping("/{id}")
     public ResponseEntity getGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
     {
-        String returnString = "";
-
         Game game = GameService.getGame(id);
 
         if (game != null)
@@ -191,8 +168,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method =  RequestMethod.POST)
-    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json)
-    {
+    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException {
         Session session = DatabaseManager.getSession();
 
         Game oldGame = GameService.getGame(id);
@@ -203,7 +179,7 @@ public class GameController
             return new ResponseEntity("Game for given id doesn't exist", HttpStatus.NOT_FOUND);
         } else
         {
-            Game game = Reference.gson.fromJson(json, Game.class);
+            Game game = Reference.objectMapper.readValue(json, Game.class);
 
             session = DatabaseManager.getSession();
             session.beginTransaction();
@@ -224,13 +200,18 @@ public class GameController
 
             if(game.isActive())
             {
-                Reference.firebase.child("frame/game").setValue(game);
+                Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
+                        .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
+                        .body(Reference.objectMapper.writeValueAsString(game))
+                        .asString()
+                        .getBody();
             }
 
             return getGame(request, response, id);
         }
     }
 
+    @Transactional
     /**
      * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
      * @param request
@@ -240,24 +221,16 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/activate")
-    public ResponseEntity activateGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity activateGame(SessionImpl session, @PathVariable("id") int id)
     {
-        Game game = GameService.getGame(id);
+        Game game = (Game) session.get(Game.class, id);
 
         if (game != null)
         {
-            Session session = DatabaseManager.getSession();
-            session.beginTransaction();
-
             Query query = session.createQuery("update Game set active = false where active = true");
             query.executeUpdate();
 
             game.setActive(true);
-
-            session.update(game);
-
-            session.getTransaction().commit();
-            session.close();
 
             return new ResponseEntity(game, HttpStatus.OK);
         } else
@@ -266,6 +239,7 @@ public class GameController
         }
     }
 
+    @Transactional
     /**
      * Sets the game to inactive
      * @param request
@@ -275,21 +249,13 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/deactivate")
-    public ResponseEntity deactivateGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity deactivateGame(SessionImpl session, @PathVariable("id") int id)
     {
-        Game game = GameService.getGame(id);
+        Game game = (Game) session.get(Game.class, id);
 
         if (game != null)
         {
-            Session session = DatabaseManager.getSession();
-            session.beginTransaction();
-
             game.setActive(false);
-
-            session.update(game);
-
-            session.getTransaction().commit();
-            session.close();
 
             return new ResponseEntity(game, HttpStatus.OK);
         } else
@@ -310,14 +276,15 @@ public class GameController
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("id") int gameID,
-                                  @RequestParam("winner") int winnerID)
-    {
+                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException {
         ResponseEntity responseEntity = null;
 
         Game game = GameService.getGame(gameID);
 
         if (game != null)
         {
+            GameService.downloadCurrentGame(game);
+
             Team team = game.getTeamByID(winnerID);
 
             if (team != null)
@@ -349,11 +316,10 @@ public class GameController
         for (Team team : game.getTeams().values())
         {
             //Participation
-            team.getPlayers().stream().forEach(p -> {
+            team.getPlayers().stream().forEach(p ->
+            {
                 p.setXpChanged(p.getXpChanged() + 50);
                 p.setPointsChanged(p.getPointsChanged() + 222);
-
-                System.out.println("Current User : " + p.getUser().getId() + " : " + p.getUser().getUsername());
 
                 p.getUser().getRanking().addXP(50);
                 p.getUser().getRanking().addPoints(222);
@@ -362,8 +328,8 @@ public class GameController
             //Completed All Objectives
             if (team.didCompleteAllObjectives())
             {
-                System.out.println(team.getName() + " has completed all objectives.");
-                team.getPlayers().stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p ->
+                {
                     p.setXpChanged(p.getXpChanged() + 150);
 
                     p.getUser().getRanking().addXP(150);
@@ -373,8 +339,8 @@ public class GameController
             //Team won
             if (team.isWin())
             {
-                System.out.println(team.getName() + " has won");
-                team.getPlayers().stream().forEach(p -> {
+                team.getPlayers().stream().forEach(p ->
+                {
                     p.setXpChanged(p.getXpChanged() + 250);
                     p.setPointsChanged(p.getPointsChanged() + 444);
 
@@ -396,7 +362,35 @@ public class GameController
             session.close();
         }
 
+
+
         return responseEntity;
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping("/{id}/resetwinner")
+    public ResponseEntity resetGameWinner(@PathVariable("id") int id, SessionImpl session)
+    {
+        Game game = (Game) session.get(Game.class, id);
+
+        game.getTeams().values().stream()
+                .forEach(team -> {
+                    team.setWin(false);
+
+                    team.getPlayers().stream().forEach(player -> {
+                        int xpChanged = player.getXpChanged();
+                        int pointsChanged = player.getPointsChanged();
+
+                        player.getUser().getRanking().addPoints(pointsChanged * -1);
+                        player.getUser().getRanking().addXP(xpChanged * -1);
+
+                        player.setXpChanged(0);
+                        player.setPointsChanged(0);
+                    });
+                });
+
+        return new ResponseEntity("Successfully reset game winner", HttpStatus.OK);
     }
 
     /**
@@ -426,13 +420,11 @@ public class GameController
 
     /**
      * Gets the current active game
-     * @param request
-     * @param response
-     * @return
+     * @return The only  game which is active
      */
     @AllowCrossOrigin(from = "*")
     @RequestMapping(value = "/currentgame")
-    public ResponseEntity currentGame(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity currentGame()
     {
         Game currentGame = GameService.currentGame();
 
@@ -447,12 +439,10 @@ public class GameController
 
     /**
      * Gets the most recently created game
-     * @param request
-     * @param response
-     * @return
+     * @return The most recent game
      */
     @RequestMapping(value = "/latestgame")
-    public ResponseEntity latestGame(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity latestGame()
     {
         Game currentGame = GameService.latestGame();
 
@@ -467,12 +457,10 @@ public class GameController
 
     /**
      * Gets the game which is nearest to the current date in the future
-     * @param request
-     * @param response
-     * @return
+     * @return The next game (Nearest Game)
      */
     @RequestMapping("/nearestgame")
-    public ResponseEntity nearestGame(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity nearestGame()
     {
         Game nearestGame = GameService.nearestGame();
 
@@ -487,162 +475,20 @@ public class GameController
 
     /**
      * Gets all signed up users for given game
-     * @param request
-     * @param response
      * @param id ID of game to get sign ups for
-     * @return
+     * @return A list of players that have signed up for the game
      */
+    @UnitOfWork
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/pendingplayers")
-    public ResponseEntity pendingPlayers(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity pendingPlayers(SessionImpl session, @PathVariable("id") int id)
     {
-
-        Session session = DatabaseManager.getSession();
         Query query = session.createQuery("select user from GameSignup g where g.game.id = :id");
         query.setParameter("id", id);
 
         List<User> users = query.list();
 
-        session.close();
-
-        if (users.size() > 0)
-        {
-            return new ResponseEntity(users, HttpStatus.OK);
-        }
-
-        return new ResponseEntity("No players signed up for that game", HttpStatus.NOT_FOUND);
-    }
-
-    //Player Actions
-
-    /**
-     * Removes a player from a team without penalizing
-     * @param request
-     * @param response
-     * @param gameID ID of game to remove from (Redundant)
-     * @param playerID ID of player to remove
-     * @return
-     */
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping("/{id}/player/{playerID}/remove")
-    public ResponseEntity removePlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("playerID") int playerID)
-    {
-        Game game = GameService.getGame(gameID);
-        Player playerFound = null;
-
-
-
-        if (game != null)
-        {
-            for (Team team : game.getTeams().values())
-            {
-                for (Player player : team.getPlayers())
-                {
-                    if (player.getId() == playerID)
-                    {
-                        playerFound = player;
-                    }
-                }
-            }
-
-            if (playerFound != null)
-            {
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                session.delete(playerFound);
-
-                session.getTransaction().commit();
-                session.close();
-
-                return new ResponseEntity(playerFound, HttpStatus.OK);
-            }
-        } else
-        {
-            return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity("Player could not be found", HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * Adds a player to a team
-     * @param request
-     * @param gameID ID of game to add to
-     * @param teamID ID of team to add to
-     * @param language The language that the user will be playing
-     * @param newUser The user that will be playing
-     * @return
-     */
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/team/{teamID}/add", method = RequestMethod.POST)
-    public ResponseEntity addPlayer(HttpServletRequest request,
-                                    @PathVariable("id") int gameID,
-                                    @PathVariable("teamID") int teamID,
-                                    @RequestParam("language") String language,
-                                    @JSONParam("user") User newUser)
-    {
-        Game game = GameService.getGame(gameID);
-        Team teamFound = null;
-
-        if (game != null)
-        {
-            for (Team team : game.getTeams().values())
-            {
-                if (team.getId() == teamID)
-                {
-                    teamFound = team;
-
-                    for (Player player : team.getPlayers())
-                    {
-                        if (player.getUser().getId() == newUser.getId())
-                        {
-                            return new ResponseEntity("User is already apart of this team", HttpStatus.CONFLICT);
-                        }
-                    }
-                }
-            }
-
-            if (teamFound != null)
-            {
-                Player newPlayer = new Player(teamFound, newUser, language);
-
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                session.save(newPlayer);
-
-                session.getTransaction().commit();
-                session.beginTransaction();
-
-                session.refresh(newPlayer);
-
-                String message = "You were added to the game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime()));
-                Activity activity = new Activity(newPlayer.getUser(), (User) request.getAttribute("user"), message, 0, 0);
-
-                session.save(activity);
-
-                session.getTransaction().commit();
-
-                session.refresh(newPlayer);
-
-                if (newPlayer.getUser().getEmail() != null)
-                {
-                    String subject = "Accepted to play a game of DevWars";
-                    String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(game.getTimestamp().getTime()).toString();
-                    Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, activityMessage, newPlayer.getUser().getEmail());
-                }
-
-                session.close();
-
-                return new ResponseEntity(newPlayer, HttpStatus.OK);
-            }
-        } else
-        {
-            return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
-        }
-
-        return null;
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     /**
@@ -670,61 +516,106 @@ public class GameController
 
     /**
      * Signs a user up for a game
-     * @param request
-     * @param response
      * @param id ID of game to sign up for
-     * @return
+     * @return Message
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
-    public ResponseEntity signupForGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user,  @PathVariable("id") int id)
     {
-        Game game = GameService.getGame(id);
+        Game game = (Game) session.get(Game.class, id);
 
         if (game != null)
         {
-            User user = (User) request.getAttribute("user");
+            boolean hasSignedUp = game.getSignups().stream()
+                    .anyMatch(signup -> signup.getUser().getId() == user.getId());
 
-            if (user != null)
+            if (!hasSignedUp)
             {
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
 
-                Query query = session.createQuery("from GameSignup where user = :user and game = :game");
-                query.setParameter("user", user);
-                query.setParameter("game", game);
+                GameSignup gameSignup = new GameSignup(user, game);
 
-                GameSignup oldGameSignup = (GameSignup) DatabaseUtil.getFirstFromQuery(query);
+                Activity activity = new Activity(user, user, "Signed up for game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime())), 0, 0);
 
-                if (oldGameSignup == null)
-                {
+                session.save(gameSignup);
+                session.save(activity);
 
-                    GameSignup gameSignup = new GameSignup();
-                    gameSignup.setUser(user);
-                    gameSignup.setGame(game);
-
-                    Activity activity = new Activity(user, user, "Signed up for game on " + new SimpleDateFormat("EEE, MMM d @ K:mm a").format(new Date(game.getTimestamp().getTime())), 0, 0);
-
-                    DatabaseUtil.saveObjects(false, gameSignup, activity);
-
-                    session.getTransaction().commit();
-                    session.close();
-
-                    return new ResponseEntity("Signed up user", HttpStatus.OK);
-                } else
-                {
-                    return new ResponseEntity("You have already signed up for that game", HttpStatus.CONFLICT);
-                }
+                return new ResponseEntity("Signed up user", HttpStatus.OK);
+            } else {
+                return new ResponseEntity("You have already signed up for that game", HttpStatus.CONFLICT);
             }
         }
 
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
     }
 
+
+    /**
+     * Method to sign up a twitch user (Meant for chat command)
+     * @param username Username of twitch user to apply
+     * @param id ID of game to apply user to
+     * @return Response Entity
+     */
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @Transactional
+    @RequestMapping(value = "/{id}/signuptwitchuser", method = RequestMethod.POST)
+    public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id,  SessionImpl session)
+    {
+        User theTwitchUser = UserService.userForTwitchUsername(username);
+
+        if (theTwitchUser != null) {
+            User twitchUser  = (User) session.merge(theTwitchUser);
+
+            Game game = (Game) session.get(Game.class, id);
+
+            if (game == null) {
+                return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
+            }
+
+            boolean isUserApplied = game.getSignups().stream()
+                    .anyMatch(signup -> signup.getUser().getId() == twitchUser.getId());
+
+            if (!isUserApplied)
+            {
+                if (twitchUser.getWarrior() == null)
+                {
+                    return new ResponseEntity("You are not a warrior, click http://devwars.tv/warrior-signup to sign up.", HttpStatus.CONFLICT);
+                }
+
+                GameSignup gameSignup = new GameSignup(twitchUser, game);
+
+                session.save(gameSignup);
+
+                return new ResponseEntity("Successfully signed up " + twitchUser.getUsername(), HttpStatus.OK);
+            } else return new ResponseEntity("You are already signed up for that game.", HttpStatus.CONFLICT);
+
+        } else return new ResponseEntity("Twitch user not found. Please connect your twitch account with your DevWars account.", HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/{id}/resign")
+    public ResponseEntity resignFromGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id)
+    {
+        Game game = (Game) session.get(Game.class, id);
+
+        Optional<GameSignup> foundSignup = game.getSignups().stream()
+                .filter(a -> a.getUser().getId() == user.getId())
+                .findFirst();
+
+        if (foundSignup.isPresent())
+        {
+            session.delete(foundSignup.get());
+
+            return new ResponseEntity("Successfully resigned", HttpStatus.OK);
+        }
+
+        return new ResponseEntity("Sign Up not found", HttpStatus.NOT_FOUND);
+    }
+
     /**
      * Adds votes to a team for voting part of game
-     * @param request
-     * @param response
      * @param id ID of game
      * @param teamID ID of team
      * @param func How many to add on the functionality vote
@@ -734,8 +625,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/addvotes")
-    public ResponseEntity addVotes(HttpServletRequest request, HttpServletResponse response,
-                                   @PathVariable("id") int id,
+    public ResponseEntity addVotes(@PathVariable("id") int id,
                                    @PathVariable("teamID") int teamID,
                                    @RequestParam(value = "func", required = false, defaultValue = "0") int func,
                                    @RequestParam(value = "design", required = false, defaultValue = "0") int design,
@@ -845,11 +735,10 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/player/{playerID}/edit")
-    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json)
-    {
+    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json) throws IOException {
         Team team = new Team();
         team.setId(teamID);
-        Player player = Reference.gson.fromJson(json, Player.class);
+        Player player = Reference.objectMapper.readValue(json, Player.class);
         player.setTeam(team);
 
         if (player != null)
@@ -890,7 +779,7 @@ public class GameController
      * @throws IOException
      */
     @RequestMapping("/{id}/sitepull")
-    public ResponseEntity resetVeteranGames(@PathVariable("id") int id) throws UnirestException, IOException
+    public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException
     {
         Game game = GameService.getGame(id);
 

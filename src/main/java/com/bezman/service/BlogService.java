@@ -1,8 +1,7 @@
 package com.bezman.service;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
