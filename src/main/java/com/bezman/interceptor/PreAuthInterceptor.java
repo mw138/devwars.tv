@@ -41,7 +41,6 @@ public class PreAuthInterceptor implements HandlerInterceptor
             request.setAttribute("hasSecretKey" , hasSecretKey);
 
             PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
-
             AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
 
             if (crossOrigin != null)
