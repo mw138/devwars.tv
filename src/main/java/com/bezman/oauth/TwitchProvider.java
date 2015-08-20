@@ -3,7 +3,6 @@ package com.bezman.oauth;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.model.User;
-import com.bezman.service.Security;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;

@@ -1,10 +1,10 @@
 package com.bezman.controller;
 
-import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.Ranking;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;

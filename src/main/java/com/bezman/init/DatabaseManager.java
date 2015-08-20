@@ -1,7 +1,6 @@
 package com.bezman.init;
 
 import com.bezman.hibernate.interceptor.HibernateInterceptor;
-import com.google.gson.Gson;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

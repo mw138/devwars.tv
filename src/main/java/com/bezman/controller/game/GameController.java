@@ -1,16 +1,14 @@
 package com.bezman.controller.game;
 
-import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.*;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
@@ -19,7 +17,10 @@ import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

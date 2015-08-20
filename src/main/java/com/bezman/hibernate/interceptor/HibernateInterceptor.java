@@ -1,10 +1,6 @@
 package com.bezman.hibernate.interceptor;
 
-import com.bezman.Reference.Reference;
 import org.hibernate.EmptyInterceptor;
-import org.hibernate.EntityMode;
-import org.hibernate.event.spi.PostLoadEvent;
-import org.hibernate.event.spi.PostLoadEventListener;
 import org.hibernate.type.Type;
 
 import javax.persistence.PostLoad;
@@ -12,7 +8,6 @@ import javax.persistence.PreUpdate;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**

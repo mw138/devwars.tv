@@ -1,10 +1,7 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**

@@ -1,7 +1,6 @@
 package com.bezman.model;
 
 import com.bezman.annotation.UserPermissionFilter;
-import com.bezman.exclusion.GsonExclude;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

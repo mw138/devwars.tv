@@ -1,10 +1,10 @@
 package com.bezman.interceptor;
 
-import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.AllowCrossOrigin;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.Access;
 import com.bezman.model.User;
 import com.bezman.model.UserSession;

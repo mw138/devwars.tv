@@ -1,7 +1,7 @@
 package com.bezman.model;
 
-import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import org.hibernate.Query;
 import org.hibernate.Session;
 

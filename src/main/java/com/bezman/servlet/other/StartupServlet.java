@@ -6,14 +6,12 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.init.FirebaseInit;
 import com.bezman.init.IInit;
 import com.bezman.init.TwitterInit;
-import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.sql.SQLException;
-import java.util.Set;
 
 @Controller
 @RequestMapping

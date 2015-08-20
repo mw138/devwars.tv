@@ -1,7 +1,7 @@
 package com.bezman.interceptor;
 
-import com.bezman.init.DatabaseManager;
 import com.bezman.annotation.Transactional;
+import com.bezman.init.DatabaseManager;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;

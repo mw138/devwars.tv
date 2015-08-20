@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Terence on 5/27/2015.

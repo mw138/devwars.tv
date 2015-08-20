@@ -5,7 +5,6 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.SecretKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import org.hibernate.Query;
@@ -18,7 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**

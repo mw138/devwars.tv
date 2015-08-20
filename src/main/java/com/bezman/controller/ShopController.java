@@ -1,8 +1,8 @@
 package com.bezman.controller;
 
-import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.ShopItem;
 import com.bezman.model.User;
 import org.hibernate.Query;
