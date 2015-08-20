@@ -58,7 +58,6 @@ public class AdminController
     public ResponseEntity getArchiveFolderList(HttpServletResponse response) throws IOException
     {
         File zipDir = new File(Reference.PROFILE_PICTURE_PATH_NO_END);
-//        File zipDir = new File("C:\\Users\\Terence\\IdeaProjects\\DevWars Maven\\src\\main\\java");
 
         JSONObject jsonObject = new JSONObject();
 

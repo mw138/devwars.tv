@@ -283,14 +283,15 @@ public class GameController
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("id") int gameID,
-                                  @RequestParam("winner") int winnerID)
-    {
+                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException {
         ResponseEntity responseEntity = null;
 
         Game game = GameService.getGame(gameID);
 
         if (game != null)
         {
+            GameService.downloadCurrentGame(game);
+            
             Team team = game.getTeamByID(winnerID);
 
             if (team != null)
@@ -367,6 +368,8 @@ public class GameController
             session.getTransaction().commit();
             session.close();
         }
+
+
 
         return responseEntity;
     }
