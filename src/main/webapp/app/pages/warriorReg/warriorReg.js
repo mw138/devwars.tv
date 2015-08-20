@@ -5,13 +5,13 @@ angular.module("app.warriorReg", [])
                 .state('warriorReg', {
                     url: '/warrior-signup',
                     templateUrl: '/app/pages/warriorReg/warriorRegView.html',
-                    controller: "warriorRegController",
+                    controller: "WarriorRegController",
 
                     auth: true
                 });
 
         }])
-    .controller("warriorRegController", ["$scope", "AuthService", "WarriorService", "ToastService", "$http", function ($scope, AuthService, WarriorService, ToastService, $http) {
+    .controller("WarriorRegController", ["$scope", "AuthService", "WarriorService", "ToastService", "$http", function ($scope, AuthService, WarriorService, ToastService, $http) {
 
         $scope.AuthService = AuthService;
 
@@ -22,10 +22,7 @@ angular.module("app.warriorReg", [])
         $scope.warrior.jsRate = 1;
 
         $scope.initWarrior = function () {
-            if(AuthService.user) {
-                console.log(AuthService.user);
-                if(AuthService.user.warrior) location.href = "/";
-            } else {
+            if(!AuthService.user) {
                 AuthService.callbacks.push($scope.initWarrior);
             }
         };

@@ -1,113 +1,115 @@
 angular.module('app.settings', [
-	'ui.router'
+    'ui.router'
 ])
-	.config(['$stateProvider',
-		function ($stateProvider) {
+    .config(['$stateProvider',
+        function ($stateProvider) {
 
-			$stateProvider
-				.state('settings', {
-					url: '/settings',
+            $stateProvider
+                .state('settings', {
+                    url: '/settings',
                     name: "settings",
 
                     templateUrl: 'app/pages/settings/settingsView.html',
                     controller: ['$scope', '$state',
                         function( $scope, $state) {
-                            $state.go('settings.accountView');
+                            if($state.name == "settings")
+                                $state.go('settings.accountView');
                         }]
                 })
 
-				.state('settings.accountView', {
-					url: '/',
+                .state('settings.accountView', {
+                    url: '/',
 
                     auth: true,
 
-					views : {
-						'' : {
-							templateUrl: 'app/pages/settings/settingsView.html',
-							controller: "SettingsController"
-						},
+                    views : {
+                        '' : {
+                            templateUrl: 'app/pages/settings/settingsView.html',
+                            controller: "SettingsController"
+                        },
 
-						'settingsInner@settings': {
-							templateUrl: "app/pages/settings/settingsAccountView.html",
-							controller: "SettingsController"
-						}
-					}
-				})
+                        'settingsInner@settings': {
+                            templateUrl: "app/pages/settings/settingsAccountView.html",
+                            controller: "SettingsController"
+                        }
+                    }
+                })
 
-				.state('settings.profileView', {
-					url: '/profile',
+                .state('settings.profileView', {
+                    url: '/profile/',
 
                     parent: 'settings',
                     auth: true,
 
-					views : {
-						'' : {
-							templateUrl: 'app/pages/settings/settingsView.html',
-							controller: "SettingsController"
-						},
+                    views : {
+                        '' : {
+                            templateUrl: 'app/pages/settings/settingsView.html',
+                            controller: "SettingsController"
+                        },
 
-						'settingsInner@settings': {
-							templateUrl: "app/pages/settings/settingsProfileView.html",
-							controller: "SettingsController"
-						}
-					}
-				})
+                        'settingsInner@settings': {
+                            templateUrl: "app/pages/settings/settingsProfileView.html",
+                            controller: "SettingsController"
+                        }
+                    }
+                })
 
-				.state('settings.notificationsView', {
-					url: '/notifications',
+                .state('settings.notificationsView', {
+                    url: '/notifications/',
 
                     parent: "settings",
                     auth: true,
 
-					views : {
-						'' : {
-							templateUrl: 'app/pages/settings/settingsView.html',
-							controller: "SettingsController"
-						},
+                    views : {
+                        '' : {
+                            templateUrl: 'app/pages/settings/settingsView.html',
+                            controller: "SettingsController"
+                        },
 
-						'settingsInner@settings': {
-							templateUrl: "app/pages/settings/settingsNotificationsView.html",
-							controller: "SettingsController"
-						}
-					}
-				})
+                        'settingsInner@settings': {
+                            templateUrl: "app/pages/settings/settingsNotificationsView.html",
+                            controller: "SettingsController"
+                        }
+                    }
+                })
 
-				.state('settings.connectView', {
-					url: '/connections',
+                .state('settings.connectView', {
+                    url: '/connections/',
 
                     auth: true,
 
-					views : {
-						'' : {
-							templateUrl: 'app/pages/settings/settingsView.html',
-							controller: "SettingsController"
-						},
+                    views : {
+                        '' : {
+                            templateUrl: 'app/pages/settings/settingsView.html',
+                            controller: "SettingsController"
+                        },
 
-						'settingsInner@settings': {
-							templateUrl: "app/pages/settings/settingsConnectView.html",
-							controller: "SettingsController"
-						}
-					}
-				})
+                        'settingsInner@settings': {
+                            templateUrl: "app/pages/settings/settingsConnectView.html",
+                            controller: "SettingsController"
+                        }
+                    }
+                })
 
-				.state('settings.warriorView', {
-					url: '/warrior',
-					views : {
-						'' : {
-							templateUrl: 'app/pages/settings/settingsView.html',
-							controller: "SettingsController"
-						},
+                .state('settings.warriorView', {
+                    url: '/warrior/',
 
-						'settingsInner@settings': {
-							templateUrl: "app/pages/settings/settingsWarriorView.html",
-							controller: "SettingsController"
-						}
-					}
-				});
+                    views : {
+                        '' : {
+                            templateUrl: 'app/pages/settings/settingsView.html',
+                            controller: "SettingsController"
+                        },
 
-		}])
-	.controller("SettingsController", ["$scope", "AuthService", "$http", "$mdDialog", "ToastService", "UserService", "$location", "DialogService", function ($scope, AuthService, $http, $mdDialog, ToastService, UserService, $location, DialogService) {
-		$scope.AuthService = AuthService;
+                        'settingsInner@settings': {
+                            templateUrl: "app/pages/settings/settingsWarriorView.html",
+                            controller: "WarriorRegController"
+                        }
+                    }
+                });
+
+        }])
+    .controller("SettingsController", ["$scope", "AuthService", "$http", "$mdDialog", "ToastService", "UserService", "$location", "DialogService", function ($scope, AuthService, $http, $mdDialog, ToastService, UserService, $location, DialogService) {
+        $scope.AuthService = AuthService;
 
         var routeParams = $location.search();
 
@@ -151,68 +153,68 @@ angular.module('app.settings', [
             }
         };
 
-		$scope.disconnect = function (provider) {
-			if(AuthService.hasProvider(provider)) {
-				$http({
-					method: "GET",
-					url: "/v1/connect/" + provider +  "/disconnect"
-				})
-					.then(function (success) {
-						console.log(success);
-						location.reload();
-					}, function (error) {
-						console.log(error);
-					});
-			} else
-			{
-				location.href = "/v1/connect/" + provider;
-			}
-		};
+        $scope.disconnect = function (provider) {
+            if(AuthService.hasProvider(provider)) {
+                $http({
+                    method: "GET",
+                    url: "/v1/connect/" + provider +  "/disconnect"
+                })
+                    .then(function (success) {
+                        console.log(success);
+                        location.reload();
+                    }, function (error) {
+                        console.log(error);
+                    });
+            } else
+            {
+                location.href = "/v1/connect/" + provider;
+            }
+        };
 
-		$scope.editAvatarImage = function (image, $event) {
-			$mdDialog.show({
-				templateUrl: "/app/components/dialogs/editAvatarImageDialog/editAvatarImageView.html",
-				controller: "EditAvatarImageDialogController",
-				clickOutsideToClose: false,
+        $scope.editAvatarImage = function (image, $event) {
+            $mdDialog.show({
+                templateUrl: "/app/components/dialogs/editAvatarImageDialog/editAvatarImageView.html",
+                controller: "EditAvatarImageDialogController",
+                clickOutsideToClose: false,
 
-				locals: {
-					image: image
-				}
-			})
-				.then(function (success) {
-					location.reload();
-				}, function (error) {
+                locals: {
+                    image: image
+                }
+            })
+                .then(function (success) {
+                    location.reload();
+                }, function (error) {
 
-				})
-		};
+                })
+        };
 
-		$scope.passwordsMatch = function (passwordChange) {
-			return passwordChange.newPassword1 === passwordChange.newPassword2
-		}
+        $scope.passwordsMatch = function (passwordChange) {
+            return passwordChange.newPassword1 === passwordChange.newPassword2
+        }
 
-		$scope.changePassword = function (passwordChange) {
-			if(passwordChange.newPassword1
-				&& passwordChange.newPassword2
-				&& passwordChange.newPassword1 === passwordChange.newPassword2) {
+        $scope.changePassword = function (passwordChange) {
+            if(passwordChange.newPassword1
+                && passwordChange.newPassword2
+                && passwordChange.newPassword1 === passwordChange.newPassword2) {
 
-				UserService.changePassword(passwordChange.newPassword1, passwordChange.currentPassword, function (success) {
-					ToastService.showDevwarsToast("fa-check-circle", "Success", "Changed your password");
-				}, function (error) {
-					ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
-				})
-			}
-		};
+                UserService.changePassword(passwordChange.newPassword1, passwordChange.currentPassword, function (success) {
+                    ToastService.showDevwarsToast("fa-check-circle", "Success", "Changed your password");
+                }, function (error) {
+                    ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
+                })
+            }
+        };
 
-		$scope.changeEmail = function (changeEmail) {
-			if(changeEmail.newEmail && changeEmail.currentPassword) {
-				UserService.changeEmail(changeEmail.newEmail, changeEmail.currentPassword, function (success) {
-					ToastService.showDevwarsToast("fa-check-circle", "Success", "Changed Email");
-					AuthService.init();
-				}, function (error) {
-					ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
-				})
-			}
-		};
+        $scope.changeEmail = function (changeEmail) {
+            if(changeEmail.newEmail && changeEmail.currentPassword) {
+                UserService.changeEmail(changeEmail.newEmail, changeEmail.currentPassword, function (success) {
+                    ToastService.showDevwarsToast("fa-check-circle", "Success", "Changed Email");
+                    AuthService.init();
+                }, function (error) {
+                    ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
+                })
+            }
+        };
 
         $scope.updateInfo = function (profile) {
             UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function (success) {
@@ -222,11 +224,11 @@ angular.module('app.settings', [
             })
         };
 
-		$scope.$watch("selectedAvatarImage", function (oldVal, newVal) {
+        $scope.$watch("selectedAvatarImage", function (oldVal, newVal) {
 
-			if(oldVal !== newVal)
-				$scope.editAvatarImage($scope.selectedAvatarImage);
-		});
+            if(oldVal !== newVal)
+                $scope.editAvatarImage($scope.selectedAvatarImage);
+        });
 
         $scope.initProfile();
-	}]);
+    }]);

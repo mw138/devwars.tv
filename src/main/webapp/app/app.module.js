@@ -113,7 +113,6 @@ app.run(function ($rootScope, $location, AuthService) {
 
         //Is the route protected
         if(toState.auth) {
-
             //Are we logged in?
             AuthService.isLoggedIn()
                 .then(angular.noop, function (error) {
