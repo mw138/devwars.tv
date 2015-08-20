@@ -100,7 +100,7 @@ public class OAuthController
                     "state=generate_a_unique_state_value&" +
                     "redirect_uri=" + Reference.rootURL + "/v1/oauth/google_callback&"+
                     "response_type=code&" +
-                    "client_id=" + Security.googleClientID + "&" +
+                    "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
                     "access_type=offline");
         } catch (Exception e)
         {
@@ -222,7 +222,7 @@ public class OAuthController
         {
             response.sendRedirect("https://api.twitch.tv/kraken/oauth2/authorize" +
                     "?response_type=code" +
-                    "&client_id=" + Security.twitchClientID +
+                    "&client_id=" + Reference.getEnvironmentProperty("twitchClientID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/oauth/twitch_callback" +
                     "&scope=user_read");
         } catch (IOException e)
@@ -293,7 +293,7 @@ public class OAuthController
         try
         {
             response.sendRedirect("https://www.facebook.com/dialog/oauth?" +
-                    "client_id=" + Security.facebookAppID +
+                    "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/oauth/facebook_callback" +
                     "&response_type=code" +
                     "&scope=email");
@@ -349,7 +349,7 @@ public class OAuthController
         try
         {
             response.sendRedirect("https://github.com/login/oauth/authorize?" +
-                    "client_id=" + Security.githubClientID +
+                    "client_id=" + Reference.getEnvironmentProperty("githubClientID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/oauth/github_callback" +
                     "&scope=user,user:email" +
                     "&state=" + Util.randomText(32));

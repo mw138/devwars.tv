@@ -60,12 +60,12 @@ public class RedditProvider implements IProvider
 
     public static User userForCode(String code) throws UnirestException
     {
-        return userForCodeWithKeys(code, Security.redditAppID, Security.redditSecret, Reference.rootURL + "/v1/oauth/reddit_callback");
+        return userForCodeWithKeys(code, Reference.getEnvironmentProperty("redditAppID"), Reference.getEnvironmentProperty("redditSecret"), Reference.rootURL + "/v1/oauth/reddit_callback");
     }
 
     public static User userForCode2(String code) throws UnirestException
     {
-        return userForCodeWithKeys(code, Security.redditAppID2, Security.redditSecret2, Reference.rootURL + "/v1/connect/reddit_callback");
+        return userForCodeWithKeys(code, Reference.getEnvironmentProperty("redditAppID2"), Reference.getEnvironmentProperty("redditSecret2"), Reference.rootURL + "/v1/connect/reddit_callback");
     }
 
 }

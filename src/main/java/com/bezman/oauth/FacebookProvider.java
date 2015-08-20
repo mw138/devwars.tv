@@ -20,8 +20,8 @@ public class FacebookProvider implements IProvider
     {
         String accessTokenJSON = Unirest.get("https://graph.facebook.com/v2.3/oauth/access_token")
             .queryString("code", code)
-            .queryString("client_id", Security.facebookAppID)
-            .queryString("client_secret", Security.facebookSecret)
+            .queryString("client_id", Reference.getEnvironmentProperty("facebookAppID"))
+            .queryString("client_secret", Reference.getEnvironmentProperty("facebookSecret"))
             .queryString("redirect_uri", redirect)
             .asString()
             .getBody();

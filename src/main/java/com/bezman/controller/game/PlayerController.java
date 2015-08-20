@@ -2,6 +2,7 @@ package com.bezman.controller.game;
 
 import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.HttpMessages;
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.JSONParam;
@@ -30,7 +31,6 @@ public class PlayerController {
 
     /**
      * Removes a player from a team without penalizing
-     * @param gameID ID of game to remove from (Redundant)
      * @param playerID ID of player to remove
      * @return The player which was removed
      */
@@ -84,7 +84,7 @@ public class PlayerController {
                 String subject = "Accepted to play a game of DevWars";
                 String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(team.getGame().getTimestamp().getTime()).toString();
 
-                Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, activityMessage, newPlayer.getUser().getEmail());
+                Util.sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, activityMessage, newPlayer.getUser().getEmail());
             }
 
             return new ResponseEntity(newPlayer, HttpStatus.OK);

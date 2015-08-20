@@ -16,7 +16,10 @@ import org.json.simple.JSONValue;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * Created by Terence on 12/22/2014.
@@ -29,6 +32,8 @@ public class Reference
     public static String[] allowedHosts = new String[]{"localhost:8080", "localhost:81", "devwars.tv", "bezcode.com:9090"};
 
     public static Firebase firebase;
+
+    public static Properties properties = new Properties();
 
     public static String PROFILE_PICTURE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator;
     public static String PROFILE_PICTURE_PATH_NO_END = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics";
@@ -149,7 +154,7 @@ public class Reference
         try
         {
             HttpResponse httpResponse = Unirest.post("https://www.google.com/recaptcha/api/siteverify")
-                    .field("secret", Security.recaptchaPrivateKey)
+                    .field("secret", Reference.getEnvironmentProperty("recaptchaPrivateKey"))
                     .field("response", response)
                     .field("remoteip", ip)
                     .asString();
@@ -177,6 +182,24 @@ public class Reference
         session.close();
 
         return secretKey != null;
+    }
+
+    public static void loadDevWarsProperties()
+    {
+        String propertiesFileName = "devwars.properties";
+
+        InputStream propertiesInputStream = Reference.class.getClassLoader().getResourceAsStream(propertiesFileName);
+
+        try {
+            Reference.properties.load(propertiesInputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getEnvironmentProperty(String key)
+    {
+        return (String) Reference.properties.get(key);
     }
 
 }

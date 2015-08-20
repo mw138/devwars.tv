@@ -31,6 +31,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Ref;
 import java.util.Enumeration;
 
 /**
@@ -122,7 +123,7 @@ public class UserConnectionController
                     "state=generate_a_unique_state_value&" +
                     "redirect_uri=" + Reference.rootURL + "/v1/connect/google_callback&"+
                     "response_type=code&" +
-                    "client_id=" + Security.googleClientID + "&" +
+                    "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
                     "access_type=offline");
         } catch (Exception e)
         {
@@ -176,8 +177,8 @@ public class UserConnectionController
         if (allowed)
         {
             ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.setOAuthConsumerKey(Security.twitterConsumerKey);
-            builder.setOAuthConsumerSecret(Security.twitterConsumerSecret);
+            builder.setOAuthConsumerKey(Reference.getEnvironmentProperty("twitterConsumerKey"));
+            builder.setOAuthConsumerSecret(Reference.getEnvironmentProperty("twitterConsumerSecret"));
             Configuration configuration = builder.build();
             TwitterFactory factory = new TwitterFactory(configuration);
             Twitter twitter = factory.getInstance();
@@ -249,7 +250,7 @@ public class UserConnectionController
         {
             response.sendRedirect("https://api.twitch.tv/kraken/oauth2/authorize" +
                     "?response_type=code" +
-                    "&client_id=" + Security.twitchClientID2 +
+                    "&client_id=" + Reference.getEnvironmentProperty("twitchClientID2") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/connect/twitch_callback" +
                     "&scope=user_read");
         } catch (IOException e)
@@ -335,7 +336,7 @@ public class UserConnectionController
         try
         {
             response.sendRedirect("https://www.facebook.com/dialog/oauth?" +
-                    "client_id=" + Security.facebookAppID +
+                    "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/connect/facebook_callback" +
                     "&response_type=code" +
                     "&scope=email");
@@ -388,7 +389,7 @@ public class UserConnectionController
         try
         {
             response.sendRedirect("https://github.com/login/oauth/authorize?" +
-                    "client_id=" + Security.githubClientID2 +
+                    "client_id=" + Reference.getEnvironmentProperty("githubClientID2") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/connect/github_callback" +
                     "&scope=user,user:email" +
                     "&state=" + Util.randomText(32));

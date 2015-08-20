@@ -214,7 +214,7 @@ public class UserController extends BaseController
 
             String subject = "DevWars account confirmation";
             String message = "Click here to confirm your account : " + Reference.rootURL + "/v1/user/validate?uid=" + uid;
-            Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, message, email);
+            Util.sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, message, email);
 
             responseEntity = new ResponseEntity("We have sent an email to " + email, HttpStatus.OK);
 
@@ -1045,8 +1045,8 @@ public class UserController extends BaseController
         Properties properties = new Properties();
 
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.user", Security.emailUsername);
-        properties.put("mail.smtp.password", Security.emailPassword);
+        properties.put("mail.smtp.user", Reference.getEnvironmentProperty("emailUsername"));
+        properties.put("mail.smtp.password", Reference.getEnvironmentProperty("emailPassword"));
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
@@ -1056,13 +1056,13 @@ public class UserController extends BaseController
             @Override
             protected PasswordAuthentication getPasswordAuthentication()
             {
-                return new PasswordAuthentication(Security.emailUsername, Security.emailPassword);
+                return new PasswordAuthentication(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"));
             }
         });
 
         MimeMessage emailMessage = new MimeMessage(session);
 
-        emailMessage.setFrom(new InternetAddress(Security.emailUsername));
+        emailMessage.setFrom(new InternetAddress(Reference.getEnvironmentProperty("emailUsername")));
         emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
         emailMessage.setSubject("test");
         emailMessage.setText(message);

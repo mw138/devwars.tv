@@ -41,6 +41,8 @@ public class StartupServlet
     @PostConstruct
     public void postConstruct()
     {
+        Reference.loadDevWarsProperties();
+
         try
         {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -55,14 +57,14 @@ public class StartupServlet
             builder.setExclusionStrategies(new ExclusionStrategy());
 
             Twitter twitter = TwitterFactory.getSingleton();
-            twitter.setOAuthConsumer(Security.twitterConsumerKey, Security.twitterConsumerSecret);
+            twitter.setOAuthConsumer(Reference.getEnvironmentProperty("twitterConsumerKey"), Reference.getEnvironmentProperty("twitterConsumerSecret"));
 
             Reference.gson = builder.create();
 
             DatabaseManager.init();
 
             Reference.firebase = new Firebase("https://devwars-tv.firebaseio.com");;
-            Reference.firebase.authWithCustomToken(Security.firebaseToken , new Firebase.AuthResultHandler() {
+            Reference.firebase.authWithCustomToken(Reference.getEnvironmentProperty("firebaseToken") , new Firebase.AuthResultHandler() {
                 @Override
                 public void onAuthenticated(AuthData authData)
                 {

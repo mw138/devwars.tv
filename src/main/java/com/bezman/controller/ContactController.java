@@ -52,7 +52,7 @@ public class ContactController
             String subject = "New " + type + " Inquiry from " + name;
             String message = "Name: " +  name + "\nEmail: " + email + "\nText: " + text + "\nType: " + type;
 
-            Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, message, "support@devwars.tv");
+            Util.sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, message, "support@devwars.tv");
 
             session.save(contact);
 

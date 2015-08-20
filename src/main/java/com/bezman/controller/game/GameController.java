@@ -208,7 +208,7 @@ public class GameController
             if(game.isActive())
             {
                 Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
-                        .queryString("auth", Security.firebaseToken)
+                        .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
                         .body(Reference.objectMapper.writeValueAsString(game))
                         .asString()
                         .getBody();
@@ -291,7 +291,7 @@ public class GameController
         if (game != null)
         {
             GameService.downloadCurrentGame(game);
-            
+
             Team team = game.getTeamByID(winnerID);
 
             if (team != null)

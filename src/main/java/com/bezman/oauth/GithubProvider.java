@@ -52,12 +52,12 @@ public class GithubProvider implements IProvider
 
     public static User userForCode(String code)
     {
-        return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/github_callback", Security.githubClientID, Security.githubSecret);
+        return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/github_callback", Reference.getEnvironmentProperty("githubClientID"), Reference.getEnvironmentProperty("githubSecret"));
     }
 
     public static User userForCode2(String code)
     {
-        return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/github_callback", Security.githubClientID2, Security.githubSecret2);
+        return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/github_callback", Reference.getEnvironmentProperty("githubClientID2"), Reference.getEnvironmentProperty("githubSecret2"));
     }
 
 }
