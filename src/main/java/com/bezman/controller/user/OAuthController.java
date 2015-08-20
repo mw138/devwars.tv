@@ -1,13 +1,12 @@
 package com.bezman.controller.user;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.model.Ranking;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.oauth.*;
-import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;

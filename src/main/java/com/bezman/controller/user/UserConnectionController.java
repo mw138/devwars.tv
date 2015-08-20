@@ -1,6 +1,6 @@
 package com.bezman.controller.user;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.DevBits;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
@@ -8,7 +8,6 @@ import com.bezman.Reference.util.Util;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.*;
 import com.bezman.oauth.*;
-import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
@@ -27,11 +26,9 @@ import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Ref;
 import java.util.Enumeration;
 
 /**

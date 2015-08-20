@@ -1,7 +1,5 @@
 package com.bezman.controller.game;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.AuthedUser;
@@ -9,9 +7,6 @@ import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.model.*;
-import com.bezman.service.GameService;
-import com.bezman.service.Security;
-import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

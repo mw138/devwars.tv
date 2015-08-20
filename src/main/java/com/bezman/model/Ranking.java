@@ -1,16 +1,6 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
-import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
-import javax.persistence.PostLoad;
-import javax.persistence.PostUpdate;
-import javax.persistence.PreUpdate;
-import java.sql.Ref;
 
 /**
  * Created by Terence on 1/26/2015.

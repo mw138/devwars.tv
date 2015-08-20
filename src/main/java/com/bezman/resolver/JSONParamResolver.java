@@ -29,6 +29,6 @@ public class JSONParamResolver implements HandlerMethodArgumentResolver
 
         JSONParam param = methodParameter.getParameterAnnotation(JSONParam.class);
 
-        return Reference.gson.fromJson(request.getParameter(param.value()), methodParameter.getParameterType());
+        return Reference.objectMapper.readValue(request.getParameter(param.value()), methodParameter.getParameterType());
     }
 }

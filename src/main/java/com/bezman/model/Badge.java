@@ -1,9 +1,7 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.exclusion.GsonExclude;
+import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 

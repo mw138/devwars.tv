@@ -1,8 +1,5 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
-import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.*;
 import com.bezman.hibernate.expression.DayCriterion;
 import com.bezman.hibernate.expression.MonthCriterion;
@@ -11,24 +8,14 @@ import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.StringType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
-import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by Terence on 4/11/2015.

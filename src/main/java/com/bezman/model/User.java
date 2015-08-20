@@ -1,17 +1,12 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
+import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.UserPermissionFilter;
-import com.bezman.exclusion.GsonExclude;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
-import com.bezman.service.Security;
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;

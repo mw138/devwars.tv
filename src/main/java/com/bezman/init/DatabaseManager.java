@@ -1,4 +1,4 @@
-package com.bezman.Reference;
+package com.bezman.init;
 
 import com.bezman.hibernate.interceptor.HibernateInterceptor;
 import com.google.gson.Gson;
@@ -20,14 +20,13 @@ import java.util.Map;
 /**
  * Created by Terence on 1/19/2015.
  */
-public class DatabaseManager
+public class DatabaseManager implements IInit
 {
     public static SessionFactory sessionFactory;
 
-    public static void init()
+    @Override
+    public void init()
     {
-        Gson gson = new Gson();
-
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
 

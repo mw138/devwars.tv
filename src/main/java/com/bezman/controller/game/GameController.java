@@ -1,25 +1,21 @@
 package com.bezman.controller.game;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.model.*;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
-import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.metamodel.relational.Database;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,13 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Response;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Ref;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -175,7 +167,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method =  RequestMethod.POST)
-    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws JsonProcessingException, UnirestException {
+    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException {
         Session session = DatabaseManager.getSession();
 
         Game oldGame = GameService.getGame(id);
@@ -186,7 +178,7 @@ public class GameController
             return new ResponseEntity("Game for given id doesn't exist", HttpStatus.NOT_FOUND);
         } else
         {
-            Game game = Reference.gson.fromJson(json, Game.class);
+            Game game = Reference.objectMapper.readValue(json, Game.class);
 
             session = DatabaseManager.getSession();
             session.beginTransaction();
@@ -742,11 +734,10 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/player/{playerID}/edit")
-    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json)
-    {
+    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json) throws IOException {
         Team team = new Team();
         team.setId(teamID);
-        Player player = Reference.gson.fromJson(json, Player.class);
+        Player player = Reference.objectMapper.readValue(json, Player.class);
         player.setTeam(team);
 
         if (player != null)

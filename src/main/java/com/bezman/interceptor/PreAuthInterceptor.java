@@ -1,33 +1,22 @@
 package com.bezman.interceptor;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.Reference;
-import com.bezman.Reference.Request;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.Reference.util.Util;
 import com.bezman.annotation.AllowCrossOrigin;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.Access;
-import com.bezman.model.SecretKey;
 import com.bezman.model.User;
 import com.bezman.model.UserSession;
-import com.google.gson.annotations.Expose;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.metamodel.relational.Database;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Ref;
 
 /**
  * Created by Terence on 3/22/2015.

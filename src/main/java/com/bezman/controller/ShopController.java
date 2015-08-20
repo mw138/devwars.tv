@@ -1,6 +1,6 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.ShopItem;

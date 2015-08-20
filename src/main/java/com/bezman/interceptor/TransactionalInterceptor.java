@@ -1,18 +1,14 @@
 package com.bezman.interceptor;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.annotation.Transactional;
-import com.bezman.annotation.UnitOfWork;
-import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.metamodel.relational.Database;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 
 /**
  * Class to open and close transactions on routes

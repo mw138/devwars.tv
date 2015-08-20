@@ -1,6 +1,6 @@
 package com.bezman.Reference.util;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
