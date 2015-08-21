@@ -9,11 +9,11 @@ angular.module("app.games", [])
                     controller: "GameController"
                 });
         }])
-    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService) {
+    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", "$location", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location) {
         $scope.games = [];
         $scope.AuthService = AuthService;
 
-        $scope.selectedSeason = 1;
+        $scope.selectedSeason = null;
 
         $scope.options = {
             thickness: 200,
@@ -27,7 +27,7 @@ angular.module("app.games", [])
 
         $scope.DialogService = DialogService;
 
-        GameService.pastGames(0, 8, null, function (success) {
+        GameService.pastGames(0, 8, function (success) {
             var seasons = success.data;
             var games = [];
 
@@ -62,10 +62,24 @@ angular.module("app.games", [])
 
             $scope.pastGames = games;
 
-            if($(document).width() > 840)
-                $scope.setSelectedGame($scope.pastGames[0]);
+            var game = $location.search().game;
+            var season = $location.search().season;
 
-            $scope.setSeasonSelected(1);
+            if(game && season)
+            {
+                $scope.pastGames = $scope.pastGames.filter(function (a) {
+                    return a.season != season;
+                });
+
+                GameService.getGameList(game, 10, function (success) {
+                    success.data.forEach(function (game) {
+                        $scope.pastGames.push(game);
+                    });
+
+                    $scope.setSeasonSelected(season);
+                }, angular.noop);
+            } else $scope.setSeasonSelected(1);
+
         }, angular.noop);
 
         GameService.upcomingGames(function (success) {
@@ -78,13 +92,9 @@ angular.module("app.games", [])
 
         $scope.setSeasonSelected = function (season) {
             if($(document).width() > 840) {
-                if($scope.selectedGame) {
-                    if ($scope.selectedGame.season !== season) {
-                        $scope.pastGames.forEach(function (game) {
-                            if (game.season === season) $scope.selectedGame = game;
-                        })
-                    }
-                }
+                $scope.selectedGame = $scope.pastGames.filter(function (game) {
+                    return game.season == season;
+                })[0];
             } else {
                 $scope.selectedGame = null;
             }

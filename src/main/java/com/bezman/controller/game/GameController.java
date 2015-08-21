@@ -61,13 +61,13 @@ public class GameController
         return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
     }
 
-    @UnitOfWork
     /**
      * Retrieves upcoming DevWars games
      * @param request
      * @param response
      * @return
      */
+    @UnitOfWork
     @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
     public ResponseEntity upcomingGames(SessionImpl session)
@@ -98,8 +98,7 @@ public class GameController
     public ResponseEntity pastGames(
             SessionImpl session,
             @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
-            @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset,
-            @RequestParam(value = "season", required = false) Integer querySeason
+            @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
     )
     {
         /**
@@ -137,7 +136,26 @@ public class GameController
         }
     }
 
-    @Transactional
+    /**
+     * Get list of games moving backwards from starting point
+     * @return List of games in descending order
+     */
+    @UnitOfWork
+    @RequestMapping("/pastgamelist")
+    public ResponseEntity getGameList(
+            @RequestParam("firstGame") int id,
+            @RequestParam(value = "count", required = false, defaultValue = "10") int count,
+            SessionImpl session)
+    {
+        List<Game> pastGames = session.createCriteria(Game.class)
+                .add(Restrictions.le("id", id))
+                .setMaxResults(count)
+                .addOrder(Order.desc("id"))
+                .list();
+
+        return new ResponseEntity(pastGames, HttpStatus.OK);
+    }
+
     /**
      * Creates a game with the default information
      * @param request
@@ -146,6 +164,7 @@ public class GameController
      * @param name Name of the game (Classic or Zen Garden)
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
     public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
@@ -242,7 +261,6 @@ public class GameController
         }
     }
 
-    @Transactional
     /**
      * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
      * @param request
@@ -250,6 +268,7 @@ public class GameController
      * @param id ID of game to activate
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/activate")
     public ResponseEntity activateGame(SessionImpl session, @PathVariable("id") int id)
@@ -270,7 +289,6 @@ public class GameController
         }
     }
 
-    @Transactional
     /**
      * Sets the game to inactive
      * @param request
@@ -278,6 +296,7 @@ public class GameController
      * @param id ID of game to deactivate
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/deactivate")
     public ResponseEntity deactivateGame(SessionImpl session, @PathVariable("id") int id)
