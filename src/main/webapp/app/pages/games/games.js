@@ -99,7 +99,7 @@ angular.module("app.games", [])
                 $scope.selectedGame = null;
             }
 
-            $scope.selectedSeason = season;
+            $scope.selectedSeason = parseInt(season);
         };
 
         $scope.shouldGameShow = function (game) {
