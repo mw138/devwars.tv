@@ -5,6 +5,11 @@
 
         <div class="gameContent row">
             <div class="gamesListColumn">
+               <div class="tabBox">
+				   <a href="#" class="tab active">Season 1</a>
+				   <a href="#" class="tab">Season 2</a>
+				</div> <!-- .tabBox -->
+               
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
                         <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
@@ -42,6 +47,9 @@
 
 
             <div class="gameStat" ng-if="selectedGame">
+				<div class="tabBox">
+					<a href="#" class="tab active">Game {{selectedGame.id}}</a>
+				</div> <!-- .tabBox -->
                 <div class="gameBanner gameBanner--classic">
                     <div class="scanlines"></div>
                     <h2>
@@ -186,6 +194,10 @@
 
         <div class="gameContent row">
             <div class="gamesListColumn">
+				<div class="tabBox">
+					<a href="#" class="tab active">Season 1</a>
+					<a href="#" class="tab">Season 2</a>
+				</div> <!-- .tabBox -->
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
                         <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
@@ -219,6 +231,9 @@
                         </div>
                     </div> <!-- .game -->
                     <div class="gameStat">
+						<div class="tabBox">
+							<a href="#" class="tab active">Game {{selectedGame.id}}</a>
+						</div> <!-- .tabBox -->
                         <div class="gameBanner gameBanner--classic">
                             <div class="scanlines"></div>
                             <h2>
