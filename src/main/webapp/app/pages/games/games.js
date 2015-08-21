@@ -13,6 +13,8 @@ angular.module("app.games", [])
         $scope.games = [];
         $scope.AuthService = AuthService;
 
+        $scope.selectedSeason = 1;
+
         $scope.options = {
             thickness: 200,
             legend: false
@@ -25,8 +27,17 @@ angular.module("app.games", [])
 
         $scope.DialogService = DialogService;
 
-        GameService.pastGames(0, 8, function (success) {
-            var games = success.data;
+        GameService.pastGames(0, 8, null, function (success) {
+            var seasons = success.data;
+            var games = [];
+
+            for(var seasonKey in seasons) {
+                var season = seasons[seasonKey];
+
+                season.forEach(function (game) {
+                    games.push(game);
+                });
+            }
 
             for(var key in games) {
                 var game = games[key];
@@ -53,11 +64,37 @@ angular.module("app.games", [])
 
             if($(document).width() > 840)
                 $scope.setSelectedGame($scope.pastGames[0]);
+
+            $scope.setSeasonSelected(1);
         }, angular.noop);
 
         GameService.upcomingGames(function (success) {
             $scope.upcomingGames = success.data;
         }, angular.noop);
+
+        $scope.isSeasonSelected = function (season) {
+            return $scope.selectedSeason === season;
+        };
+
+        $scope.setSeasonSelected = function (season) {
+            if($(document).width() > 840) {
+                if($scope.selectedGame) {
+                    if ($scope.selectedGame.season !== season) {
+                        $scope.pastGames.forEach(function (game) {
+                            if (game.season === season) $scope.selectedGame = game;
+                        })
+                    }
+                }
+            } else {
+                $scope.selectedGame = null;
+            }
+
+            $scope.selectedSeason = season;
+        };
+
+        $scope.shouldGameShow = function (game) {
+            return game.season == $scope.selectedSeason;
+        };
 
         $scope.signupForGame = function (game, $event) {
             if (AuthService.user && AuthService.user.role !== "PENDING") {
@@ -102,15 +139,15 @@ angular.module("app.games", [])
             $scope.designData = $scope.dataForGameCategory($scope.selectedGame, 'design');
             $scope.funcData = $scope.dataForGameCategory($scope.selectedGame, 'func');
             $scope.codeData = $scope.dataForGameCategory($scope.selectedGame, 'code');
-        }
+        };
 
         $scope.isGameSelected = function (game) {
             return game.id === $scope.selectedGame.id;
-        }
+        };
 
         $scope.moderateGame = function (game) {
             window.location = "/#/gpanel?game=" + game.id;
-        }
+        };
 
         $scope.dataForGameCategory = function (game, category) {
             var data = [];

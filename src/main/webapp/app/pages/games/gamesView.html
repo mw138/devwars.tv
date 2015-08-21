@@ -6,8 +6,8 @@
         <div class="gameContent row">
             <div class="gamesListColumn">
                <div class="tabBox">
-				   <a href="#" class="tab active">Season 1</a>
-				   <a href="#" class="tab">Season 2</a>
+                   <a href="#" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
+                   <a href="#" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
 				</div> <!-- .tabBox -->
                
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
@@ -27,7 +27,7 @@
                     </div>
                 </div> <!-- .game -->
 
-                <div class="game" ng-click="setSelectedGame(game)" ng-class="{'game--active' : isGameSelected(game)}" ng-repeat="game in pastGames">
+                <div class="game" ng-click="setSelectedGame(game)" ng-class="{'game--active' : isGameSelected(game)}" ng-repeat="game in pastGames" ng-if="shouldGameShow(game)">
                     <div class="gameDate">
                         <span class="gameDate__month">{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
                         <span class="gameDate__day">{{game.timestamp | date : 'dd' : 'UTC'}}</span>
@@ -195,8 +195,8 @@
         <div class="gameContent row">
             <div class="gamesListColumn">
 				<div class="tabBox">
-					<a href="#" class="tab active">Season 1</a>
-					<a href="#" class="tab">Season 2</a>
+					<a href="#" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
+					<a href="#" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
 				</div> <!-- .tabBox -->
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
@@ -214,7 +214,7 @@
                     </div>
                 </div> <!-- .game -->
 
-                <div class="gameMobile" ng-repeat="game in pastGames">
+                <div class="gameMobile" ng-repeat="game in pastGames" ng-if="shouldGameShow(game)">
                     <div class="game game{{$index}}" ng-click="setSelectedGame(game, $index)" ng-class="{'game--active' : isGameSelected(game)}">
                         <div class="gameDate">
                             <span>{{game.timestamp | date : 'MMM' : 'UTC'}}</span>

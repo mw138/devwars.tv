@@ -11,9 +11,17 @@ import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.hibernate.sql.Select;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,9 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -79,23 +86,47 @@ public class GameController
         }
     }
 
-    @UnitOfWork
     /**
      * Retrieves games that have been done in the past
-     * @param count
-     * @param offset
+     * @param queryCount
+     * @param queryOffset
+     * @param querySeason
      * @return
      */
+    @UnitOfWork
     @RequestMapping("/pastgames")
-    public ResponseEntity pastGames(SessionImpl session, @RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
+    public ResponseEntity pastGames(
+            SessionImpl session,
+            @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
+            @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset,
+            @RequestParam(value = "season", required = false) Integer querySeason
+    )
     {
-        count = count > 8 ? 8 : count;
+        /**
+         * Make sure count isn't too high
+         */
+        final Integer count = queryCount > 8 ? 8 : queryCount;
 
-        Query query = session.createQuery("from Game where done = true order by id desc");
-        query.setFirstResult(offset);
-        query.setMaxResults(count);
+        /**
+         * Get all seasons
+         */
+        Criteria criteria = session.createCriteria(Game.class)
+                .setProjection(Projections.projectionList()
+                                .add(Projections.groupProperty("season"))
+                );
 
-        List<Game> pastGames = query.list();
+        HashMap pastGames = new HashMap<>();
+
+        criteria.list().stream()
+                .forEach(season ->
+                {
+                    Criteria seasonCriteria = session.createCriteria(Game.class)
+                            .add(Restrictions.eq("season", season))
+                            .setMaxResults(count)
+                            .setFirstResult(queryOffset);
+
+                    pastGames.put(season, seasonCriteria.list());
+                });
 
         if (pastGames != null || (pastGames != null && pastGames.size() > 0))
         {
