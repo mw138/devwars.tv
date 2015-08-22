@@ -117,6 +117,7 @@ public class UserService
 
         Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
         userQuery.setString("username",username.toLowerCase());
+        userQuery.setMaxResults(1);
 
         User user = (User) userQuery.uniqueResult();
 
