@@ -79,14 +79,14 @@ public class BlogController
 
     /**
      * @param session
-     * @param id of requested blog post
+     * @param title Title of the blog post
      * @return The requested blog post
      */
     @UnitOfWork
-    @RequestMapping("/{id}")
-    public ResponseEntity getBlog(SessionImpl session, @PathVariable("id") int id)
+    @RequestMapping("/{title}")
+    public ResponseEntity getBlog(SessionImpl session, @PathVariable("title") String title)
     {
-        BlogPost blogPost = BlogService.getPost(id);
+        BlogPost blogPost = BlogService.getPostByTitle(title);
 
         if (blogPost != null)
         {

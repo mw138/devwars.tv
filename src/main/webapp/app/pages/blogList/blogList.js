@@ -2,14 +2,14 @@ angular.module("app.blog", [])
     .config(['$stateProvider',
         function ($stateProvider) {
             $stateProvider
-                .state('blog', {
+                .state('blogList', {
                     url: '/blog',
-                    templateUrl: '/app/pages/blog/blogListView.html',
-                    controller: "BlogController"
+                    templateUrl: '/app/pages/blogList/blogListView.html',
+                    controller: "BlogListController"
                 });
 
         }])
-    .controller("BlogController", ["$scope", "BlogService", "$mdDialog", "ToastService", "AuthService", "$anchorScroll", "$sce", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce) {
+    .controller("BlogListController", ["$scope", "BlogService", "$mdDialog", "ToastService", "AuthService", "$anchorScroll", "$sce", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce) {
         $scope.posts = [];
 
         $scope.AuthService = AuthService;

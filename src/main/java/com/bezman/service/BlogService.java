@@ -4,6 +4,9 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.SessionImpl;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -53,6 +56,20 @@ public class BlogService
         session.close();
 
         return post;
+    }
+
+    public static BlogPost getPostByTitle(String title)
+    {
+        Session session = DatabaseManager.getSession();
+
+        BlogPost blogPost = (BlogPost) session.createCriteria(BlogPost.class)
+                .add(Restrictions.eq("title", title.replace("-", " ")))
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.close();
+
+        return blogPost;
     }
 
 }
