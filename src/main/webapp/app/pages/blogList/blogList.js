@@ -4,7 +4,7 @@ angular.module("app.blog", [])
             $stateProvider
                 .state('blog', {
                     url: '/blog',
-                    templateUrl: '/app/pages/blog/blogView.html',
+                    templateUrl: '/app/pages/blog/blogListView.html',
                     controller: "BlogController"
                 });
 
