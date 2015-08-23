@@ -359,7 +359,7 @@ public class User extends BaseModel
     @JsonIgnore
     public boolean isNative()
     {
-        return this.getProvider().equals("");
+        return "".equals(this.getProvider());
     }
 
     public void logout()
