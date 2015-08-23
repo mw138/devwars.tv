@@ -8,6 +8,13 @@ angular.module("app.blogList", [])
                     controller: "BlogController"
                 });
         }])
-    .controller("BlogController", function ($scope, $stateParams) {
+    .controller("BlogController", ["$scope", "$stateParams", "BlogService", "$location", function ($scope, $stateParams, BlogService, $location) {
 
-    });
+        if($stateParams.title)
+        {
+            BlogService.getBlog($stateParams.title, function (success) {
+                $scope.post = success.data;
+            }, angular.noop);
+        } else $location.path('/');
+
+    }]);

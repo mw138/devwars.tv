@@ -15,7 +15,7 @@ angular.module("app.blog", [])
         $scope.AuthService = AuthService;
 
         $scope.updatePosts = function () {
-            BlogService.allPosts(function (success) {
+            BlogService.allPosts(null, null, null, function (success) {
                 $scope.posts = success.data;
             }, function (error) {
                 console.log(error);
