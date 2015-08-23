@@ -3,23 +3,7 @@
     <div class="col-2">
         <div class="left">
 			<button class="button newPostButton" ng-click="newPost($event)" ng-if="AuthService.isAtLeast('BLOGGER')">New Post</button>
-			<div id="{{post.id}}" class="blog__post" ng-repeat="post in posts">
-				<div class="blog__post--close">
-					<a href="#" ng-if="AuthService.isAtLeast('BLOGGER')" ng-click="editPost(post, $event)"><i class="fa fa-pencil"></i></a>
-					<a href="#" ng-if="AuthService.isAtLeast('BLOGGER')" ng-click="deletePost(post)"><i class="fa fa-times"></i></a>
-				</div>
-				<h3 class="blog__post--title">{{post.title}}</h3>
-				<p class="blog__post--poster">By {{post.user.username}} - {{post.timestamp | date : 'mediumDate' : 'UTC'}}</p>
-				<img src="{{post.image_url}}"/>
-				<p class="blog__post--summary">{{post.description}}</p>
-				<p class="blog__post--content" ng-bind-html="post.text"></p>
-				<md-divider></md-divider>
-				<div class="blog__share">
-					<a href="https://twitter.com/share" class="twitter-share-button" data-text="{{post.title}}" data-via="devwarstv">Tweet</a>
-					<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-					<div class="fb-share-button" data-href="https://devwars.tv/#/blog#{{post.id}}" data-layout="button_count"></div>
-				</div>
-			</div> <!-- .blog__posts -->
+			<blog class="blog-post" post="post" ng-repeat="post in posts"></blog>
         </div> <!-- .left -->
         <div class="right">
 			<sidebar></sidebar> 

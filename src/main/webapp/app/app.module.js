@@ -50,6 +50,7 @@ var app = angular.module('app', [
     'app.leaderboards',
     'app.modCP',
     'app.blogList',
+    'app.blogDirective',
 
     //Poll
     'LivePoll-Client',

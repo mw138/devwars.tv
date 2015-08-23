@@ -1,6 +1,14 @@
 .blogView {
 	margin-top: 60px;
-	
+
+    .blog-post {
+      display: block;
+
+      &:not(:first-child) {
+        margin-top: 75px;
+      }
+    }
+
 	.button.newPostButton {
 	  margin-top: 20px;
 	}
