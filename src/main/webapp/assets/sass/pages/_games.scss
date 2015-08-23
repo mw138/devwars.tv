@@ -67,15 +67,13 @@
     border: 8px solid;
     position: absolute;
     top: calc(50% - 100px);
-    left: -80px;
-    top: -42px;
-    transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
+    left: -20px;
+    top: -50px;
+    .rotate(25);
 
     .arrow__inner {
       width: 100px;
-      height: 100px;
+      height: 110px;
     }
   }
 
@@ -384,10 +382,11 @@
         border-bottom: 1px solid;
 
         h3 {
+          color: $xdgray;
           display: inline-block;
           font-size: 16px;
           position: relative;
-          left: 80px;
+          left: 10px;
         }
         span.event {
           padding: 2px 7px;
@@ -464,10 +463,9 @@
 
     .team--blue {
       float: left;
+      border-top: 5px solid $main-color;
+      border-bottom: 5px solid $main-color;
 
-      .teamHeader {
-        color: $main-color;
-      }
       span.role {
         color: $main-color;
       }
@@ -479,10 +477,9 @@
 
     .team--red {
       float: right;
+      border-top: 5px solid $accent-color;
+      border-bottom: 5px solid $accent-color;
 
-      .teamHeader {
-        color: $accent-color;
-      }
       span.role {
         color: $accent-color;
       }
@@ -492,29 +489,13 @@
     }
 
     .team--win {
-      .teamHeader {
-        border-color: color($green, light);
-      }
-      &.team {
-		border-color: color($green, light);
-      }
 		span.event { border-color: color($green, light); color: color($green, light); }
-      span.score {
-		  color: color($green, light);
-      }
+    span.score { color: color($green, light); }
     }
 
     .team--lose {
-      .teamHeader {
-		  border-color: color($red, light);
-      }
-      &.team {
-		  border-color: color($red, light);
-      }
 		span.event { border-color: color($red, light); color: color($red, light); }
-      span.score {
-		  color: color($red, light);
-      }
+    span.score { color: color($green, light); }
     }
   } /* .teamBox */
 
@@ -729,9 +710,64 @@
 		
 	}
 	
-	
-	
-	
-	
-	
+  .votes-container {
+    float: left;
+    width: 320px;
+    font-size: 0;
+    border-right: 1px solid #363636;
+    
+    &.func-vote {
+      float: right;
+      border: none;
+    }
+    
+    h3 {
+      text-align: center;
+      text-transform: uppercase;
+      padding: 15px 0;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 400;
+    }
+    
+    span {
+      display: inline-block;
+      width: 34px;
+      line-height: 20px;
+      vertical-align: middle;
+      text-align: center;
+      color: #fff;
+      font-size: 20px;
+    }
+    
+    .red-team__votes {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      width: 250px;
+      height: 20px;
+      background: #e91e63;
+    }
+    
+    .blue-team__votes {
+      height: 100%;
+      width: 65%;
+      background: #03a9f4;
+    }
+    
+    .separator {
+      position: absolute;
+      top: -5px;
+      left: 33%;
+      margin-left: -1px;
+      width: 2px;
+      height: 30px;
+      background: #fff;
+    }
+    
+    .separator-right {
+      left: 66%;
+      margin-left: 0;
+    }
+  }
 }

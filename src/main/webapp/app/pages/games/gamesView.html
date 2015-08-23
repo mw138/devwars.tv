@@ -6,8 +6,8 @@
         <div class="gameContent row">
             <div class="gamesListColumn">
                <div class="tabBox">
-                   <a href="#" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
-                   <a href="#" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
+                   <a href="" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
+                   <a href="" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
 				</div> <!-- .tabBox -->
                
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
@@ -98,7 +98,7 @@
                             <div class="arrow">
                                 <div class="arrow__inner"></div>
                             </div>
-                            <h3>Team {{team.name}}</h3>
+                            <h3>{{team.name}}</h3>
                             <span ng-if="team.win" class="event">WIN</span>
                             <span ng-if="!team.win" class="event">LOSE</span>
                         </div>
@@ -145,34 +145,8 @@
                         <span>Votes</span>
                     </div>
 
-                    <div class="chartsContainer" layout="row" layout-align="space-around center">
-                        <div class="chartContainer">
-                            <div class="innerPie">
-                                <span>ROUND 1</span>
-                                <h3>DESIGN</h3>
-                                <span>{{ selectedGame.teams.red.designVotes + selectedGame.teams.designVotes }} VOTES</span>
-                            </div>
-                            <pie-chart data="designData" options="options"></pie-chart>
-                        </div>
+                
 
-                        <div class="chartContainer" ng-if="dataForGameCategory(selectedGame, 'func').length > 0">
-                            <div class="innerPie">
-                                <span>ROUND 2</span>
-                                <h3>FUNC</h3>
-                                <span>{{ selectedGame.teams.red.funcVotes + selectedGame.teams.funcVotes }} VOTES</span>
-                            </div>
-                            <pie-chart data="funcData" options="options"></pie-chart>
-                        </div>
-
-                        <div class="chartContainer" ng-if="dataForGameCategory(selectedGame, 'code').length > 0">
-                            <div class="innerPie">
-                                <span>ROUND 3</span>
-                                <h3>CODE</h3>
-                                <span>{{ selectedGame.teams.red.codeVotes + selectedGame.teams.codeVotes }} VOTES</span>
-                            </div>
-                            <pie-chart data="codeData" options="options"></pie-chart>
-                        </div>
-                    </div>
                 </div>
 
             </div> <!-- .gameStat -->
@@ -282,7 +256,7 @@
                                     <div class="arrow">
                                         <div class="arrow__inner"></div>
                                     </div>
-                                    <h3>Team {{team.name}}</h3>
+                                    <h3>{{team.name}}</h3>
                                     <span ng-if="team.win" class="event">WIN</span>
                                     <span ng-if="!team.win" class="event">LOSE</span>
                                 </div>
@@ -329,34 +303,28 @@
                                 <span>Votes</span>
                             </div>
 
-                            <div class="chartsContainer">
-                                <div class="chartContainer">
-                                    <div class="innerPie">
-                                        <span>ROUND 1</span>
-                                        <h3>DESIGN</h3>
-                                        <span>{{ game.teams.red.designVotes + game.teams.designVotes }} VOTES</span>
-                                    </div>
-                                    <pie-chart data="designData" options="options"></pie-chart>
+                            <div class="votes-container">
+                                <h3>Design</h3>
+                                <span class="blue-team__score">2</span>
+                                <div class="red-team__votes">
+                                    <div class="separator"></div>
+                                    <div class="separator separator-right"></div>
+                                    <div class="blue-team__votes"></div>
                                 </div>
-
-                                <div class="chartContainer" ng-if="dataForGameCategory(game, 'func').length > 0">
-                                    <div class="innerPie">
-                                        <span>ROUND 2</span>
-                                        <h3>FUNC</h3>
-                                        <span>{{ game.teams.red.funcVotes + game.teams.funcVotes }} VOTES</span>
-                                    </div>
-                                    <pie-chart data="funcData" options="options"></pie-chart>
-                                </div>
-
-                                <div class="chartContainer" ng-if="dataForGameCategory(game, 'code').length > 0">
-                                    <div class="innerPie">
-                                        <span>ROUND 3</span>
-                                        <h3>CODE</h3>
-                                        <span>{{ game.teams.red.codeVotes + game.teams.codeVotes }} VOTES</span>
-                                    </div>
-                                    <pie-chart data="codeData" options="options"></pie-chart>
-                                </div>
+                                <span class="red-team__score">0</span>
                             </div>
+
+                            <div class="votes-container func-vote">
+                                <h3>Functionality</h3>
+                                <span class="blue-team__score">2</span>
+                                <div class="red-team__votes">
+                                    <div class="separator"></div>
+                                    <div class="separator separator-right"></div>
+                                    <div class="blue-team__votes"></div>
+                                </div>
+                                <span class="red-team__score">0</span>
+                            </div>
+
                         </div>
 
                     </div> <!-- .gameStat -->
