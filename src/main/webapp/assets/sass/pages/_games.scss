@@ -475,6 +475,10 @@
         color: $main-color;
       }
 
+      .arrow {
+        border-color: $main-color;
+      }
+
       .arrow__inner {
         background-color: $main-color;
       }
@@ -493,6 +497,11 @@
       span.role {
         color: $accent-color;
       }
+
+      .arrow {
+        border-color: $accent-color;
+      }
+
       .arrow__inner {
         background-color: $accent-color;
       }
