@@ -63,8 +63,6 @@ public class GameController
 
     /**
      * Retrieves upcoming DevWars games
-     * @param request
-     * @param response
      * @return
      */
     @UnitOfWork
@@ -90,7 +88,6 @@ public class GameController
      * Retrieves games that have been done in the past
      * @param queryCount
      * @param queryOffset
-     * @param querySeason
      * @return
      */
     @UnitOfWork
@@ -158,8 +155,6 @@ public class GameController
 
     /**
      * Creates a game with the default information
-     * @param request
-     * @param response
      * @param timestamp The time in UTC which the game will start
      * @param name Name of the game (Classic or Zen Garden)
      * @return
@@ -263,8 +258,6 @@ public class GameController
 
     /**
      * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
-     * @param request
-     * @param response
      * @param id ID of game to activate
      * @return
      */
@@ -291,8 +284,6 @@ public class GameController
 
     /**
      * Sets the game to inactive
-     * @param request
-     * @param response
      * @param id ID of game to deactivate
      * @return
      */

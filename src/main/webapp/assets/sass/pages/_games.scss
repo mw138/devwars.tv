@@ -69,7 +69,7 @@
     top: calc(50% - 100px);
     left: -20px;
     top: -50px;
-    .rotate(25);
+    @include rotate(25);
 
     .arrow__inner {
       width: 100px;
