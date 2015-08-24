@@ -1,16 +1,21 @@
 .blog-post__container {
-  margin: 20px;
+  position: relative;
+  margin: 0 0 60px;
   width: 670px;
   color: #fff;
 
   h1 {
-    padding: 0 30px 20px 0;
+    padding: 0 30px 5px 0;
     font-size: 32px;
     font-weight: bold;
     font-family: 'Open Sans', sans-serif;
   }
 
-  .info {
+  h3 {
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .post-info {
     padding: 0 0 15px;
 
     > span {
@@ -23,7 +28,7 @@
     }
   }
 
-  .tags {
+  .post-tags {
     padding: 0 0 15px;
     list-style-type: none;
     color: #636363;
@@ -57,7 +62,18 @@
     border: none;
   }
 
-  .sharebox {
+  .featured-image {
+    width: 100%;
+  }
+
+  .sub-heading {
+    margin: 25px 50px 20px 0;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .post-sharebox {
     margin: 30px 0 0;
 
     h2 {
@@ -97,25 +113,62 @@
       }
     }
   }
+
+  .read-more {
+    display: none;
+  }
 }
 
-.blog-post__content {
 
+
+.blog-post__content {
   margin: 0 30px 0 0;
 
+  p {
+    font-family: 'Open Sans', sans-serif;
+  }
+}
+
+
+.blog-post__preview {
+  border: 1px solid $dgray;
+
+  h1 {
+    padding: 20px 20px 0;
+    font-size: 22px;
+    background: $dgray;
+  }
+
+  .post-info {
+    padding: 0 20px 20px;
+    background: $dgray;
+  }
+
   .featured-image {
-    width: calc(100% + 30px);
+    padding: 20px;
+  }
+
+  hr,
+  .blog-post__content,
+  .post-sharebox {
+    display: none;
   }
 
   .sub-heading {
-    margin: 25px 50px 20px 0;
-    font-size: 16px;
-    font-weight: bold;
-    font-family: 'Open Sans', sans-serif;
+    display: block;
+    margin: 0;
+    padding: 0 20px 50px;
   }
 
-  p {
-    margin: 0 0 20px;
-    font-family: 'Open Sans', sans-serif;
+  .read-more {
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: $main-color;
+
+    &:hover {
+      color: $accent-color;
+    }
   }
 }
