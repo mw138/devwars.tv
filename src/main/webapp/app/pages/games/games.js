@@ -56,7 +56,13 @@ angular.module("app.games", [])
                         if(player.language.toLowerCase() === "js") sortedPlayers[2] = player;
                     }
 
-                    team.players = sortedPlayers;
+                    var actuallySorted = [];
+
+                    sortedPlayers.forEach(function (a) {
+                        if(a) actuallySorted.push(a);
+                    });
+
+                    team.players = actuallySorted;
                 }
             }
 
