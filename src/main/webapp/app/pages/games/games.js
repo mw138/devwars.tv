@@ -212,29 +212,16 @@ angular.module("app.games", [])
         };
 
         $scope.getVotePointsEarned = function (teamName, game) {
-            var otherTeam = null;
-            var team = null;
+            var votingPoints = $scope.getVotePointsForTeam(game, teamName, 'design');
+            votingPoints += $scope.getVotePointsForTeam(game, teamName, 'func');
 
-            if(teamName === "red") {
-                team = game.teams['red'];
-                otherTeam = game.teams['blue'];
-            } else if(teamName === "blue") {
-                team = game.teams['blue'];
-                otherTeam = game.teams['red'];
+            var objectivePoints = game.teams[teamName].completedObjectives.length;
+
+            if(objectivePoints == game.objectives.length) {
+                objectivePoints += 1;
             }
 
-            var total = 0;
-
-            if(team.designVotes >= otherTeam.designVotes && (team.designVotes !== 0 && otherTeam.designVotes !== 0)) total+=2;
-            if(team.funcVotes >= otherTeam.funcVotes  && (team.funcVotes !== 0 && otherTeam.funcVotes !== 0)) total+=2;
-            if(team.codeVotes >= otherTeam.codeVotes  && (team.codeVotes !== 0 && otherTeam.codeVotes !== 0)) total+=2;
-
-            //Last objective is two so add one if they aced
-            if(team.completedObjectives.length === game.objectives.length) {
-                total++;
-            }
-
-            return total;
+            return objectivePoints + votingPoints;
         };
 
         $scope.getOtherTeam = function (team, game) {
