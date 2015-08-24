@@ -106,6 +106,33 @@ angular.module("app.games", [])
             return game.season == $scope.selectedSeason;
         };
 
+        $scope.getBluePercentageFor = function (game, type) {
+            var redVotes = game.teams.red[type + 'Votes'];
+            var blueVotes = game.teams.blue[type + 'Votes'];
+
+            var totalVotes = redVotes + blueVotes;
+
+            return blueVotes / totalVotes * 100;
+        };
+
+        $scope.getVotePointsForTeam = function (game, team, type) {
+            var redVotes = game.teams.red[type + 'Votes'];
+            var blueVotes = game.teams.blue[type + 'Votes'];
+
+            var totalVotes = redVotes + blueVotes;
+
+            var teamVotes = team === "blue" ? blueVotes : redVotes;
+            var otherVotes = team === "blue" ? redVotes : blueVotes;
+
+            var teamPercentage = teamVotes / totalVotes;
+
+            if (teamPercentage >= .66) return 2;
+
+            if(teamPercentage >= .33) return 1;
+
+            return 0;
+        };
+
         $scope.signupForGame = function (game, $event) {
             if (AuthService.user && AuthService.user.role !== "PENDING") {
                 DialogService.applyForGame(game, $event);

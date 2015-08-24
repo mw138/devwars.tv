@@ -118,6 +118,7 @@ public class GameController
                 {
                     Criteria seasonCriteria = session.createCriteria(Game.class)
                             .add(Restrictions.eq("season", season))
+                            .add(Restrictions.eq("done", true))
                             .setMaxResults(count)
                             .setFirstResult(queryOffset);
 
