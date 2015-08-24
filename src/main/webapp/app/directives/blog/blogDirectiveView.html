@@ -8,7 +8,7 @@
         <span>{{ post.timestamp | date}}</span>
     </div>
 
-    <ul class="tags" ng-show="posts.tags.length > 0">
+    <ul class="tags" ng-show="shouldShowTags(post)">
         <li>Tags: </li>
         <li ng-repeat="tag in post.tags"><a href="">{{ tag }}</a></li>
     </ul>

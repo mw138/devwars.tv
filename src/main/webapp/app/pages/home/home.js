@@ -39,9 +39,9 @@ home.controller("HomeController", ["$scope", "InfoService", "DialogService", "Bl
             $scope.xpLeaderboard = success.data;
         }, function (error) {
             console.log(error);
-        })
+        });
 
-        BlogService.allPosts(function (success) {
+        BlogService.allPosts(null, null, null, function (success) {
             success.data.splice(3, success.data.length - 3);
             $scope.posts = success.data;
         }, function (error) {
@@ -51,6 +51,10 @@ home.controller("HomeController", ["$scope", "InfoService", "DialogService", "Bl
 
     $scope.scrollToBlogPost = function (id) {
         location.href = "/blog#" + id;
+    };
+
+    $scope.readMore = function (post) {
+        $location.path('/blog/' + post.title.replace(/ /g, '-'));
     };
 
     $scope.updateInfo();

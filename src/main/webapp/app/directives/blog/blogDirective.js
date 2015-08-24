@@ -7,6 +7,18 @@ angular.module('app.blogDirective', [])
                 "post" : "="
             },
 
+            controller: function ($scope) {
+
+                $scope.shouldShowTags = function (blog) {
+                    if(blog) {
+                        return blog.tags.length > 0;
+                    } else {
+                        console.log("Not blog");
+                    }
+                }
+
+            },
+
             templateUrl: "/app/directives/blog/blogDirectiveView.html"
         }
     });
