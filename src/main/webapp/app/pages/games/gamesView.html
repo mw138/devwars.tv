@@ -139,7 +139,7 @@
                 <div class="voteBox">
                     <div class="gameHeader">
                         <div class="objPoint objPoint--{{team.name}}" ng-repeat="team in selectedGame.teams"><span class="bonusPoint">ACE</span>
-                            {{team.designVotes + team.funcVotes + team.codeVotes}}
+                            {{ getVotePointsForTeam(selectedGame, team.name, 'design') + getVotePointsForTeam(selectedGame, team.name, 'func') }}
 
                         </div>
                         <span>Votes</span>
