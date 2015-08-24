@@ -12,10 +12,8 @@ angular.module('app.blogDirective', [])
                 $scope.shouldShowTags = function (blog) {
                     if(blog) {
                         return blog.tags.length > 0;
-                    } else {
-                        console.log("Not blog");
                     }
-                }
+                };
 
                 $scope.readMore = function (post) {
                     $location.path('/blog/' + post.title.replace(/ /g, '-'));
