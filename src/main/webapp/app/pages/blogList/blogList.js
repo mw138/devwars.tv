@@ -22,10 +22,6 @@ angular.module("app.blog", [])
             });
         }
 
-        $scope.getBlogFormattedTitle = function (blog) {
-            return blog.title.replace(/ /g, '-');
-        };
-
         $scope.newPost = function ($event) {
             $mdDialog.show({
                 templateUrl: "/app/components/dialogs/addBlogPostDialog/addBlogPostDialogView.html",

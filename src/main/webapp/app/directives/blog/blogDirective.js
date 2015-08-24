@@ -7,7 +7,7 @@ angular.module('app.blogDirective', [])
                 "post" : "="
             },
 
-            controller: function ($scope) {
+            controller: function ($scope, $location) {
 
                 $scope.shouldShowTags = function (blog) {
                     if(blog) {
@@ -16,6 +16,10 @@ angular.module('app.blogDirective', [])
                         console.log("Not blog");
                     }
                 }
+
+                $scope.readMore = function (post) {
+                    $location.path('/blog/' + post.title.replace(/ /g, '-'));
+                };
 
             },
 
