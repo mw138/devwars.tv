@@ -74,7 +74,7 @@
                             <span ng-show="team.completedObjectives.length <= 1">point</span>
                         </div>
 
-                        <div class="scoreSlot totalObjectives">
+                        <div class="scoreSlot totalObjectives" ng-if="selectedGame.objectives.length > 0">
                             <span>Objectives</span>
                             <ul class="tallyBar">
                                 <li ng-class="{active: $index < team.completedObjectives.length}" ng-repeat="objective in selectedGame.objectives"></li>
@@ -128,7 +128,7 @@
                             <span ng-show="team.completedObjectives.length === selectedGame.objectives.length" class="bonusPoint active">ACE</span></div>
                         <span>Objectives</span>
                     </div>
-                    <ul class="objList">
+                    <ul class="objList" ng-if="selectedGame.objectives.length > 0">
                         <li ng-repeat="objective in selectedGame.objectives">
                             <div class="objSquare objSquare--{{team.name}}" ng-class="{active: teamHasObjective(team, objective)}" ng-repeat="team in selectedGame.teams"></div>
                             <span>{{objective.objectiveText}}</span>
