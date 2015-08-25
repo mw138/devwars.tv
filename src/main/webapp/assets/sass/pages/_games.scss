@@ -265,13 +265,13 @@
 
     .watchGame {
       position: relative;
-      background: $dgray;
-      color: $gray;
+      background: $gray;
+      color: $lgray;
       float: right;
       cursor: default;
       &:after { content: "Recording Unavailable"; }
 
-      &:hover { color: $gray; background: $dgray; }
+      &:hover { color: $lgray; background: $gray; }
 
       &.active {
         background: $youtube-color;
@@ -772,6 +772,13 @@
       height: 100%;
       background: #03a9f4;
     }
+	  
+	  .total_votes {
+		  font-size: 14px;
+		  text-align: center;
+		  margin-top: 15px;
+		  color: $lgray;
+	  }
     
     .separator {
       position: absolute;
