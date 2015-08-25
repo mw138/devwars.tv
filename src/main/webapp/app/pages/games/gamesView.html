@@ -84,9 +84,7 @@
                         <div class="scoreSlot totalVotes">
                             <span>Votes</span>
                             <ul class="tallyBar">
-                                <li ng-show="team.designVotes > 0 && getOtherTeam(team, selectedGame).designVotes > 0" ng-class="{active: team.designVotes >= getOtherTeam(team, selectedGame).designVotes}"></li>
-                                <li ng-show="team.funcVotes > 0 && getOtherTeam(team, selectedGame).funcVotes > 0" ng-class="{active: team.funcVotes >= getOtherTeam(team, selectedGame).funcVotes}"></li>
-                                <li ng-show="team.codeVotes > 0 && getOtherTeam(team, selectedGame).codeVotes > 0" ng-class="{active: team.codeVotes >= getOtherTeam(team, selectedGame).codeVotes}"></li>
+                                <li ng-repeat="i in [0,1,2,3]" ng-class="{active: getVotePointsForTeam(selectedGame, team.name, 'design') + getVotePointsForTeam(selectedGame, team.name, 'func') > $index}"></li>
                             </ul>
                         </div>
                     </div> <!-- .scoreRow -->
