@@ -10,8 +10,6 @@
                                     http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 
-
-
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
             <beans:bean class="com.bezman.resolver.UserResolver"></beans:bean>

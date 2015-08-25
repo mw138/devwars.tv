@@ -34,7 +34,11 @@ angular.module("app.blog", [])
                 }, function (error) {
                     //Otherwise means they just clicked cancel
                     if(error) {
-                        ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not publish post");
+                        var messages = error.data.map(function (error) {
+                           return error.defaultMessage;
+                        }).join('\n');
+
+                        ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", messages);
                     }
                 })
         };

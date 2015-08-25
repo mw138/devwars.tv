@@ -13,4 +13,6 @@
 
     <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver" />
 
+    <bean id="BlogPostValidatorBean" class="com.bezman.validator.BlogPostValidator"></bean>
+
 </beans>

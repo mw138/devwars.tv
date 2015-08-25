@@ -7,15 +7,22 @@ import com.bezman.hibernate.expression.YearCriterion;
 import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
+import com.bezman.validator.BlogPostValidator;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.naming.Binding;
 
 /**
  * Created by Terence on 4/11/2015.
@@ -24,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/v1/blog")
 public class BlogController
 {
+
+    @Autowired
+    BlogPostValidator blogPostValidator;
 
     /**
      * Gets blog posts
@@ -70,6 +80,14 @@ public class BlogController
                                      @AuthedUser User user,
                                      SessionImpl session)
     {
+        Errors errors = new BeanPropertyBindingResult(blogPost, "blogPost");
+        blogPostValidator.validate(blogPost, errors);
+
+        if (errors.hasErrors())
+        {
+            return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+
         blogPost.setUser(user);
 
         session.save(blogPost);

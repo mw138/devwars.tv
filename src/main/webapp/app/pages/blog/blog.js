@@ -10,7 +10,6 @@ angular.module("app.blogList", [])
         }])
     .controller("BlogController", ["$scope", "$stateParams", "BlogService", "$location", function ($scope, $stateParams, BlogService, $location) {
 
-        console.log($stateParams);
         if($stateParams.title)
         {
             BlogService.getBlog($stateParams.title, function (success) {
