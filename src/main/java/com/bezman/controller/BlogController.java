@@ -86,7 +86,7 @@ public class BlogController
     @RequestMapping("/{title}")
     public ResponseEntity getBlog(SessionImpl session, @PathVariable("title") String title)
     {
-        BlogPost blogPost = BlogService.getPostByTitle(title);
+        BlogPost blogPost = BlogService.getPostByShortTitle(title);
 
         if (blogPost != null)
         {

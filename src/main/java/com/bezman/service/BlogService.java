@@ -1,5 +1,6 @@
 package com.bezman.service;
 
+import com.bezman.hibernate.expression.SubstringCriterion;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
 import org.hibernate.Query;
@@ -72,4 +73,16 @@ public class BlogService
         return blogPost;
     }
 
+    public static BlogPost getPostByShortTitle(String title) {
+        Session session = DatabaseManager.getSession();
+
+        BlogPost blogPost = (BlogPost) session.createCriteria(BlogPost.class)
+                .add(new SubstringCriterion("title", 1, title.length(), title.replace('-', ' ')))
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.close();
+
+        return blogPost;
+    }
 }

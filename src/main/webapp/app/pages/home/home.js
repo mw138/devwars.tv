@@ -54,7 +54,7 @@ home.controller("HomeController", ["$scope", "InfoService", "DialogService", "Bl
     };
 
     $scope.readMore = function (post) {
-        $location.path('/blog/' + post.title.replace(/ /g, '-'));
+        $location.path('/blog/' + post.title.substr(0, 30).replace(/ /g, '-'));
     };
 
     $scope.updateInfo();

@@ -16,7 +16,7 @@ angular.module('app.blogDirective', [])
                 };
 
                 $scope.readMore = function (post) {
-                    $location.path('/blog/' + post.title.replace(/ /g, '-'));
+                    $location.path('/blog/' + post.title.substring(0, 30).replace(/ /g, '-'));
                 };
 
             },
