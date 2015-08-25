@@ -227,6 +227,8 @@ public class GameController
         {
             Game game = Reference.objectMapper.readValue(json, Game.class);
 
+            game.setSignups(oldGame.getSignups());
+
             session = DatabaseManager.getSession();
             session.beginTransaction();
 
