@@ -5,11 +5,11 @@
 
         <div class="gameContent row">
             <div class="gamesListColumn">
-               <div class="tabBox">
-                   <a href="" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
-                   <a href="" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
-				</div> <!-- .tabBox -->
-               
+                <div class="tabBox">
+                    <a href="" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
+                    <a href="" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
+                </div> <!-- .tabBox -->
+
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
                         <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
@@ -47,9 +47,9 @@
 
 
             <div class="gameStat" ng-if="selectedGame">
-				<div class="tabBox">
-					<a href="#" class="tab active">Game {{selectedGame.id}}</a>
-				</div> <!-- .tabBox -->
+                <div class="tabBox">
+                    <a href="#" class="tab active">Game {{selectedGame.id}}</a>
+                </div> <!-- .tabBox -->
                 <div class="gameBanner gameBanner--classic">
                     <div class="scanlines"></div>
                     <h2>
@@ -84,9 +84,7 @@
                         <div class="scoreSlot totalVotes">
                             <span>Votes</span>
                             <ul class="tallyBar">
-                                <li ng-show="team.designVotes > 0 && getOtherTeam(team, selectedGame).designVotes > 0" ng-class="{active: team.designVotes >= getOtherTeam(team, selectedGame).designVotes}"></li>
-                                <li ng-show="team.funcVotes > 0 && getOtherTeam(team, selectedGame).funcVotes > 0" ng-class="{active: team.funcVotes >= getOtherTeam(team, selectedGame).funcVotes}"></li>
-                                <li ng-show="team.codeVotes > 0 && getOtherTeam(team, selectedGame).codeVotes > 0" ng-class="{active: team.codeVotes >= getOtherTeam(team, selectedGame).codeVotes}"></li>
+                                <li ng-repeat="i in [0,1,2,3]" ng-class="{active: getVotePointsForTeam(selectedGame, team.name, 'design') + getVotePointsForTeam(selectedGame, team.name, 'func') > $index}"></li>
                             </ul>
                         </div>
                     </div> <!-- .scoreRow -->
@@ -115,17 +113,20 @@
                     </div> <!-- .team .team--blue -->
 
                     <!--<div class="teamFiles">-->
-                        <!--<div class="fileBox" ng-repeat="team in selectedGame.teams">-->
-                            <!--<a href="{{team.websiteUrl}}" target="_blank" class="button button-blue">View Website</a>-->
-                            <!--<a href="{{team.codeUrl}}" target="_blank" class="button button-blue">View Code</a>-->
-                        <!--</div>-->
+                    <!--<div class="fileBox" ng-repeat="team in selectedGame.teams">-->
+                    <!--<a href="{{team.websiteUrl}}" target="_blank" class="button button-blue">View Website</a>-->
+                    <!--<a href="{{team.codeUrl}}" target="_blank" class="button button-blue">View Code</a>-->
+                    <!--</div>-->
                     <!--</div>-->
                 </div> <!-- .teamBox -->
 
                 <div class="objBox" ng-if="selectedGame.objectives.length > 0">
                     <div class="gameHeader">
-                        <div class="objPoint objPoint--{{team.name}}" ng-repeat="team in selectedGame.teams">{{team.completedObjectives.length}}
-                            <span ng-show="team.completedObjectives.length === selectedGame.objectives.length" class="bonusPoint active">ACE</span></div>
+                        <div class="objPoint objPoint--{{team.name}}" ng-repeat="team in selectedGame.teams">
+                            <span ng-show="team.completedObjectives.length === selectedGame.objectives.length && $index === 1" class="bonusPoint active">ACE</span>
+                            {{team.completedObjectives.length}}
+                            <span ng-show="team.completedObjectives.length === selectedGame.objectives.length && $index === 0" class="bonusPoint active">ACE</span>
+                        </div>
                         <span>Objectives</span>
                     </div>
                     <ul class="objList" ng-if="selectedGame.objectives.length > 0">
@@ -188,10 +189,10 @@
 
         <div class="gameContent row">
             <div class="gamesListColumn">
-				<div class="tabBox">
-					<a href="#" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
-					<a href="#" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
-				</div> <!-- .tabBox -->
+                <div class="tabBox">
+                    <a href="#" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
+                    <a href="#" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
+                </div> <!-- .tabBox -->
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
                         <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
@@ -225,9 +226,9 @@
                         </div>
                     </div> <!-- .game -->
                     <div class="gameStat">
-						<div class="tabBox">
-							<a href="#" class="tab active">Game {{selectedGame.id}}</a>
-						</div> <!-- .tabBox -->
+                        <div class="tabBox">
+                            <a href="#" class="tab active">Game {{selectedGame.id}}</a>
+                        </div> <!-- .tabBox -->
                         <div class="gameBanner gameBanner--classic">
                             <div class="scanlines"></div>
                             <h2>
@@ -293,10 +294,10 @@
                             </div> <!-- .team .team--blue -->
 
                             <!--<div class="teamFiles">-->
-                                <!--<div class="fileBox" ng-repeat="team in game.teams">-->
-                                    <!--<a href="{{team.websiteUrl}}" target="_blank" class="button button-red">View Website</a>-->
-                                    <!--<a href="{{team.codeUrl}}" target="_blank" class="button button-red">View Code</a>-->
-                                <!--</div>-->
+                            <!--<div class="fileBox" ng-repeat="team in game.teams">-->
+                            <!--<a href="{{team.websiteUrl}}" target="_blank" class="button button-red">View Website</a>-->
+                            <!--<a href="{{team.codeUrl}}" target="_blank" class="button button-red">View Code</a>-->
+                            <!--</div>-->
                             <!--</div> &lt;!&ndash; .teamFiles &ndash;&gt;-->
                         </div> <!-- .teamBox -->
 

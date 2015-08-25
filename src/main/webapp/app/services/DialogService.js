@@ -30,7 +30,7 @@ angular.module("app.DialogService", [])
                     }
                 })
                     .then(function (success) {
-                        GameService.signupForGame(success.game.id, function (signupSuccess) {
+                        GameService.signUpForGame(success.game.id, function (signupSuccess) {
                             AuthService.init();
                             ToastService.showDevwarsToast("fa-calendar", "Game applied for", $filter("date")(game.timestamp, 'medium'));
                         }, function (error) {
