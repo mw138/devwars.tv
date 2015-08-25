@@ -61,7 +61,7 @@
 							</span>
 						</span>
                     </h2>
-                    <a href="{{selectedGame.youtubeURL}}" ng-if="selectedGame.youtubeURL" target="_blank" class="interactButton watchGame active"><i class="fa fa-youtube-play"></i></a>
+                    <a href="{{selectedGame.youtubeURL}}" target="_blank" ng-class="{active: selectedGame.youtubeUrl}" class="interactButton watchGame"><i class="fa fa-youtube-play"></i></a>
                 </div>
 
 
@@ -114,15 +114,15 @@
                         </a> <!-- .teamPlayer -->
                     </div> <!-- .team .team--blue -->
 
-                    <div class="teamFiles">
-                        <div class="fileBox" ng-repeat="team in selectedGame.teams">
-                            <a href="{{team.websiteUrl}}" target="_blank" class="button button-blue">View Website</a>
-                            <a href="{{team.codeUrl}}" target="_blank" class="button button-blue">View Code</a>
-                        </div>
-                    </div>
+                    <!--<div class="teamFiles">-->
+                        <!--<div class="fileBox" ng-repeat="team in selectedGame.teams">-->
+                            <!--<a href="{{team.websiteUrl}}" target="_blank" class="button button-blue">View Website</a>-->
+                            <!--<a href="{{team.codeUrl}}" target="_blank" class="button button-blue">View Code</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div> <!-- .teamBox -->
 
-                <div class="objBox">
+                <div class="objBox" ng-if="selectedGame.objectives.length > 0">
                     <div class="gameHeader">
                         <div class="objPoint objPoint--{{team.name}}" ng-repeat="team in selectedGame.teams">{{team.completedObjectives.length}}
                             <span ng-show="team.completedObjectives.length === selectedGame.objectives.length" class="bonusPoint active">ACE</span></div>
