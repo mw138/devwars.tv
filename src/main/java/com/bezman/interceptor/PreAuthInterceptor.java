@@ -48,6 +48,12 @@ public class PreAuthInterceptor implements HandlerInterceptor
                 response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
             }
 
+            //Make sure it's not a double header
+            if(Reference.isProduction() && crossOrigin == null)
+            {
+                response.addHeader("Access-Control-Allow-Origin", "*");
+            }
+
             User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
 
             Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");

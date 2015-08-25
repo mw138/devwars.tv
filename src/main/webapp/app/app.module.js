@@ -69,6 +69,26 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
+    if(true) {
+        $httpProvider.interceptors.push(function () {
+
+            var Interceptor = {};
+
+            Interceptor.request = function (config) {
+                var url = config.url;
+
+                if (url.indexOf('.html') < 0) {
+                    config.url = "http://local.bezcode.com:9090/" + config.url;
+                }
+
+                return config;
+            };
+
+            return Interceptor;
+
+        });
+    }
+
     $httpProvider.defaults.transformResponse = function (response) {
         try {
             return JSON.parse(response);
