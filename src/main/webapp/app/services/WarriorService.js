@@ -17,12 +17,31 @@ angular.module('app.WarriorService', [])
          Query Parameter {favFood} : java.lang.String
          Query Parameter {favTool} : java.lang.String
          Query Parameter {day} : int
+         Query Parameter {email} : java.lang.String
          */
-        WarriorService.register = function(cssRate, year, about, htmlRate, firstName, month, jsRate, c9Name, location, favFood, favTool, day, company, successCallback, errorCallback){
+        WarriorService.register = function(cssRate, year, about, htmlRate, firstName, month, jsRate, c9Name, location, favFood, favTool, day, email, company, successCallback, errorCallback){
             $http({
                 method: 'GET',
                 url: '/v1/warrior/register',
-                params: {cssRate : cssRate,year : year,about : about,htmlRate : htmlRate,firstName : firstName,month : month,jsRate : jsRate,c9Name : c9Name,location : location,company : company,favFood : favFood,favTool : favTool,day : day}
+                params: {cssRate : cssRate,year : year,about : about,htmlRate : htmlRate,firstName : firstName,month : month,jsRate : jsRate,c9Name : c9Name,location : location,company : company,favFood : favFood,favTool : favTool,day : day,email : email}
+            })
+                .then(function(success){
+                    successCallback(success)
+                },
+                function(error){
+                    errorCallback(error)
+                });
+
+        };
+
+        /*
+         Required Role : USER
+         */
+        WarriorService.updateWarrior = function(warrior, successCallback, errorCallback){
+            $http({
+                method: 'POST',
+                url: '/v1/warrior/update',
+                data: {warrior : warrior}
             })
                 .then(function(success){
                     successCallback(success)

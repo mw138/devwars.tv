@@ -18,6 +18,7 @@
         <property name="about" column="about" type="text"></property>
         <property name="location" type="text"></property>
         <property name="company" type="text"></property>
+        <property name="updatedAt" type="date" column="updated_at"></property>
 
         <one-to-one name="user" class="com.bezman.model.User"></one-to-one>
     </class>

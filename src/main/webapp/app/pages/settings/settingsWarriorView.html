@@ -8,7 +8,6 @@
 			<input type="text" placeholder="DD" ng-model="warrior.day"/>
             <input type="text" placeholder="YYYY" ng-model="warrior.year"/>
 		</div>
-        <input type="email" ng-model="warrior.email" placeholder="Email" />
         <input type="text" ng-model="warrior.company" placeholder="Company Name (Optional)" />
 
 		<h2 class="title"><span>Skill Assessment</span></h2>
@@ -61,7 +60,6 @@
         <input type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
         <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
 
-        <button class="button" ng-click="register(warrior)" ng-hide="AuthService.user.warrior">Update my details</button>
-        <button class="button button--disabled" disabled ng-show="AuthService.user.warrior">Already Registered!</button>
+        <button class="button" ng-click="update(warrior)">Update my details</button>
     </form> <!-- form.warriorForm -->
 </div> <!-- .right -->

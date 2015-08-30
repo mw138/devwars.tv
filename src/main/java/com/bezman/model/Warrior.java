@@ -1,10 +1,12 @@
 package com.bezman.model;
 
+import com.bezman.annotation.PreFlush;
 import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import javax.persistence.PreUpdate;
 import java.util.Date;
 
 /**
@@ -42,6 +44,8 @@ public class Warrior extends BaseModel
 
     @JsonIgnore
     private User user;
+
+    private Date updatedAt;
 
     public Warrior(){}
 
@@ -189,5 +193,19 @@ public class Warrior extends BaseModel
     public void setLocation(String location)
     {
         this.location = location;
+    }
+
+    public Date getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @PreFlush
+    public void preUpdate()
+    {
+        this.setUpdatedAt(new Date());
     }
 }

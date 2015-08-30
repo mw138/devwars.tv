@@ -190,7 +190,7 @@ angular.module('app.settings', [
 
         $scope.passwordsMatch = function (passwordChange) {
             return passwordChange.newPassword1 === passwordChange.newPassword2
-        }
+        };
 
         $scope.changePassword = function (passwordChange) {
             if(passwordChange.newPassword1
