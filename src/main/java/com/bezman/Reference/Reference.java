@@ -11,6 +11,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +44,9 @@ public class Reference
 
     public static String SITE_STORAGE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator + "site-storage";
 
-    public static Connection connection;
-
     public static ObjectMapper objectMapper;
+
+    public static Twitter twitterBot;
 
     public static Cookie getCookieFromArray(Cookie[] cookies, String key)
     {
@@ -58,93 +60,6 @@ public class Reference
         }
 
         return null;
-    }
-
-    public static void resetConnectionToDB()
-    {
-        try
-        {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public static PreparedStatement prepareStatement(String query)
-    {
-        try
-        {
-
-            if (connection == null || connection.isClosed())
-            {
-                resetConnectionToDB();
-            }
-
-            PreparedStatement statement = connection.prepareStatement(query);
-
-            if (statement == null)
-            {
-                resetConnectionToDB();
-
-                return prepareStatement(query);
-            } else return statement;
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static PreparedStatement prepareStatement(String query, Object... values)
-    {
-        PreparedStatement statement = prepareStatement(query);
-
-        int valIndex = 1;
-        for (int i = 0; i < query.length(); i++)
-        {
-            if (query.charAt(i) == '?')
-            {
-                try
-                {
-                    statement.setObject(valIndex, values[valIndex - 1]);
-                    valIndex++;
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return statement;
-    }
-
-    public static ResultSet prepareStatementAndQuery(String query, Object... values)
-    {
-        try
-        {
-            return prepareStatement(query, values).executeQuery();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public static int prepareStatementAndUpdate(String query, Object... values)
-    {
-        try
-        {
-            return prepareStatement(query, values).executeUpdate();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return 0;
     }
 
     public static boolean recaptchaValid(String response, String ip)

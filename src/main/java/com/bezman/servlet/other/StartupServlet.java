@@ -45,17 +45,4 @@ public class StartupServlet
         AngularServiceBuilder.buildServicesFromPackage("com.bezman.controller", "C:\\Users\\teren\\IdeaProjects\\DevWars Maven\\target\\services\\", Reference.rootURL, "app");
     }
 
-    @PreDestroy
-    public void preDestroy()
-    {
-        try
-        {
-            Reference.connection.close();
-            DatabaseManager.sessionFactory.close();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
 }
