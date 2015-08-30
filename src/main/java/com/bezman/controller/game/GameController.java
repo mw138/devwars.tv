@@ -3,6 +3,7 @@ package com.bezman.controller.game;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
@@ -24,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -780,6 +783,7 @@ public class GameController
      * @throws UnirestException
      * @throws IOException
      */
+    @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/sitepull")
     public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException
     {
@@ -795,6 +799,29 @@ public class GameController
         {
             return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    /**
+     * Method to pull the Cloud Nine website for a specific game
+     * @param id The ID of the games websites you would like to pull
+     * @param response
+     * @throws IOException
+     */
+    @PreAuthorization(minRole = User.Role.BLOGGER)
+    @RequestMapping("/{id}/sitearchive")
+    public void siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
+
+        response.setHeader("Content-Disposition","attachment; filename=\"" + "archive.zip" + "\"");
+        response.setContentType("application/zip");
+
+        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+
+        File zipDir = new File(Reference.SITE_STORAGE_PATH + File.separator + id);
+
+        Util.zipFolder("", zipDir, zipOutputStream);
+
+        zipOutputStream.finish();
+        zipOutputStream.close();
     }
 
 }
