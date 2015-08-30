@@ -811,17 +811,23 @@ public class GameController
     @RequestMapping("/{id}/sitearchive")
     public void siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
 
-        response.setHeader("Content-Disposition","attachment; filename=\"" + "archive.zip" + "\"");
-        response.setContentType("application/zip");
+        Game game = GameService.getGame(id);
 
-        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+        if(game != null) {
+            SimpleDateFormat gameFormat = new SimpleDateFormat("yyyy-mm-dd");
 
-        File zipDir = new File(Reference.SITE_STORAGE_PATH + File.separator + id);
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + gameFormat.format(game.getTimestamp()) + "_" + game.getName() + ".zip" + "\"");
+            response.setContentType("application/zip");
 
-        Util.zipFolder("", zipDir, zipOutputStream);
+            ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
 
-        zipOutputStream.finish();
-        zipOutputStream.close();
+            File zipDir = new File(Reference.SITE_STORAGE_PATH + File.separator + id);
+
+            Util.zipFolder("", zipDir, zipOutputStream);
+
+            zipOutputStream.finish();
+            zipOutputStream.close();
+        }
     }
 
 }
