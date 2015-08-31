@@ -12,6 +12,7 @@ angular.module('app.settings', [
                     templateUrl: 'app/pages/settings/settingsView.html',
                     controller: ['$scope', '$state',
                         function( $scope, $state) {
+                            console.log($state);
                             if($state.name == "settings")
                                 $state.go('settings.accountView');
                         }]

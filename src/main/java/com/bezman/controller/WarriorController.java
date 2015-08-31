@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Terence on 5/27/2015.
@@ -97,6 +98,18 @@ public class WarriorController
         if(user.getWarrior() == null) return new ResponseEntity("You are not a warrior", HttpStatus.CONFLICT);
 
         user = (User) session.merge(user);
+
+        Warrior oldWarrior = user.getWarrior();
+
+        if(oldWarrior.getHtmlRate() != warrior.getHtmlRate() || oldWarrior.getCssRate() != warrior.getCssRate() || oldWarrior.getJsRate() != warrior.getJsRate())
+        {
+            long now = new Date().getTime();
+            long then = oldWarrior.getUpdatedAt().getTime();
+
+            if(now - then < (86400 * 7 * 2 * 1000)) return new ResponseEntity("You can only change your ratings once every two weeks", HttpStatus.CONFLICT);
+
+            warrior.setUpdatedAt(new Date());
+        }
 
         warrior.setId(user.getWarrior().getId());
         session.merge(warrior);

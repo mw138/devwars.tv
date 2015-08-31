@@ -202,10 +202,4 @@ public class Warrior extends BaseModel
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    @PreFlush
-    public void preUpdate()
-    {
-        this.setUpdatedAt(new Date());
-    }
 }
