@@ -20,7 +20,6 @@ angular.module("app.AuthService", [])
                 url: "/v1/user/"
             })
                 .then(function (success) {
-                    console.log(success);
                     AuthService.setUser(success.data);
 
                     for (var i = 0; i < AuthService.callbacks.length; i++) {

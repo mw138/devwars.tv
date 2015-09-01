@@ -69,7 +69,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
-    if(false) {
+    if(true) {
         $httpProvider.interceptors.push(function () {
 
             var Interceptor = {};
@@ -129,8 +129,6 @@ app.filter("players", function () {
 
 app.run(function ($rootScope, $location, AuthService) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {
-        console.log(toState);
-
         //Is the route protected
         if(toState.auth) {
             //Are we logged in?
