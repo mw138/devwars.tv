@@ -12,9 +12,9 @@ angular.module('app.settings', [
                     templateUrl: 'app/pages/settings/settingsView.html',
                     controller: ['$scope', '$state',
                         function( $scope, $state) {
-                            console.log($state);
-                            if($state.name == "settings")
+                            if($state.current.name == "settings") {
                                 $state.go('settings.accountView');
+                            }
                         }]
                 })
 
@@ -120,8 +120,6 @@ angular.module('app.settings', [
                 AuthService.callbacks.push($scope.initProfile);
             } else {
                 $scope.profile = AuthService.user;
-
-                console.log($scope.profile);
             }
         };
 

@@ -129,8 +129,6 @@ app.filter("players", function () {
 
 app.run(function ($rootScope, $location, AuthService) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {
-        console.log(toState);
-
         //Is the route protected
         if(toState.auth) {
             //Are we logged in?
