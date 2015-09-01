@@ -67,7 +67,7 @@
     border: 8px solid;
     position: absolute;
     top: calc(50% - 100px);
-    left: -20px;
+    left: -48px;
     top: -50px;
     @include rotate(25);
 
@@ -382,18 +382,16 @@
         border-bottom: 1px solid;
 
         h3 {
-          color: $xdgray;
-          display: inline-block;
-          font-size: 16px;
-          position: relative;
-          left: 10px;
+         font-family: $oswald;
+			color: $xdgray;
+			font-size: 18px;
+			top: 14px;
+			position: absolute;
         }
         span.event {
           padding: 2px 7px;
           border: 1px solid;
-          position: absolute;
-          top: 27%;
-          right: 15px;
+			float: right;
         }
 
       }
@@ -464,14 +462,13 @@
     .team--blue {
       float: left;
       border: 1px solid $main-color;
-      border-top: 5px solid $main-color;
       border-bottom: 5px solid $main-color;
 
       .teamHeader {
         border-color: $main-color;  
       }
 
-      span.role {
+      span.rolte {
         color: $main-color;
       }
 
@@ -487,7 +484,6 @@
     .team--red {
       float: right;
       border: 1px solid $accent-color;
-      border-top: 5px solid $accent-color;
       border-bottom: 5px solid $accent-color;
 
       .teamHeader {
