@@ -10,6 +10,8 @@
                     <a href="" class="tab" ng-click="setSeasonSelected(2)" ng-class="{active: isSeasonSelected(2)}">Season 2</a>
                 </div> <!-- .tabBox -->
 
+				<div class="gameListColumn__container">
+               
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
                         <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
@@ -42,8 +44,10 @@
                         <a ng-href="{{game.youtubeURL}}" target="_blank" ng-if="game.youtubeURL"><i class="fa fa-youtube-play youtube--active"></i></a>
                     </div>
                 </div> <!-- .game -->
-
-            </div>
+				
+           
+				</div> <!-- .gameListColumn__container -->
+			</div> <!-- .gameListColumn -->
 
 
             <div class="gameStat" ng-if="selectedGame">
