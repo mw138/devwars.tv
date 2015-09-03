@@ -2,12 +2,6 @@ package com.bezman.hibernate.interceptor;
 
 import com.bezman.annotation.PreFlush;
 import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.Type;
-import sun.invoke.empty.Empty;
-
-import javax.persistence.PostLoad;
-import javax.persistence.PreUpdate;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
