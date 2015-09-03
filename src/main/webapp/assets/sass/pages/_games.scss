@@ -88,8 +88,7 @@
     float: left;
 
 	  .gameListColumn__container {
-		  min-height: 60vh;
-		  max-height: 60vh;
+		  height: 60vh;
 		  overflow-y: scroll;
 		  border: 1px solid $accent_color;
 	  }

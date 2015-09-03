@@ -39,32 +39,25 @@ angular.module("app.games", [])
                 });
             }
 
-            for(var key in games) {
-                var game = games[key];
+            games.forEach(function (game) {
+                _.values(game.teams).forEach(function (team) {
+                    var newPlayers = [];
 
-                for(var teamKey in game.teams) {
-                    var team = game.teams[teamKey];
-
-                    var players = team.players;
-                    var sortedPlayers = [];
-
-                    for(var playerKey in players) {
-                        var player = players[playerKey];
-
-                        if(player.language.toLowerCase() === "html") sortedPlayers[0] = player;
-                        if(player.language.toLowerCase() === "css") sortedPlayers[1] = player;
-                        if(player.language.toLowerCase() === "js") sortedPlayers[2] = player;
-                    }
-
-                    var actuallySorted = [];
-
-                    sortedPlayers.forEach(function (a) {
-                        if(a) actuallySorted.push(a);
+                    team.players.filter(function (player) {return player.language.toLowerCase() === "html"}).forEach(function (player) {
+                        newPlayers.push(player);
                     });
 
-                    team.players = actuallySorted;
-                }
-            }
+                    team.players.filter(function(player) { return player.language.toLowerCase() === "js"}).forEach(function (player) {
+                        newPlayers.push(player);
+                    });
+
+                    team.players.filter(function(player) { return player.language.toLowerCase() === "css"}).forEach(function (player) {
+                        newPlayers.push(player);
+                    });
+
+                    team.players = newPlayers;
+                })
+            })
 
             $scope.pastGames = games;
 
@@ -293,6 +286,20 @@ angular.module("app.games", [])
         }, function (error) {
             console.log(error);
             $scope.getAllGames();
+        });
+
+        angular.element('.gameListColumn__container').bind('scroll', function (event) {
+            if( event.target.scrollTop >= (event.target.scrollHeight - event.target.offsetHeight)) {
+                var offset = $scope.pastGames.filter(function (game) {
+                    return game.season == $scope.selectedSeason;
+                }).length;
+
+                GameService.pastGames(offset, null, function (success) {
+                    success.data[1].forEach(function (a) {
+                        $scope.pastGames.push(a);
+                    })
+                }, angular.noop );
+            }
         });
 
         $scope.lastTimeClicked = new Date().getTime();
