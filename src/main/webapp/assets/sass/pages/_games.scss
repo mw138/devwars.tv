@@ -479,7 +479,7 @@
         border-color: $main-color;  
       }
 
-      span.rolte {
+      span.role {
         color: $main-color;
       }
 
@@ -584,6 +584,7 @@
   }
 
   .gameHeader {
+	  background: $black;
     text-transform: uppercase;
     text-align: center;
     font-weight: 200;

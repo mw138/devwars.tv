@@ -1,12 +1,16 @@
 <div class="settingsView">
     <form class="settings-content">
 		<h2 class="title"><span>About Yourself</span></h2>
-		<input type="text" placeholder="Name" ng-model="warrior.firstName"/>
+		<label for="dwReg-name">Name</label>
+       <input id="dwReg-name" type="text" placeholder="Name" ng-model="warrior.firstName"/>
         <div class="split-inputs dateofbirth">
 			<span>D.O.B.</span>
-			<input type="text" placeholder="MM" ng-model="warrior.month"/>
-			<input type="text" placeholder="DD" ng-model="warrior.day"/>
-            <input type="text" placeholder="YYYY" ng-model="warrior.year"/>
+			<label for="dwReg-month">Month</label>
+			<input id="dwReg-month" type="text" placeholder="MM" ng-model="warrior.month"/>
+			<label for="dwReg-day">Day</label>
+			<input id="dwReg-day" type="text" placeholder="DD" ng-model="warrior.day"/>
+			<label for="dwReg-year">Year</label>
+			<input id="dwReg-year" type="text" placeholder="YYYY" ng-model="warrior.year"/>
 		</div>
         <input type="text" ng-model="warrior.company" placeholder="Company Name (Optional)" />
 
@@ -55,9 +59,12 @@
         </div> <!-- .c9-register -->
 
 		<h2 class="title"><span>Public Introduction</span></h2>
-		<input type="text" placeholder="Country" ng-model="warrior.location"/>
-        <input type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
-        <input type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
+		<label for="dwReg-country"></label>
+		<input id="dwReg-country"type="text" placeholder="Country" ng-model="warrior.location"/>
+		<label for="dwReg-food"></label>
+        <input id="dwReg-food"type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
+		<label for="dwReg-tool"></label>
+        <input id="dwReg-tool" type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
         <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
 
         <button class="button" ng-click="update(warrior)">Update my details</button>
