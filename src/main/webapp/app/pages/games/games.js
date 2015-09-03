@@ -295,7 +295,7 @@ angular.module("app.games", [])
                 }).length;
 
                 GameService.pastGames(offset, null, function (success) {
-                    success.data[1].forEach(function (a) {
+                    success.data[$scope.selectedSeason].forEach(function (a) {
                         $scope.pastGames.push(a);
                     })
                 }, angular.noop );
