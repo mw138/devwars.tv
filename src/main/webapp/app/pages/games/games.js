@@ -77,7 +77,7 @@ angular.module("app.games", [])
 
                     $scope.setSeasonSelected(season);
                 }, angular.noop);
-            } else $scope.setSeasonSelected(1);
+            } else $scope.setSeasonSelected(2);
 
         }, angular.noop);
 
@@ -221,27 +221,6 @@ angular.module("app.games", [])
             return game.teams[team.name === "red" ? "blue" : "red"];
         };
 
-        $scope.getAllGames = function (success) {
-            GameService.allGames(0, 5, function (allGamesSuccess) {
-                var returnGames = allGamesSuccess.data;
-
-                $scope.games = $scope.games.concat(returnGames);
-
-                for (var i = 0; i < $scope.games.length; i++) {
-                    var game = $scope.games[i];
-
-                    if (success && game.id === success.data.id) {
-                        $scope.games.splice(i, 1);
-                        i = $scope.games.length;
-                    }
-                }
-
-                console.log($scope.games);
-            }, function (allGamesError) {
-                console.log(allGamesError);
-            });
-        };
-
         $scope.teamHasObjective = function (team, objective) {
             for(var objectiveKey in team.completedObjectives) {
                 var teamObjective = team.completedObjectives[objectiveKey].objective;
@@ -251,32 +230,6 @@ angular.module("app.games", [])
                 }
             }
             return false;
-        };
-
-        $scope.sortPlayers = function (data) {
-            var langs = ["html", "css", "js"];
-
-            data.sort(function (a) {
-                return langs.indexOf(a.language.toLowerCase());
-            });
-        };
-
-        $scope.timezone = function () {
-            var timeString = new Date().toString();
-
-            var words = timeString.split('(')[timeString.split('(').length -1];
-            words = words.split(')')[0];
-            words = words.split(' ');
-
-            var returnString = "";
-
-            for(var wordKey in words) {
-                var word = words[wordKey];
-
-                returnString += word.charAt(0);
-            }
-
-            return returnString;
         };
 
         GameService.nearestGame(function (success) {
