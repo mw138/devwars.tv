@@ -254,6 +254,7 @@ public class GameController
 
             if(game.isActive())
             {
+                System.out.println(Reference.objectMapper.writeValueAsString(game));
                 Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
                         .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
                         .body(Reference.objectMapper.writeValueAsString(game))

@@ -356,6 +356,22 @@ public class User extends BaseModel
         this.gamesWatched = gamesWatched;
     }
 
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getNextRank() {
+        return nextRank;
+    }
+
+    public void setNextRank(Rank nextRank) {
+        this.nextRank = nextRank;
+    }
+
     @JsonIgnore
     public boolean isNative()
     {
@@ -417,16 +433,6 @@ public class User extends BaseModel
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
 
-        if(this.getRanking() != null)
-        {
-            this.rank = (Rank) session.createCriteria(Rank.class)
-                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
-                    .addOrder(Order.desc("xpRequired"))
-                    .setMaxResults(1)
-                    .uniqueResult();
-
-            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
-        }
 
         session.close();
     }
@@ -651,5 +657,24 @@ public class User extends BaseModel
         }
 
         return false;
+    }
+
+    @PostLoad
+    public void postLoad()
+    {
+        Session session = DatabaseManager.getSession();
+
+        if(this.getRanking() != null)
+        {
+            this.rank = (Rank) session.createCriteria(Rank.class)
+                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
+                    .addOrder(Order.desc("xpRequired"))
+                    .setMaxResults(1)
+                    .uniqueResult();
+
+            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
+        }
+
+        session.close();
     }
 }
