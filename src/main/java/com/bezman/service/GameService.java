@@ -197,6 +197,26 @@ public class GameService
                     }
                 });
 
+        document.getElementsByTag("img")
+                .forEach(tag -> {
+                    String source = tag.attr("src");
+
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
         downloadURLToFile(site + "/index.html", new File(path + File.separator + "index.html"));
     }
 
