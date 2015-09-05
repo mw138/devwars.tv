@@ -50,18 +50,11 @@ var app = angular.module('app', [
     'app.leaderboards',
     'app.modCP',
 
-    //Poll
-    'LivePoll-Client',
-    'LivePoll-Display',
-    'Progress',
-    'Tooltip',
-
     //dependencies
     'ngCookies',
     'ngMaterial',
     'vcRecaptcha',
     'textAngular',
-    'n3-pie-chart',
     'ngImgCrop'
 ]);
 
