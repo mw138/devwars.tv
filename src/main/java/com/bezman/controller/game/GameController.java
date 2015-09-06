@@ -125,7 +125,7 @@ public class GameController
                     Criteria seasonCriteria = session.createCriteria(Game.class)
                             .add(Restrictions.eq("season", season))
                             .add(Restrictions.eq("done", true))
-                            .addOrder(Order.desc("date"))
+                            .addOrder(Order.desc("id"))
                             .setMaxResults(count)
                             .setFirstResult(queryOffset);
 

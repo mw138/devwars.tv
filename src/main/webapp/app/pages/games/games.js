@@ -217,6 +217,16 @@ angular.module("app.games", [])
             return objectivePoints + votingPoints;
         };
 
+        $scope.getTotalVotesForVote = function (game, vote) {
+            var sum = 0;
+
+            _.values(game.teams).forEach(function (team) {
+                sum += team[vote + 'Votes'];
+            });
+
+            return sum;
+        };
+
         $scope.getOtherTeam = function (team, game) {
             return game.teams[team.name === "red" ? "blue" : "red"];
         };
