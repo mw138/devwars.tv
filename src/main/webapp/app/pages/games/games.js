@@ -210,11 +210,21 @@ angular.module("app.games", [])
 
             var objectivePoints = game.teams[teamName].completedObjectives.length;
 
-            if(objectivePoints == game.objectives.length) {
+            if(objectivePoints == game.objectives.length && game.objectives.length > 0) {
                 objectivePoints += 1;
             }
 
             return objectivePoints + votingPoints;
+        };
+
+        $scope.getTotalVotesForVote = function (game, vote) {
+            var sum = 0;
+
+            _.values(game.teams).forEach(function (team) {
+                sum += team[vote + 'Votes'];
+            });
+
+            return sum;
         };
 
         $scope.getOtherTeam = function (team, game) {
@@ -232,28 +242,21 @@ angular.module("app.games", [])
             return false;
         };
 
+        $scope.loadMore = function () {
+            var offset = $scope.pastGames.filter(function (game) {
+                return game.season == $scope.selectedSeason;
+            }).length;
+
+            GameService.pastGames(offset, null, function (success) {
+                success.data[$scope.selectedSeason].forEach(function (a) {
+                    $scope.pastGames.push(a);
+                })
+            }, angular.noop);
+        };
+
         GameService.nearestGame(function (success) {
             $scope.games.push(success.data);
-
-            $scope.getAllGames(success);
-        }, function (error) {
-            console.log(error);
-            $scope.getAllGames();
-        });
-
-        angular.element('.gameListColumn__container').bind('scroll', function (event) {
-            if( event.target.scrollTop >= (event.target.scrollHeight - event.target.offsetHeight)) {
-                var offset = $scope.pastGames.filter(function (game) {
-                    return game.season == $scope.selectedSeason;
-                }).length;
-
-                GameService.pastGames(offset, null, function (success) {
-                    success.data[$scope.selectedSeason].forEach(function (a) {
-                        $scope.pastGames.push(a);
-                    })
-                }, angular.noop );
-            }
-        });
+        }, angular.noop);
 
         $scope.lastTimeClicked = new Date().getTime();
     }]);
