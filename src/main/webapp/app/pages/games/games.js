@@ -234,12 +234,7 @@ angular.module("app.games", [])
 
         GameService.nearestGame(function (success) {
             $scope.games.push(success.data);
-
-            $scope.getAllGames(success);
-        }, function (error) {
-            console.log(error);
-            $scope.getAllGames();
-        });
+        }, angular.noop);
 
         angular.element('.gameListColumn__container').bind('scroll', function (event) {
             if( event.target.scrollTop >= (event.target.scrollHeight - event.target.offsetHeight)) {
@@ -251,7 +246,7 @@ angular.module("app.games", [])
                     success.data[$scope.selectedSeason].forEach(function (a) {
                         $scope.pastGames.push(a);
                     })
-                }, angular.noop );
+                }, angular.noop);
             }
         });
 

@@ -158,7 +158,7 @@
                             <div style="width: {{ getBluePercentageFor(selectedGame, 'design') }}%;" class="blue-team__votes"></div>
                         </div>
                         <span class="red-team__score">{{ getVotePointsForTeam(selectedGame, 'red', 'design') }}</span>
-						<div class="total_votes">104 Votes</div>
+						<div class="total_votes">{{ getVotePointsForTeam(selectedGame, 'red', 'design') + getVotePointsForTeam(selectedGame, 'blue', 'design') }} Votes</div>
                     </div>
 
                     <div class="votes-container func-vote">
@@ -170,7 +170,7 @@
                             <div style="width: {{ getBluePercentageFor(selectedGame, 'func') }}%;" class="blue-team__votes"></div>
                         </div>
                         <span class="red-team__score">{{ getVotePointsForTeam(selectedGame, 'red', 'func')}}</span>
-						<div class="total_votes">104 Votes</div>
+                        <div class="total_votes">{{ getVotePointsForTeam(selectedGame, 'red', 'func') + getVotePointsForTeam(selectedGame, 'blue', 'func') }} Votes</div>
                     </div>
                 </div>
 
