@@ -1,18 +1,24 @@
 package com.bezman.controller;
 
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.annotation.AuthedUser;
+import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.annotation.Transactional;
 import com.bezman.model.User;
 import com.bezman.model.Warrior;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Terence on 5/27/2015.
@@ -42,6 +48,7 @@ public class WarriorController
      * @param about
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/register")
     public ResponseEntity register(HttpServletRequest request, HttpServletResponse response,
@@ -58,9 +65,11 @@ public class WarriorController
                                    @RequestParam("favTool") String favTool,
                                    @RequestParam("location") String location,
                                    @RequestParam(value = "company", required = false) String company,
-                                   @RequestParam("about") String about)
+                                   @RequestParam("about") String about,
+                                   SessionImpl session)
     {
         User user = (User) request.getAttribute("user");
+        user = (User) session.merge(user);
 
         if (user.getEmail() == null)
         {
@@ -72,16 +81,40 @@ public class WarriorController
 
         Warrior warrior = new Warrior(firstName, favFood, favTool, about, c9Name, company, location, htmlRate, cssRate, jsRate, calendar.getTime(), user.getId());
 
-        if(user.getWarrior() == null)
-        {
-            DatabaseUtil.mergeObjects(false, user);
-            DatabaseUtil.saveObjects(true, warrior);
-            return new ResponseEntity("Successfully registered to be a warrior", HttpStatus.OK);
-        } else
-        {
-            return new ResponseEntity("You are already a warrior", HttpStatus.CONFLICT);
-        }
+        if(user.getWarrior() != null) return new ResponseEntity("You are already a warrior", HttpStatus.CONFLICT);
+
+        session.save(warrior);
+
+        return new ResponseEntity("Successfully registered", HttpStatus.OK);
     }
 
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity updateWarrior(@AuthedUser User user,
+                                        @JSONParam("warrior") Warrior warrior,
+                                        SessionImpl session)
+    {
+        if(user.getWarrior() == null) return new ResponseEntity("You are not a warrior", HttpStatus.CONFLICT);
+
+        user = (User) session.merge(user);
+
+        Warrior oldWarrior = user.getWarrior();
+
+        if(oldWarrior.getHtmlRate() != warrior.getHtmlRate() || oldWarrior.getCssRate() != warrior.getCssRate() || oldWarrior.getJsRate() != warrior.getJsRate())
+        {
+            long now = new Date().getTime();
+            long then = oldWarrior.getUpdatedAt().getTime();
+
+            if(now - then < (86400 * 7 * 2 * 1000)) return new ResponseEntity("You can only change your ratings once every two weeks", HttpStatus.CONFLICT);
+
+            warrior.setUpdatedAt(new Date());
+        }
+
+        warrior.setId(user.getWarrior().getId());
+        session.merge(warrior);
+
+        return new ResponseEntity("Ok", HttpStatus.OK);
+    }
 
 }

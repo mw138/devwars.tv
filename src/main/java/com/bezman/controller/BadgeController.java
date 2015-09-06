@@ -29,11 +29,9 @@ public class BadgeController
     @UnitOfWork
     public ResponseEntity getAll(SessionImpl session)
     {
+        System.out.println(session);
         List<Badge> badges = session.createCriteria(Badge.class)
                                         .list();
-
-        badges.stream()
-                .forEach(b -> b.updateUsersCount());
 
         HashMap<String, Object> map = new HashMap<>();
 

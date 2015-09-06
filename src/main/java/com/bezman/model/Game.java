@@ -4,6 +4,7 @@ import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.IntegerType;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ public class Game extends BaseModel
 
     @JsonIgnore
     private Set<GameSignup> signups;
+
+    private Integer season;
 
     public int getId()
     {
@@ -138,6 +141,14 @@ public class Game extends BaseModel
 
     public void setSignups(Set<GameSignup> signups) {
         this.signups = signups;
+    }
+
+    public Integer getSeason() {
+        return season;
+    }
+
+    public void setSeason(Integer season) {
+        this.season = season;
     }
 
     public Team getTeamByID(int id)

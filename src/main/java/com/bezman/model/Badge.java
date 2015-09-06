@@ -101,16 +101,6 @@ public class Badge extends BaseModel
         this.userCount = userCount;
     }
 
-    @JsonIgnore
-    public void updateUsersCount()
-    {
-        Session session = DatabaseManager.getSession();
-
-        this.userCount = this.getUsers().size();
-
-        session.close();
-    }
-
     public static Badge badgeForName(String name)
     {
         Session session = DatabaseManager.getSession();

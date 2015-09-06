@@ -1,5 +1,4 @@
-<div class="right settingsView" ng-init="checkVeteran()">
-    <h1>Connections</h1>
+<div class="settingsView" ng-init="checkVeteran()">
     <div class="settings-content">
         <ul class="connect-social">
             <li ng-hide="AuthService.user.provider === 'TWITTER'" ng-class="{'disconnect-social': AuthService.hasProvider('twitter')}">

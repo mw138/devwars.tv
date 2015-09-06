@@ -52,6 +52,7 @@ public class GameService
         game.setName("Default Name");
         game.setActive(false);
         game.setTimestamp(new Timestamp(new Date().getTime()));
+        game.setSeason(2);
 
         Team blueTeam = new Team();
         blueTeam.setGame(game);

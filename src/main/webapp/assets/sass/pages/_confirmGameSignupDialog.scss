@@ -38,7 +38,7 @@
   .dialog-container__dateBox {
     display: block;
     font-size: 0;
-    width: 182px;
+    width: 235px;
     border: 1px solid white;
     border-radius: 5px;
     margin: 20px auto;
@@ -57,7 +57,8 @@
   }
     
   .dateBox-time {
-    width: 130px;
+    width: auto;
+    margin: 0 20px;
     height: 54px;
     display: inline-block;
     text-align: center;

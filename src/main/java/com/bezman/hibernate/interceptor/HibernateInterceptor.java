@@ -1,11 +1,7 @@
 package com.bezman.hibernate.interceptor;
 
+import com.bezman.annotation.PreFlush;
 import org.hibernate.EmptyInterceptor;
-import org.hibernate.type.Type;
-
-import javax.persistence.PostLoad;
-import javax.persistence.PreUpdate;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -13,8 +9,14 @@ import java.util.Iterator;
 /**
  * Created by Terence on 7/1/2015.
  */
-public class HibernateInterceptor
+public class HibernateInterceptor extends EmptyInterceptor
 {
+
+    @Override
+    public void preFlush(Iterator entities) {
+        entities.forEachRemaining(entity -> HibernateInterceptor.invokeMethodWithAnnotation(entity, PreFlush.class));
+    }
+
     @SuppressWarnings("NullArgumentToVariableArgMethod")
     public static void invokeMethodWithAnnotation(Object obj, Class annotation)
     {

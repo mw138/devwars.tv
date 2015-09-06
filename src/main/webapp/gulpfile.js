@@ -31,6 +31,7 @@ var concat = require('gulp-concat');
 var ngmin = require('gulp-ngmin');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var pipe = require('multipipe');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -158,6 +159,7 @@ gulp.task('dist', function () {
     return gulp.src('index.html')
         .pipe(rename('index.min.html'))
         .pipe(assets)
+        .pipe($.if('*.js', pipe(ngmin(), uglify())))
         .pipe(assets.restore())
         .pipe($.useref())
         .pipe(gulp.dest('./'));
@@ -178,8 +180,8 @@ gulp.task('serve', ['styles'], function () {
     });
 
     gulp.watch(['app/**/*.html'], reload);
-    gulp.watch(['app/**/*.js'], ['concat', reload]);
-    gulp.watch(['app/**/**/*.js'], ['concat', reload]);
+    gulp.watch(['app/**/*.js'], [reload]);
+    gulp.watch(['app/**/**/*.js'], [reload]);
     gulp.watch(['assets/sass/**/*.scss'],['styles', reload]);
     gulp.watch(['app/images/**/*'], reload);
 });

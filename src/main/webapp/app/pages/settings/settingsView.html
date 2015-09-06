@@ -1,15 +1,23 @@
 <div class="settingsView inner">
 
-	<div class="left">
-		<h1>Settings</h1>
-		<ul class="settings-nav">
-			<li ui-sref="settings.accountView" ui-sref-active="selected">Account</li>
-			<li ui-sref="settings.profileView" ui-sref-active="selected">Profile</li>
-			<li ui-sref="settings.notificationsView" ui-sref-active="selected" style="display: none;">Notifications</li>
-			<li ui-sref="settings.connectView" ui-sref-active="selected">Connections</li>
-		</ul> <!-- ul.settings-nav -->
-	</div> <!-- .left -->
+	<div class="col-2--dashboard">
 
-	<div ui-view="settingsInner"></div> <!-- .settingsInner -->
+		<div class="left">
+			<dashnav></dashnav>
+		</div>
+
+		<div class="right">
+			<ul class="settings-nav">
+				<li ui-sref="settings.accountView" ui-sref-active="selected">Account</li>
+				<li ui-sref="settings.profileView" ui-sref-active="selected">Profile</li>
+				<li ui-sref="settings.notificationsView" ui-sref-active="selected" style="display: none;">Notifications</li>
+				<li ui-sref="settings.connectView" ui-sref-active="selected">Connections</li>
+				<li ui-sref="settings.warriorView" ui-sref-active="selected">Warrior Profile</li>
+			</ul> <!-- ul.settings-nav -->
+
+			<div ui-view="settingsInner"></div> <!-- .settingsInner -->
+		</div> <!-- .right -->
+
+	</div>
 
 </div> <!-- .settingsView.inner -->

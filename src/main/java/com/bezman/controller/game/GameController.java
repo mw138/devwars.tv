@@ -3,6 +3,7 @@ package com.bezman.controller.game;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
@@ -11,9 +12,17 @@ import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.hibernate.sql.Select;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.IntegerType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,12 +33,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -54,13 +67,11 @@ public class GameController
         return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
     }
 
-    @UnitOfWork
     /**
      * Retrieves upcoming DevWars games
-     * @param request
-     * @param response
      * @return
      */
+    @UnitOfWork
     @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
     public ResponseEntity upcomingGames(SessionImpl session)
@@ -79,23 +90,47 @@ public class GameController
         }
     }
 
-    @UnitOfWork
     /**
      * Retrieves games that have been done in the past
-     * @param count
-     * @param offset
+     * @param queryCount
+     * @param queryOffset
      * @return
      */
+    @UnitOfWork
     @RequestMapping("/pastgames")
-    public ResponseEntity pastGames(SessionImpl session, @RequestParam(value = "count", required = false, defaultValue = "8") int count, @RequestParam(value = "offset", required = false, defaultValue = "0") int offset)
+    public ResponseEntity pastGames(
+            SessionImpl session,
+            @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
+            @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
+    )
     {
-        count = count > 8 ? 8 : count;
+        /**
+         * Make sure count isn't too high
+         */
+        final Integer count = queryCount > 8 ? 8 : queryCount;
 
-        Query query = session.createQuery("from Game where done = true order by id desc");
-        query.setFirstResult(offset);
-        query.setMaxResults(count);
+        /**
+         * Get all seasons
+         */
+        Criteria criteria = session.createCriteria(Game.class)
+                .setProjection(Projections.projectionList()
+                                .add(Projections.groupProperty("season"))
+                );
 
-        List<Game> pastGames = query.list();
+        HashMap pastGames = new HashMap<>();
+
+        criteria.list().stream()
+                .forEach(season ->
+                {
+                    Criteria seasonCriteria = session.createCriteria(Game.class)
+                            .add(Restrictions.eq("season", season))
+                            .add(Restrictions.eq("done", true))
+                            .addOrder(Order.desc("id"))
+                            .setMaxResults(count)
+                            .setFirstResult(queryOffset);
+
+                    pastGames.put(season, seasonCriteria.list());
+                });
 
         if (pastGames != null || (pastGames != null && pastGames.size() > 0))
         {
@@ -106,15 +141,33 @@ public class GameController
         }
     }
 
-    @Transactional
+    /**
+     * Get list of games moving backwards from starting point
+     * @return List of games in descending order
+     */
+    @UnitOfWork
+    @RequestMapping("/pastgamelist")
+    public ResponseEntity getGameList(
+            @RequestParam("firstGame") int id,
+            @RequestParam(value = "count", required = false, defaultValue = "10") int count,
+            SessionImpl session)
+    {
+        List<Game> pastGames = session.createCriteria(Game.class)
+                .add(Restrictions.le("id", id))
+                .setMaxResults(count)
+                .addOrder(Order.desc("id"))
+                .list();
+
+        return new ResponseEntity(pastGames, HttpStatus.OK);
+    }
+
     /**
      * Creates a game with the default information
-     * @param request
-     * @param response
      * @param timestamp The time in UTC which the game will start
      * @param name Name of the game (Classic or Zen Garden)
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
     public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
@@ -202,6 +255,7 @@ public class GameController
 
             if(game.isActive())
             {
+                System.out.println(Reference.objectMapper.writeValueAsString(game));
                 Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
                         .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
                         .body(Reference.objectMapper.writeValueAsString(game))
@@ -213,14 +267,12 @@ public class GameController
         }
     }
 
-    @Transactional
     /**
      * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
-     * @param request
-     * @param response
      * @param id ID of game to activate
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/activate")
     public ResponseEntity activateGame(SessionImpl session, @PathVariable("id") int id)
@@ -241,14 +293,12 @@ public class GameController
         }
     }
 
-    @Transactional
     /**
      * Sets the game to inactive
-     * @param request
-     * @param response
      * @param id ID of game to deactivate
      * @return
      */
+    @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/deactivate")
     public ResponseEntity deactivateGame(SessionImpl session, @PathVariable("id") int id)
@@ -780,6 +830,7 @@ public class GameController
      * @throws UnirestException
      * @throws IOException
      */
+    @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/sitepull")
     public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException
     {
@@ -794,6 +845,35 @@ public class GameController
         } else
         {
             return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Method to pull the Cloud Nine website for a specific game
+     * @param id The ID of the games websites you would like to pull
+     * @param response
+     * @throws IOException
+     */
+    @PreAuthorization(minRole = User.Role.BLOGGER)
+    @RequestMapping("/{id}/sitearchive")
+    public void siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
+
+        Game game = GameService.getGame(id);
+
+        if(game != null) {
+            SimpleDateFormat gameFormat = new SimpleDateFormat("yyyy-mm-dd");
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + gameFormat.format(game.getTimestamp()) + "_" + game.getName() + ".zip" + "\"");
+            response.setContentType("application/zip");
+
+            ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
+
+            File zipDir = new File(Reference.SITE_STORAGE_PATH + File.separator + id);
+
+            Util.zipFolder("", zipDir, zipOutputStream);
+
+            zipOutputStream.finish();
+            zipOutputStream.close();
         }
     }
 

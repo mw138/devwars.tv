@@ -16,6 +16,7 @@
         <property name="active" type="boolean" column="active"></property>
         <property name="done" type="boolean" column="done"></property>
         <property name="status" type="string" column="status"></property>
+        <property name="season" type="integer"></property>
 
         <property name="youtubeURL" type="string"></property>
 

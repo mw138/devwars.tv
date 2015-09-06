@@ -43,7 +43,13 @@ public class PreAuthInterceptor implements HandlerInterceptor
             PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
             AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
 
-            if (crossOrigin != null)
+            //Make sure it's not a double header
+            if(!Reference.isProduction())
+            {
+                response.addHeader("Access-Control-Allow-Origin", "*");
+            }
+
+            if (Reference.isProduction() && crossOrigin != null)
             {
                 response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
             }

@@ -202,4 +202,8 @@ public class Reference
         return (String) Reference.properties.get(key);
     }
 
+    public static boolean isProduction()
+    {
+        return Boolean.parseBoolean(Reference.getEnvironmentProperty("production"));
+    }
 }

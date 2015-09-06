@@ -356,10 +356,26 @@ public class User extends BaseModel
         this.gamesWatched = gamesWatched;
     }
 
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getNextRank() {
+        return nextRank;
+    }
+
+    public void setNextRank(Rank nextRank) {
+        this.nextRank = nextRank;
+    }
+
     @JsonIgnore
     public boolean isNative()
     {
-        return "".equals(this.getProvider());
+        return this.getProvider() == null || this.getProvider().isEmpty();
     }
 
     public void logout()
@@ -417,16 +433,6 @@ public class User extends BaseModel
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
 
-        if(this.getRanking() != null)
-        {
-            this.rank = (Rank) session.createCriteria(Rank.class)
-                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
-                    .addOrder(Order.desc("xpRequired"))
-                    .setMaxResults(1)
-                    .uniqueResult();
-
-            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
-        }
 
         session.close();
     }
@@ -533,6 +539,26 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Obsessed"));
         }
 
+        if(this.gamesWatched >= 1)
+        {
+            badgesToAward.add(Badge.badgeForName("First Timer"));
+        }
+
+        if(this.gamesWatched >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Hobbyist"));
+        }
+
+        if(this.gamesWatched >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Biggest Fan"));
+        }
+
+        if(this.gamesWatched >= 50)
+        {
+            badgesToAward.add(Badge.badgeForName("Obsessed"));
+        }
+
         session = DatabaseManager.getSession();
 
         Query playersWonQuery = session.createQuery("from Player player where player.user.id = :id order by player.team.game.timestamp desc");
@@ -631,5 +657,24 @@ public class User extends BaseModel
         }
 
         return false;
+    }
+
+    @PostLoad
+    public void postLoad()
+    {
+        Session session = DatabaseManager.getSession();
+
+        if(this.getRanking() != null)
+        {
+            this.rank = (Rank) session.createCriteria(Rank.class)
+                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
+                    .addOrder(Order.desc("xpRequired"))
+                    .setMaxResults(1)
+                    .uniqueResult();
+
+            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
+        }
+
+        session.close();
     }
 }

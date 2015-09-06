@@ -51,25 +51,40 @@ var app = angular.module('app', [
     'app.modCP',
     'app.blogList',
     'app.blogDirective',
-
-    //Poll
-    'LivePoll-Client',
-    'LivePoll-Display',
-    'Progress',
-    'Tooltip',
+    'app.scroll-bottom',
+    'app.no-scroll-other',
 
     //dependencies
     'ngCookies',
     'ngMaterial',
     'vcRecaptcha',
     'textAngular',
-    'n3-pie-chart',
     'ngImgCrop'
 ]);
 
 app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function ($urlRouterProvider, $httpProvider, $locationProvider) {
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
+
+    if(false) {
+        $httpProvider.interceptors.push(function () {
+
+            var Interceptor = {};
+
+            Interceptor.request = function (config) {
+                var url = config.url;
+
+                if (url.indexOf('.html') < 0) {
+                    config.url = "http://local.bezcode.com:9090/" + config.url;
+                }
+
+                return config;
+            };
+
+            return Interceptor;
+
+        });
+    }
 
     $httpProvider.defaults.transformResponse = function (response) {
         try {
@@ -111,11 +126,8 @@ app.filter("players", function () {
 
 app.run(function ($rootScope, $location, AuthService) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {
-        console.log(toState);
-
         //Is the route protected
         if(toState.auth) {
-
             //Are we logged in?
             AuthService.isLoggedIn()
                 .then(angular.noop, function (error) {

@@ -16,7 +16,7 @@
   .tabBox {
     width: 100%;
     display: block;
-    border-bottom: 5px solid $accent-color;
+    border-bottom: 4px solid $accent-color;
     font-size: 0;
 
     .tab {
@@ -67,15 +67,13 @@
     border: 8px solid;
     position: absolute;
     top: calc(50% - 100px);
-    left: -80px;
-    top: -42px;
-    transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
+    left: -48px;
+    top: -50px;
+    @include rotate(25);
 
     .arrow__inner {
       width: 100px;
-      height: 100px;
+      height: 110px;
     }
   }
 
@@ -89,6 +87,12 @@
     width: 35%;
     float: left;
 
+	  .gameListColumn__container {
+		  height: 60vh;
+		  overflow-y: scroll;
+		  border: 1px solid $accent_color;
+	  }
+	  
     .game {
       background-color: $black;
       padding: 10px;
@@ -100,6 +104,10 @@
         color: $black;
         .gameDate { border-color: $black; }
       }
+		
+		&:last-of-type {
+			margin-bottom: 0;
+		}
 
       .moderateButton {
         font-size: 62%;
@@ -267,13 +275,13 @@
 
     .watchGame {
       position: relative;
-      background: $dgray;
-      color: $gray;
+      background: $gray;
+      color: $lgray;
       float: right;
       cursor: default;
       &:after { content: "Recording Unavailable"; }
 
-      &:hover { color: $gray; background: $dgray; }
+      &:hover { color: $lgray; background: $gray; }
 
       &.active {
         background: $youtube-color;
@@ -376,7 +384,7 @@
       .teamHeader {
         width: 100%;
         padding: 15px;
-        background: $xdgray;
+        background: $black;
         font-size: 14px;
         text-transform: uppercase;
         overflow: hidden;
@@ -384,17 +392,16 @@
         border-bottom: 1px solid;
 
         h3 {
-          display: inline-block;
-          font-size: 16px;
-          position: relative;
-          left: 80px;
+         font-family: $oswald;
+			color: $xdgray;
+			font-size: 18px;
+			top: 14px;
+			position: absolute;
         }
         span.event {
           padding: 2px 7px;
           border: 1px solid;
-          position: absolute;
-          top: 27%;
-          right: 15px;
+			float: right;
         }
 
       }
@@ -464,12 +471,19 @@
 
     .team--blue {
       float: left;
+      border: 1px solid $main-color;
+      border-bottom: 5px solid $main-color;
 
       .teamHeader {
-        color: $main-color;
+        border-color: $main-color;  
       }
+
       span.role {
         color: $main-color;
+      }
+
+      .arrow {
+        border-color: $main-color;
       }
 
       .arrow__inner {
@@ -479,42 +493,34 @@
 
     .team--red {
       float: right;
+      border: 1px solid $accent-color;
+      border-bottom: 5px solid $accent-color;
 
       .teamHeader {
-        color: $accent-color;
+        border-color: $accent-color;  
       }
+
       span.role {
         color: $accent-color;
       }
+
+      .arrow {
+        border-color: $accent-color;
+      }
+
       .arrow__inner {
         background-color: $accent-color;
       }
     }
 
     .team--win {
-      .teamHeader {
-        border-color: color($green, light);
-      }
-      &.team {
-		border-color: color($green, light);
-      }
 		span.event { border-color: color($green, light); color: color($green, light); }
-      span.score {
-		  color: color($green, light);
-      }
+    span.score { color: color($green, light); }
     }
 
     .team--lose {
-      .teamHeader {
-		  border-color: color($red, light);
-      }
-      &.team {
-		  border-color: color($red, light);
-      }
 		span.event { border-color: color($red, light); color: color($red, light); }
-      span.score {
-		  color: color($red, light);
-      }
+    span.score { color: color($green, light); }
     }
   } /* .teamBox */
 
@@ -577,6 +583,7 @@
   }
 
   .gameHeader {
+	  background: $black;
     text-transform: uppercase;
     text-align: center;
     font-weight: 200;
@@ -729,9 +736,70 @@
 		
 	}
 	
-	
-	
-	
-	
-	
+  .votes-container {
+    float: left;
+    width: 320px;
+    font-size: 0;
+    border-right: 1px solid #363636;
+    
+    &.func-vote {
+      float: right;
+      border: none;
+    }
+    
+    h3 {
+      text-align: center;
+      text-transform: uppercase;
+      padding: 15px 0;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 400;
+    }
+    
+    span {
+      display: inline-block;
+      width: 34px;
+      line-height: 20px;
+      vertical-align: middle;
+      text-align: center;
+      color: #fff;
+      font-size: 20px;
+    }
+    
+    .red-team__votes {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      width: 250px;
+      height: 20px;
+      background: #e91e63;
+    }
+    
+    .blue-team__votes {
+      height: 100%;
+      background: #03a9f4;
+    }
+	  
+	  .total_votes {
+		  font-size: 14px;
+		  text-align: center;
+		  margin-top: 15px;
+		  color: $lgray;
+	  }
+    
+    .separator {
+      position: absolute;
+      top: -5px;
+      left: 33%;
+      margin-left: -1px;
+      width: 2px;
+      height: 30px;
+      background: #fff;
+    }
+    
+    .separator-right {
+      left: 66%;
+      margin-left: 0;
+    }
+  }
 }
