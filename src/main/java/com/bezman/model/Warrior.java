@@ -5,8 +5,11 @@ import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.PreUpdate;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 /**
@@ -21,22 +24,28 @@ public class Warrior extends BaseModel
     @UserPermissionFilter(userField = "user")
     private String firstName;
 
+    @NotEmpty
     private String favFood;
 
     @UserPermissionFilter(userField = "user")
     private String favTool;
 
     @UserPermissionFilter(userField = "user")
+    @NotEmpty
     private String about;
 
+    @NotEmpty
     private String c9Name;
 
     @UserPermissionFilter(userField = "user")
     private String company;
 
     @UserPermissionFilter(userField = "user")
+    @NotEmpty
     private String location;
 
+    @Min(1)
+    @Max(5)
     private Integer htmlRate, cssRate, jsRate;
 
     @UserPermissionFilter(userField = "user")

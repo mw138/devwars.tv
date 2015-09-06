@@ -107,7 +107,7 @@ angular.module("app.warriorReg", [])
             WarriorService.updateWarrior(JSON.stringify(warrior), function (success) {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Updated Warrior");
             }, function (error) {
-                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
+                ToastService.showErrorList(error.data);
             });
         };
 
