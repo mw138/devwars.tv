@@ -7,28 +7,42 @@
 		height: auto;
         margin-bottom: 20px;
 		h3 { font-size: 2rem; font-weight: 200; }
-		span { font-size: 14px; }	
+		span { display: block; font-size: 14px; }	
 
 		&.explain {
             background: $main-color;
             &:hover {
-                background-color: lighten($main-color, 5%);
+                background: lighten($main-color, 5%);
             }
         }
 
 	    &.donate {
-		    background-color: #0E9841;
+		    background: #0E9841;
 		    &:hover {
-			    background-color: lighten(#0E9841, 5%);
+			    background: lighten(#0E9841, 5%);
 		    }
 	    }
 
         &.extension {
-            background-color: $accent-color;
+            background: $accent-color;
             h3 { font-size: 1.6rem; }
             &:hover {
-                background-color: lighten($accent-color, 5%);
+                background: lighten($accent-color, 5%);
             }
+        }
+
+        &.advertise {
+        	padding: 20px 0;
+        	border: 1px solid $gray;
+        	background: $dgray;
+
+        	span {
+        		padding: 10px 0;
+        	}
+
+        	&:hover {
+        		background: $gray;
+        	}
         }
     }
 
