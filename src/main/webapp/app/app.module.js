@@ -49,6 +49,7 @@ var app = angular.module('app', [
     'app.confirmDialog',
     'app.leaderboards',
     'app.modCP',
+    'app.scroll-bottom',
 
     //dependencies
     'ngCookies',

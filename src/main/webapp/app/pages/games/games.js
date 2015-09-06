@@ -242,21 +242,27 @@ angular.module("app.games", [])
             return false;
         };
 
+        $scope.loadMore = function () {
+            var offset = $scope.pastGames.filter(function (game) {
+                return game.season == $scope.selectedSeason;
+            }).length;
+
+            GameService.pastGames(offset, null, function (success) {
+                success.data[$scope.selectedSeason].forEach(function (a) {
+                    $scope.pastGames.push(a);
+                })
+            }, angular.noop);
+        };
+
         GameService.nearestGame(function (success) {
             $scope.games.push(success.data);
         }, angular.noop);
 
-        angular.element('.gameListColumn__container').bind('scroll', function (event) {
-            if( event.target.scrollTop >= (event.target.scrollHeight - event.target.offsetHeight)) {
-                var offset = $scope.pastGames.filter(function (game) {
-                    return game.season == $scope.selectedSeason;
-                }).length;
+        $('.gameListColumn__container').bind('mousewheel', function (event) {
+            var target = angular.element('.gameListColumn__container')[0];
 
-                GameService.pastGames(offset, null, function (success) {
-                    success.data[$scope.selectedSeason].forEach(function (a) {
-                        $scope.pastGames.push(a);
-                    })
-                }, angular.noop);
+            if( target.scrollTop >= (target.scrollHeight - target.offsetHeight)) {
+                return false;
             }
         });
 

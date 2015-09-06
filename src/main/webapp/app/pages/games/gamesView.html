@@ -10,7 +10,7 @@
                     <a href="" class="tab" ng-click="setSeasonSelected(1)" ng-class="{active: isSeasonSelected(1)}">Season 1</a>
                 </div> <!-- .tabBox -->
 
-				<div class="gameListColumn__container">
+				<div class="gameListColumn__container" ng-scroll-bottom="loadMore()">
               
                 <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                     <div class="gameDate">
