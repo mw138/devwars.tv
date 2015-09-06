@@ -50,6 +50,7 @@ var app = angular.module('app', [
     'app.leaderboards',
     'app.modCP',
     'app.scroll-bottom',
+    'app.no-scroll-other',
 
     //dependencies
     'ngCookies',

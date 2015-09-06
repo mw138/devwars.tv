@@ -258,13 +258,5 @@ angular.module("app.games", [])
             $scope.games.push(success.data);
         }, angular.noop);
 
-        $('.gameListColumn__container').bind('mousewheel', function (event) {
-            var target = angular.element('.gameListColumn__container')[0];
-
-            if( target.scrollTop >= (target.scrollHeight - target.offsetHeight)) {
-                return false;
-            }
-        });
-
         $scope.lastTimeClicked = new Date().getTime();
     }]);
