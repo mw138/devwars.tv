@@ -210,7 +210,7 @@ angular.module("app.games", [])
 
             var objectivePoints = game.teams[teamName].completedObjectives.length;
 
-            if(objectivePoints == game.objectives.length) {
+            if(objectivePoints == game.objectives.length && game.objectives.length > 0) {
                 objectivePoints += 1;
             }
 

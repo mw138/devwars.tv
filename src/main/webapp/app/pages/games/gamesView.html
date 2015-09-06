@@ -252,9 +252,9 @@
                         <div class="scoreBox">
                             <div class="scoreRow scoreRow--{{team.name}}" ng-repeat="team in game.teams">
                                 <div class="scoreSlot totalPoints">
-                                    <h2>{{team.completedObjectives.length + getVotePointsEarned(team.name, game)}}</h2>
-                                    <span ng-show="team.completedObjectives.length > 1">points</span>
-                                    <span ng-show="team.completedObjectives.length <= 1">point</span>
+                                    <h2>{{getVotePointsEarned(team.name, game)}}</h2>
+                                    <span ng-show="getVotePointsEarned(team.name, game) > 1">points</span>
+                                    <span ng-show="getVotePointsEarned(team.name, game) < 1">point</span>
                                 </div>
 
                                 <div class="scoreSlot totalObjectives">
