@@ -186,13 +186,15 @@ gulp.task('serve', ['styles'], function () {
     gulp.watch(['app/images/**/*'], reload);
 });
 
-gulp.task('watch', function(){
+gulp.task('watch-files', function(){
     gulp.watch(['app/**/*.html'], reload);
     gulp.watch(['app/**/*.js'], ['concat', reload]);
     gulp.watch(['app/**/**/*.js'], ['concat', reload]);
     gulp.watch(['assets/sass/**/*.scss'], ['styles', reload]);
     gulp.watch(['app/images/**/*'], reload);
 });
+
+gulp.task('watch', ['styles', 'watch-files']);
 
 // Build and serve the output from the dist build
 gulp.task('serve:dist', ['default'], function () {

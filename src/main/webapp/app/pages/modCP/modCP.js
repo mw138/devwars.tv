@@ -143,7 +143,7 @@ angular.module('app.modCP', [
         };
 
         $scope.gameLabel = function (game) {
-            return $filter('date')(game.timestamp, 'mediumDate') + " - " + game.name;
+            return game.id + " : " + $filter('date')(game.timestamp, 'mediumDate') + " - " + game.name;
         };
 
         $scope.createGame = function () {

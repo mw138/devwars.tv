@@ -1,22 +1,28 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.Reference.Reference;
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.model.User;
 import com.bezman.model.Warrior;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,6 +33,8 @@ import java.util.Date;
 @RequestMapping("/v1/warrior")
 public class WarriorController
 {
+    @Autowired
+    Validator validator;
 
     /**
      * Cloud Nine registration
@@ -93,8 +101,18 @@ public class WarriorController
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity updateWarrior(@AuthedUser User user,
                                         @JSONParam("warrior") Warrior warrior,
-                                        SessionImpl session)
-    {
+                                        SessionImpl session) throws JsonProcessingException {
+
+        Errors errors = new BeanPropertyBindingResult(warrior, warrior.getClass().getName());
+        validator.validate(warrior, errors);
+
+        if(errors.hasErrors())
+        {
+            return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
+
+        System.out.println(Reference.objectMapper.writeValueAsString(errors.getAllErrors()));
+
         if(user.getWarrior() == null) return new ResponseEntity("You are not a warrior", HttpStatus.CONFLICT);
 
         user = (User) session.merge(user);
