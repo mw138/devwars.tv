@@ -8,16 +8,14 @@ angular.module("app.blog", [])
                     controller: "BlogController",
 
                     resolve: {
-                        posts: ['$http', function ($http) {
-                            return $http({
-                                url: "/v1/blog/all"
-                            })
+                        posts: ['BlogService', function (BlogService) {
+                            return BlogService.http.allPosts();
                         }]
                     }
                 });
 
         }])
-    .controller("BlogController", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce, posts) {
+    .controller("BlogController", ['$scope', 'BlogService', '$mdDialog', 'ToastService', 'AuthService', '$anchorScroll', '$sce', 'posts', function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce, posts) {
         $scope.posts = posts.data;
 
         $scope.AuthService = AuthService;
@@ -71,4 +69,4 @@ angular.module("app.blog", [])
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not delete post");
             })
         }
-    });
+    }]);
