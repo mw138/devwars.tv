@@ -49,7 +49,7 @@ public class AngularServiceBuilder
                 PrintWriter printWriter = new PrintWriter(file);
 
                 printWriter.println("angular.module('" + moduleNamePrefix + "." + serviceName + "', [])");
-                printWriter.println("   .factory('" + serviceName + "', ['$http', function($http){\n var " + serviceName + " = {};\n");
+                printWriter.println("   .factory('" + serviceName + "', ['$http', function($http){\n var " + serviceName + " = {};\n" + serviceName + ".http = {};\n");
 
                 for(Method method : controller.getMethods())
                 {
@@ -186,6 +186,17 @@ public class AngularServiceBuilder
                                     "errorCallback(error)\n" +
                                     "});\n");
                             printWriter.print("\n};\n\n");
+
+                            printWriter.print(serviceName + ".http." + method.getName() + " = function(" + methodParams + "){");
+                            printWriter.print("\nreturn $http({\n" +
+                                    "method: '" + urlMethod + "',\n" +
+                                    "url: '" + absoluteUrl.replace("{", "' + ").replace("}", " + '") + "',\n" +
+                                    (urlMethod.equalsIgnoreCase("get") ? "params" : "data") + ": {" +
+                                    queryParamsString +
+                                    "}" +
+                                    "\n})" +
+                                    "};");
+
                         }
                     }catch (ArrayIndexOutOfBoundsException e) {
                         System.out.println("Couldn't do " + method.getName());

@@ -1,6 +1,7 @@
 angular.module('app.UserService', [])
    .factory('UserService', ['$http', function($http){
  var UserService = {};
+UserService.http = {};
 
 /*
 Required Role : PENDING
@@ -20,7 +21,12 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.user = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/',
+params: {}
+})};/*
 Query Parameter {password} : java.lang.String
 Query Parameter {username} : java.lang.String
 */
@@ -39,7 +45,12 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.login = function(password, username, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/login',
+params: {password : password,username : username}
+})};/*
 Required Role : PENDING
 */
 UserService.logout = function(successCallback, errorCallback){
@@ -57,10 +68,15 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.logout = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/logout',
+params: {}
+})};/*
 Query Parameter {captchaResponse} : java.lang.String
 Query Parameter {password} : java.lang.String
-Query Parameter {referral} : int
+Query Parameter {referral} : java.lang.String
 Query Parameter {email} : java.lang.String
 Query Parameter {username} : java.lang.String
 */
@@ -79,26 +95,12 @@ errorCallback(error)
 
 };
 
-/*
-Required Role : USER
-Path Variable {id} : int
-*/
-UserService.getUser = function(id, successCallback, errorCallback){
-$http({
+UserService.http.createUser = function(captchaResponse, password, email, username, referral, successCallback, errorCallback){
+return $http({
 method: 'GET',
-url: '/v1/user/' + id + '',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
+url: '/v1/user/create',
+params: {captchaResponse : captchaResponse,password : password,referral : referral,email : email,username : username}
+})};/*
 Required Role : ADMIN
 Path Variable {id} : int
 Query Parameter {xp} : double
@@ -119,7 +121,106 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.addPoints = function(id, xp, points, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/' + id + '/addpoints',
+params: {xp : xp,points : points}
+})};/*
+Required Role : USER
+Path Variable {id} : int
+*/
+UserService.getUser = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/' + id + '',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.getUser = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/' + id + '',
+params: {}
+})};/*
+Required Role : PENDING
+*/
+UserService.appliedGames = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/appliedgames',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.appliedGames = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/appliedgames',
+params: {}
+})};/*
+Required Role : PENDING
+*/
+UserService.getActivities = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/activity',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.getActivities = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/activity',
+params: {}
+})};/*
+Required Role : ADMIN
+Path Variable {id} : int
+*/
+UserService.deleteUser = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/' + id + '/delete',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.deleteUser = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/' + id + '/delete',
+params: {}
+})};/*
 Required Role : NONE
 Query Parameter {uid} : java.lang.String
 */
@@ -138,32 +239,18 @@ errorCallback(error)
 
 };
 
-/*
-Required Role : PENDING
-Query Parameter {file} : org.springframework.web.multipart.MultipartFile
-*/
-UserService.changeAvatar = function(file, successCallback, errorCallback){
-$http({
+UserService.http.validateUser = function(uid, successCallback, errorCallback){
+return $http({
 method: 'GET',
-url: '/v1/user/changeavatar',
-params: {file : file}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
+url: '/v1/user/validate',
+params: {uid : uid}
+})};/*
 Required Role : PENDING
 */
-UserService.getActivities = function(successCallback, errorCallback){
+UserService.releaseUsername = function(successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/user/activity',
+url: '/v1/user/releasetwitch',
 params: {}
 })
 .then(function(success){
@@ -175,7 +262,130 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.releaseUsername = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/releasetwitch',
+params: {}
+})};/*
+Required Role : PENDING
+Query Parameter {newEmail} : java.lang.String
+Query Parameter {currentPassword} : java.lang.String
+*/
+UserService.changeEmail = function(newEmail, currentPassword, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/changeemail',
+params: {newEmail : newEmail,currentPassword : currentPassword}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.changeEmail = function(newEmail, currentPassword, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/changeemail',
+params: {newEmail : newEmail,currentPassword : currentPassword}
+})};/*
+Path Variable {username} : java.lang.String
+*/
+UserService.getPublicUser = function(username, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/' + username + '/public',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.getPublicUser = function(username, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/' + username + '/public',
+params: {}
+})};/*
+Required Role : PENDING
+*/
+UserService.claimTwitch = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/claimtwitch',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.claimTwitch = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/claimtwitch',
+params: {}
+})};/*
+Query Parameter {uid} : java.lang.String
+Query Parameter {email} : java.lang.String
+*/
+UserService.testEmail = function(uid, email, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/testemail',
+params: {uid : uid,email : email}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.testEmail = function(uid, email, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/testemail',
+params: {uid : uid,email : email}
+})};/*
+Required Role : PENDING
+*/
+UserService.getAvatar = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/user/avatar',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserService.http.getAvatar = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/avatar',
+params: {}
+})};/*
 Required Role : PENDING
 Query Parameter {company} : java.lang.String
 Query Parameter {location} : java.lang.String
@@ -197,14 +407,20 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.updateInfo = function(company, location, url, username, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/updateinfo',
+params: {company : company,location : location,url : url,username : username}
+})};/*
 Required Role : PENDING
+Query Parameter {file} : org.springframework.web.multipart.MultipartFile
 */
-UserService.appliedGames = function(successCallback, errorCallback){
+UserService.changeAvatar = function(file, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/user/appliedgames',
-params: {}
+url: '/v1/user/changeavatar',
+params: {file : file}
 })
 .then(function(success){
 successCallback(success)
@@ -215,100 +431,12 @@ errorCallback(error)
 
 };
 
-/*
-Path Variable {username} : java.lang.String
-*/
-UserService.getPublicUser = function(username, successCallback, errorCallback){
-$http({
+UserService.http.changeAvatar = function(file, successCallback, errorCallback){
+return $http({
 method: 'GET',
-url: '/v1/user/' + username + '/public',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
-Path Variable {username} : java.lang.String
-*/
-UserService.getUserAvatar = function(username, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/user/' + username + '/avatar',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
-Required Role : PENDING
-Query Parameter {newEmail} : java.lang.String
-Query Parameter {currentPassword} : java.lang.String
-*/
-UserService.changeEmail = function(newEmail, currentPassword, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/user/changeemail',
-params: {newEmail : newEmail,currentPassword : currentPassword}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
-Required Role : PENDING
-*/
-UserService.getAvatar = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/user/avatar',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
-Required Role : ADMIN
-Path Variable {id} : int
-*/
-UserService.deleteUser = function(id, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/user/' + id + '/delete',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
+url: '/v1/user/changeavatar',
+params: {file : file}
+})};/*
 Required Role : PENDING
 Query Parameter {newPassword} : java.lang.String
 Query Parameter {currentPassword} : java.lang.String
@@ -328,25 +456,12 @@ errorCallback(error)
 
 };
 
-/*
-Required Role : PENDING
-*/
-UserService.claimTwitch = function(successCallback, errorCallback){
-$http({
+UserService.http.changePassword = function(newPassword, currentPassword, successCallback, errorCallback){
+return $http({
 method: 'GET',
-url: '/v1/user/claimtwitch',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
+url: '/v1/user/changepassword',
+params: {newPassword : newPassword,currentPassword : currentPassword}
+})};/*
 Required Role : PENDING
 */
 UserService.getBadges = function(successCallback, errorCallback){
@@ -364,32 +479,18 @@ errorCallback(error)
 
 };
 
-/*
-Query Parameter {uid} : java.lang.String
-Query Parameter {email} : java.lang.String
+UserService.http.getBadges = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/badges',
+params: {}
+})};/*
+Path Variable {username} : java.lang.String
 */
-UserService.testEmail = function(uid, email, successCallback, errorCallback){
+UserService.getUserAvatar = function(username, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/user/testemail',
-params: {uid : uid,email : email}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-/*
-Required Role : PENDING
-*/
-UserService.releaseUsername = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/user/releasetwitch',
+url: '/v1/user/' + username + '/avatar',
 params: {}
 })
 .then(function(success){
@@ -401,7 +502,12 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.getUserAvatar = function(username, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/' + username + '/avatar',
+params: {}
+})};/*
 Required Role : PENDING
 */
 UserService.markNotificationsAsRead = function(notifications, successCallback, errorCallback){
@@ -419,7 +525,12 @@ errorCallback(error)
 
 };
 
-/*
+UserService.http.markNotificationsAsRead = function(notifications, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/user/notifications/read',
+data: {notifications : notifications}
+})};/*
 Required Role : PENDING
 */
 UserService.getUnreadNotifications = function(successCallback, errorCallback){
@@ -437,5 +548,10 @@ errorCallback(error)
 
 };
 
-return UserService;
+UserService.http.getUnreadNotifications = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/user/notifications',
+params: {}
+})};return UserService;
 }]);
