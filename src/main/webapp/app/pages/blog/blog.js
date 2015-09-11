@@ -5,12 +5,20 @@ angular.module("app.blog", [])
                 .state('blog', {
                     url: '/blog',
                     templateUrl: '/app/pages/blog/blogView.html',
-                    controller: "BlogController"
+                    controller: "BlogController",
+
+                    resolve: {
+                        posts: function ($http) {
+                            return $http({
+                                url: "/v1/blog/all"
+                            })
+                        }
+                    }
                 });
 
         }])
-    .controller("BlogController", ["$scope", "BlogService", "$mdDialog", "ToastService", "AuthService", "$anchorScroll", "$sce", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce) {
-        $scope.posts = [];
+    .controller("BlogController", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce, posts) {
+        $scope.posts = posts.data;
 
         $scope.AuthService = AuthService;
 
@@ -20,7 +28,7 @@ angular.module("app.blog", [])
             }, function (error) {
                 console.log(error);
             });
-        }
+        };
 
         $scope.newPost = function ($event) {
             $mdDialog.show({
@@ -65,4 +73,4 @@ angular.module("app.blog", [])
         }
 
         $scope.updatePosts();
-    }])
+    })
