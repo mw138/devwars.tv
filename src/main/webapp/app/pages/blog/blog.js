@@ -8,11 +8,11 @@ angular.module("app.blog", [])
                     controller: "BlogController",
 
                     resolve: {
-                        posts: function ($http) {
+                        posts: ['$http', function ($http) {
                             return $http({
                                 url: "/v1/blog/all"
                             })
-                        }
+                        }]
                     }
                 });
 

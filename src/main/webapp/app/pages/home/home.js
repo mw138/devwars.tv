@@ -15,21 +15,21 @@ home.config(['$stateProvider',
                 controller: "HomeController",
 
                 resolve: {
-                    allInfo: function (InfoService) {
+                    allInfo: ['InfoService', function (InfoService) {
                         return InfoService.http.allInfo();
-                    },
+                    }],
 
-                    bitsLeaderboard: function (InfoService) {
+                    bitsLeaderboard: ['InfoService', function (InfoService) {
                         return InfoService.http.bitsLeaderboard();
-                    },
+                    }],
 
-                    xpLeaderboard: function (InfoService) {
+                    xpLeaderboard: ['InfoService', function (InfoService) {
                         return InfoService.http.xpLeaderboard();
-                    },
+                    }],
 
-                    blogPosts: function (BlogService) {
+                    blogPosts: ['BlogService', function (BlogService) {
                         return BlogService.http.allPosts();
-                    }
+                    }]
                 }
             });
 
