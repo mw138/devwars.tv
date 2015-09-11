@@ -23,7 +23,7 @@ angular.module("app.blog", [])
         $scope.AuthService = AuthService;
 
         $scope.updatePosts = function () {
-            BlogService.allPosts(function (success) {
+            BlogService.allPosts(null, null, null, function (success) {
                 $scope.posts = success.data;
             }, function (error) {
                 console.log(error);
@@ -41,7 +41,7 @@ angular.module("app.blog", [])
                     $scope.updatePosts();
                 }, function (error) {
                     //Otherwise means they just clicked cancel
-                    if(error) {
+                    if (error) {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not publish post");
                     }
                 })
@@ -61,7 +61,7 @@ angular.module("app.blog", [])
                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Edited post");
                     $scope.updatePosts();
                 }, angular.noop)
-        }
+        };
 
         $scope.deletePost = function (post) {
             BlogService.deleteBlog(post.id, function (success) {
@@ -71,6 +71,4 @@ angular.module("app.blog", [])
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not delete post");
             })
         }
-
-        $scope.updatePosts();
-    })
+    });
