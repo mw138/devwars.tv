@@ -37,10 +37,12 @@ home.config(['$stateProvider',
 
 home.controller("HomeController", function ($scope, InfoService, DialogService, BlogService, $location, $anchorScroll, AuthService, allInfo, bitsLeaderboard, xpLeaderboard, blogPosts) {
 
+    console.log(blogPosts);
+
     $scope.info = allInfo.data;
     $scope.bitsLeaderboard = bitsLeaderboard.data;
     $scope.xpLeaderboard = xpLeaderboard.data;
-    $scope.posts = blogPosts.data.splice(3, blogPosts.data.length - 3);
+    $scope.posts = blogPosts.data.slice(0, 3);
 
     $scope.DialogService = DialogService;
     $scope.AuthService = AuthService;
