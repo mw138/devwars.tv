@@ -2,12 +2,15 @@ package com.bezman.service;
 
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.init.DatabaseManager;
+import com.bezman.model.ConnectedAccount;
+import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -137,6 +140,37 @@ public class UserService
         session.close();
 
         return count.intValue();
+    }
+
+    public static void addTwitchPointsToUser(User user)
+    {
+        Session session = DatabaseManager.getSession();
+
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
+                .filter(account ->
+                        "TWITCH".equals(account.getProvider()) && account.getDisconnected() == false)
+                .findFirst();
+
+        boolean isTwitchAccount = "TWITCH".equals(user.getProvider());
+
+        if(!connectedAccount.isPresent() && !isTwitchAccount) return;
+
+        String username = connectedAccount.isPresent() ? connectedAccount.get().getUsername() : user.getUsername();
+
+        TwitchPointStorage twitchPointStorage = (TwitchPointStorage) session.createQuery("from TwitchPointStorage where username = :username")
+                .setString("username", username)
+                .setMaxResults(1)
+                .uniqueResult();
+
+        if (twitchPointStorage != null)
+        {
+            user.getRanking().addPoints(twitchPointStorage.getPoints());
+            user.getRanking().addXP(twitchPointStorage.getXp());
+
+            session.delete(twitchPointStorage);
+        }
+
+        session.close();
     }
 
 }
