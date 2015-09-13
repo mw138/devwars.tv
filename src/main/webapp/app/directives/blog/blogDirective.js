@@ -9,6 +9,8 @@ angular.module('app.blogDirective', [])
 
             controller: function ($scope, $location) {
 
+                $scope.location = window.location.href;
+
                 $scope.shouldShowTags = function (blog) {
                     if(blog) {
                         return blog.tags.length > 0;

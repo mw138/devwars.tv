@@ -26,11 +26,12 @@
 <div class="post-sharebox">
     <h2>Share this story</h2>
     <ul>
-        <li><a class="facebook" href=""><i class="fa fa-facebook"></i></a></li>
-        <li><a class="twitter" href=""><i class="fa fa-twitter"></i></a></li>
-        <li><a class="gplus" href=""><i class="fa fa-google-plus"></i></a></li>
-        <li><a class="reddit" href=""><i class="fa fa-reddit"></i></a></li>
+        <li><a class="facebook" href="http://www.facebook.com/share.php?u={{ location }}&title={{ post.title }}"><i class="fa fa-facebook"></i></a></li>
+        <li><a class="twitter" href="https://twitter.com/intent/tweet?text={{ post.title }} : &url={{ location }}&via=devwarstv"><i class="fa fa-twitter"></i></a></li>
+        <li><a class="gplus" href="https://plus.google.com/share?url={{ location }}"><i class="fa fa-google-plus"></i></a></li>
+        <li><a class="reddit" href="http://www.reddit.com/submit?url={{ location }}&title={{ post.title }}"><i class="fa fa-reddit"></i></a></li>
     </ul>
 </div>
 
 <a href="" class="read-more" ng-click="readMore(post)">Read More...</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
