@@ -391,7 +391,7 @@ public class GameController
             session.close();
         }
 
-
+        pastGamesCache.invalidateAll();
 
         return responseEntity;
     }
