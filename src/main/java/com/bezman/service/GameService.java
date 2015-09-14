@@ -8,8 +8,13 @@ import com.bezman.model.Team;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.IntegerType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -21,6 +26,7 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -167,7 +173,7 @@ public class GameService
 
                     source = source.replace("/", File.separator);
 
-                    if(source.indexOf("http") == 0 ||source.indexOf("//") == 0) return;
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
                     try
                     {
@@ -234,6 +240,42 @@ public class GameService
 
         fileOutputStream.close();
         urlConnection.getInputStream().close();
+    }
+
+    public static HashMap pastGames(Integer queryCount, Integer queryOffset)
+    {
+        Session session = DatabaseManager.getSession();
+        /**
+         * Make sure count isn't too high
+         */
+        final Integer count = queryCount > 8 ? 8 : queryCount;
+
+        /**
+         * Get all seasons
+         */
+        Criteria criteria = session.createCriteria(Game.class)
+                .setProjection(Projections.projectionList()
+                                .add(Projections.groupProperty("season"))
+                );
+
+        HashMap pastGames = new HashMap<>();
+
+        criteria.list().stream()
+                .forEach(season ->
+                {
+                    Criteria seasonCriteria = session.createCriteria(Game.class)
+                            .add(Restrictions.eq("season", season))
+                            .add(Restrictions.eq("done", true))
+                            .addOrder(Order.desc("id"))
+                            .setMaxResults(count)
+                            .setFirstResult(queryOffset);
+
+                    pastGames.put(season, seasonCriteria.list());
+                });
+
+        session.close();
+
+        return pastGames;
     }
 
 }
