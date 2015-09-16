@@ -1,6 +1,6 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -11,7 +11,7 @@ public class UserSession extends BaseModel
     private int id;
     private String sessionID;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     public int getId()

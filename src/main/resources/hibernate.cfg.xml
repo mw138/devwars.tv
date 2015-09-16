@@ -29,7 +29,7 @@
         <!-- Use this when you delete the DB again you fucking moron -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
         <property name="hibernate.cache.use_query_cache">false</property>
         <property name="hibernate.cache.use_second_level_cache">false</property>
 

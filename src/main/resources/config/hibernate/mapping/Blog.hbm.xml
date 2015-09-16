@@ -17,5 +17,10 @@
         <many-to-one name="user" class="com.bezman.model.User" lazy="false"></many-to-one>
 
         <property name="timestamp" type="timestamp"></property>
+
+        <set name="tags" table="blog_tags" lazy="false">
+            <key column="post_id"></key>
+            <element type="string" column="tag_name"></element>
+        </set>
     </class>
 </hibernate-mapping>

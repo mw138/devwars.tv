@@ -5,11 +5,13 @@ angular.module("app.warriorReg", [])
                 .state('warriorReg', {
                     url: '/warrior-signup',
                     templateUrl: '/app/pages/warriorReg/warriorRegView.html',
-                    controller: "warriorRegController"
+                    controller: "WarriorRegController",
+
+                    auth: true
                 });
 
         }])
-    .controller("warriorRegController", ["$scope", "AuthService", "WarriorService", "ToastService", "$http", function ($scope, AuthService, WarriorService, ToastService, $http) {
+    .controller("WarriorRegController", ["$scope", "AuthService", "WarriorService", "ToastService", "$http", "$state", "$filter", function ($scope, AuthService, WarriorService, ToastService, $http, $state, $filter) {
 
         $scope.AuthService = AuthService;
 
@@ -20,11 +22,22 @@ angular.module("app.warriorReg", [])
         $scope.warrior.jsRate = 1;
 
         $scope.initWarrior = function () {
-            if(AuthService.user) {
-                console.log(AuthService.user);
-                if(AuthService.user.warrior) location.href = "/";
-            } else {
+            if(!AuthService.user) {
                 AuthService.callbacks.push($scope.initWarrior);
+            } else {
+                if(!AuthService.user.warrior) $state.go('warriorReg');
+
+                $scope.warrior = AuthService.user.warrior;
+
+                var warrior = $scope.warrior;
+
+                if(warrior) {
+                    warrior.month = $filter('date')(warrior.dob, 'MM');
+                    warrior.day = $filter('date')(warrior.dob, 'dd');
+                    warrior.year = $filter('date')(warrior.dob, 'yyyy');
+                    warrior.email = AuthService.user.email;
+                    $scope.hasTS = true;
+                }
             }
         };
 
@@ -51,12 +64,12 @@ angular.module("app.warriorReg", [])
         $scope.setHtml = function (rate) {
             $scope.htmlTooltip = $scope.htmlTooltips[rate - 1];
             $scope.warrior.htmlRate = rate;
-        }
+        };
 
         $scope.setCSS = function (rate) {
             $scope.cssTooltip = $scope.cssTooltips[rate - 1];
             $scope.warrior.cssRate = rate;
-        }
+        };
 
         $scope.setJS = function (rate) {
             $scope.jsTooltip = $scope.jsTooltips[rate - 1];
@@ -86,7 +99,17 @@ angular.module("app.warriorReg", [])
             } else {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must have Teamspeak to be a warrior");
             }
-        }
+        };
+
+        $scope.update = function (warrior) {
+            warrior.dob = new Date(warrior.year, warrior.month - 1, warrior.day).getTime();
+
+            WarriorService.updateWarrior(JSON.stringify(warrior), function (success) {
+                ToastService.showDevwarsToast("fa-check-circle", "Success", "Updated Warrior");
+            }, function (error) {
+                ToastService.showErrorList(error.data);
+            });
+        };
 
         $scope.initWarrior();
 

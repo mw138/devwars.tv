@@ -1,6 +1,5 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -11,7 +10,7 @@ public class Notification extends BaseModel
 
     private int id;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
 
     private String notificationText;

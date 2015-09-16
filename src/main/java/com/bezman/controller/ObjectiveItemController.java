@@ -1,6 +1,5 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.BaseModel;
@@ -24,6 +23,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ObjectiveItemController extends BaseController
 {
 
+    /**
+     * Creates a new objective item
+     * @param request
+     * @param response
+     * @param objective Objective text
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
     public ResponseEntity createObjective(HttpServletRequest request, HttpServletResponse response,
@@ -33,9 +39,16 @@ public class ObjectiveItemController extends BaseController
 
         DatabaseUtil.saveObjects(true, objectiveItem);
 
-        return new ResponseEntity(Reference.gson.toJson(objectiveItem), HttpStatus.OK);
+        return new ResponseEntity(objectiveItem, HttpStatus.OK);
     }
 
+    /**
+     * Gets objective item by id
+     * @param request
+     * @param response
+     * @param id ID of objective item
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}")
     public ResponseEntity getObjective(HttpServletRequest request, HttpServletResponse response,
@@ -45,13 +58,20 @@ public class ObjectiveItemController extends BaseController
 
         if (objectiveItem != null)
         {
-            return new ResponseEntity(objectiveItem.toJSON(), HttpStatus.OK);
+            return new ResponseEntity(objectiveItem, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Objective Not found", HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Deletes objective item
+     * @param request
+     * @param response
+     * @param id ID of objective item to delete
+     * @return
+     */
     @RequestMapping("/{id}/delete")
     public ResponseEntity deleteObjective(HttpServletRequest request, HttpServletResponse response,
                                           @PathVariable("id") int id)
@@ -61,7 +81,7 @@ public class ObjectiveItemController extends BaseController
         if (objectiveItem != null)
         {
             DatabaseUtil.deleteObjects(objectiveItem);
-            return new ResponseEntity(objectiveItem.toJSON(), HttpStatus.OK);
+            return new ResponseEntity(objectiveItem, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("Objective Not found", HttpStatus.NOT_FOUND);

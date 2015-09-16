@@ -1,6 +1,6 @@
 package com.bezman.service;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
 import org.hibernate.Query;
 import org.hibernate.Session;

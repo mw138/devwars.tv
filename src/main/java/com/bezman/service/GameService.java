@@ -1,15 +1,33 @@
 package com.bezman.service;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.Game;
-import com.bezman.model.Player;
 import com.bezman.model.Team;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.io.IOUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.IntegerType;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -40,6 +58,7 @@ public class GameService
         game.setName("Default Name");
         game.setActive(false);
         game.setTimestamp(new Timestamp(new Date().getTime()));
+        game.setSeason(2);
 
         Team blueTeam = new Team();
         blueTeam.setGame(game);
@@ -125,6 +144,138 @@ public class GameService
         session.close();
 
         return game;
+    }
+
+    public static void downloadCurrentGame(Game game) throws UnirestException, IOException
+    {
+        String redPath = Reference.SITE_STORAGE_PATH + File.separator + game.getId() + File.separator + "red";
+        String bluePath = Reference.SITE_STORAGE_PATH + File.separator + game.getId() + File.separator + "blue";
+
+        File redDirectory = new File(redPath);
+        File blueDirectory = new File(bluePath);
+
+        redDirectory.mkdirs();
+        blueDirectory.mkdirs();
+
+        downloadSiteAtDirectory("https://red-devwars-1.c9.io", redPath);
+        downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
+    }
+
+    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException
+    {
+        Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
+
+        document.getElementsByTag("script")
+                .forEach(tag -> {
+                    String source = tag.attr("src");
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
+        document.getElementsByTag("link")
+                .forEach(tag -> {
+                    String source = tag.attr("href");
+
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
+        document.getElementsByTag("img")
+                .forEach(tag -> {
+                    String source = tag.attr("src");
+
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+
+                    if (source.charAt(0) == '/') source = source.substring(1);
+
+                    source = source.replace("/", File.separator);
+
+                    try
+                    {
+                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+
+        downloadURLToFile(site + "/index.html", new File(path + File.separator + "index.html"));
+    }
+
+    public static void downloadURLToFile(String urlLink, File file) throws IOException
+    {
+        URL url = new URL(urlLink);
+
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("GET");
+
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+        IOUtils.copy(urlConnection.getInputStream(), fileOutputStream);
+
+        fileOutputStream.close();
+        urlConnection.getInputStream().close();
+    }
+
+    public static HashMap pastGames(Integer queryCount, Integer queryOffset)
+    {
+        Session session = DatabaseManager.getSession();
+        /**
+         * Make sure count isn't too high
+         */
+        final Integer count = queryCount > 8 ? 8 : queryCount;
+
+        /**
+         * Get all seasons
+         */
+        Criteria criteria = session.createCriteria(Game.class)
+                .setProjection(Projections.projectionList()
+                                .add(Projections.groupProperty("season"))
+                );
+
+        HashMap pastGames = new HashMap<>();
+
+        criteria.list().stream()
+                .forEach(season ->
+                {
+                    Criteria seasonCriteria = session.createCriteria(Game.class)
+                            .add(Restrictions.eq("season", season))
+                            .add(Restrictions.eq("done", true))
+                            .addOrder(Order.desc("id"))
+                            .setMaxResults(count)
+                            .setFirstResult(queryOffset);
+
+                    pastGames.put(season, seasonCriteria.list());
+                });
+
+        session.close();
+
+        return pastGames;
     }
 
 }

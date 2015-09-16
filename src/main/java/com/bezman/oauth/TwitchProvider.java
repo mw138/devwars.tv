@@ -3,7 +3,6 @@ package com.bezman.oauth;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.model.User;
-import com.bezman.service.Security;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
@@ -60,12 +59,12 @@ public class TwitchProvider implements IProvider
 
     public static User userForCode(String code)
     {
-        return userForCodeWithKeys(code, Security.twitchClientID, Security.twitchSecret, Reference.rootURL + "/v1/oauth/twitch_callback");
+        return userForCodeWithKeys(code, Reference.getEnvironmentProperty("twitchClientID"), Reference.getEnvironmentProperty("twitchSecret"), Reference.rootURL + "/v1/oauth/twitch_callback");
     }
 
     public static User userForCode2(String code)
     {
-        return userForCodeWithKeys(code, Security.twitchClientID2, Security.twitchSecret2, Reference.rootURL + "/v1/connect/twitch_callback");
+        return userForCodeWithKeys(code, Reference.getEnvironmentProperty("twitchClientID2"), Reference.getEnvironmentProperty("twitchSecret2"), Reference.rootURL + "/v1/connect/twitch_callback");
     }
 
 }

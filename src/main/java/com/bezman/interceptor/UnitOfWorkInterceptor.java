@@ -1,8 +1,7 @@
 package com.bezman.interceptor;
 
-import com.bezman.Reference.DatabaseManager;
 import com.bezman.annotation.UnitOfWork;
-import jdk.nashorn.internal.runtime.ECMAException;
+import com.bezman.init.DatabaseManager;
 import org.hibernate.Session;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by Terence on 6/29/2015.
+ * Class to open and close sessions on routes
  */
 public class UnitOfWorkInterceptor implements HandlerInterceptor
 {

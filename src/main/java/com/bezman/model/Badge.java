@@ -1,9 +1,7 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.exclusion.GsonExclude;
+import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -21,7 +19,7 @@ public class Badge extends BaseModel
 
     private Integer bitsAwarded, xpAwarded, userCount;
 
-    @GsonExclude
+    @JsonIgnore
     private Set<User> users;
 
     public Badge(){}
@@ -95,14 +93,12 @@ public class Badge extends BaseModel
         this.users = users;
     }
 
-    @JsonIgnore
-    public void updateUsersCount()
-    {
-        Session session = DatabaseManager.getSession();
+    public Integer getUserCount() {
+        return userCount;
+    }
 
-        this.userCount = this.getUsers().size();
-
-        session.close();
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
     }
 
     public static Badge badgeForName(String name)

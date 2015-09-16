@@ -3,7 +3,6 @@ package com.bezman.oauth;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.model.User;
-import com.bezman.service.Security;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -21,8 +20,8 @@ public class GoogleProvider implements IProvider
     {
         com.mashape.unirest.http.HttpResponse<String> accessTokenResponse = Unirest.post("https://www.googleapis.com/oauth2/v3/token")
                 .queryString("code", code)
-                .queryString("client_id", Security.googleClientID)
-                .queryString("client_secret", Security.googleSecret)
+                .queryString("client_id", Reference.getEnvironmentProperty("googleClientID"))
+                .queryString("client_secret", Reference.getEnvironmentProperty("googleSecret"))
                 .queryString("redirect_uri", redirect)
                 .queryString("grant_type", "authorization_code")
                 .asString();

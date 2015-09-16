@@ -1,15 +1,12 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
-import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
 import com.bezman.model.Game;
 import com.bezman.model.Ranking;
 import com.bezman.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Result;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Terence on 4/12/2015.
@@ -33,6 +27,12 @@ import java.util.Random;
 public class InfoController extends BaseController
 {
 
+    /**
+     * Returns Stat info (User count, game count, blog post count, DevBits earned)
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/")
     public ResponseEntity allInfo(HttpServletRequest request, HttpServletResponse response)
     {
@@ -59,6 +59,12 @@ public class InfoController extends BaseController
         return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.OK);
     }
 
+    /**
+     * Leaderboard for devbits (Just sorts users by devbit amount)
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/bitsleaderboard")
     public ResponseEntity bitsLeaderboard(HttpServletRequest request, HttpServletResponse response)
     {
@@ -72,9 +78,15 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
+    /**
+     * Leaderboard for XP (Just sorts users by xp amount)
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("/xpleaderboard")
     public ResponseEntity xpLeaderboard(HttpServletRequest request, HttpServletResponse response)
     {
@@ -88,9 +100,16 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(users), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
+    /**
+     * Sorts based on weird formula Synswag wanted
+     * @param request
+     * @param response
+     * @param page Pagination if you want
+     * @return
+     */
     @RequestMapping("/leaderboard")
     public ResponseEntity leaderboard(HttpServletRequest request, HttpServletResponse response,
                                       @RequestParam(value = "page", required = false, defaultValue = "0") int page)
@@ -119,40 +138,7 @@ public class InfoController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
-
-    /*@RequestMapping("/leaderboard/seed")
-    public ResponseEntity seedLeaderboard(HttpServletRequest request, HttpServletResponse response)
-    {
-
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
-
-        Query query = session.createQuery("from User ");
-
-        List<User> users = query.list();
-
-        for(User user : users)
-        {
-            if (user.getRanking() == null)
-            {
-                Ranking ranking = new Ranking();
-                ranking.setId(user.getId());
-
-                ranking.setPoints((double) new Random().nextInt(10000));
-                ranking.setXp((double) new Random().nextInt(10000));
-
-                session.save(ranking);
-            }
-        }
-
-        session.getTransaction().commit();
-        session.close();
-
-        return null;
-    }*/
-
-
 
 }

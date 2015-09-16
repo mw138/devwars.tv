@@ -30,7 +30,7 @@ angular.module("app.DialogService", [])
                     }
                 })
                     .then(function (success) {
-                        GameService.signupForGame(success.game.id, function (signupSuccess) {
+                        GameService.signUpForGame(success.game.id, function (signupSuccess) {
                             AuthService.init();
                             ToastService.showDevwarsToast("fa-calendar", "Game applied for", $filter("date")(game.timestamp, 'medium'));
                         }, function (error) {
@@ -117,6 +117,24 @@ angular.module("app.DialogService", [])
                 }
 
             });
+
+        };
+
+        DialogService.getConfirmationDialog = function (title, message, yes, no, $event) {
+            return $mdDialog.show({
+                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                controller: "ConfirmDialogController",
+                targetEvent: $event,
+
+                locals: {
+                    title: title,
+                    message: message,
+                    yes: yes,
+                    no: no
+                }
+
+            });
+
         };
 
         return DialogService;

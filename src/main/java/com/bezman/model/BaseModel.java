@@ -1,12 +1,10 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.init.DatabaseManager;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 /**
@@ -14,11 +12,6 @@ import java.util.List;
  */
 public class BaseModel
 {
-    public String toString()
-    {
-        return Reference.gson.toJson(this);
-    }
-
     public static BaseModel byID(Class hibernateClass, int id)
     {
         BaseModel obj = null;
@@ -101,10 +94,5 @@ public class BaseModel
     public void delete()
     {
         DatabaseUtil.deleteObjects(this);
-    }
-
-    public String toJSON()
-    {
-        return Reference.gson.toJson(this);
     }
 }

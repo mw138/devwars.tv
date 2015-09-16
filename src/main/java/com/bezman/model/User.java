@@ -1,34 +1,30 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
-import com.bezman.exclusion.GsonExclude;
-import com.bezman.service.Security;
+import com.bezman.annotation.UserPermissionFilter;
+import com.bezman.init.DatabaseManager;
+import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.expression.spel.ast.QualifiedIdentifier;
 
-import javax.xml.crypto.Data;
-import java.beans.Transient;
-import java.sql.Ref;
+import javax.persistence.PostLoad;
 import java.util.*;
 
 /**
  * Created by Terence on 12/22/2014.
  */
+@JsonSerialize(using = UserPermissionSerializer.class)
 public class User extends BaseModel
 {
 
     public enum Role
     {
-        NONE, PENDING, USER, ADMIN
+        NONE, PENDING, USER, BLOGGER, ADMIN
     }
 
     private int id;
@@ -39,34 +35,38 @@ public class User extends BaseModel
 
     private String username;
 
+    @UserPermissionFilter
     private String email;
 
     private String provider;
 
-    private transient String password;
+    @JsonIgnore
+    private String password;
 
-    public transient UserSession session;
+    @JsonIgnore
+    public UserSession session;
 
     private UserReset passwordReset;
 
     private Ranking ranking;
 
+    @JsonIgnore
     private EmailConfirmation emailConfirmation;
 
     private Role role;
 
     private Set<Integer> appliedGames;
 
+    @UserPermissionFilter
     private Set<ConnectedAccount> connectedAccounts;
 
-    @GsonExclude
+    @JsonIgnore
     private Set<Activity> activityLog;
 
+    @JsonIgnore
     private Set<Badge> badges;
 
-    @GsonExclude
-    private Set<UserTeam> teams;
-
+    @UserPermissionFilter
     private String providerID;
 
     private Integer referredUsers;
@@ -111,24 +111,11 @@ public class User extends BaseModel
     public void setId(int id)
     {
         this.id = id;
-
-        this.performCalculatedProperties(id);
     }
 
     public String getPassword()
     {
         return password;
-    }
-
-    @JsonIgnore
-    public String getUnencryptedPassword()
-    {
-        return Security.decrypt(password);
-    }
-
-    public void setEncryptedPassword(String password)
-    {
-        this.password = Security.encrypt(password);
     }
 
     public void setPassword(String password)
@@ -174,21 +161,6 @@ public class User extends BaseModel
     public void setRanking(Ranking ranking)
     {
         this.ranking = ranking;
-
-        if(ranking != null)
-        {
-            Session session = DatabaseManager.getSession();
-
-            Query rankQuery = session.createQuery("from Rank r where r.xpRequired <= :xp order by r.xpRequired desc");
-            rankQuery.setInteger("xp", this.getRanking().getXp().intValue());
-            rankQuery.setMaxResults(1);
-
-            this.rank = (Rank) DatabaseUtil.getFirstFromQuery(rankQuery);
-
-            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
-
-            session.close();
-        }
     }
 
     public String getProvider()
@@ -201,6 +173,7 @@ public class User extends BaseModel
         this.provider = provider;
     }
 
+    @JsonIgnore
     public Set<Integer> getAppliedGames()
     {
         return appliedGames;
@@ -241,6 +214,7 @@ public class User extends BaseModel
         this.providerID = providerID;
     }
 
+    @JsonIgnore
     public Set<Activity> getActivityLog()
     {
         return activityLog;
@@ -259,16 +233,6 @@ public class User extends BaseModel
     public void setReferredUsers(Integer referredUsers)
     {
         this.referredUsers = referredUsers;
-    }
-
-    public Rank getRank()
-    {
-        return rank;
-    }
-
-    public void setRank(Rank rank)
-    {
-        this.rank = rank;
     }
 
     public Integer getAvatarChanges()
@@ -361,6 +325,7 @@ public class User extends BaseModel
         this.emailConfirmation = emailConfirmation;
     }
 
+    @JsonIgnore
     public Set<Badge> getBadges()
     {
         return badges;
@@ -391,21 +356,26 @@ public class User extends BaseModel
         this.gamesWatched = gamesWatched;
     }
 
-    @JsonIgnore
-    public Set<UserTeam> getTeams()
-    {
-        return teams;
+    public Rank getRank() {
+        return rank;
     }
 
-    public void setTeams(Set<UserTeam> teams)
-    {
-        this.teams = teams;
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getNextRank() {
+        return nextRank;
+    }
+
+    public void setNextRank(Rank nextRank) {
+        this.nextRank = nextRank;
     }
 
     @JsonIgnore
     public boolean isNative()
     {
-        return this.getProvider().equals("");
+        return this.getProvider() == null || this.getProvider().isEmpty();
     }
 
     public void logout()
@@ -443,7 +413,8 @@ public class User extends BaseModel
         return token;
     }
 
-    private void performCalculatedProperties(int id)
+    @PostLoad
+    public void performCalculatedProperties()
     {
         Session session = DatabaseManager.getSession();
 
@@ -462,12 +433,13 @@ public class User extends BaseModel
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
 
+
         session.close();
     }
 
     public boolean canBuyItem(ShopItem item)
     {
-        return this.getRanking().getPoints() >= item.getPrice() && this.getRank().getLevel() >= item.getRequiredLevel();
+        return this.getRanking().getPoints() >= item.getPrice() && this.rank.getLevel() >= item.getRequiredLevel();
     }
 
     public void purchaseItem(ShopItem item)
@@ -547,6 +519,46 @@ public class User extends BaseModel
             badgesToAward.add(Badge.badgeForName("Steamroller"));
         }
 
+        if (this.gamesWon > 0)
+        {
+            badgesToAward.add(Badge.badgeForName("First Timer"));
+        }
+
+        if (this.gamesWon >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Hobbyist"));
+        }
+
+        if (this.gamesWon >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Biggest Fan"));
+        }
+
+        if (this.gamesWon >= 50)
+        {
+            badgesToAward.add(Badge.badgeForName("Obsessed"));
+        }
+
+        if(this.gamesWatched >= 1)
+        {
+            badgesToAward.add(Badge.badgeForName("First Timer"));
+        }
+
+        if(this.gamesWatched >= 5)
+        {
+            badgesToAward.add(Badge.badgeForName("Hobbyist"));
+        }
+
+        if(this.gamesWatched >= 25)
+        {
+            badgesToAward.add(Badge.badgeForName("Biggest Fan"));
+        }
+
+        if(this.gamesWatched >= 50)
+        {
+            badgesToAward.add(Badge.badgeForName("Obsessed"));
+        }
+
         session = DatabaseManager.getSession();
 
         Query playersWonQuery = session.createQuery("from Player player where player.user.id = :id order by player.team.game.timestamp desc");
@@ -576,7 +588,7 @@ public class User extends BaseModel
 
         session.close();
 
-        if (this.getWarrior().getDob() != null)
+        if (this.getWarrior() != null && this.getWarrior().getDob() != null)
         {
             Calendar dob = Calendar.getInstance();
             dob.setTime(this.getWarrior().getDob());
@@ -628,6 +640,7 @@ public class User extends BaseModel
         {
             this.getRanking().addPoints(badge.getBitsAwarded());
             this.getRanking().addXP(badge.getXpAwarded());
+
             this.getBadges().add(badge);
 
             return true;
@@ -644,5 +657,24 @@ public class User extends BaseModel
         }
 
         return false;
+    }
+
+    @PostLoad
+    public void postLoad()
+    {
+        Session session = DatabaseManager.getSession();
+
+        if(this.getRanking() != null)
+        {
+            this.rank = (Rank) session.createCriteria(Rank.class)
+                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
+                    .addOrder(Order.desc("xpRequired"))
+                    .setMaxResults(1)
+                    .uniqueResult();
+
+            this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
+        }
+
+        session.close();
     }
 }

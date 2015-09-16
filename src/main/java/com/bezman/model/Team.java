@@ -1,9 +1,7 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,7 +21,7 @@ public class Team extends BaseModel
 
     private String codeUrl, websiteUrl;
 
-    @GsonExclude
+    @JsonIgnore
     private Game game;
 
     private Set<Player> players;
@@ -177,6 +175,6 @@ public class Team extends BaseModel
         Set<Objective> gameObjectives = this.getGame().getObjectives();
         Set<CompletedObjective> completedObjectives = this.getCompletedObjectives();
 
-        return gameObjectives.size() == completedObjectives.size();
+        return gameObjectives.size() == completedObjectives.size() && gameObjectives.size() > 0;
     }
 }

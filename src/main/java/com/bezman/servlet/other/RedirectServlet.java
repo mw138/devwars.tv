@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,7 +38,7 @@ public class RedirectServlet
     }
 
 
-    @RequestMapping(value = {"modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
+    @RequestMapping(value = {"settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
     public String about(HttpServletRequest request, HttpServletResponse response)
     {
         return "index";
@@ -53,4 +54,21 @@ public class RedirectServlet
         return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.FORBIDDEN);
     }
 
+    @RequestMapping("/challenge")
+    public String challenge()
+    {
+        return "/challenge/index";
+    }
+
+    @RequestMapping("/codeview")
+    public String codeView()
+    {
+        return "/codeview/index";
+    }
+
+    @RequestMapping("/s{seasonID}/{gameID}")
+    public String getGamePage(@PathVariable("gameID") int gameID, @PathVariable("seasonID") int seasonID)
+    {
+        return "redirect:/games?game=" + gameID + "&season=" + seasonID;
+    }
 }

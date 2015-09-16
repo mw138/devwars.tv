@@ -1,33 +1,22 @@
 package com.bezman.interceptor;
 
-import com.bezman.Reference.DatabaseManager;
 import com.bezman.Reference.Reference;
-import com.bezman.Reference.Request;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.Reference.util.Util;
 import com.bezman.annotation.AllowCrossOrigin;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.Access;
-import com.bezman.model.SecretKey;
 import com.bezman.model.User;
 import com.bezman.model.UserSession;
-import com.google.gson.annotations.Expose;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.metamodel.relational.Database;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.Ref;
 
 /**
  * Created by Terence on 3/22/2015.
@@ -49,87 +38,82 @@ public class PreAuthInterceptor implements HandlerInterceptor
 
             boolean hasSecretKey  = Reference.requestHasSecretKey(request);
 
-            PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
+            request.setAttribute("hasSecretKey" , hasSecretKey);
 
+            PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
             AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
 
-            if (crossOrigin != null)
+            //Make sure it's not a double header
+            if(!Reference.isProduction())
+            {
+                response.addHeader("Access-Control-Allow-Origin", "*");
+            }
+
+            if (Reference.isProduction() && crossOrigin != null)
             {
                 response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
             }
 
-            if (auth != null)
+            User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
+
+            Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
+
+            if (cookie != null)
             {
-                User.Role requiredRole = auth.minRole();
+                String token = cookie.getValue();
 
-                Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
-
-                if (cookie != null)
+                if (token != null)
                 {
-                    String token = cookie.getValue();
+                    Session session = DatabaseManager.getSession();
+                    Query query = session.createQuery("from UserSession where sessionID = :session");
+                    query.setString("session", token);
 
-                    if (token != null)
+                    UserSession userSession = (UserSession) DatabaseUtil.getFirstFromQuery(query);
+
+                    if (userSession != null)
                     {
-                        Session session = DatabaseManager.getSession();
-                        Query query = session.createQuery("from UserSession where sessionID = :session");
-                        query.setString("session", token);
+                        Query userQuery = session.createQuery("from User where id = :id");
+                        userQuery.setInteger("id", userSession.getId());
 
-                        UserSession userSession = (UserSession) DatabaseUtil.getFirstFromQuery(query);
+                        User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
-                        if (userSession != null)
+                        if (requiredRole == User.Role.NONE)
                         {
-                            Query userQuery = session.createQuery("from User where id = :id");
-                            userQuery.setInteger("id", userSession.getId());
+                            request.setAttribute("user", user);
+                            return true;
+                        }
 
-                            User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
+                        if (user != null)
+                        {
+                            User.Role userRole = User.Role.valueOf(user.getRole());
 
-                            if (requiredRole == User.Role.NONE)
+                            if (userRole.ordinal() >= requiredRole.ordinal())
                             {
                                 request.setAttribute("user", user);
                                 return true;
                             }
-
-                            if (user != null)
-                            {
-                                User.Role userRole = User.Role.valueOf(user.getRole());
-
-                                System.out.println(requiredRole.toString() + ", " + requiredRole.ordinal());
-                                System.out.println(userRole.toString() + ", " + userRole.ordinal());
-
-                                if (userRole.ordinal() >= requiredRole.ordinal())
-                                {
-                                    request.setAttribute("user", user);
-                                    return true;
-                                }
-                            }
                         }
-
-                        session.close();
                     }
+
+                    session.close();
                 }
+            }
 
-                if(hasSecretKey)
-                {
-                    return true;
-                }
-
-                if (requiredRole == User.Role.NONE)
-                {
-                    return true;
-                }
-
-                response.setStatus(403);
-                response.getWriter().print("You need to be at least " + requiredRole.toString());
-
-                return false;
-            } else
+            if(hasSecretKey)
             {
                 return true;
             }
-        }catch (Exception e)
-        {
 
-        }
+            if (requiredRole == User.Role.NONE)
+            {
+                return true;
+            }
+
+            response.setStatus(403);
+            response.getWriter().print("You need to be at least " + requiredRole.toString());
+
+            return false;
+        }catch (Exception e){}
 
         return successful;
     }

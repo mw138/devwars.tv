@@ -1,33 +1,32 @@
 package com.bezman.controller.user;
 
-import com.bezman.Reference.*;
+import com.bezman.Reference.HttpMessages;
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.controller.BaseController;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.validator.Validator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.metamodel.relational.Database;
 import org.json.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.*;
@@ -37,11 +36,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.sql.Ref;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -51,62 +50,49 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/v1/user")
 public class UserController extends BaseController
 {
+
+    /**
+     * Gets the signed in user
+     * @param session
+     * @param user
+     * @return
+     */
+    @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/")
-    public ResponseEntity user(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity user(SessionImpl session, @AuthedUser User user)
     {
-        User currentUser = (User) request.getAttribute("user");
+        User currentUser = (User) session.merge(user);
 
-        if(currentUser != null)
+        if(currentUser.getRanking() == null)
         {
-            if(currentUser.getRanking() == null)
-            {
-                Ranking ranking = new Ranking();
-                ranking.setId(currentUser.getId());
-                currentUser.setRanking(ranking);
+            Ranking ranking = new Ranking();
+            ranking.setId(currentUser.getId());
 
-                DatabaseUtil.saveObjects(true, ranking);
+            currentUser.setRanking(ranking);
 
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                session.createQuery("update ConnectedAccount set disconnected = false where NOT username = ''");
-
-                session.getTransaction().commit();
-                session.close();
-            }
-
-            try
-            {
-                Session session = DatabaseManager.getSession();
-                session.beginTransaction();
-
-                User theUser = (User) session.get(User.class, currentUser.getId());
-
-                List<Badge> badgesToAward = currentUser.tryAllBadges();
-
-                badgesToAward.stream()
-                        .filter(a -> !currentUser.hasBadge(a))
-                        .forEach(badge -> {
-                            theUser.awardBadge(badge);
-                            session.save(new Notification(theUser, "Badge Get : " + badge.getName(), false));
-                            session.save(new Activity(theUser, theUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
-                        });
-
-
-                session.getTransaction().commit();
-                session.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        } else {
-            return new ResponseEntity(HttpMessages.FORBIDDEN, HttpStatus.FORBIDDEN);
+            session.save(ranking);
         }
 
-        return new ResponseEntity(Reference.gson.toJson(currentUser), HttpStatus.OK);
+        List<Badge> badgesToAward = currentUser.tryAllBadges();
+
+        badgesToAward.stream()
+                .filter(a -> !currentUser.hasBadge(a))
+                .forEach(badge -> {
+                    currentUser.awardBadge(badge);
+                    session.save(new Notification(currentUser, "Badge Get : " + badge.getName(), false));
+                    session.save(new Activity(currentUser, currentUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
+                });
+
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves the signed in user's activity
+     * @param request
+     * @param response
+     * @return Signed in User's Activity
+     */
     @RequestMapping("/activity")
     @PreAuthorization(minRole = User.Role.PENDING)
     public ResponseEntity getActivities(HttpServletRequest request, HttpServletResponse response)
@@ -123,10 +109,21 @@ public class UserController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
 
 
+    /**
+     * Sign up method for the user
+     * @param request
+     * @param response
+     * @param username Username for new user
+     * @param email Email for new user
+     * @param password Password for new user
+     * @param rcResponse The Google Recaptcha response sent from the client
+     * @param referral (Optional) The person which referred them
+     * @return
+     */
     @RequestMapping("/create")
     public ResponseEntity createUser(HttpServletRequest request, HttpServletResponse response,
                                      @RequestParam("username") String username,
@@ -199,7 +196,7 @@ public class UserController extends BaseController
             User user = new User();
             user.setUsername(username);
             user.setEmail(email);
-            user.setEncryptedPassword(password);
+            user.setPassword(Security.hash(password));
             user.setRole(User.Role.PENDING.toString());
             user.setAvatarChanges(1);
 
@@ -216,7 +213,7 @@ public class UserController extends BaseController
 
             String subject = "DevWars account confirmation";
             String message = "Click here to confirm your account : " + Reference.rootURL + "/v1/user/validate?uid=" + uid;
-            Util.sendEmail(Security.emailUsername, Security.emailPassword, subject, message, email);
+            Util.sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, message, email);
 
             responseEntity = new ResponseEntity("We have sent an email to " + email, HttpStatus.OK);
 
@@ -247,6 +244,13 @@ public class UserController extends BaseController
         return responseEntity;
     }
 
+    /**
+     * Get a user
+     * @param request
+     * @param response
+     * @param id
+     * @return Requested User
+     */
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}")
     public ResponseEntity getUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -266,7 +270,7 @@ public class UserController extends BaseController
 
         if (user != null)
         {
-            responseEntity = new ResponseEntity(user.toString(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(user, HttpStatus.OK);
         } else
         {
             responseEntity = new ResponseEntity(HttpMessages.NO_USER_FOUND, HttpStatus.NOT_FOUND);
@@ -276,6 +280,13 @@ public class UserController extends BaseController
         return responseEntity;
     }
 
+    /**
+     * Remove a user from the system
+     * @param request
+     * @param response
+     * @param id
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/delete")
     public ResponseEntity deleteUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
@@ -302,6 +313,14 @@ public class UserController extends BaseController
         return responseEntity;
     }
 
+    /**
+     * Validate the user's email
+     * @param request
+     * @param response
+     * @param uid The UID sent in the email to confirm that they are who they say they are
+     * @return
+     * @throws IOException
+     */
     @PreAuthorization(minRole = User.Role.NONE)
     @RequestMapping("/validate")
     public ResponseEntity validateUser(HttpServletRequest request, HttpServletResponse response, @RequestParam("uid") String uid) throws IOException
@@ -350,6 +369,15 @@ public class UserController extends BaseController
         return responseEntity;
     }
 
+    /**
+     * Adds xp / devbits to the specified user
+     * @param request
+     * @param response
+     * @param id
+     * @param points
+     * @param xp
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/addpoints")
     public ResponseEntity addPoints(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "points", required = false, defaultValue = "0") double points, @RequestParam(value = "xp", required = false, defaultValue = "0") double xp)
@@ -397,6 +425,15 @@ public class UserController extends BaseController
         return responseEntity;
     }
 
+    /**
+     * Login the user
+     * @param request
+     * @param response
+     * @param username
+     * @param password
+     * @return
+     * @throws URISyntaxException
+     */
     @RequestMapping(value = "/login")
     public Object login(HttpServletRequest request, HttpServletResponse response, @RequestParam("username") String username, @RequestParam("password") String password) throws URISyntaxException
     {
@@ -410,7 +447,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        if (user != null && user.getUnencryptedPassword().equals(password))
+        if (user != null && user.getPassword().equals(Security.hash(password)))
         {
             if (User.Role.valueOf(user.getRole()) != User.Role.PENDING)
             {
@@ -419,7 +456,7 @@ public class UserController extends BaseController
                 cookie.setPath("/");
 
                 response.addCookie(cookie);
-                responseObject = new ResponseEntity(Reference.gson.toJson(user), HttpStatus.OK);
+                responseObject = new ResponseEntity(user, HttpStatus.OK);
             } else
             {
                 responseObject = new ResponseEntity("You must validate your email before signing in", HttpStatus.CONFLICT);
@@ -432,6 +469,12 @@ public class UserController extends BaseController
         return responseObject;
     }
 
+    /**
+     * Logs out the current user
+     * @param request
+     * @param response
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/logout")
     public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response)
@@ -443,6 +486,12 @@ public class UserController extends BaseController
         return new ResponseEntity("Logged out successfully", HttpStatus.OK);
     }
 
+    /**
+     * Gets the applied games for the signed in user
+     * @param request
+     * @param response
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/appliedgames")
     public ResponseEntity appliedGames(HttpServletRequest request, HttpServletResponse response)
@@ -458,7 +507,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        return new ResponseEntity(Reference.gson.toJson(games), HttpStatus.OK);
+        return new ResponseEntity(games, HttpStatus.OK);
     }
 
 //    @RequestMapping("/initreset")
@@ -523,6 +572,14 @@ public class UserController extends BaseController
 //        }
 //    }
 
+    /**
+     * Method to change password for the signed in user
+     * @param request
+     * @param response
+     * @param currentPassword
+     * @param newPassword
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changepassword")
     public ResponseEntity changePassword(HttpServletRequest request, HttpServletResponse response,
@@ -536,11 +593,11 @@ public class UserController extends BaseController
             return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
         }
 
-        if (user.getUnencryptedPassword().equals(currentPassword))
+        if (user.getPassword().equals(Security.hash(currentPassword)))
         {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update User set password = :password where id = :id");
-            query.setString("password", Security.encrypt(newPassword));
+            query.setString("password", Security.hash(newPassword));
             query.setInteger("id", user.getId());
 
             query.executeUpdate();
@@ -554,6 +611,14 @@ public class UserController extends BaseController
         }
     }
 
+    /**
+     * Method to change the email for the signed in user
+     * @param request
+     * @param response
+     * @param currentPassword
+     * @param newEmail
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeemail")
     public ResponseEntity changeEmail(HttpServletRequest request, HttpServletResponse response,
@@ -562,7 +627,7 @@ public class UserController extends BaseController
     {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative() || user.getUnencryptedPassword().equals(currentPassword))
+        if (!user.isNative() || user.getPassword().equals(Security.hash(currentPassword)))
         {
             if(EmailValidator.getInstance().isValid(newEmail))
             {
@@ -587,6 +652,13 @@ public class UserController extends BaseController
     }
 
 
+    /**
+     * Method to change the avatar picture for the signed in user
+     * @param request
+     * @param response
+     * @param image
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeavatar")
     public ResponseEntity changeAvatar(HttpServletRequest request, HttpServletResponse response,
@@ -631,6 +703,16 @@ public class UserController extends BaseController
         }
     }
 
+    /**
+     * Returns public information for the user
+     * Deprecated due to new json processing
+     * @param request
+     * @param response
+     * @param username
+     * @return
+     * @throws IOException
+     * @throws ServletException
+     */
     @RequestMapping("/{username}/public")
     public ResponseEntity getPublicUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException
     {
@@ -638,17 +720,22 @@ public class UserController extends BaseController
 
         if (currentUser != null)
         {
-            JSONObject userJSON = (JSONObject) JSONValue.parse(Reference.gson.toJson(currentUser));
-            userJSON.remove("warrior");
-            userJSON.remove("connectedAccounts");
-            userJSON.remove("email");
-            return new ResponseEntity(userJSON, HttpStatus.OK);
+            return new ResponseEntity(currentUser, HttpStatus.OK);
         } else
         {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
     }
 
+    /**
+     * Gets the Avatar for the given user
+     * @param request
+     * @param response
+     * @param username
+     * @return
+     * @throws IOException
+     * @throws ServletException
+     */
     @RequestMapping("/{username}/avatar")
     public ResponseEntity getUserAvatar(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException
     {
@@ -678,6 +765,14 @@ public class UserController extends BaseController
         }
     }
 
+    /**
+     * Gets the signed in user's avatar
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws ServletException
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/avatar")
     public ResponseEntity getAvatar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
@@ -695,13 +790,22 @@ public class UserController extends BaseController
             inputStream.close();
         } else
         {
-            System.out.println("NA");
             request.getRequestDispatcher("/assets/img/default-avatar.png").forward(request, response);
         }
 
         return null;
     }
 
+    /**
+     * Method to update the user's personal information
+     * @param request
+     * @param response
+     * @param username
+     * @param url
+     * @param company
+     * @param location
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/updateinfo")
     public ResponseEntity updateInfo(HttpServletRequest request, HttpServletResponse response,
@@ -744,6 +848,12 @@ public class UserController extends BaseController
         return new ResponseEntity("", HttpStatus.OK);
     }
 
+    /**
+     * Method for a veteran to claim his/her old twitch account username
+     * @param request
+     * @param response
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/claimtwitch")
     public ResponseEntity claimTwitch(HttpServletRequest request, HttpServletResponse response)
@@ -825,6 +935,12 @@ public class UserController extends BaseController
         }
     }
 
+    /**
+     * Method for the user to release their twitch account and keep their new username
+     * @param request
+     * @param response
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/releasetwitch")
     public ResponseEntity releaseUsername(HttpServletRequest request, HttpServletResponse response)
@@ -904,6 +1020,16 @@ public class UserController extends BaseController
         }
     }
 
+    /**
+     * Made to test sending html emails
+     * @param request
+     * @param response
+     * @param email
+     * @param uid
+     * @return
+     * @throws UnirestException
+     * @throws MessagingException
+     */
     @RequestMapping("/testemail")
     public ResponseEntity testEmail(HttpServletRequest request, HttpServletResponse response,
                                     @RequestParam("email") String email,
@@ -918,8 +1044,8 @@ public class UserController extends BaseController
         Properties properties = new Properties();
 
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.user", Security.emailUsername);
-        properties.put("mail.smtp.password", Security.emailPassword);
+        properties.put("mail.smtp.user", Reference.getEnvironmentProperty("emailUsername"));
+        properties.put("mail.smtp.password", Reference.getEnvironmentProperty("emailPassword"));
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
@@ -929,13 +1055,13 @@ public class UserController extends BaseController
             @Override
             protected PasswordAuthentication getPasswordAuthentication()
             {
-                return new PasswordAuthentication(Security.emailUsername, Security.emailPassword);
+                return new PasswordAuthentication(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"));
             }
         });
 
         MimeMessage emailMessage = new MimeMessage(session);
 
-        emailMessage.setFrom(new InternetAddress(Security.emailUsername));
+        emailMessage.setFrom(new InternetAddress(Reference.getEnvironmentProperty("emailUsername")));
         emailMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
         emailMessage.setSubject("test");
         emailMessage.setText(message);
@@ -945,6 +1071,12 @@ public class UserController extends BaseController
         return null;
     }
 
+    /**
+     * Gets the signed in user's unread notifications
+     * @param user
+     * @param session
+     * @return
+     */
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/notifications")
@@ -955,7 +1087,7 @@ public class UserController extends BaseController
                 .add(Restrictions.eq("hasRead", false))
                 .list();
 
-        return new ResponseEntity(Reference.gson.toJson(results), HttpStatus.OK);
+        return new ResponseEntity(results, HttpStatus.OK);
     }
 
     @PreAuthorization(minRole = User.Role.PENDING)
@@ -977,18 +1109,23 @@ public class UserController extends BaseController
             notifications.stream()
                     .forEach(a -> a.setHasRead(true));
         }
-//
-        return new ResponseEntity(Reference.gson.toJson(notificationList), HttpStatus.OK);
+
+        return new ResponseEntity(notificationList, HttpStatus.OK);
     }
 
 
-
+    /**
+     * Gets the signed in user's badges
+     * @param request
+     * @param response
+     * @param user
+     * @return
+     */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/badges")
     public ResponseEntity getBadges(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user)
     {
-        return new ResponseEntity(Reference.gson.toJson(user.getBadges()), HttpStatus.OK);
+        return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
-
 
 }

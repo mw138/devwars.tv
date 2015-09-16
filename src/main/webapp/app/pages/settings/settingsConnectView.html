@@ -1,5 +1,4 @@
-<div class="right settingsView" ng-init="checkVeteran()">
-    <h1>Connections</h1>
+<div class="settingsView" ng-init="checkVeteran()">
     <div class="settings-content">
         <ul class="connect-social">
             <li ng-hide="AuthService.user.provider === 'TWITTER'" ng-class="{'disconnect-social': AuthService.hasProvider('twitter')}">
@@ -21,13 +20,6 @@
                 <div class="tooltip">
                     <span ng-if="!AuthService.hasConnectedToProvider('google')">+150</span>
                     <img ng-if="!AuthService.hasConnectedToProvider('google')" src="http://i.imgur.com/3yXppe6.png"/>
-                </div>
-            </li>
-            <li ng-hide="AuthService.user.provider === 'REDDIT'" ng-class="{'disconnect-social': AuthService.hasProvider('reddit')}">
-                <div class="connect-social-button" ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('reddit')}" ng-click="disconnect('reddit')"><i class="fa fa-reddit"></i><span ng-hide="AuthService.hasProvider('reddit')">Connect with Reddit</span><span ng-show="AuthService.hasProvider('reddit')">Disconnect from Reddit</span></div>
-                <div class="tooltip">
-                    <span ng-if="!AuthService.hasConnectedToProvider('reddit')">+150</span>
-                    <img ng-if="!AuthService.hasConnectedToProvider('reddit')" src="http://i.imgur.com/3yXppe6.png"/>
                 </div>
             </li>
             <li ng-hide="AuthService.user.provider === 'TWITCH'" ng-class="{'disconnect-social': AuthService.hasProvider('twitch')}">

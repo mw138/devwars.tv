@@ -12,12 +12,37 @@ home.config(['$stateProvider',
             .state('home', {
                 url: '/',
                 templateUrl: '/app/pages/home/homeView.html',
-                controller: "HomeController"
+                controller: "HomeController",
+
+                resolve: {
+                    allInfo: ['InfoService', function (InfoService) {
+                        return InfoService.http.allInfo();
+                    }],
+
+                    bitsLeaderboard: ['InfoService', function (InfoService) {
+                        return InfoService.http.bitsLeaderboard();
+                    }],
+
+                    xpLeaderboard: ['InfoService', function (InfoService) {
+                        return InfoService.http.xpLeaderboard();
+                    }],
+
+                    blogPosts: ['BlogService', function (BlogService) {
+                        return BlogService.http.allPosts();
+                    }]
+                }
             });
 
     }]);
 
-home.controller("HomeController", ["$scope", "InfoService", "DialogService", "BlogService", "$location", "$anchorScroll", "AuthService", function ($scope, InfoService, DialogService, BlogService, $location, $anchorScroll, AuthService) {
+home.controller("HomeController", function ($scope, InfoService, DialogService, BlogService, $location, $anchorScroll, AuthService, allInfo, bitsLeaderboard, xpLeaderboard, blogPosts) {
+
+    console.log(blogPosts);
+
+    $scope.info = allInfo.data;
+    $scope.bitsLeaderboard = bitsLeaderboard.data;
+    $scope.xpLeaderboard = xpLeaderboard.data;
+    $scope.posts = blogPosts.data.slice(0, 3);
 
     $scope.DialogService = DialogService;
     $scope.AuthService = AuthService;
@@ -27,33 +52,29 @@ home.controller("HomeController", ["$scope", "InfoService", "DialogService", "Bl
             $scope.info = success.data;
         }, function (error) {
             console.log(error);
-        })
+        });
 
         InfoService.bitsLeaderboard(function (success) {
             $scope.bitsLeaderboard = success.data;
         }, function (error) {
             console.log(error);
-        })
+        });
 
         InfoService.xpLeaderboard(function (success) {
             $scope.xpLeaderboard = success.data;
         }, function (error) {
             console.log(error);
-        })
+        });
 
         BlogService.allPosts(function (success) {
-            success.data.splice(2, success.data.length - 2);
+            success.data.splice(3, success.data.length - 3);
             $scope.posts = success.data;
-
-            console.log($scope.posts);
         }, function (error) {
             console.log(error);
-        })
+        });
     };
 
     $scope.scrollToBlogPost = function (id) {
         location.href = "/blog#" + id;
     };
-
-    $scope.updateInfo();
-}]);
+});

@@ -15,6 +15,8 @@ angular.module("app.dashboard", [])
 
                     parent: "dashboard",
 
+                    auth: true,
+
                     views: {
                         '' : {
                             templateUrl: '/app/pages/dashboard/dashboardView.html',
@@ -32,6 +34,8 @@ angular.module("app.dashboard", [])
 
                     parent: "dashboard",
 
+                    auth: true,
+
                     views: {
                         '' : {
                             templateUrl: '/app/pages/dashboard/dashboardView.html',
@@ -48,6 +52,8 @@ angular.module("app.dashboard", [])
                     url: '/badges',
 
                     parent: "dashboard",
+
+                    auth: true,
 
                     views: {
                         '' : {
@@ -68,6 +74,10 @@ angular.module("app.dashboard", [])
         $scope.onLoad = function () {
             UserService.getActivities(function (success) {
                 AuthService.user.activityLog = success.data;
+            }, angular.noop);
+
+            UserService.getBadges(function (success) {
+                AuthService.user.badges = success.data;
             }, angular.noop);
         };
 

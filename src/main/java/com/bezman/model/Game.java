@@ -1,8 +1,10 @@
 package com.bezman.model;
 
-import com.bezman.Reference.DatabaseManager;
+import com.bezman.init.DatabaseManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.IntegerType;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -26,6 +28,11 @@ public class Game extends BaseModel
     private Map<String, Team> teams = new HashMap<>();
 
     private Set<Objective> objectives;
+
+    @JsonIgnore
+    private Set<GameSignup> signups;
+
+    private Integer season;
 
     public int getId()
     {
@@ -125,6 +132,23 @@ public class Game extends BaseModel
     public void setStatus(String status)
     {
         this.status = status;
+    }
+
+    @JsonIgnore
+    public Set<GameSignup> getSignups() {
+        return signups;
+    }
+
+    public void setSignups(Set<GameSignup> signups) {
+        this.signups = signups;
+    }
+
+    public Integer getSeason() {
+        return season;
+    }
+
+    public void setSeason(Integer season) {
+        this.season = season;
     }
 
     public Team getTeamByID(int id)

@@ -1,9 +1,15 @@
 package com.bezman.Reference.util;
 
 import com.bezman.Reference.EmailThread;
+import org.apache.commons.io.IOUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created by Terence on 12/22/2014.
@@ -73,6 +79,27 @@ public class Util
         }
 
         return oldMap;
+    }
+
+    public static void zipFolder(String path, File directory, ZipOutputStream zipOutputStream) throws IOException
+    {
+        for(File file : directory.listFiles())
+        {
+            if (file.isDirectory())
+            {
+                zipFolder(path + file.getName() + File.separator, file, zipOutputStream);
+            } else
+            {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                zipOutputStream.putNextEntry(new ZipEntry(path + file.getName()));
+
+                IOUtils.copy(fileInputStream, zipOutputStream);
+
+                zipOutputStream.closeEntry();
+                fileInputStream.close();
+            }
+        }
+
     }
 
 }

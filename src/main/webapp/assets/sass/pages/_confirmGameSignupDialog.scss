@@ -10,7 +10,12 @@
       color: red;
     }
   }
-
+    
+  .warning {
+    padding: 10px 10px;
+    color: red;
+  }
+    
   .dialog-container__header {
     text-align: center;
     font-size: 22px;
@@ -33,7 +38,7 @@
   .dialog-container__dateBox {
     display: block;
     font-size: 0;
-    width: 182px;
+    width: 235px;
     border: 1px solid white;
     border-radius: 5px;
     margin: 20px auto;
@@ -47,12 +52,13 @@
     vertical-align: top;
     padding: 6px 0 6px 6px;
     
-    span:nth-of-type(1) { font-size: 12px; }
+    span:nth-of-type(1) { font-size: 13px; }
     span:nth-of-type(2) { font-size: 24px; }
   }
     
   .dateBox-time {
-    width: 130px;
+    width: auto;
+    margin: 0 20px;
     height: 54px;
     display: inline-block;
     text-align: center;

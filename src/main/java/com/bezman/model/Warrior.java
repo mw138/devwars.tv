@@ -1,25 +1,60 @@
 package com.bezman.model;
 
-import com.bezman.exclusion.GsonExclude;
+import com.bezman.annotation.PreFlush;
+import com.bezman.annotation.UserPermissionFilter;
+import com.bezman.jackson.serializer.UserPermissionSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.PreUpdate;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 /**
  * Created by Terence on 5/27/2015.
  */
+@JsonSerialize(using = UserPermissionSerializer.class)
 public class Warrior extends BaseModel
 {
 
     private int id;
 
-    private String firstName, favFood, favTool, about, c9Name, company, location;
+    @UserPermissionFilter(userField = "user")
+    private String firstName;
 
+    @NotEmpty
+    private String favFood;
+
+    @UserPermissionFilter(userField = "user")
+    private String favTool;
+
+    @UserPermissionFilter(userField = "user")
+    @NotEmpty
+    private String about;
+
+    @NotEmpty
+    private String c9Name;
+
+    @UserPermissionFilter(userField = "user")
+    private String company;
+
+    @UserPermissionFilter(userField = "user")
+    @NotEmpty
+    private String location;
+
+    @Min(1)
+    @Max(5)
     private Integer htmlRate, cssRate, jsRate;
 
+    @UserPermissionFilter(userField = "user")
     private Date dob;
 
-    @GsonExclude
+    @JsonIgnore
     private User user;
+
+    private Date updatedAt;
 
     public Warrior(){}
 
@@ -167,5 +202,13 @@ public class Warrior extends BaseModel
     public void setLocation(String location)
     {
         this.location = location;
+    }
+
+    public Date getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

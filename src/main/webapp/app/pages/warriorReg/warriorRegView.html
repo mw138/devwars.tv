@@ -91,7 +91,7 @@
 		<input type="text" placeholder="Country" ng-model="warrior.location"/>
         <input type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
         <input type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
-        <textarea placeholder="A Couple of Sentences About Me..." ng-model="warrior.about"></textarea>
+        <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
 
         <button class="button" ng-click="register(warrior)" ng-hide="AuthService.user.warrior">Enter The Battlefield!</button>
         <button class="button button--disabled" disabled ng-show="AuthService.user.warrior">Already Registered!</button>

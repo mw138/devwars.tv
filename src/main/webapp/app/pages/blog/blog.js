@@ -5,23 +5,28 @@ angular.module("app.blog", [])
                 .state('blog', {
                     url: '/blog',
                     templateUrl: '/app/pages/blog/blogView.html',
-                    controller: "BlogController"
+                    controller: "BlogController",
+
+                    resolve: {
+                        posts: ['BlogService', function (BlogService) {
+                            return BlogService.http.allPosts();
+                        }]
+                    }
                 });
 
         }])
-    .controller("BlogController", ["$scope", "BlogService", "$mdDialog", "ToastService", "AuthService", "$anchorScroll", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll) {
-        $scope.posts = [];
+    .controller("BlogController", ['$scope', 'BlogService', '$mdDialog', 'ToastService', 'AuthService', '$anchorScroll', '$sce', 'posts', function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce, posts) {
+        $scope.posts = posts.data;
 
         $scope.AuthService = AuthService;
 
         $scope.updatePosts = function () {
-            BlogService.allPosts(function (success) {
-                console.log(success.data);
+            BlogService.allPosts(null, null, null, function (success) {
                 $scope.posts = success.data;
             }, function (error) {
                 console.log(error);
             });
-        }
+        };
 
         $scope.newPost = function ($event) {
             $mdDialog.show({
@@ -34,7 +39,7 @@ angular.module("app.blog", [])
                     $scope.updatePosts();
                 }, function (error) {
                     //Otherwise means they just clicked cancel
-                    if(error) {
+                    if (error) {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not publish post");
                     }
                 })
@@ -54,7 +59,7 @@ angular.module("app.blog", [])
                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Edited post");
                     $scope.updatePosts();
                 }, angular.noop)
-        }
+        };
 
         $scope.deletePost = function (post) {
             BlogService.deleteBlog(post.id, function (success) {
@@ -64,6 +69,4 @@ angular.module("app.blog", [])
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not delete post");
             })
         }
-
-        $scope.updatePosts();
-    }])
+    }]);

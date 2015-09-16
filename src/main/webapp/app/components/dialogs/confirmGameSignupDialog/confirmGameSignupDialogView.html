@@ -4,11 +4,11 @@
         <h2 class="dialog-container__header">You are registering for the game on:</h2>
         <div class="dialog-container__dateBox">
                 <div class="dateBox-date">
-                        <span>{{game.timestamp | date : 'MMM'}}</span>
-                        <span>{{game.timestamp | date : 'dd'}}</span>
+                        <span>{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
+                        <span>{{game.timestamp | date : 'dd' : 'UTC'}}</span>
                 </div>
                 <div class="dateBox-time">
-                        <span>{{game.timestamp | date : 'shortTime'}}</span>
+                        <span>{{game.timestamp | date : 'shortTime' : 'UTC'}} UTC</span>
                 </div>
         </div>
         <h2 class="dialog-container__header">By clicking confirm I verify that:</h2>
@@ -19,6 +19,10 @@
             <li class="dialog-container__infoItem">I have Teamspeak 3</li>
             <li class="dialog-container__infoItem">I have a basic understanding of English</li>
         </ul>
+        
+        <div class="warning">
+            <h4>WARNING: If your application to play is accepted and you do not turn up to play, your account will be penalised.</h4>
+        </div>
 
         <div class="dialog-container__actions">
             <button class="button" ng-click="confirmSignUp()">Confirm</button>

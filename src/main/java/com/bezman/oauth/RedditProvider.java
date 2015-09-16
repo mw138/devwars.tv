@@ -3,13 +3,10 @@ package com.bezman.oauth;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.model.User;
-import com.bezman.service.Security;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-
-import java.sql.Ref;
 
 /**
  * Created by Terence on 3/24/2015.
@@ -60,12 +57,12 @@ public class RedditProvider implements IProvider
 
     public static User userForCode(String code) throws UnirestException
     {
-        return userForCodeWithKeys(code, Security.redditAppID, Security.redditSecret, Reference.rootURL + "/v1/oauth/reddit_callback");
+        return userForCodeWithKeys(code, Reference.getEnvironmentProperty("redditAppID"), Reference.getEnvironmentProperty("redditSecret"), Reference.rootURL + "/v1/oauth/reddit_callback");
     }
 
     public static User userForCode2(String code) throws UnirestException
     {
-        return userForCodeWithKeys(code, Security.redditAppID2, Security.redditSecret2, Reference.rootURL + "/v1/connect/reddit_callback");
+        return userForCodeWithKeys(code, Reference.getEnvironmentProperty("redditAppID2"), Reference.getEnvironmentProperty("redditSecret2"), Reference.rootURL + "/v1/connect/reddit_callback");
     }
 
 }

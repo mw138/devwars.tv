@@ -1,6 +1,5 @@
 package com.bezman.oauth;
 
-import com.bezman.Reference.Request;
 import com.bezman.Reference.util.Util;
 import com.bezman.model.User;
 

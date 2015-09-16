@@ -1,18 +1,18 @@
 .warriorRegView {
 
-	.title--line {
-		margin-top: 60px!important;
-		margin-bottom: 10px !important;
-		&:before {
-			border-color: $gray;
-		}
-		span {
-			background-color: $dgray;
-			font-size: 24px;
-			color: $lgray;
-		}
-	}
-	
+  .title--line {
+    margin-top: 60px!important;
+    margin-bottom: 10px !important;
+    &:before {
+      border-color: $gray;
+    }
+    span {
+      background-color: $dgray;
+      font-size: 24px;
+      color: $lgray;
+    }
+  }
+
   .warrior-header {
     width: 80%;
     margin: 80px auto -50px auto;
@@ -104,21 +104,21 @@
       margin: 0 auto 20px auto;
       display: flex;
       justify-content: space-between;
-	align-content: center;
+      align-content: center;
 
       input {
         width: calc(50% - 10px);
         display: inline-block;
         margin: 0;
       }
-		
-		&.dateofbirth {
-			
-			span { width: calc(20% - 10px); align-self: center; }
-			input:nth-child(2) { width: calc(40% - 10px); }
-			input:nth-child(3) { width: calc(15% - 10px); }
-			input:nth-child(4) { width: calc(25% - 10px); }
-		}
+
+      &.dateofbirth {
+
+        span { width: calc(20% - 10px); align-self: center; }
+        input:nth-child(2) { width: calc(40% - 10px); }
+        input:nth-child(3) { width: calc(15% - 10px); }
+        input:nth-child(4) { width: calc(25% - 10px); }
+      }
     }
 
     .img-input {
@@ -145,8 +145,8 @@
     button {
       width: 30%;
       padding: 15px 0;
-	margin-top: 40px;
-	display:inline-block;
+      margin-top: 40px;
+      display:inline-block;
     }
 
     .c9-register, .ts-register {
@@ -154,126 +154,126 @@
       //background-color: transparentize(darken($c9-color, 25%), 0.8);
       border: 1px solid $c9-color;
       margin: 0 auto;
-	
+
       img { height: 30px; display: block; margin: 20px auto 0 auto; }
       span { font-size: 14px; padding: 6px 0 10px 0; display: block; }
     }
-	  
-	  .ts-register { 
-		  border-color: #C5CDDB;
-		  margin-top: 40px;
-	  }
-	  
-	  .toggleAccept {
-		  width:60%;
-		  text-align: center;
-		  border: 1px solid $gray;
-		  margin: 0 auto 20px auto;
-		  font-size: 0;
-		  
-		  span {
-			width: 50%;
-			  display: inline-block;
-			  background: $xdgray;
-			  color: $white;
-			  cursor: pointer;
-			  font-size: 14px;
-			  padding: 10px 0;
 
-			  
-			  &.decline.selected {
-				  background: color($red, dark);
-			  }
-			  &.accept.selected {
-				  background: color($green, dark);
-			  }
-			  
-			  &:hover {
-				  background-color: $gray;
-			  }
-			  
-			  &.selected { cursor: default; }
-		  }
-	  }
+    .ts-register {
+      border-color: #C5CDDB;
+      margin-top: 40px;
+    }
+
+    .toggleAccept {
+      width:60%;
+      text-align: center;
+      border: 1px solid $gray;
+      margin: 0 auto 20px auto;
+      font-size: 0;
+
+      span {
+        width: 50%;
+        display: inline-block;
+        background: $xdgray;
+        color: $white;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 10px 0;
+
+
+        &.decline.selected {
+          background: color($red, dark);
+        }
+        &.accept.selected {
+          background: color($green, dark);
+        }
+
+        &:hover {
+          background-color: $gray;
+        }
+
+        &.selected { cursor: default; }
+      }
+    }
 
   }
 
   .skillBox {
     width: 60%;
     margin: 0 auto;
-	 
-	  
-	.positionMain {
-		
-		&.positionMain--html {
-			h6 { margin-top: 0; }
-			h6.skillName { color: $html-color; }
-			.html-hover {
-				background-color: $html-color;
-			}
-			span:not(.selected):hover {
-				background: $html-color;
-				& ~ span { background: $html-color; }
-			}
-		}
-		
-		&.positionMain--css {
-			h6.skillName { color: $css-color; }
-			.css-hover {
-				background-color: $css-color;
-			}
-			span:not(.selected):hover {
-				background: $css-color;
-				& ~ span { background: $css-color; }
-			}
-		}
-		
-		&.positionMain--js {
-			h6.skillName { color: $js-color; }
-			.js-hover {
-				background-color: $js-color;
-			}
-			span:not(.selected):hover {
-				background: $js-color;
-				& ~ span { background: $js-color; }
-			}
-		}
-		
-		
-		& > p {
-			text-align: center;
-			font-size: 13px;
-			line-height: 1.3;
-			color: $lgray;
-			padding: 10px 0 40px 0;
-			display: block;
-		}
-		
-		p.no-margin-bottom {
-			margin-bottom: 0;
-			padding-bottom: 0;
-		}
-	}
 
-	  .positionInfo {
-		  width: 100%;
-		  display: flex;
-		  justify-content: space-between;
 
-		  h6 { 
-		  	margin: 5px 0;
-			font-size: 16px;
-		  }
-	  }
-	
+    .positionMain {
+
+      &.positionMain--html {
+        h6 { margin-top: 0; }
+        h6.skillName { color: $html-color; }
+        .html-hover {
+          background-color: $html-color;
+        }
+        span:not(.selected):hover {
+          background: $html-color;
+          & ~ span { background: $html-color; }
+        }
+      }
+
+      &.positionMain--css {
+        h6.skillName { color: $css-color; }
+        .css-hover {
+          background-color: $css-color;
+        }
+        span:not(.selected):hover {
+          background: $css-color;
+          & ~ span { background: $css-color; }
+        }
+      }
+
+      &.positionMain--js {
+        h6.skillName { color: $js-color; }
+        .js-hover {
+          background-color: $js-color;
+        }
+        span:not(.selected):hover {
+          background: $js-color;
+          & ~ span { background: $js-color; }
+        }
+      }
+
+
+      & > p {
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.3;
+        color: $lgray;
+        padding: 10px 0 40px 0;
+        display: block;
+      }
+
+      p.no-margin-bottom {
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .positionInfo {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      h6 {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+    }
+
     .skillMeter {
       width: 100%;
       height: 15px;
       display: flex;
       justify-content: space-between;
       flex-direction: row-reverse;
-	flex-wrap: wrap;
-		
+      flex-wrap: wrap;
+
       span {
         width: calc(20% - 5px);
         height: 100%;

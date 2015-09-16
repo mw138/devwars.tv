@@ -1,8 +1,14 @@
 angular.module("app.addBlogPostDialog", [])
     .controller("AddBlogPostDialogController", ["$scope", "BlogService", "$mdDialog", "ToastService", function ($scope, BlogService, $mdDialog, ToastService) {
+
         $scope.done = function () {
-            if($scope.title && $scope.description && $scope.text && $scope.image_url) {
-                BlogService.createBlog($scope.image_url, $scope.description, $scope.text, $scope.title, $mdDialog.hide, $mdDialog.cancel);
+            var post = $scope.blog;
+
+            if($scope.tags)
+                post.tags = $scope.tags.split(" ");
+
+            if(post.title && post.description && post.text && post.image_url) {
+                BlogService.createBlog($scope.blog, $mdDialog.hide, $mdDialog.cancel);
             } else {
                 if(!$scope.title && !$scope.description) {
                     ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Missing input fields");
@@ -14,24 +20,26 @@ angular.module("app.addBlogPostDialog", [])
                     }
                 }
             }
-        }
+        };
 
         $scope.cancel = function () {
             $mdDialog.cancel();
         }
     }])
     .controller("EditBlogPostDialogController", ["$scope", "post", "$mdDialog", "BlogService", "ToastService", function($scope, post, $mdDialog, BlogService, ToastService) {
-        $scope.title = post.title;
-        $scope.image_url = post.image_url;
-        $scope.description = post.description;
-        $scope.text = post.text;
+        $scope.blog = post;
+
+        $scope.tags = post.tags.join(" ");
 
         $scope.done = function () {
-            BlogService.updateBlog(post.id, $scope.image_url, $scope.description, $scope.text, $scope.title, function (success) {
-                console.log(success);
+            var updatedPost = $scope.blog;
+
+            if($scope.tags)
+                updatedPost.tags = $scope.tags.split(" ");
+
+            BlogService.updateBlog(post.id, updatedPost, function (success) {
                 $mdDialog.hide();
             }, function (error) {
-                console.log(error);
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Couldn't update post");
             })
         };

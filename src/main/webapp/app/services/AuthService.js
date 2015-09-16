@@ -7,13 +7,19 @@ angular.module("app.AuthService", [])
 
         AuthService.callbacks = [];
 
+        AuthService.roles = [
+            "PENDING",
+            "USER",
+            "BLOGGER",
+            "ADMIN"
+        ];
+
         AuthService.init = function () {
             $http({
                 method: "GET",
                 url: "/v1/user/"
             })
                 .then(function (success) {
-                    console.log(success);
                     AuthService.setUser(success.data);
 
                     for (var i = 0; i < AuthService.callbacks.length; i++) {
@@ -49,7 +55,7 @@ angular.module("app.AuthService", [])
                 }, function (error) {
                     errorCallback(error);
                 })
-        }
+        };
 
         AuthService.logout = function () {
             return $http({
@@ -69,6 +75,17 @@ angular.module("app.AuthService", [])
 
         AuthService.isAdmin = function () {
             return AuthService.user ? AuthService.user.role === "ADMIN" : false;
+        };
+
+        AuthService.isAtLeast = function (min) {
+            if(!AuthService.user) return false;
+
+            var minIndex = AuthService.roles.indexOf(min);
+            var userIndex = AuthService.roles.indexOf(AuthService.user.role);
+
+            if(minIndex < 0) return false;
+
+            return userIndex >= minIndex;
         };
 
         AuthService.hasProvider = function (provider) {
@@ -93,6 +110,13 @@ angular.module("app.AuthService", [])
             }
 
             return false;
+        };
+
+        AuthService.isLoggedIn = function () {
+            return $http({
+                url: "/v1/user/",
+                method: "GET"
+            })
         };
 
         return AuthService;

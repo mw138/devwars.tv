@@ -1,6 +1,7 @@
 angular.module('app.InfoService', [])
     .factory('InfoService', ['$http', function($http){
         var InfoService = {};
+        InfoService.http = {};
 
         /*
          */
@@ -19,24 +20,12 @@ angular.module('app.InfoService', [])
 
         };
 
-        /*
-         */
-        InfoService.xpLeaderboard = function(successCallback, errorCallback){
-            $http({
+        InfoService.http.allInfo = function(successCallback, errorCallback){
+            return $http({
                 method: 'GET',
-                url: '/v1/info/xpleaderboard',
+                url: '/v1/info/',
                 params: {}
-            })
-                .then(function(success){
-                    successCallback(success)
-                },
-                function(error){
-                    errorCallback(error)
-                });
-
-        };
-
-        /*
+            })};/*
          */
         InfoService.bitsLeaderboard = function(successCallback, errorCallback){
             $http({
@@ -53,7 +42,12 @@ angular.module('app.InfoService', [])
 
         };
 
-        /*
+        InfoService.http.bitsLeaderboard = function(successCallback, errorCallback){
+            return $http({
+                method: 'GET',
+                url: '/v1/info/bitsleaderboard',
+                params: {}
+            })};/*
          Query Parameter {page} : int
          */
         InfoService.leaderboard = function(page, successCallback, errorCallback){
@@ -71,5 +65,32 @@ angular.module('app.InfoService', [])
 
         };
 
-        return InfoService;
+        InfoService.http.leaderboard = function(page, successCallback, errorCallback){
+            return $http({
+                method: 'GET',
+                url: '/v1/info/leaderboard',
+                params: {page : page}
+            })};/*
+         */
+        InfoService.xpLeaderboard = function(successCallback, errorCallback){
+            $http({
+                method: 'GET',
+                url: '/v1/info/xpleaderboard',
+                params: {}
+            })
+                .then(function(success){
+                    successCallback(success)
+                },
+                function(error){
+                    errorCallback(error)
+                });
+
+        };
+
+        InfoService.http.xpLeaderboard = function(successCallback, errorCallback){
+            return $http({
+                method: 'GET',
+                url: '/v1/info/xpleaderboard',
+                params: {}
+            })};return InfoService;
     }]);
