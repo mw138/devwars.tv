@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/v1/team")
-public class TeamController
+public class UserTeamController
 {
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
