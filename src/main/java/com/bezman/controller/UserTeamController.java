@@ -9,6 +9,7 @@ import com.bezman.model.Activity;
 import com.bezman.model.Notification;
 import com.bezman.model.User;
 import com.bezman.model.UserTeam;
+import com.bezman.service.UserTeamService;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
@@ -28,31 +29,48 @@ import java.util.List;
  * Created by Terence on 7/21/2015.
  */
 @Controller
-@RequestMapping("/v1/team")
+@RequestMapping("/v1/teams")
 public class UserTeamController
 {
+
+    /**
+     * Returns a team for a given ID
+     * @param id ID of the team
+     * @param session (Resolved)
+     * @return The team
+     */
+    @UnitOfWork
+    @RequestMapping("/{id}")
+    public ResponseEntity getTeam(@PathVariable("id") int id, SessionImpl session)
+    {
+        return new ResponseEntity(session.get(UserTeam.class, id), HttpStatus.OK);
+    }
+
+    /**
+     * Creates a team and adds the user to it
+     * @param session (Resolved)
+     * @param user (Resolved)
+     * @param name The name of the team
+     * @return A message for the user
+     */
     @Transactional
-    @PreAuthorization(minRole = User.Role.PENDING)
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ResponseEntity createTeam(SessionImpl session, @AuthedUser User user, @RequestParam("name") String name)
     {
+        user = (User) session.merge(user);
+
+        if (user.getOwnedTeam() != null)
+        {
+            return new ResponseEntity("You already have a team", HttpStatus.CONFLICT);
+        }
+
         UserTeam userTeam = new UserTeam(name, user);
 
         session.save(userTeam);
+        user.setOwnedTeam(userTeam);
 
         return new ResponseEntity("Created Team", HttpStatus.OK);
-    }
-
-    @UnitOfWork
-    @PreAuthorization(minRole = User.Role.PENDING)
-    @RequestMapping("/mine")
-    public ResponseEntity getMyTeams(SessionImpl session, @AuthedUser User user)
-    {
-        List results = session.createCriteria(UserTeam.class)
-                .add(Restrictions.eq("owner", user))
-                .list();
-
-        return new ResponseEntity(results, HttpStatus.OK);
     }
 
     @Transactional
@@ -74,7 +92,7 @@ public class UserTeamController
             return new ResponseEntity("User does not exist", HttpStatus.NOT_FOUND);
         }
 
-        if (userTeam.inviteUser(invitedUser))
+        if (UserTeamService.inviteUserToTeam(invitedUser, userTeam))
         {
             Activity activity = new Activity(invitedUser, user, "You were invited to the team : " + userTeam.getName(), 0, 0);
             Notification notification = new Notification(invitedUser, "You were invited to the team : " + userTeam.getName(), false);

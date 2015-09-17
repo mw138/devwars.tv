@@ -31,6 +31,8 @@
         <one-to-one name="passwordReset" class="UserReset" lazy="false"></one-to-one>
         <one-to-one name="warrior" class="Warrior" lazy="false" cascade="save-update"></one-to-one>
         <one-to-one name="emailConfirmation" class="EmailConfirmation"></one-to-one>
+        <one-to-one name="ownedTeam" foreign-key="owner" class="UserTeam"></one-to-one>
+        <one-to-one name="team" class="UserTeam"></one-to-one>
 
         <set name="appliedGames" table="gamesignup" lazy="false">
             <key column="user"></key>

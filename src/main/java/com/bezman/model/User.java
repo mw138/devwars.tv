@@ -51,6 +51,12 @@ public class User extends BaseModel
     private Ranking ranking;
 
     @JsonIgnore
+    private UserTeam ownedTeam;
+
+    @JsonIgnore
+    private UserTeam team;
+
+    @JsonIgnore
     private EmailConfirmation emailConfirmation;
 
     private Role role;
@@ -372,6 +378,26 @@ public class User extends BaseModel
         this.nextRank = nextRank;
     }
 
+    public UserTeam getOwnedTeam()
+    {
+        return ownedTeam;
+    }
+
+    public void setOwnedTeam(UserTeam ownedTeam)
+    {
+        this.ownedTeam = ownedTeam;
+    }
+
+    public UserTeam getTeam()
+    {
+        return team;
+    }
+
+    public void setTeam(UserTeam team)
+    {
+        this.team = team;
+    }
+
     @JsonIgnore
     public boolean isNative()
     {
@@ -432,7 +458,6 @@ public class User extends BaseModel
         gamesLostQuery.setInteger("id", id);
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
-
 
         session.close();
     }

@@ -1,5 +1,6 @@
 package com.bezman.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,6 +25,14 @@ public class UserTeam extends BaseModel
     {
         this.name = name;
         this.owner = owner;
+
+        this.members = new HashSet<>();
+        this.invites = new HashSet<>();
+
+        this.members.add(owner);
+        owner.setTeam(this);
+
+        this.setId(owner.getId());
     }
 
     public int getId()
@@ -76,22 +85,5 @@ public class UserTeam extends BaseModel
         this.invites = invites;
     }
 
-
-    public boolean inviteUser(User user)
-    {
-        for(User currentUser : this.getMembers())
-        {
-            if(currentUser.getId() == user.getId()) return false;
-        }
-
-        for(User currentUser : this.getInvites())
-        {
-            if(currentUser.getId() == user.getId()) return false;
-        }
-
-        this.getInvites().add(user);
-
-        return true;
-    }
 }
 

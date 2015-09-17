@@ -1128,4 +1128,44 @@ public class UserController extends BaseController
         return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
 
+    /**
+     * Returns the team that the current user owns
+     * @param user (Resolved) The user requesting the data
+     * @return Response Entity for the request
+     */
+    @UnitOfWork
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/ownedteam")
+    public ResponseEntity getOwnedTeam(@AuthedUser User user)
+    {
+        UserTeam userTeam = user.getOwnedTeam();
+
+        if (userTeam != null)
+        {
+            return new ResponseEntity(user.getOwnedTeam(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Returns the team that the current user belongs to
+     * @param user (Resolved) The user requesting the data
+     * @return Response Entity for the request
+     */
+    @UnitOfWork
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/myteam")
+    public ResponseEntity getMyTeam(@AuthedUser User user)
+    {
+        UserTeam userTeam = user.getTeam();
+
+        if (userTeam != null)
+        {
+            return new ResponseEntity(user.getOwnedTeam(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity("You don't belong to a team", HttpStatus.NOT_FOUND);
+    }
+
 }

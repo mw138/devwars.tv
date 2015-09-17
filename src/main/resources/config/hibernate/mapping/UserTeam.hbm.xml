@@ -5,17 +5,15 @@
 
 <hibernate-mapping>
     <class name="com.bezman.model.UserTeam" table="user_teams">
-        <id name="id">
-           <generator class="increment"></generator>
-        </id>
+        <id name="id"></id>
 
         <property name="name" column="team_name" type="string"></property>
 
-        <many-to-one name="owner" class="com.bezman.model.User"></many-to-one>
+        <one-to-one name="owner" cascade="all" class="com.bezman.model.User"></one-to-one>
 
-        <set name="members" table="team_members">
+        <set name="members" cascade="all">
             <key column="team_id"></key>
-            <many-to-many class="com.bezman.model.User" column="user_id"></many-to-many>
+            <one-to-many class="com.bezman.model.User"></one-to-many>
         </set>
 
         <set name="invites" table="team_invites">
