@@ -188,8 +188,8 @@ gulp.task('serve', ['styles'], function () {
 
 gulp.task('watch-files', function(){
     gulp.watch(['app/**/*.html'], reload);
-    gulp.watch(['app/**/*.js'], ['concat', reload]);
-    gulp.watch(['app/**/**/*.js'], ['concat', reload]);
+    gulp.watch(['app/**/*.js'], [reload]);
+    gulp.watch(['app/**/**/*.js'], [reload]);
     gulp.watch(['assets/sass/**/*.scss'], ['styles', reload]);
     gulp.watch(['app/images/**/*'], reload);
 });
