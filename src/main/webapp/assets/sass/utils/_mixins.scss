@@ -36,6 +36,12 @@
 	user-select: $property;	
 }
 
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); 
+}
+
 @mixin gradient($direction, $from-color, $to-color) {
 	
 	@if $direction == 'left' {
@@ -139,12 +145,6 @@ transform: rotate(#{$value}deg);
 	display: -ms-flexbox;
 	display: flex;
 }
-
-
-
-
-
-
 
 @function px-em($px, $px-context: 16) {
 	// Make sure it's a number
