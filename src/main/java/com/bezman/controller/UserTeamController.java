@@ -73,22 +73,38 @@ public class UserTeamController
         return new ResponseEntity("Created Team", HttpStatus.OK);
     }
 
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteTeam(SessionImpl session, @PathVariable("id") int id, @RequestParam("name") String teamName)
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if (!teamName.equals(userTeam.getName()))
+            return new ResponseEntity("Team name did not match", HttpStatus.BAD_REQUEST);
+
+        session.delete(userTeam);
+
+        return new ResponseEntity(userTeam, HttpStatus.OK);
+    }
+
     @PreAuthorization(minRole = User.Role.USER)
     @Transactional
     @RequestMapping("/{id}/changename")
     public ResponseEntity editTeamName(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("newName") String newName)
     {
+
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
-        if(userTeam == null)
+        if (userTeam == null)
             return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
 
-        if(!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
         userTeam.setName(newName);
 
-        return new ResponseEntity("Successfully changed team name", HttpStatus.OK); 
+        return new ResponseEntity("Successfully changed team name", HttpStatus.OK);
     }
 
     @Transactional
