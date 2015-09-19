@@ -98,6 +98,14 @@ public class UserTeamController
         return new ResponseEntity(userTeam, HttpStatus.OK);
     }
 
+    /**
+     * Change the name of a team
+     * @param session (Resolved)
+     * @param user (Resolved)
+     * @param id The ID of the team
+     * @param newName The new name of the team
+     * @return Message
+     */
     @PreAuthorization(minRole = User.Role.USER)
     @Transactional
     @RequestMapping("/{id}/changename")
@@ -117,6 +125,14 @@ public class UserTeamController
         return new ResponseEntity("Successfully changed team name", HttpStatus.OK);
     }
 
+    /**
+     * Invites a player to a roster
+     * @param session (Resolved)
+     * @param teamID ID of the team to invite player to
+     * @param user (Resolved)
+     * @param inviteUser The ID of the user to invite
+     * @return Message
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/{id}/invite")
@@ -151,6 +167,13 @@ public class UserTeamController
         }
     }
 
+    /**
+     * Accept an invite to a team
+     * @param teamID ID of the team to accept invite from
+     * @param session (Resolved)
+     * @param user (Resolved)
+     * @return Message
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/{id}/invite/accept")
@@ -190,6 +213,14 @@ public class UserTeamController
         }
     }
 
+    /**
+     * Gets the game history of a team
+     * @param session (Resolved)
+     * @param id ID of the team
+     * @param page Page offset
+     * @param count Number of results
+     * @return history
+     */
     @UnitOfWork
     @RequestMapping("/{id}/history")
     public ResponseEntity getHistory(SessionImpl session,
@@ -212,6 +243,12 @@ public class UserTeamController
         return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Statistics of a team
+     * @param session (Resolved)
+     * @param id ID of the team
+     * @return Statistics
+     */
     @UnitOfWork
     @RequestMapping("/{id}/statistics")
     public ResponseEntity getStatistics(SessionImpl session, @PathVariable("id") int id)
