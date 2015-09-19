@@ -152,8 +152,13 @@ public class UserTeamController
                                      @RequestParam(value = "page", defaultValue = "1", required = false) int page,
                                      @RequestParam(value = "count", defaultValue = "8", required = false) int count)
     {
+        page = page < 1 ? 1 : page;
+        count = count < 1 || count > 8 ? 8 : count;
+
         List<Game> games = session.createQuery("from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id)")
                 .setInteger("id", id)
+                .setMaxResults(count)
+                .setFirstResult(count * (page - 1))
                 .list();
 
         return new ResponseEntity(games, HttpStatus.OK);
