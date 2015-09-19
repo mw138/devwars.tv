@@ -38,7 +38,7 @@ public class UserService
         {
             session.save(user);
             session.flush();
-        }catch (Exception e)
+        } catch (Exception e)
         {
             System.out.println("Could not save user : " + e.getMessage());
         }
@@ -124,7 +124,7 @@ public class UserService
         Session session = DatabaseManager.getSession();
 
         Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
-        userQuery.setString("username",username.toLowerCase());
+        userQuery.setString("username", username.toLowerCase());
         userQuery.setMaxResults(1);
 
         User user = (User) userQuery.uniqueResult();
@@ -158,7 +158,7 @@ public class UserService
 
         boolean isTwitchAccount = "TWITCH".equals(user.getProvider());
 
-        if(!connectedAccount.isPresent() && !isTwitchAccount) return;
+        if (!connectedAccount.isPresent() && !isTwitchAccount) return;
 
         String username = connectedAccount.isPresent() ? connectedAccount.get().getUsername() : user.getUsername();
 
@@ -190,5 +190,12 @@ public class UserService
         session.close();
 
         return users;
+    }
+
+    public static boolean isUserAtLeast(User user, User.Role role)
+    {
+        User.Role userRole = User.Role.valueOf(user.getRole());
+
+        return (userRole.ordinal() >= role.ordinal());
     }
 }

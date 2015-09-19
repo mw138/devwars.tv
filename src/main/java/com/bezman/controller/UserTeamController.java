@@ -6,6 +6,7 @@ import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.*;
+import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -70,6 +71,24 @@ public class UserTeamController
         user.setOwnedTeam(userTeam);
 
         return new ResponseEntity("Created Team", HttpStatus.OK);
+    }
+
+    @PreAuthorization(minRole = User.Role.USER)
+    @Transactional
+    @RequestMapping("/{id}/changename")
+    public ResponseEntity editTeamName(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("newName") String newName)
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if(userTeam == null)
+            return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
+
+        if(!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+            return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
+
+        userTeam.setName(newName);
+
+        return new ResponseEntity("Successfully changed team name", HttpStatus.OK); 
     }
 
     @Transactional
@@ -152,15 +171,32 @@ public class UserTeamController
                                      @RequestParam(value = "page", defaultValue = "1", required = false) int page,
                                      @RequestParam(value = "count", defaultValue = "8", required = false) int count)
     {
-        page = page < 1 ? 1 : page;
-        count = count < 1 || count > 8 ? 8 : count;
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
-        List<Game> games = session.createQuery("from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id)")
-                .setInteger("id", id)
-                .setMaxResults(count)
-                .setFirstResult(count * (page - 1))
-                .list();
+        if (userTeam != null)
+        {
+            page = page < 1 ? 1 : page;
+            count = count < 1 || count > 8 ? 8 : count;
 
-        return new ResponseEntity(games, HttpStatus.OK);
+            List<Game> games = UserTeamService.getGamesForUserTeam(userTeam, page, count);
+
+            return new ResponseEntity(games, HttpStatus.OK);
+        }
+
+        return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
+    }
+
+    @UnitOfWork
+    @RequestMapping("/{id}/statistics")
+    public ResponseEntity getStatistics(SessionImpl session, @PathVariable("id") int id)
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if (userTeam != null)
+        {
+            return new ResponseEntity(UserTeamService.getStatisticsForUserTeam(userTeam), HttpStatus.OK);
+        }
+
+        return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
     }
 }

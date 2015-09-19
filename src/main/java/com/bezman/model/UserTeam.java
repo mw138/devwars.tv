@@ -1,7 +1,11 @@
 package com.bezman.model;
 
+import com.bezman.init.DatabaseManager;
+import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.Session;
 
+import javax.persistence.PostLoad;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +28,8 @@ public class UserTeam extends BaseModel
 
     @JsonIgnore
     private Set<Team> gameTeams;
+
+    private Long gamesWon, gamesLost;
 
     public UserTeam(){}
 
@@ -100,6 +106,26 @@ public class UserTeam extends BaseModel
     public void setGameTeams(Set<Team> gameTeams)
     {
         this.gameTeams = gameTeams;
+    }
+
+    public Long getGamesWon()
+    {
+        return gamesWon;
+    }
+
+    public void setGamesWon(Long gamesWon)
+    {
+        this.gamesWon = gamesWon;
+    }
+
+    public Long getGamesLost()
+    {
+        return gamesLost;
+    }
+
+    public void setGamesLost(Long gamesLost)
+    {
+        this.gamesLost = gamesLost;
     }
 }
 
