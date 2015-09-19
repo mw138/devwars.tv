@@ -322,7 +322,7 @@ public class UserController extends BaseController
         {
             return new ResponseEntity("Query cannot be empty", HttpStatus.BAD_REQUEST);
         }
-        
+
         return new ResponseEntity(UserService.searchUsers(username), HttpStatus.OK);
     }
 

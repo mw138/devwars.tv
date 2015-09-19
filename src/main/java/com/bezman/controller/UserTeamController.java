@@ -35,7 +35,8 @@ public class UserTeamController
 
     /**
      * Returns a team for a given ID
-     * @param id ID of the team
+     *
+     * @param id      ID of the team
      * @param session (Resolved)
      * @return The team
      */
@@ -48,9 +49,10 @@ public class UserTeamController
 
     /**
      * Creates a team and adds the user to it
+     *
      * @param session (Resolved)
-     * @param user (Resolved)
-     * @param name The name of the team
+     * @param user    (Resolved)
+     * @param name    The name of the team
      * @return A message for the user
      */
     @Transactional
@@ -144,5 +146,15 @@ public class UserTeamController
         {
             return new ResponseEntity("You were not invited to that team", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @UnitOfWork
+    @RequestMapping("/{id}/history")
+    public ResponseEntity getHistory(SessionImpl session,
+                                     @PathVariable("id") int id,
+                                     @RequestParam(value = "page", defaultValue = "1", required = false) int page,
+                                     @RequestParam(value = "count", defaultValue = "8", required = false) int count)
+    {
+        
     }
 }

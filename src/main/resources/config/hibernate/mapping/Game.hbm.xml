@@ -35,6 +35,11 @@
             <key column="game"></key>
             <one-to-many class="com.bezman.model.Objective"></one-to-many>
         </set>
+
+        <set name="teamGameSignups" table="team_signups">
+            <key column="game"></key>
+            <one-to-many class="TeamGameSignup"></one-to-many>
+        </set>
     </class>
 
 </hibernate-mapping>

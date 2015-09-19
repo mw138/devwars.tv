@@ -32,6 +32,9 @@ public class Game extends BaseModel
     @JsonIgnore
     private Set<GameSignup> signups;
 
+    @JsonIgnore
+    private Set<TeamGameSignup> teamGameSignups;
+
     private Integer season;
 
     public int getId()
@@ -141,6 +144,16 @@ public class Game extends BaseModel
 
     public void setSignups(Set<GameSignup> signups) {
         this.signups = signups;
+    }
+
+    public Set<TeamGameSignup> getTeamGameSignups()
+    {
+        return teamGameSignups;
+    }
+
+    public void setTeamGameSignups(Set<TeamGameSignup> teamGameSignups)
+    {
+        this.teamGameSignups = teamGameSignups;
     }
 
     public Integer getSeason() {

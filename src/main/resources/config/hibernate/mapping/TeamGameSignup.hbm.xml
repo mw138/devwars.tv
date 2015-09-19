@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+        <hibernate-mapping>
+    <class name="com.bezman.model.TeamGameSignup" table="team_signups">
+        <id name="id"></id>
+
+        <many-to-one name="game" class="com.bezman.model.Game"/>
+
+        <many-to-one name="userTeam" class="com.bezman.model.UserTeam"/>
+
+        <set name="users" table="team_signups_users">
+            <key></key>
+            <many-to-many class="com.bezman.model.User" column="user"></many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>
