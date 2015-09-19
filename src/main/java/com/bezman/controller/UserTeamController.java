@@ -73,15 +73,25 @@ public class UserTeamController
         return new ResponseEntity("Created Team", HttpStatus.OK);
     }
 
+    /**
+     * Deletes a team
+     * @param session (Resolved)
+     * @param id ID of the team to delete
+     * @param teamName Team name confirmation
+     * @return Message
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteTeam(SessionImpl session, @PathVariable("id") int id, @RequestParam("name") String teamName)
+    public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName)
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (!teamName.equals(userTeam.getName()))
             return new ResponseEntity("Team name did not match", HttpStatus.BAD_REQUEST);
+
+        if(!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+            return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
         session.delete(userTeam);
 
