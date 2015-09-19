@@ -139,21 +139,16 @@ public class UserTeamController
     public ResponseEntity invitePlayer(SessionImpl session, @PathVariable("id") int teamID, @AuthedUser User user, @RequestParam("user") int inviteUser)
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, teamID);
+        User invitedUser = (User) session.get(User.class, inviteUser);
+
+        if (userTeam == null)
+            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
         if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
-        if (userTeam == null)
-        {
-            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
-        }
-
-        User invitedUser = (User) session.get(User.class, inviteUser);
-
         if (invitedUser == null)
-        {
             return new ResponseEntity("User does not exist", HttpStatus.NOT_FOUND);
-        }
 
         if (UserTeamService.inviteUserToTeam(invitedUser, userTeam))
         {
