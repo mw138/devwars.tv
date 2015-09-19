@@ -9,6 +9,34 @@ angular.module("app.team", [])
                 });
 
         }])
-    .controller("TeamController", ["$scope", function ($scope) {
-        
+    .controller("TeamController", ["$scope", "$mdDialog", function ($scope, $mdDialog) {
+
+        $scope.createTeam = function () {
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
+                controller: "CreateTeamDialogController"
+            });
+        };
+
+        $scope.invitePlayer = function () {
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/invitePlayerDialog/invitePlayerDialogView.html",
+                controller: "CreateTeamDialogController"
+            });
+        };
+
+        $scope.leaveTeam = function () {
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/leaveTeamDialog/leaveTeamDialogView.html",
+                controller: "CreateTeamDialogController"
+            });
+        };
+
+        $scope.disbandTeam = function () {
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/disbandTeamDialog/disbandTeamDialogView.html",
+                controller: "CreateTeamDialogController"
+            });
+        }
+
     }]);

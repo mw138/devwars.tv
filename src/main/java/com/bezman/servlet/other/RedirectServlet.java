@@ -21,6 +21,7 @@ import java.io.IOException;
 @RequestMapping("/")
 public class RedirectServlet
 {
+
     @PreAuthorization(minRole = User.Role.NONE)
     @RequestMapping("/")
     public String index(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -38,7 +39,7 @@ public class RedirectServlet
     }
 
 
-    @RequestMapping(value = {"settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
+    @RequestMapping(value = {"team", "settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
     public String about(HttpServletRequest request, HttpServletResponse response)
     {
         return "index";
