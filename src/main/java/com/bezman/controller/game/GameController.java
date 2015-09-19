@@ -520,6 +520,16 @@ public class GameController
         return new ResponseEntity(users, HttpStatus.OK);
     }
 
+    @UnitOfWork
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping("/{id}/pendingteams")
+    public ResponseEntity pendingTeams(SessionImpl session, @PathVariable("id") int id)
+    {
+        Game game = (Game) session.get(Game.class, id);
+
+        return new ResponseEntity(game.getTeamGameSignups(), HttpStatus.OK);
+    }
+
     /**
      * Removes a user from the game and penlizes them with some value
      * @param session
