@@ -313,6 +313,19 @@ public class UserController extends BaseController
         return responseEntity;
     }
 
+    @PreAuthorization(minRole = User.Role.USER)
+    @UnitOfWork
+    @RequestMapping("/search")
+    public ResponseEntity searchUsers(SessionImpl session, @RequestParam("username") String username)
+    {
+        if (username.isEmpty())
+        {
+            return new ResponseEntity("Query cannot be empty", HttpStatus.BAD_REQUEST);
+        }
+        
+        return new ResponseEntity(UserService.searchUsers(username), HttpStatus.OK);
+    }
+
     /**
      * Validate the user's email
      * @param request

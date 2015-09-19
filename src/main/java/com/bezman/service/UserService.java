@@ -7,9 +7,14 @@ import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.transform.ResultTransformer;
+import org.hibernate.transform.Transformers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -173,4 +178,17 @@ public class UserService
         session.close();
     }
 
+    public static List<User> searchUsers(String username)
+    {
+        Session session = DatabaseManager.getSession();
+
+        List<User> users = session.createQuery("select user.id as id, user.username as username from User user where lower(username) LIKE :username")
+                .setString("username", "%" + username.toLowerCase() + "%")
+                .setResultTransformer(Transformers.aliasToBean(User.class))
+                .list();
+
+        session.close();
+
+        return users;
+    }
 }
