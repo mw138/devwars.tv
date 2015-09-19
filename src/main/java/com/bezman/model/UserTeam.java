@@ -1,6 +1,9 @@
 package com.bezman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,6 +21,9 @@ public class UserTeam extends BaseModel
     private Set<User> members;
 
     private Set<User> invites;
+
+    @JsonIgnore
+    private Set<Team> gameTeams;
 
     public UserTeam(){}
 
@@ -85,5 +91,15 @@ public class UserTeam extends BaseModel
         this.invites = invites;
     }
 
+    @JsonIgnore
+    public Set<Team> getGameTeams()
+    {
+        return gameTeams;
+    }
+
+    public void setGameTeams(Set<Team> gameTeams)
+    {
+        this.gameTeams = gameTeams;
+    }
 }
 

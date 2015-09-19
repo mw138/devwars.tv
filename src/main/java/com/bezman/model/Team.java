@@ -24,6 +24,8 @@ public class Team extends BaseModel
     @JsonIgnore
     private Game game;
 
+    private UserTeam userTeam;
+
     private Set<Player> players;
 
     private Set<CompletedObjective> completedObjectives;
@@ -168,6 +170,16 @@ public class Team extends BaseModel
     public void setWebsiteUrl(String websiteUrl)
     {
         this.websiteUrl = websiteUrl;
+    }
+
+    public UserTeam getUserTeam()
+    {
+        return userTeam;
+    }
+
+    public void setUserTeam(UserTeam userTeam)
+    {
+        this.userTeam = userTeam;
     }
 
     public boolean didCompleteAllObjectives()

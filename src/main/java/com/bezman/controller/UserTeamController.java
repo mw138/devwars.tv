@@ -5,10 +5,7 @@ import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.annotation.UnitOfWork;
-import com.bezman.model.Activity;
-import com.bezman.model.Notification;
-import com.bezman.model.User;
-import com.bezman.model.UserTeam;
+import com.bezman.model.*;
 import com.bezman.service.UserTeamService;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -155,6 +152,10 @@ public class UserTeamController
                                      @RequestParam(value = "page", defaultValue = "1", required = false) int page,
                                      @RequestParam(value = "count", defaultValue = "8", required = false) int count)
     {
-        
+        List<Game> games = session.createQuery("from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id)")
+                .setInteger("id", id)
+                .list();
+
+        return new ResponseEntity(games, HttpStatus.OK);
     }
 }

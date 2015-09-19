@@ -11,6 +11,11 @@
 
         <one-to-one name="owner" cascade="all" class="com.bezman.model.User"></one-to-one>
 
+        <set name="gameTeams" lazy="true">
+            <key></key>
+            <one-to-many class="com.bezman.model.Team"></one-to-many>
+        </set>
+
         <set name="members" cascade="all">
             <key column="team_id"></key>
             <one-to-many class="com.bezman.model.User"></one-to-many>
