@@ -140,6 +140,9 @@ public class UserTeamController
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, teamID);
 
+        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+            return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
+
         if (userTeam == null)
         {
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
