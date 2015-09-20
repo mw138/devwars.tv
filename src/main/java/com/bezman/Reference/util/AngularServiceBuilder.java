@@ -2,8 +2,10 @@ package com.bezman.Reference.util;
 
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.controller.UserTeamController;
 import com.bezman.controller.game.GameController;
 import com.bezman.controller.user.UserController;
+import com.bezman.service.UserTeamService;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +36,7 @@ public class AngularServiceBuilder
 
         controllers.add(UserController.class);
         controllers.add(GameController.class);
+        controllers.add(UserTeamController.class);
 
         for(Class controller : controllers)
         {
