@@ -8,18 +8,18 @@
 
 		<div class="right">
 
-	<div ng-switch on="userTeamStatus">
-		<div ng-switch-when="false">
+	<div>
+		<div ng-hide="team">
 			<h1>no team</h1>
 		</div>
 
 
-		<div ng-switch-when="member">
+		<div ng-hide="isOwner">
 			<h1>member</h1>
 		</div>
 
 
-		<div ng-switch-when="leader">
+		<div ng-show="team">
 
 			<div class="teams-left">
 				<div class="roster">

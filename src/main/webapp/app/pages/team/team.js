@@ -9,44 +9,20 @@ angular.module("app.team", [])
                 });
 
         }])
-    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", function ($scope, $mdDialog, UserService, UserTeamService) {
+    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", function ($scope, $mdDialog, UserService, UserTeamService, AuthService) {
 
         //console.log("UserService.getMyTeam():", UserService.getMyTeam());
 
-        //We must get user team status: leader, member, or false (not a member nor leader).
-        $scope.userTeamStatus = false;
-        $scope.team = {};
+        //Set team to null (the false state)
+        $scope.team = null;
+        $scope.isOwner = false;
 
-        UserService.getOwnedTeam(function (data) {
-            console.log("data:", data);
-            if (data) {
-                $scope.userTeamStatus = 'leader';
-                return $scope.team = data.data;
-            }
-            
-        }, function (err) {
+        UserService.http.getMyTeam()
+            .then(function (success) {
+                $scope.team = success.data;
 
-            console.log("err:", err);
-            if (err.data === 'You don\'t own a team') {
-
-                UserService.getMyTeam(function (data) {
-
-                    console.log("data getMyTeam:", data);
-
-                    $scope.userTeamStatus = 'member';
-
-                }, function (err) {
-                    console.log("err getMyTeam:", err);
-                    if (err.data === 'You don\'t belong to a team') {
-
-                        $scope.userTeamStatus = false;
-
-                    }
-                })
-
-            }
-
-        });
+                $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
+            }, angular.noop);
 
 
         /**
