@@ -9,8 +9,50 @@ angular.module("app.team", [])
                 });
 
         }])
-    .controller("TeamController", ["$scope", "$mdDialog", function ($scope, $mdDialog) {
+    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", function ($scope, $mdDialog, UserService, UserTeamService) {
 
+        //console.log("UserService.getMyTeam():", UserService.getMyTeam());
+
+        //We must get user team status: leader, member, or false (not a member nor leader).
+        $scope.userTeamStatus = false;
+        $scope.team = {};
+
+        UserService.getOwnedTeam(function (data) {
+            console.log("data:", data);
+            if (data) {
+                $scope.userTeamStatus = 'leader';
+                return $scope.team = data.data;
+            }
+            
+        }, function (err) {
+
+            console.log("err:", err);
+            if (err.data === 'You don\'t own a team') {
+
+                UserService.getMyTeam(function (data) {
+
+                    console.log("data getMyTeam:", data);
+
+                    $scope.userTeamStatus = 'member';
+
+                }, function (err) {
+                    console.log("err getMyTeam:", err);
+                    if (err.data === 'You don\'t belong to a team') {
+
+                        $scope.userTeamStatus = false;
+
+                    }
+                })
+
+            }
+
+        });
+
+
+        /**
+         * Dialogs
+         */
+        
         $scope.createTeam = function () {
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
@@ -38,5 +80,10 @@ angular.module("app.team", [])
                 controller: "CreateTeamDialogController"
             });
         }
+
+
+
+
+
 
     }]);
