@@ -1,6 +1,7 @@
 package com.bezman.jackson;
 
 import com.bezman.Reference.Reference;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,11 @@ public class DevWarsObjectMapper extends ObjectMapper
 
         configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        setVisibilityChecker(getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
 
         Reference.objectMapper = this;
     }
