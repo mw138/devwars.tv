@@ -105,6 +105,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
         return str.join("&");
     };
 
+    $httpProvider.defaults.withCredentials = true;
     $httpProvider.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded";
 
     $locationProvider.html5Mode(true);

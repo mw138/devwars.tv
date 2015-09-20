@@ -8,6 +8,7 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.Access;
 import com.bezman.model.User;
 import com.bezman.model.UserSession;
+import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.web.method.HandlerMethod;
@@ -42,19 +43,19 @@ public class PreAuthInterceptor implements HandlerInterceptor
 
             PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
             AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
+            User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
 
             //Make sure it's not a double header
             if(!Reference.isProduction())
             {
-                response.addHeader("Access-Control-Allow-Origin", "*");
+                response.addHeader("Access-Control-Allow-Origin", "http://localhost:81");
+                response.addHeader("Access-Control-Allow-Credentials", "true");
             }
 
             if (Reference.isProduction() && crossOrigin != null)
             {
                 response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
             }
-
-            User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
 
             Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
 
