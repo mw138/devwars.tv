@@ -1,1 +1,14 @@
-<md-dialog></md-dialog>
+<md-dialog class="team-dialog">
+	<i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i>
+
+	<h3>Are you sure you want to disband your team?</h3>
+	<p>All of your team's data will be lost. <b class="warning">This CANNOT be reversed.</b></p>	
+	<a href="" class="button">Disband team</a>
+	<h3 class="second-header">Aternatively: Leave your team, and hand over leadership.</h3>
+	<p>This is permanent, choose wisely!</p>
+	<select>
+		<option>Team member 1</option>
+		<option>Team member 2</option>
+	</select>
+	<a href="" class="button">Assign and leave</a>
+</md-dialog>
