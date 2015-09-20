@@ -8,34 +8,45 @@
 
 		<div class="right">
 
+	<div ng-switch on="userTeamStatus">
+		<div ng-switch-when="false">
+			<h1>no team</h1>
+		</div>
+
+
+		<div ng-switch-when="member">
+			<h1>member</h1>
+		</div>
+
+
+		<div ng-switch-when="leader">
+
 			<div class="teams-left">
 				<div class="roster">
 					<div class="roster-header">
 						<span class="roster-title">Roster</span>
-						<a href="" class="edit-roster">Edit</a>					
+						<a href="" class="edit-roster">Edit</a>
 						<a href="" class="invite-roster button" ng-click="invitePlayer()">Invite</a>
 					</div>
 					<div class="roster-players editable">
-						<a href="" class="player offline">Beau</a>
-						<a href="" class="player online">SYNTAG</a>
-						<a href="" class="player online">Ridiculously long name</a>
+						<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>
 					</div>
-				</div>	
+				</div>
 
 				<div class="team-stat global">
 					<span>Global</span>
 					<span>#24</span>
-				</div>	
+				</div>
 
 				<div class="team-stat games">
 					<span>Games</span>
 					<span>47</span>
-				</div>	
+				</div>
 
 				<div class="team-stat win-stat">
 					<span>W/L Ratio</span>
 					<span>0.74</span>
-				</div>	
+				</div>
 
 				<a href="" class="disband-team" ng-click="disbandTeam()">Disband Team</a>
 				<a href="" class="disband-team" ng-click="leaveTeam()">Leave Team</a>
@@ -52,7 +63,7 @@
 
 					<div class="team-info">
 						<div class="team-rank"></div>
-						<span class="team-name">Cloud9</span>
+						<span class="team-name">{{ team.name }}</span>
 						<span class="team-tag">[C9]</span>
 
 						<div class="team-xp">
@@ -62,7 +73,7 @@
 								<div class="xp-total"></div>
 							</div>
 						</div>
-					</div>					
+					</div>
 				</div>
 
 				<div class="team-history">
@@ -83,105 +94,125 @@
 							<span class="match-stat xp">-350 XP</span>
 							<a href="" class="match-details">Game Details</a>
 						</div>
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game win--game">
-							<span class="match-stat opposition">vs bum bandits</span>
-							<div class="match-stat score">
-								<span class="team-blue">8</span>
-								<span class="divider">-</span>
-								<span class="team-red">1</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">+350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game win&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs bum bandits</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">8</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">1</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">+350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
-							<div class="match-stat score">
-								<span class="team-blue">6</span>
-								<span class="divider">-</span>
-								<span class="team-red">8</span>
-							</div>
-							<span class="match-stat date">03 Aug 2015</span>
-							<span class="match-stat xp">-350 XP</span>
-							<a href="" class="match-details">Game Details</a>
-						</div>
+						<!--<div class="team-history&#45;&#45;game">-->
+							<!--<span class="match-stat opposition">vs TeamSoloMid</span>-->
+							<!--<div class="match-stat score">-->
+								<!--<span class="team-blue">6</span>-->
+								<!--<span class="divider">-</span>-->
+								<!--<span class="team-red">8</span>-->
+							<!--</div>-->
+							<!--<span class="match-stat date">03 Aug 2015</span>-->
+							<!--<span class="match-stat xp">-350 XP</span>-->
+							<!--<a href="" class="match-details">Game Details</a>-->
+						<!--</div>-->
 
 					</div>
 				</div>
-				
+
+		</div>
+
+
+	</div>
+
+
+
+
+
 			</div>
 		</div> <!-- .right -->
 	</div>

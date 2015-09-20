@@ -57,6 +57,7 @@ var app = angular.module('app', [
     'app.no-scroll-other',
     'app.team',
     'app.addGame',
+    'app.UserTeamService',
 
     //dependencies
     'ngCookies',
