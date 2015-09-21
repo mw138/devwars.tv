@@ -13,6 +13,8 @@ var ngmin = require('gulp-ngmin');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var pipe = require('multipipe');
+var url = require('url');
+var fs = require('fs');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -64,6 +66,7 @@ gulp.task('dist', function () {
 gulp.task('serve', ['styles', 'watch-files'], function () {
     browserSync({
         notify: false,
+        open: false,
         // Run as an https by uncommenting 'https: true'
         // Note: this uses an unsigned certificate which on first access
         //       will present a certificate warning in the browser.
@@ -71,7 +74,19 @@ gulp.task('serve', ['styles', 'watch-files'], function () {
         injectChanges: true,
         port:81,
 
-        server: "./"
+        server: {
+            baseDir: "./",
+
+            middleware: [
+                function(req, res, next) {
+                    var fileName = url.parse(req.url);
+
+                    if(fileName.path.indexOf('.') < 0) req.url = "/index.html";
+
+                    return next();
+                }
+            ]
+        },
     });
 });
 
