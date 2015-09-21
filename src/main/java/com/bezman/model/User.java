@@ -2,11 +2,15 @@ package com.bezman.model;
 
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
+import com.bezman.annotation.HibernateDefault;
 import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -19,6 +23,8 @@ import java.util.*;
  * Created by Terence on 12/22/2014.
  */
 @JsonSerialize(using = UserPermissionSerializer.class)
+@Data
+@NoArgsConstructor
 public class User extends BaseModel
 {
 
@@ -75,8 +81,10 @@ public class User extends BaseModel
     @UserPermissionFilter
     private String providerID;
 
+    @HibernateDefault("5")
     private Integer referredUsers;
 
+    @HibernateDefault("0")
     private Integer avatarChanges;
 
     private Integer gamesPlayed = 0;
@@ -89,314 +97,18 @@ public class User extends BaseModel
 
     private String location, url, company;
 
+    @HibernateDefault("0")
     private Integer usernameChanges;
 
+    @HibernateDefault("0")
     private Integer score;
 
     private Boolean veteran;
 
+    @HibernateDefault("0")
     private Integer bettingBitsEarned;
 
     private Integer gamesWatched;
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public String getRole()
-    {
-        return role == null ? "PENDING" : role.toString();
-    }
-
-    public void setRole(String role)
-    {
-        this.role = Role.valueOf(role == null ? "PENDING" : role);
-    }
-
-    public UserSession getSession()
-    {
-        return session;
-    }
-
-    public void setSession(UserSession session)
-    {
-        this.session = session;
-    }
-
-    public String getUsername()
-    {
-        return username.replace(" ", "_");
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public Ranking getRanking()
-    {
-        return ranking;
-    }
-
-    public void setRanking(Ranking ranking)
-    {
-        this.ranking = ranking;
-    }
-
-    public String getProvider()
-    {
-        return provider;
-    }
-
-    public void setProvider(String provider)
-    {
-        this.provider = provider;
-    }
-
-    @JsonIgnore
-    public Set<Integer> getAppliedGames()
-    {
-        return appliedGames;
-    }
-
-    public void setAppliedGames(Set<Integer> appliedGames)
-    {
-        this.appliedGames = appliedGames;
-    }
-
-    public Set<ConnectedAccount> getConnectedAccounts()
-    {
-        return connectedAccounts;
-    }
-
-    public void setConnectedAccounts(Set<ConnectedAccount> connectedAccounts)
-    {
-        this.connectedAccounts = connectedAccounts;
-    }
-
-    public UserReset getPasswordReset()
-    {
-        return passwordReset;
-    }
-
-    public void setPasswordReset(UserReset passwordReset)
-    {
-        this.passwordReset = passwordReset;
-    }
-
-    public String getProviderID()
-    {
-        return providerID;
-    }
-
-    public void setProviderID(String providerID)
-    {
-        this.providerID = providerID;
-    }
-
-    @JsonIgnore
-    public Set<Activity> getActivityLog()
-    {
-        return activityLog;
-    }
-
-    public void setActivityLog(Set<Activity> activityLog)
-    {
-        this.activityLog = activityLog;
-    }
-
-    public Integer getReferredUsers()
-    {
-        return referredUsers == null ? 0 : referredUsers;
-    }
-
-    public void setReferredUsers(Integer referredUsers)
-    {
-        this.referredUsers = referredUsers;
-    }
-
-    public Integer getAvatarChanges()
-    {
-        return avatarChanges == null ? 1 : avatarChanges;
-    }
-
-    public void setAvatarChanges(Integer avatarChanges)
-    {
-        this.avatarChanges = avatarChanges;
-    }
-
-    public Warrior getWarrior()
-    {
-        return warrior;
-    }
-
-    public void setWarrior(Warrior warrior)
-    {
-        this.warrior = warrior;
-    }
-
-    public String getLocation()
-    {
-        return location;
-    }
-
-    public void setLocation(String location)
-    {
-        this.location = location;
-    }
-
-    public String getUrl()
-    {
-        return url;
-    }
-
-    public void setUrl(String url)
-    {
-        this.url = url;
-    }
-
-    public String getCompany()
-    {
-        return company;
-    }
-
-    public void setCompany(String company)
-    {
-        this.company = company;
-    }
-
-    public Integer getUsernameChanges()
-    {
-        return usernameChanges == null ? (this.provider == null ? 0 : 1) : usernameChanges;
-    }
-
-    public void setUsernameChanges(Integer usernameChanges)
-    {
-        this.usernameChanges = usernameChanges;
-    }
-
-    public Boolean getVeteran()
-    {
-        return veteran == null ? false : veteran;
-    }
-
-    public void setVeteran(Boolean veteran)
-    {
-        this.veteran = veteran;
-    }
-
-    public Integer getScore()
-    {
-        return score;
-    }
-
-    public void setScore(Integer score)
-    {
-        this.score = score;
-    }
-
-    public EmailConfirmation getEmailConfirmation()
-    {
-        return emailConfirmation;
-    }
-
-    public void setEmailConfirmation(EmailConfirmation emailConfirmation)
-    {
-        this.emailConfirmation = emailConfirmation;
-    }
-
-    @JsonIgnore
-    public Set<Badge> getBadges()
-    {
-        return badges;
-    }
-
-    public void setBadges(Set<Badge> badges)
-    {
-        this.badges = badges;
-    }
-
-    public Integer getBettingBitsEarned()
-    {
-        return bettingBitsEarned == null ? 0 : bettingBitsEarned;
-    }
-
-    public void setBettingBitsEarned(Integer bettingBitsEarned)
-    {
-        this.bettingBitsEarned = bettingBitsEarned;
-    }
-
-    public Integer getGamesWatched()
-    {
-        return gamesWatched == null ? 0 : gamesWatched;
-    }
-
-    public void setGamesWatched(Integer gamesWatched)
-    {
-        this.gamesWatched = gamesWatched;
-    }
-
-    public Rank getRank() {
-        return rank;
-    }
-
-    public void setRank(Rank rank) {
-        this.rank = rank;
-    }
-
-    public Rank getNextRank() {
-        return nextRank;
-    }
-
-    public void setNextRank(Rank nextRank) {
-        this.nextRank = nextRank;
-    }
-
-    public UserTeam getOwnedTeam()
-    {
-        return ownedTeam;
-    }
-
-    public void setOwnedTeam(UserTeam ownedTeam)
-    {
-        this.ownedTeam = ownedTeam;
-    }
-
-    public UserTeam getTeam()
-    {
-        return team;
-    }
-
-    public void setTeam(UserTeam team)
-    {
-        this.team = team;
-    }
 
     @JsonIgnore
     public boolean isNative()

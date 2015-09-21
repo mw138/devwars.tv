@@ -194,7 +194,7 @@ public class UserService
 
     public static boolean isUserAtLeast(User user, User.Role role)
     {
-        User.Role userRole = User.Role.valueOf(user.getRole());
+        User.Role userRole = user.getRole();
 
         return (userRole.ordinal() >= role.ordinal());
     }

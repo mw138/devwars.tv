@@ -68,7 +68,7 @@ public class UserPermissionSerializer extends JsonSerializer<Object> implements 
 
                     if (jsonIgnore == null && field.get(o) != null && currentUser != null && user != null)
                     {
-                        if (hasSecretKey || currentUser.getId() == user.getId() || User.Role.valueOf(currentUser.getRole()) == User.Role.ADMIN || userPermissionFilter == null)
+                        if (hasSecretKey || currentUser.getId() == user.getId() || currentUser.getRole() == User.Role.ADMIN || userPermissionFilter == null)
                         {
                             jsonGenerator.writeObjectField(field.getName(), field.get(o));
                         }

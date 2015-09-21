@@ -14,7 +14,7 @@ public class TwitterProvider
         User user = new User();
         user.setEmail(null);
         user.setUsername(twitterUser.getScreenName() + Util.randomNumbers(4));
-        user.setRole(User.Role.USER.toString());
+        user.setRole(User.Role.USER);
         user.setProvider("TWITTER");
         user.setProviderID(String.valueOf(twitterUser.getId()));
 

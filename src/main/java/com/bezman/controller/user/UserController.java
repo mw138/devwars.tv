@@ -197,7 +197,7 @@ public class UserController extends BaseController
             user.setUsername(username);
             user.setEmail(email);
             user.setPassword(Security.hash(password));
-            user.setRole(User.Role.PENDING.toString());
+            user.setRole(User.Role.PENDING);
             user.setAvatarChanges(1);
 
             session.save(user);
@@ -362,7 +362,7 @@ public class UserController extends BaseController
 
             User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
-            user.setRole(User.Role.USER.toString());
+            user.setRole(User.Role.USER);
 
             session.delete(confirmation);
             session.saveOrUpdate(user);
@@ -462,7 +462,7 @@ public class UserController extends BaseController
 
         if (user != null && user.getPassword().equals(Security.hash(password)))
         {
-            if (User.Role.valueOf(user.getRole()) != User.Role.PENDING)
+            if (user.getRole() != User.Role.PENDING)
             {
                 String newToken = user.newSession();
                 Cookie cookie = new Cookie("token", newToken);

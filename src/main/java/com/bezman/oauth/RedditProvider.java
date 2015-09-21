@@ -45,7 +45,7 @@ public class RedditProvider implements IProvider
             User user = new User();
             user.setEmail(null);
             user.setUsername((String) meJSONObject.get("name") + Util.randomNumbers(4));
-            user.setRole(User.Role.USER.toString());
+            user.setRole(User.Role.USER);
             user.setProvider("REDDIT");
             user.setProviderID((String) meJSONObject.get("id"));
 

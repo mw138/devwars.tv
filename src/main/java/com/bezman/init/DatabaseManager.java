@@ -1,5 +1,6 @@
 package com.bezman.init;
 
+import com.bezman.annotation.HibernateDefault;
 import com.bezman.hibernate.interceptor.HibernateInterceptor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,6 +39,7 @@ public class DatabaseManager implements IInit
 
         registry.getEventListenerGroup(EventType.POST_LOAD).appendListener(postLoadEvent ->
         {
+            HibernateInterceptor.postLoadAny(postLoadEvent.getEntity());
             HibernateInterceptor.invokeMethodWithAnnotation(postLoadEvent.getEntity(), PostLoad.class);
         });
     }

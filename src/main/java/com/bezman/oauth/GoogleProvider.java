@@ -53,7 +53,7 @@ public class GoogleProvider implements IProvider
 
                 user.setEmail(email);
                 user.setUsername(username);
-                user.setRole(role.toString());
+                user.setRole(role);
                 user.setProvider("GOOGLE");
                 user.setProviderID(providerID);
 

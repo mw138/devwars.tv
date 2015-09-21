@@ -38,7 +38,7 @@ public class GithubProvider implements IProvider
 
             User user = new User();
             user.setUsername(userInfoJSON.get("login") + Util.randomNumbers(4));
-            user.setRole(User.Role.USER.toString());
+            user.setRole(User.Role.USER);
             user.setEmail((String) userInfoJSON.get("email"));
             user.setProviderID(String.valueOf(userInfoJSON.get("id")));
             user.setProvider("GITHUB");

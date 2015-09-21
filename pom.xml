@@ -347,6 +347,13 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.6</version>
+            <scope>provided</scope>
+        </dependency>
        <!-- SFTP Connection via JSch -->
 		<!-- dependency>
 			<groupId>com.jcraft</groupId>

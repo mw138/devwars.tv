@@ -48,7 +48,7 @@ public class FacebookProvider implements IProvider
 
                     user.setUsername((String) meJSONObject.get("name") + Util.randomNumbers(4));
                     user.setEmail((String) meJSONObject.get("email"));
-                    user.setRole(User.Role.USER.toString());
+                    user.setRole(User.Role.USER);
                     user.setProvider("FACEBOOK");
                     user.setProviderID((String) meJSONObject.get("id"));
 
