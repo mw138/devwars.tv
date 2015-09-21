@@ -1,35 +1,17 @@
 package com.bezman.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/**
- * Created by Terence on 4/30/2015.
- */
+@Getter
+@Setter
+@NoArgsConstructor
 public class Settings extends BaseModel
 {
-
     private int id;
 
     @JsonIgnore
     private User user;
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
 }

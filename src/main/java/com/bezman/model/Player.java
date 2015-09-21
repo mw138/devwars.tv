@@ -1,10 +1,14 @@
 package com.bezman.model;
 
+import com.bezman.annotation.HibernateDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/**
- * Created by Terence Bezman on 12/27/2014.
- */
+@Getter
+@Setter
+@NoArgsConstructor
 public class Player extends BaseModel
 {
 
@@ -14,73 +18,14 @@ public class Player extends BaseModel
     private Team team;
 
     private User user;
+
     private String language;
 
+    @HibernateDefault("0")
     private Integer pointsChanged;
 
+    @HibernateDefault("0")
     private Integer xpChanged;
-
-    public String getLanguage()
-    {
-        return language;
-    }
-
-    public void setLanguage(String language)
-    {
-        this.language = language;
-    }
-
-    public Team getTeam()
-    {
-        return team;
-    }
-
-    public void setTeam(Team team)
-    {
-        this.team = team;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public Integer getPointsChanged()
-    {
-        return pointsChanged == null ? 0 : pointsChanged;
-    }
-
-    public void setPointsChanged(Integer pointsChanged)
-    {
-        this.pointsChanged = pointsChanged;
-    }
-
-    public Integer getXpChanged()
-    {
-        return xpChanged == null ? 0 : xpChanged;
-    }
-
-    public void setXpChanged(Integer xpChanged)
-    {
-        this.xpChanged = xpChanged;
-    }
-
-    public Player(){}
 
     public Player(Team team, User user, String language)
     {

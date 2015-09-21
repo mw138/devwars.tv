@@ -6,6 +6,8 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 import java.util.zip.ZipEntry;
@@ -103,13 +105,22 @@ public class Util
     }
 
     public static Object toObject( Class clazz, String value ) {
+        if(value.isEmpty())
+        {
+            if(Timestamp.class == clazz) return new Timestamp(new Date().getTime());
+            if(Date.class == clazz) return new Date();
+        }
+
         if( Boolean.class == clazz ) return Boolean.parseBoolean( value );
-        if( Byte.class == clazz ) return Byte.parseByte( value );
-        if( Short.class == clazz ) return Short.parseShort( value );
-        if( Integer.class == clazz ) return Integer.parseInt( value );
-        if( Long.class == clazz ) return Long.parseLong( value );
-        if( Float.class == clazz ) return Float.parseFloat( value );
-        if( Double.class == clazz ) return Double.parseDouble( value );
+        if( Byte.class == clazz ) return Byte.parseByte(value);
+        if( Short.class == clazz ) return Short.parseShort(value);
+        if( Integer.class == clazz ) return Integer.parseInt(value);
+        if( Long.class == clazz ) return Long.parseLong(value);
+        if( Float.class == clazz ) return Float.parseFloat(value);
+        if( Double.class == clazz ) return Double.parseDouble(value);
+        if(Timestamp.class == clazz ) return new Timestamp(Long.valueOf(value));
+        if(Date.class == clazz ) return new Date(Long.valueOf(value));
+
         return value;
     }
 }

@@ -1,47 +1,19 @@
 package com.bezman.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/**
- * Created by Terence on 4/17/2015.
- */
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserReset extends BaseModel
 {
-
     private int id;
 
     @JsonIgnore
     private User user;
 
     private String uid;
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public String getUid()
-    {
-        return uid;
-    }
-
-    public void setUid(String uid)
-    {
-        this.uid = uid;
-    }
 }

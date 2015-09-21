@@ -3,6 +3,8 @@ package com.bezman.hibernate.interceptor;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.HibernateDefault;
 import com.bezman.annotation.PreFlush;
+import com.bezman.annotation.PreFlushHibernateDefault;
+import com.bezman.model.Objective;
 import org.hibernate.EmptyInterceptor;
 
 import java.lang.reflect.Field;
@@ -19,10 +21,37 @@ public class HibernateInterceptor extends EmptyInterceptor
 
     @Override
     public void preFlush(Iterator entities) {
-        entities.forEachRemaining(entity -> HibernateInterceptor.invokeMethodWithAnnotation(entity, PreFlush.class));
+        entities.forEachRemaining(entity ->
+        {
+            HibernateInterceptor.loadEntityDefaults(entity);
+            HibernateInterceptor.setPreFlushers(entity);
+            HibernateInterceptor.invokeMethodWithAnnotation(entity, PreFlush.class);
+        });
     }
 
-    public static void postLoadAny(Object object)
+    public static void setPreFlushers(Object object)
+    {
+        Arrays.stream(object.getClass().getDeclaredFields())
+                .forEach(field ->
+                {
+                    PreFlushHibernateDefault hibernateDefault = field.getAnnotation(PreFlushHibernateDefault.class);
+
+                    field.setAccessible(true);
+
+                    try
+                    {
+                        if (hibernateDefault != null && field.get(object) == null)
+                        {
+                            field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
+                        }
+                    } catch (IllegalAccessException e)
+                    {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    public static void loadEntityDefaults(Object object)
     {
         Arrays.stream(object.getClass().getDeclaredFields())
                 .forEach(field ->
@@ -35,13 +64,18 @@ public class HibernateInterceptor extends EmptyInterceptor
                     {
                         if (hibernateDefault != null && field.get(object) == null)
                         {
-                                field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
+                            field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
                         }
                     } catch (IllegalAccessException e)
                     {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    public static void postLoadAny(Object object)
+    {
+        HibernateInterceptor.loadEntityDefaults(object);
     }
 
     @SuppressWarnings("NullArgumentToVariableArgMethod")

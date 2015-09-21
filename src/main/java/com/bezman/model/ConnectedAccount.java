@@ -1,10 +1,14 @@
 package com.bezman.model;
 
+import com.bezman.annotation.HibernateDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-/**
- * Created by root on 4/25/15.
- */
+@Getter
+@Setter
+@NoArgsConstructor
 public class ConnectedAccount extends BaseModel
 {
 
@@ -15,9 +19,8 @@ public class ConnectedAccount extends BaseModel
     @JsonIgnore
     private User user;
 
+    @HibernateDefault("0")
     private Boolean disconnected;
-
-    public ConnectedAccount(){}
 
     public ConnectedAccount(User user, String provider, String username)
     {
@@ -25,55 +28,5 @@ public class ConnectedAccount extends BaseModel
         this.provider = provider;
         this.username = username;
         this.disconnected = false;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public String getUsername()
-    {
-        return username;
-    }
-
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
-
-    public String getProvider()
-    {
-        return provider;
-    }
-
-    public void setProvider(String provider)
-    {
-        this.provider = provider;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public Boolean getDisconnected()
-    {
-        return disconnected == null ? false : disconnected;
-    }
-
-    public void setDisconnected(Boolean disconnected)
-    {
-        this.disconnected = disconnected;
     }
 }

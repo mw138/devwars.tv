@@ -1,50 +1,23 @@
 package com.bezman.model;
 
-/**
- * Created by Terence on 4/4/2015.
- */
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class GameSignup extends BaseModel
 {
 
     private int id;
 
     private User user;
-    private Game game;
 
-    public GameSignup() {}
+    private Game game;
 
     public GameSignup(User user, Game game) {
         this.user = user;
-        this.game = game;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public User getUser()
-    {
-        return user;
-    }
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public Game getGame()
-    {
-        return game;
-    }
-
-    public void setGame(Game game)
-    {
         this.game = game;
     }
 }

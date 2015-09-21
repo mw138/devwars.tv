@@ -1,15 +1,20 @@
 package com.bezman.model;
 
+import com.bezman.annotation.HibernateDefault;
 import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.Set;
 
-/**
- * Created by Terence on 6/28/2015.
- */
+@Getter
+@Setter
+@NoArgsConstructor
 public class Badge extends BaseModel
 {
 
@@ -17,12 +22,11 @@ public class Badge extends BaseModel
 
     private String name, description;
 
+    @HibernateDefault("0")
     private Integer bitsAwarded, xpAwarded, userCount;
 
     @JsonIgnore
     private Set<User> users;
-
-    public Badge(){}
 
     public Badge(String name, int bitsAwarded, int xpAwarded, String description)
     {
@@ -30,75 +34,6 @@ public class Badge extends BaseModel
         this.bitsAwarded = bitsAwarded;
         this.xpAwarded = xpAwarded;
         this.description = description;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public int getBitsAwarded()
-    {
-        return bitsAwarded == null ? 0 : bitsAwarded;
-    }
-
-    public void setBitsAwarded(int bitsAwarded)
-    {
-        this.bitsAwarded = bitsAwarded;
-    }
-
-    public int getXpAwarded()
-    {
-        return xpAwarded == null ? 0 : xpAwarded;
-    }
-
-    public void setXpAwarded(int xpAwarded)
-    {
-        this.xpAwarded = xpAwarded;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    @JsonIgnore
-    public Set<User> getUsers()
-    {
-        return users;
-    }
-
-    public void setUsers(Set<User> users)
-    {
-        this.users = users;
-    }
-
-    public Integer getUserCount() {
-        return userCount;
-    }
-
-    public void setUserCount(Integer userCount) {
-        this.userCount = userCount;
     }
 
     public static Badge badgeForName(String name)

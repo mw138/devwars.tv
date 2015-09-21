@@ -8,9 +8,7 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -23,7 +21,8 @@ import java.util.*;
  * Created by Terence on 12/22/2014.
  */
 @JsonSerialize(using = UserPermissionSerializer.class)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User extends BaseModel
 {
