@@ -79,7 +79,20 @@ angular.module("app.team", [])
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
                 controller: "CreateTeamDialogController"
-            });
+            })
+                .then(function (teamName) {
+                    console.log("team:", teamName);
+
+                    UserTeamService.http.createTeam(teamName)
+                        .then(function (success) {
+                            console.log("success:", success);
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Uploaded files for team");
+
+
+                        }, function (error) {
+                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                        })
+                });
         };
 
         $scope.invitePlayer = function () {

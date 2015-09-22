@@ -1,1 +1,17 @@
-<md-dialog></md-dialog>
+<md-dialog>
+    <i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i> <!-- .closeDialog -->
+    <div class="dialog-container">
+        <h2 class="dialog-container__header">Create Team</h2>
+
+
+
+        <div class="warning">
+            <input type="text" ng-model="teamName"/>
+        </div>
+
+        <div class="dialog-container__actions">
+            <button class="button" ng-click="submitTeam(teamName)">Submit</button>
+            <button class="button button--warn" ng-click="cancelCreateTeam()">Cancel</button>
+        </div>
+    </div>
+</md-dialog>
