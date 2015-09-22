@@ -22,6 +22,15 @@ angular.module("app.team", [])
                 $scope.team = success.data;
                 console.log("success.data:", success.data);
                 $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
+
+                //get match history.
+                UserTeamService.http.getHistory(success.data.id, null, null)
+                    .then(function(success) {
+                        console.log("success.history", success.data);
+                        $scope.team.matchHistory = success.data;
+                    })
+
+
             }, angular.noop);
 
         /**
