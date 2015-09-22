@@ -10,7 +10,11 @@
 
 	<div>
 		<div ng-hide="team">
-			<h1>no team</h1>
+			<div class="teams-left">
+				<h1>no team</h1>
+				<a href="" class="create-team" ng-click="createTeam()">Create Team</a>
+			</div>
+
 		</div>
 
 
@@ -25,12 +29,28 @@
 				<div class="roster">
 					<div class="roster-header">
 						<span class="roster-title">Roster</span>
-						<a href="" class="edit-roster">Edit</a>
-						<a href="" class="invite-roster button" ng-click="invitePlayer()">Invite</a>
+						<span class="roster-management" ng-show="isOwner">
+							<a href="" class="edit-roster" ng-hide="editingRoster" ng-click="editRoster()">Edit</a>
+							<a href="" class="edit-roster" ng-show="editingRoster" ng-click="editRoster()">Exit</a>
+
+							<a href="" class="invite-roster button" ng-click="invitePlayer()">Invite</a>
+						</span>
+
 					</div>
-					<div class="roster-players editable">
-						<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>
+					<!--<div class="roster-players editable">-->
+						<!--<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>-->
+					<!--</div>-->
+					<div class="roster-players" ng-class="{'editable' : editingRoster}">
+						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member.username, $index)">{{ member.username }}</a>
 					</div>
+
+					<!--TODO: see if invite list is needed for owners.-->
+					<!--<div class="roster-header">-->
+						<!--<span class="roster-title">Invites</span>-->
+						<!--<div class="roster-players">-->
+							<!--<a href="" class="player offline" ng-repeat="member in team.invites track by $index">{{ member.username }}</a>-->
+						<!--</div>-->
+					<!--</div>-->
 				</div>
 
 				<div class="team-stat global">
@@ -48,8 +68,8 @@
 					<span>0.74</span>
 				</div>
 
-				<a href="" class="disband-team" ng-click="disbandTeam()">Disband Team</a>
-				<a href="" class="disband-team" ng-click="leaveTeam()">Leave Team</a>
+				<a href="" class="disband-team" ng-show="isOwner" ng-click="disbandTeam()">Disband Team</a>
+				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam()">Leave Team</a>
 
 			</div>
 

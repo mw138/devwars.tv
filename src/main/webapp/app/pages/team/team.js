@@ -9,7 +9,7 @@ angular.module("app.team", [])
                 });
 
         }])
-    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", function ($scope, $mdDialog, UserService, UserTeamService, AuthService) {
+    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", "ToastService", "DialogService", function ($scope, $mdDialog, UserService, UserTeamService, AuthService, ToastService, DialogService) {
 
         //console.log("UserService.getMyTeam():", UserService.getMyTeam());
 
@@ -20,9 +20,46 @@ angular.module("app.team", [])
         UserService.http.getMyTeam()
             .then(function (success) {
                 $scope.team = success.data;
-
+                console.log("success.data:", success.data);
                 $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
             }, angular.noop);
+
+        /**
+         * Roster
+         */
+        $scope.editingRoster = false;
+
+        $scope.editRoster = function () {//toggle function.
+            $scope.editingRoster = !$scope.editingRoster;
+        };
+
+
+        //removing player
+        $scope.removePlayer = function (member, idx) {
+            if ($scope.isOwner && $scope.editingRoster) {
+                console.log("removePlayer()");
+
+                //see if owner is trying to remove himself.
+                if ($scope.team.owner.id === AuthService.user.id) {
+                    return $scope.disbandTeam();
+                } else {
+
+                    DialogService.getConfirmationDialog("Confirmation", "Are you sure you want to kick " + member + " from " + $scope.team.name, "Yes", "No", $event)
+                        .then(function () {
+
+                            //TODO: removePlayer logic
+
+                        },  angular.noop);
+
+                }
+
+
+
+            } else { //removePlayer not owner
+                //ToastService.showDevwarsToast("fa-exclamation-circle", "Error", "Error");
+            }
+        };
+
 
 
         /**
