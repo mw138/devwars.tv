@@ -12,7 +12,7 @@
 		<div ng-hide="team">
 			<div class="teams-left">
 				<h1>no team</h1>
-				<a href="" class="create-team" ng-click="createTeam()">Create Team</a>
+				<a style="font-size: 10px" href="" class="create-team" ng-click="createTeam()">Create Team</a>
 			</div>
 
 		</div>
@@ -103,8 +103,8 @@
 						<span class="team-wins">W25</span>
 					</div>
 					<div class="team-history--content">
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
+						<div class="team-history--game" ng-repeat="match in team.matchHistory">
+							<span class="match-stat opposition">{{  }}</span>
 							<div class="match-stat score">
 								<span class="team-blue">6</span>
 								<span class="divider">-</span>

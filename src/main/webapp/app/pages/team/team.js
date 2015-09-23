@@ -22,6 +22,15 @@ angular.module("app.team", [])
                 $scope.team = success.data;
                 console.log("success.data:", success.data);
                 $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
+
+                //get match history.
+                UserTeamService.http.getHistory(success.data.id, null, null)
+                    .then(function(success) {
+                        console.log("success.history", success.data);
+                        $scope.team.matchHistory = success.data;
+                    })
+
+
             }, angular.noop);
 
         /**
@@ -70,7 +79,20 @@ angular.module("app.team", [])
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
                 controller: "CreateTeamDialogController"
-            });
+            })
+                .then(function (teamName) {
+                    console.log("team:", teamName);
+
+                    UserTeamService.http.createTeam(teamName)
+                        .then(function (success) {
+                            console.log("success:", success);
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Uploaded files for team");
+
+
+                        }, function (error) {
+                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                        })
+                });
         };
 
         $scope.invitePlayer = function () {
@@ -90,8 +112,15 @@ angular.module("app.team", [])
         $scope.disbandTeam = function () {
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/disbandTeamDialog/disbandTeamDialogView.html",
-                controller: "CreateTeamDialogController"
-            });
+                controller: "DisbandTeamDialogController",
+
+                locals: {
+                    team: $scope.team
+                }
+            })
+                .then(function (teamId) {
+                    UserService.http.deleteTeam(teamId, null)
+                });
         }
 
 
