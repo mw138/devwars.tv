@@ -112,8 +112,15 @@ angular.module("app.team", [])
         $scope.disbandTeam = function () {
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/disbandTeamDialog/disbandTeamDialogView.html",
-                controller: "CreateTeamDialogController"
-            });
+                controller: "DisbandTeamDialogController",
+
+                locals: {
+                    team: $scope.team
+                }
+            })
+                .then(function (teamId) {
+                    UserService.http.deleteTeam(teamId, null)
+                });
         }
 
 
