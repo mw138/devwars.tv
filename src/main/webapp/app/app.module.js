@@ -55,6 +55,7 @@ var app = angular.module('app', [
     'app.modCP',
     'app.scroll-bottom',
     'app.no-scroll-other',
+    'app.stackedInput',
     'app.team',
     'app.addGame',
     'app.UserTeamService',
