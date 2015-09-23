@@ -118,8 +118,14 @@ angular.module("app.team", [])
                     team: $scope.team
                 }
             })
-                .then(function (teamId) {
-                    UserService.http.deleteTeam(teamId, null)
+                .then(function (teamId, teamName) {
+                    console.log("teamId", teamId);
+                    UserTeamService.http.deleteTeam(teamId, teamName)
+                        .then(function (success) {
+                            console.log("success:", success);
+                        }, function (error) {
+                            console.log("error:", error);
+                        })
                 });
         }
 

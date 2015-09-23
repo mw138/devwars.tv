@@ -5,7 +5,7 @@ angular.module("app.disbandTeamDialog", [])
         console.log("team", team);
 
         $scope.disbandTeam = function (id) {
-            $mdDialog.hide(id);
+            $mdDialog.hide(id, $scope.team.name);
         };
 
 
