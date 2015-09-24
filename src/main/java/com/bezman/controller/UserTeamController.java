@@ -64,7 +64,7 @@ public class UserTeamController
 
         session.save(userTeam);
 
-        return new ResponseEntity("Created Team", HttpStatus.OK);
+        return new ResponseEntity(userTeam, HttpStatus.OK);
     }
 
     /**
