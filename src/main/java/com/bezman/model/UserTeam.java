@@ -43,9 +43,6 @@ public class UserTeam extends BaseModel
         this.invites = new HashSet<>();
 
         this.members.add(owner);
-        owner.setTeam(this);
-
-        this.setId(owner.getId());
     }
 }
 

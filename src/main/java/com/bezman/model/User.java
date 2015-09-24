@@ -56,15 +56,21 @@ public class User extends BaseModel
     private Ranking ranking;
 
     @JsonIgnore
+    private EmailConfirmation emailConfirmation;
+
+    private Role role;
+
+    @JsonIgnore
+    private Set<UserTeam> ownedTeams;
+
+    @JsonIgnore
+    private Set<UserTeam> teams;
+
+    @JsonIgnore
     private UserTeam ownedTeam;
 
     @JsonIgnore
     private UserTeam team;
-
-    @JsonIgnore
-    private EmailConfirmation emailConfirmation;
-
-    private Role role;
 
     private Set<Integer> appliedGames;
 
@@ -169,6 +175,24 @@ public class User extends BaseModel
         gamesLostQuery.setInteger("id", id);
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
+
+        if(this.getTeams() != null)
+        {
+            Optional<UserTeam> teamOptional = this.getTeams().stream().findFirst();
+            if (teamOptional.isPresent())
+            {
+                this.setTeam(teamOptional.get());
+            }
+        }
+
+        if(this.getOwnedTeams() != null)
+        {
+            Optional<UserTeam> ownedTeamOptional = this.getOwnedTeams().stream().findFirst();
+            if (ownedTeamOptional.isPresent())
+            {
+                this.setOwnedTeam(ownedTeamOptional.get());
+            }
+        }
 
         session.close();
     }

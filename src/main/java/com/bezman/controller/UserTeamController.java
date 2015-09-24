@@ -60,15 +60,9 @@ public class UserTeamController
     {
         user = (User) session.merge(user);
 
-        if (user.getOwnedTeam() != null)
-        {
-            return new ResponseEntity("You already have a team", HttpStatus.CONFLICT);
-        }
-
         UserTeam userTeam = new UserTeam(name, user);
 
         session.save(userTeam);
-        user.setOwnedTeam(userTeam);
 
         return new ResponseEntity("Created Team", HttpStatus.OK);
     }
@@ -82,7 +76,7 @@ public class UserTeamController
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName)
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
@@ -93,7 +87,7 @@ public class UserTeamController
         if(!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
-        session.delete(userTeam);
+        userTeam.setOwner(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
     }
