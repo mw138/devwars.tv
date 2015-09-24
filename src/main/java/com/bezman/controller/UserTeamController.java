@@ -82,7 +82,7 @@ public class UserTeamController
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
     public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName)
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
