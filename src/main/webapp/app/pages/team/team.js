@@ -98,7 +98,7 @@ angular.module("app.team", [])
         $scope.invitePlayer = function () {
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/invitePlayerDialog/invitePlayerDialogView.html",
-                controller: "CreateTeamDialogController"
+                controller: "InvitePlayerDialogController"
             });
         };
 
