@@ -2,8 +2,8 @@
 	<i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i>
 
 	<h3>Are you sure you want to disband your team?</h3>
-	<p>All of your team's data will be lost. <b class="warning">This CANNOT be reversed.</b></p>	
-	<a href="" class="button" ng-click="disbandTeam(team.id)">Disband {{ team.name }}</a>
+	<p>All of your team's data will be lost. <b class="warning">This CANNOT be reversed.</b></p>
+	<a href="" class="button" ng-click="disbandTeam(team.id, team.name)">Disband {{ team.name }}</a>
 	<h3 class="second-header">Aternatively: Leave your team, and hand over leadership.</h3>
 	<p>This is permanent, choose wisely!</p>
 	<select ng-model="selectedMember" placeholder="Choose Member">

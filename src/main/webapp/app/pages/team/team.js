@@ -118,13 +118,15 @@ angular.module("app.team", [])
                     team: $scope.team
                 }
             })
-                .then(function (teamId, teamName) {
-                    console.log("teamId", teamId);
-                    UserTeamService.http.deleteTeam(teamId, teamName)
+                .then(function (team) {
+                    UserTeamService.http.deleteTeam(team.id, team.name)
                         .then(function (success) {
-                            console.log("success:", success);
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Team Disbanded");
+
+                            $scope.team = null;
                         }, function (error) {
-                            console.log("error:", error);
+                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+
                         })
                 });
         }
