@@ -1152,10 +1152,10 @@ public class UserController extends BaseController
     public ResponseEntity getOwnedTeam(SessionImpl session, @AuthedUser User user)
     {
         UserTeam userTeam = user.getOwnedTeam();
-        userTeam = (UserTeam) session.merge(userTeam);
 
         if (userTeam != null)
         {
+            userTeam = (UserTeam) session.merge(userTeam);
             return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
@@ -1173,10 +1173,10 @@ public class UserController extends BaseController
     public ResponseEntity getMyTeam(SessionImpl session, @AuthedUser User user)
     {
         UserTeam userTeam = user.getTeam();
-        userTeam = (UserTeam) session.merge(userTeam);
 
         if (userTeam != null)
         {
+            userTeam = (UserTeam) session.merge(userTeam);
             return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 

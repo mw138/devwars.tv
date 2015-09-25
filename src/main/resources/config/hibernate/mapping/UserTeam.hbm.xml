@@ -19,7 +19,7 @@
         </set>
 
         <set name="members" cascade="all">
-            <key column="team_id"/>
+            <key column="team"/>
             <one-to-many class="com.bezman.model.User"/>
         </set>
 
