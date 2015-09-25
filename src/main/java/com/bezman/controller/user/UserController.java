@@ -1149,13 +1149,14 @@ public class UserController extends BaseController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/ownedteam")
-    public ResponseEntity getOwnedTeam(@AuthedUser User user)
+    public ResponseEntity getOwnedTeam(SessionImpl session, @AuthedUser User user)
     {
         UserTeam userTeam = user.getOwnedTeam();
+        userTeam = (UserTeam) session.merge(userTeam);
 
         if (userTeam != null)
         {
-            return new ResponseEntity(user.getOwnedTeam(), HttpStatus.OK);
+            return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
         return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
@@ -1169,13 +1170,14 @@ public class UserController extends BaseController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/myteam")
-    public ResponseEntity getMyTeam(@AuthedUser User user)
+    public ResponseEntity getMyTeam(SessionImpl session, @AuthedUser User user)
     {
         UserTeam userTeam = user.getTeam();
+        userTeam = (UserTeam) session.merge(userTeam);
 
         if (userTeam != null)
         {
-            return new ResponseEntity(user.getOwnedTeam(), HttpStatus.OK);
+            return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
         return new ResponseEntity("You don't belong to a team", HttpStatus.NOT_FOUND);

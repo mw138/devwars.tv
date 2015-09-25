@@ -60,6 +60,9 @@ public class UserTeamController
     {
         user = (User) session.merge(user);
 
+        if (user.getTeam() != null)
+            return new ResponseEntity("You already belong to a team", HttpStatus.CONFLICT);
+
         UserTeam userTeam = new UserTeam(name, user);
 
         session.save(userTeam);

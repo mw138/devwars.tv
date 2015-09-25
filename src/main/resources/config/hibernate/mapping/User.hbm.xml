@@ -37,7 +37,9 @@
         <one-to-one name="warrior" class="Warrior" lazy="false" cascade="save-update"/>
         <one-to-one name="emailConfirmation" class="EmailConfirmation"/>
 
-        <set name="ownedTeams" table="user_teams">
+        <many-to-one name="team" class="UserTeam"></many-to-one>
+
+        <set name="ownedTeams" table="user_teams" lazy="true">
             <key column="owner"></key>
             <one-to-many class="UserTeam"/>
         </set>

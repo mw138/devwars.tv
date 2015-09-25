@@ -64,9 +64,6 @@ public class User extends BaseModel
     private Set<UserTeam> ownedTeams;
 
     @JsonIgnore
-    private Set<UserTeam> teams;
-
-    @JsonIgnore
     private UserTeam ownedTeam;
 
     @JsonIgnore
@@ -176,16 +173,7 @@ public class User extends BaseModel
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
 
-        if(this.getTeams() != null)
-        {
-            Optional<UserTeam> teamOptional = this.getTeams().stream().findFirst();
-            if (teamOptional.isPresent())
-            {
-                this.setTeam(teamOptional.get());
-            }
-        }
-
-        if(this.getOwnedTeams() != null)
+       if(this.getOwnedTeams() != null)
         {
             Optional<UserTeam> ownedTeamOptional = this.getOwnedTeams().stream().findFirst();
             if (ownedTeamOptional.isPresent())
