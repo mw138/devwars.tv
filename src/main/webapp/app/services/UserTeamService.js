@@ -76,14 +76,15 @@ url: '/v1/teams/' + id + '/invite',
 params: {user : user}
 })};/*
 Required Role : USER
+Query Parameter {image} : org.springframework.web.multipart.MultipartFile
 Query Parameter {name} : java.lang.String
 Query Parameter {tag} : java.lang.String
 */
-UserTeamService.createTeam = function(name, tag, successCallback, errorCallback){
+UserTeamService.createTeam = function(name, tag, image, successCallback, errorCallback){
 $http({
 method: 'GET',
 url: '/v1/teams/create',
-params: {name : name,tag : tag}
+params: {image : image,name : name,tag : tag}
 })
 .then(function(success){
 successCallback(success)
@@ -94,11 +95,11 @@ errorCallback(error)
 
 };
 
-UserTeamService.http.createTeam = function(name, tag, successCallback, errorCallback){
+UserTeamService.http.createTeam = function(name, tag, image, successCallback, errorCallback){
 return $http({
 method: 'GET',
 url: '/v1/teams/create',
-params: {name : name,tag : tag}
+params: {image : image,name : name,tag : tag}
 })};/*
 Path Variable {id} : int
 Query Parameter {count} : int
@@ -197,6 +198,53 @@ UserTeamService.http.acceptInvite = function(id, successCallback, errorCallback)
 return $http({
 method: 'GET',
 url: '/v1/teams/' + id + '/invite/accept',
+params: {}
+})};/*
+Required Role : USER
+Path Variable {id} : int
+*/
+UserTeamService.leaveTeam = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/' + id + '/leave',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.leaveTeam = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/' + id + '/leave',
+params: {}
+})};/*
+Path Variable {id} : int
+*/
+UserTeamService.getTeamAvatar = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/' + id + '/avatar',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.getTeamAvatar = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/' + id + '/avatar',
 params: {}
 })};return UserTeamService;
 }]);
