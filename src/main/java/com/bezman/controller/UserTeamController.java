@@ -107,17 +107,38 @@ public class UserTeamController
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName)
     {
+        user = (User) session.merge(user);
+
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (!teamName.equals(userTeam.getName()))
             return new ResponseEntity("Team name did not match", HttpStatus.BAD_REQUEST);
 
-        if(!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
         userTeam.setOwner(null);
+        user.setTeam(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/{id}/leave")
+    public ResponseEntity leaveTeam(SessionImpl session,
+                                    @AuthedUser User user,
+                                    @PathVariable("id") int id)
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if (userTeam == null)
+            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
+
+        userTeam.getMembers().removeIf(currentUser ->
+                currentUser.getId() == user.getId());
+
+        return new ResponseEntity("Successfully left team", HttpStatus.OK);
     }
 
     /**
