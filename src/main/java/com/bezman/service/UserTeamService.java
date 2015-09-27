@@ -6,6 +6,7 @@ import com.bezman.model.Team;
 import com.bezman.model.User;
 import com.bezman.model.UserTeam;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
 
@@ -121,6 +122,22 @@ public class UserTeamService
         hashMap.put("gamesLost", getNumberOfGamesLostForUserTeam(userTeam));
 
         return hashMap;
+    }
+
+    public static List<Team> teamsInvitedTo(User user)
+    {
+        List<Team> returnList;
+
+        Session session = DatabaseManager.getSession();
+
+        returnList = session.createCriteria(UserTeam.class)
+                .createAlias("invites", "i")
+                .add(Restrictions.eq("i.id", user.getId()))
+                .list();
+
+        session.close();
+
+        return returnList;
     }
 
     public static boolean doesUserOwnUserTeam(User user, UserTeam userTeam)

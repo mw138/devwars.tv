@@ -18,12 +18,12 @@
             <one-to-many class="com.bezman.model.Team"/>
         </set>
 
-        <set name="members" cascade="all">
+        <set name="members" lazy="false" cascade="all">
             <key column="team"/>
             <one-to-many class="com.bezman.model.User"/>
         </set>
 
-        <set name="invites" table="team_invites">
+        <set name="invites" lazy="false" table="team_invites">
             <key column="team_id"/>
             <many-to-many class="com.bezman.model.User" column="user_id"/>
         </set>
