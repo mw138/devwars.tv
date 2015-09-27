@@ -6,12 +6,18 @@
 
 
         <div class="warning">
-            <input type="text" ng-model="teamName"/>
+            <input type="text" ng-model="teamName" placeholder="team name"/>
+            <input type="text" ng-model="teamTag" placeholder="team tag"/>
         </div>
+
+        <div>
+            {{ teamName }} [ {{ teamTag }} ]
+        </div>
+
 
         <div class="dialog-container__actions">
             <button class="button" ng-click="submitTeam(teamName)">Submit</button>
-            <button class="button button--warn" ng-click="cancelCreateTeam()">Cancel</button>
+            <button class="button button--warn" ng-click="$mdDialog.hide()">Cancel</button>
         </div>
     </div>
 </md-dialog>
