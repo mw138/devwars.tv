@@ -9,7 +9,7 @@ angular.module("app.team", [])
                 });
 
         }])
-    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", "ToastService", "DialogService", function ($scope, $mdDialog, UserService, UserTeamService, AuthService, ToastService, DialogService) {
+    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", "ToastService", "DialogService", "$http", function ($scope, $mdDialog, UserService, UserTeamService, AuthService, ToastService, DialogService, $http) {
 
         //console.log("UserService.getMyTeam():", UserService.getMyTeam());
 
@@ -89,18 +89,28 @@ angular.module("app.team", [])
                 templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
                 controller: "CreateTeamDialogController"
             })
-                .then(function (teamName) {
-                    console.log("team:", teamName);
+                .then(function (team) {
+                    console.log(team);
+                    var fd = new FormData();
 
-                    UserTeamService.http.createTeam(teamName)
+                    fd.append('image', team.image);
+                    fd.append('name', team.name);
+                    fd.append('tag', team.tag);
+
+                    $http.post("/v1/teams/create", fd, {
+                        withCredentials: true,
+                        headers: {'Content-Type': undefined},
+                        transformRequest: angular.identity
+                    })
                         .then(function (success) {
-                            console.log("success:", success);
-                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Created team");
+                            console.log("success", success);
                             $scope.team = success.data;
 
                         }, function (error) {
-                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                            console.log("error", error);
                         })
+
+
                 });
         };
 

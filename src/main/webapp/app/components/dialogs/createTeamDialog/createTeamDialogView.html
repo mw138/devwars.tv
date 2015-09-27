@@ -14,9 +14,28 @@
             {{ teamName }} [ {{ teamTag }} ]
         </div>
 
+        <div>
+            <h1>picture</h1>
+            <label>
+                <div class="avatar-upload">
+                    <!--<span class="button" ng-click="editAvatarImage($event)">Upload Image</span>-->
+                    <input type="file" fileread="selectedTeamImage">
+                    <span>Upload a new avatar</span>
+                </div>
+            </label>
+
+        </div>
+
+        <div class="dialog-container">
+            <h2 class="dialog-container__header">Crop your new team picture</h2>
+            <div class="cropArea" style="width:500px; height:350px;">
+                <img-crop class="img-cropping" image="image" result-image="myCroppedImage" area-min-size="minSize" change-on-fly="true" area-type="square"></img-crop>
+            </div>
+        </div> <!-- .dialog-container -->
+
 
         <div class="dialog-container__actions">
-            <button class="button" ng-click="submitTeam(teamName)">Submit</button>
+            <button class="button" ng-click="submitTeam(teamName, teamTag, myCroppedImage)">Submit</button>
             <button class="button button--warn" ng-click="$mdDialog.hide()">Cancel</button>
         </div>
     </div>
