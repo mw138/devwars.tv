@@ -11,7 +11,6 @@ angular.module("app.team", [])
         }])
     .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", "ToastService", "DialogService", "$http", function ($scope, $mdDialog, UserService, UserTeamService, AuthService, ToastService, DialogService, $http) {
 
-        //console.log("UserService.getMyTeam():", UserService.getMyTeam());
 
         //Set team to null (the false state)
         $scope.team = null;
@@ -39,6 +38,13 @@ angular.module("app.team", [])
                     console.log("success.data:", success.data);
                     $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
                 }
+
+            }, angular.noop);
+
+        UserService.http.getMyTeamInvites()
+            .then(function (success) {
+                console.log("success invites", success);
+                $scope.invites = success.data;
 
             }, angular.noop);
 
@@ -83,6 +89,35 @@ angular.module("app.team", [])
         /**
          * Dialogs
          */
+
+        $scope.joinTeam = function (team) {
+          $mdDialog.show({
+              templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+              controller: "ConfirmDialogController",
+
+              locals: {
+                  title: "Team",
+                  message: "Invitation to join " + team.name,
+                  yes: "Accept",
+                  no: "Decline"
+              }
+          })
+              .then(function () {
+                  console.log("accept");
+                  UserTeamService.http.acceptInvite(team.id)
+                      .then(function (success) {
+                          console.log("success acceptInvite:", success);
+                          ToastService.showDevwarsToast("fa-check-circle", "Success", "Joined Team");
+                          team.members.push(AuthService.user);
+                          $scope.team = team;
+
+
+                      }, angular.noop)
+              }, function () {
+                  console.log("decline");
+              })
+
+        };
         
         $scope.createTeam = function () {
             $mdDialog.show({
@@ -118,14 +153,43 @@ angular.module("app.team", [])
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/invitePlayerDialog/invitePlayerDialogView.html",
                 controller: "InvitePlayerDialogController"
-            });
+            })
+                .then(function (player) {
+                    console.log("player invite:", player);
+                    UserTeamService.http.invitePlayer($scope.team.id, player.id)
+                        .then(function (success) {
+                            console.log("success invite:", success);
+                            $scope.team.invites.push(player);
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Invite Sent");
+
+                        }, function (error) {
+                            console.log("error invite:", error);
+                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                        })
+                })
         };
 
-        $scope.leaveTeam = function () {
+        $scope.leaveTeam = function (team) {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/leaveTeamDialog/leaveTeamDialogView.html",
-                controller: "CreateTeamDialogController"
-            });
+                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                controller: "ConfirmDialogController",
+
+                locals: {
+                    title: "Team",
+                    message: "Leave " + team.name,
+                    yes: "Yes",
+                    no: "No"
+                }
+            })
+                .then(function () {
+                    UserTeamService.http.leaveTeam(team.id)
+                        .then(function (success) {
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Left Team");
+                            $scope.team = null;
+                        }, function (error) {
+                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                        })
+                }, angular.noop)
         };
 
         $scope.disbandTeam = function () {

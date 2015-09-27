@@ -10,9 +10,13 @@
 
 	<div>
 		<div ng-hide="team">
-			<div class="teams-left">
+			<div class="teams-left" style="font-size: 20px">
 				<h1>no team</h1>
-				<a style="font-size: 10px" href="" class="create-team" ng-click="createTeam()">Create Team</a>
+				<a href="" class="create-team" ng-click="createTeam()">Create Team</a>
+				<h1>Team Invites</h1>
+				<ul>
+					<li ng-repeat="team in invites"><a href="" ng-click="joinTeam(team)"> {{ team.name }} [{{ team.tag }}] </a></li>
+				</ul>
 			</div>
 
 		</div>
@@ -69,7 +73,7 @@
 				</div>
 
 				<a href="" class="disband-team" ng-show="isOwner" ng-click="disbandTeam()">Disband Team</a>
-				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam()">Leave Team</a>
+				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam(team)">Leave Team</a>
 
 			</div>
 

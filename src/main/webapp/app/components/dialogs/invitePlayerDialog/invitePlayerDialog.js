@@ -4,6 +4,8 @@ angular.module("app.invitePlayerDialog", [])
         console.log("invitePlayer");
 
         $scope.userInput = '';
+        $scope.selectedPlayer = '';
+        $scope.results = [];
 
         $scope.searchUser = function () {
             console.log($scope.userInput);
@@ -11,8 +13,21 @@ angular.module("app.invitePlayerDialog", [])
                 UserService.http.searchUsers($scope.userInput)
                     .then(function (success) {
                         console.log("userSearch:", success);
+                        $scope.results = success.data;
+                        $scope.selectedPlayer = success.data[0];
+
                     })
             }
+        };
+
+
+        $scope.playerFormat = function (player) {
+            return player.username;
+        };
+
+
+        $scope.invitePlayer = function (player) {
+            $mdDialog.hide(player);
         }
 
     }]);
