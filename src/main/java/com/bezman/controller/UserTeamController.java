@@ -8,6 +8,7 @@ import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.*;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
@@ -18,9 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,6 +51,18 @@ public class UserTeamController
         return new ResponseEntity(session.get(UserTeam.class, id), HttpStatus.OK);
     }
 
+    @RequestMapping("/{id}/avatar")
+    public void getTeamAvatar(@PathVariable("id") int id, HttpServletResponse response) throws IOException
+    {
+        File file = new File(Reference.TEAM_PICTURE_PATH + File.separator + id, "avatar.jpg");
+        File defaultFile = new File(Reference.TEAM_PICTURE_PATH, "default.jpg");
+
+        if(file.exists())
+            IOUtils.copy(new FileInputStream(file), response.getOutputStream());
+
+        IOUtils.copy(new FileInputStream(defaultFile), response.getOutputStream());
+    }
+
     /**
      * Creates a team and adds the user to it
      *
@@ -56,7 +74,11 @@ public class UserTeamController
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public ResponseEntity createTeam(SessionImpl session, @AuthedUser User user, @RequestParam("name") String name, @RequestParam("tag") String tag)
+    public ResponseEntity createTeam(SessionImpl session,
+                                     @AuthedUser User user,
+                                     @RequestParam("name") String name,
+                                     @RequestParam("tag") String tag,
+                                     @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException
     {
         user = (User) session.merge(user);
 
@@ -66,6 +88,9 @@ public class UserTeamController
         UserTeam userTeam = new UserTeam(name, tag, user);
 
         session.save(userTeam);
+
+        if (multipartFile != null)
+            UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
     }
@@ -82,17 +107,38 @@ public class UserTeamController
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName)
     {
+        user = (User) session.merge(user);
+
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (!teamName.equals(userTeam.getName()))
             return new ResponseEntity("Team name did not match", HttpStatus.BAD_REQUEST);
 
-        if(!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
         userTeam.setOwner(null);
+        user.setTeam(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/{id}/leave")
+    public ResponseEntity leaveTeam(SessionImpl session,
+                                    @AuthedUser User user,
+                                    @PathVariable("id") int id)
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if (userTeam == null)
+            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
+
+        userTeam.getMembers().removeIf(currentUser ->
+                currentUser.getId() == user.getId());
+
+        return new ResponseEntity("Successfully left team", HttpStatus.OK);
     }
 
     /**

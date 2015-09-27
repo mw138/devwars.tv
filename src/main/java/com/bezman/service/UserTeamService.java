@@ -1,15 +1,21 @@
 package com.bezman.service;
 
+import com.bezman.Reference.Reference;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.Game;
 import com.bezman.model.Team;
 import com.bezman.model.User;
 import com.bezman.model.UserTeam;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -138,6 +144,19 @@ public class UserTeamService
         session.close();
 
         return returnList;
+    }
+
+    public static void changeTeamPicture(UserTeam userTeam, InputStream inputStream) throws IOException
+    {
+        File file = new File(Reference.TEAM_PICTURE_PATH + File.separator + userTeam.getId(), "avatar.jpg");
+
+        if(!file.getParentFile().isDirectory())
+            file.getParentFile().mkdirs();
+
+        if(!file.exists())
+            file.createNewFile();
+
+        IOUtils.copy(inputStream, new FileOutputStream(file));
     }
 
     public static boolean doesUserOwnUserTeam(User user, UserTeam userTeam)

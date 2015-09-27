@@ -40,6 +40,8 @@ public class Reference
     public static String PROFILE_PICTURE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator;
     public static String PROFILE_PICTURE_PATH_NO_END = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics";
 
+    public static String TEAM_PICTURE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator + "team-pics";
+
     public static String SITE_STORAGE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator + "site-storage";
 
     public static Connection connection;
