@@ -34,6 +34,11 @@ angular.module("app.team", [])
                     .then(function (success) {
                         $scope.statistics = success.data;
                     }, angular.noop);
+                if (!success) {
+                    $scope.team = success.data;
+                    console.log("success.data:", success.data);
+                    $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
+                }
 
             }, angular.noop);
 
@@ -90,8 +95,8 @@ angular.module("app.team", [])
                     UserTeamService.http.createTeam(teamName)
                         .then(function (success) {
                             console.log("success:", success);
-                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Uploaded files for team");
-
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Created team");
+                            $scope.team = success.data;
 
                         }, function (error) {
                             ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
