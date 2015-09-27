@@ -28,7 +28,7 @@ angular.module("app.team", [])
                     .then(function(success) {
                         console.log("success.history", success.data);
                         $scope.team.matchHistory = success.data;
-                    })
+                    });
 
                 UserTeamService.http.getStatistics($scope.team.id)
                     .then(function (success) {

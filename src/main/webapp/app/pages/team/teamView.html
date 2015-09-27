@@ -60,12 +60,12 @@
 
 				<div class="team-stat games">
 					<span>Games</span>
-					<span>47</span>
+					<span>{{ statistics.gamesPlayed }}</span>
 				</div>
 
 				<div class="team-stat win-stat">
 					<span>W/L Ratio</span>
-					<span>0.74</span>
+					<span>{{ (statistics.gamesWon / (statistics.gamesPlayed > 0.0 ? statistics.gamesPlayed : 1.0)) | number : 2 }}</span>
 				</div>
 
 				<a href="" class="disband-team" ng-show="isOwner" ng-click="disbandTeam()">Disband Team</a>
@@ -84,7 +84,7 @@
 					<div class="team-info">
 						<div class="team-rank"></div>
 						<span class="team-name">{{ team.name }}</span>
-						<span class="team-tag">[C9]</span>
+						<span class="team-tag">[{{ team.tag }}]</span>
 
 						<div class="team-xp">
 							<span>Bronze I</span>
@@ -99,8 +99,8 @@
 				<div class="team-history">
 					<div class="team-history--header">
 						<span class="history-title">Match History</span>
-						<span class="team-losses">L15</span>
-						<span class="team-wins">W25</span>
+						<span class="team-losses">L{{ statistics.gamesLost }}</span>
+						<span class="team-wins">W{{ statistics.gamesWon }}</span>
 					</div>
 					<div class="team-history--content">
 						<div class="team-history--game" ng-repeat="match in team.matchHistory">
