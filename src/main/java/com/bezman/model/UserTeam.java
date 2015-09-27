@@ -25,6 +25,8 @@ public class UserTeam extends BaseModel
 
     private String name;
 
+    private String tag;
+
     private Set<User> members;
 
     private Set<User> invites;
@@ -34,9 +36,10 @@ public class UserTeam extends BaseModel
 
     private Long gamesWon, gamesLost;
 
-    public UserTeam(String name, User owner)
+    public UserTeam(String name, String tag, User owner)
     {
         this.name = name;
+        this.tag = tag;
         this.owner = owner;
 
         this.members = new HashSet<>();

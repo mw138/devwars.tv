@@ -11,6 +11,8 @@
 
         <property name="name" column="team_name" type="string"/>
 
+        <property name="tag" column="tag" type="string"/>
+
         <many-to-one name="owner" class="com.bezman.model.User"/>
 
         <set name="gameTeams" lazy="true">

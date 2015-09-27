@@ -30,6 +30,10 @@ angular.module("app.team", [])
                         $scope.team.matchHistory = success.data;
                     })
 
+                UserTeamService.http.getStatistics($scope.team.id)
+                    .then(function (success) {
+                        $scope.statistics = success.data;
+                    }, angular.noop);
 
             }, angular.noop);
 

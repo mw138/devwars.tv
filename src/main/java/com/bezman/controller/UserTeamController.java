@@ -56,14 +56,14 @@ public class UserTeamController
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public ResponseEntity createTeam(SessionImpl session, @AuthedUser User user, @RequestParam("name") String name)
+    public ResponseEntity createTeam(SessionImpl session, @AuthedUser User user, @RequestParam("name") String name, @RequestParam("tag") String tag)
     {
         user = (User) session.merge(user);
 
         if (user.getTeam() != null)
             return new ResponseEntity("You already belong to a team", HttpStatus.CONFLICT);
 
-        UserTeam userTeam = new UserTeam(name, user);
+        UserTeam userTeam = new UserTeam(name, tag, user);
 
         session.save(userTeam);
 
