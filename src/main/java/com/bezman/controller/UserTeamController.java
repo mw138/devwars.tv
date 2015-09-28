@@ -70,6 +70,34 @@ public class UserTeamController
     }
 
     /**
+     * Change a teams avatar
+     * @param session (Resolved)
+     * @param multipartFile (Image)
+     * @param id ID of team to change picture
+     * @return Response
+     * @throws IOException
+     */
+    @UnitOfWork
+    @RequestMapping(value = "/{id}/avatar", method = RequestMethod.POST)
+    public ResponseEntity changeAvatar(SessionImpl session,
+                                       @AuthedUser User user,
+                                       @RequestParam("image") MultipartFile multipartFile,
+                                       @PathVariable("id") int id) throws IOException
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if (userTeam == null)
+            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
+
+        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+            return new ResponseEntity("You cannot do that", HttpStatus.FORBIDDEN);
+
+        UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
+
+        return new ResponseEntity("Successfully changed picture", HttpStatus.OK);
+    }
+
+    /**
      * Creates a team and adds the user to it
      *
      * @param session (Resolved)
