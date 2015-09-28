@@ -10,9 +10,13 @@
 
 	<div>
 		<div ng-hide="team">
-			<div class="teams-left">
+			<div class="teams-left" style="font-size: 20px">
 				<h1>no team</h1>
-				<a style="font-size: 10px" href="" class="create-team" ng-click="createTeam()">Create Team</a>
+				<a href="" class="create-team" ng-click="createTeam()">Create Team</a>
+				<h1>Team Invites</h1>
+				<ul>
+					<li ng-repeat="team in invites"><a href="" ng-click="joinTeam(team)"> {{ team.name }} [{{ team.tag }}] </a></li>
+				</ul>
 			</div>
 
 		</div>
@@ -60,16 +64,16 @@
 
 				<div class="team-stat games">
 					<span>Games</span>
-					<span>47</span>
+					<span>{{ statistics.gamesPlayed }}</span>
 				</div>
 
 				<div class="team-stat win-stat">
 					<span>W/L Ratio</span>
-					<span>0.74</span>
+					<span>{{ (statistics.gamesWon / (statistics.gamesPlayed > 0.0 ? statistics.gamesPlayed : 1.0)) | number : 2 }}</span>
 				</div>
 
 				<a href="" class="disband-team" ng-show="isOwner" ng-click="disbandTeam()">Disband Team</a>
-				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam()">Leave Team</a>
+				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam(team)">Leave Team</a>
 
                 <a href="" class="disband-team" ng-click="confirmTeamSignup()">Confirm Team Signup</a>
 
@@ -86,7 +90,7 @@
 					<div class="team-info">
 						<div class="team-rank"></div>
 						<span class="team-name">{{ team.name }}</span>
-						<span class="team-tag">[C9]</span>
+						<span class="team-tag">[{{ team.tag }}]</span>
 
 						<div class="team-xp">
 							<span>Bronze I</span>
@@ -101,8 +105,8 @@
 				<div class="team-history">
 					<div class="team-history--header">
 						<span class="history-title">Match History</span>
-						<span class="team-losses">L15</span>
-						<span class="team-wins">W25</span>
+						<span class="team-losses">L{{ statistics.gamesLost }}</span>
+						<span class="team-wins">W{{ statistics.gamesWon }}</span>
 					</div>
 					<div class="team-history--content">
 						<div class="team-history--game" ng-repeat="match in team.matchHistory">

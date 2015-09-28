@@ -4,6 +4,10 @@
     <h3>Invite</h3>
 
     <input ng-stacked-input="searchUser()" time="200" ng-model="userInput"/>
+    <select ng-model="selectedPlayer" ng-options="playerFormat(player) for player in results">
+        <!--<option value='' disabled selected>Select Game</option>-->
+    </select>
 
-    <a href="" class="button">Button</a>
+
+    <a href="" class="button" ng-click="invitePlayer(selectedPlayer)">Invite {{ selectedPlayer.username }}</a>
 </md-dialog>
