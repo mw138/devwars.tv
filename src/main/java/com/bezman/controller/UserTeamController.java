@@ -73,7 +73,7 @@ public class UserTeamController
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity createTeam(SessionImpl session,
                                      @AuthedUser User user,
                                      @RequestParam("name") String name,

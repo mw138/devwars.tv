@@ -43,15 +43,15 @@ angular.module('app.createTeamDialog', [])
                 $scope.editTeamImage($scope.selectedTeamImage);
         });
 
-        
+
         $scope.submitTeam = function (teamName, teamTag, croppedImage) {
             console.log(teamName, teamTag, croppedImage);
 
-                $mdDialog.hide({
-                    name: teamName,
-                    tag: teamTag,
-                    image: dataURItoBlob(croppedImage)
-                });
+            $mdDialog.hide({
+                name: teamName,
+                tag: teamTag,
+                image: dataURItoBlob(croppedImage)
+            });
 
         };
 

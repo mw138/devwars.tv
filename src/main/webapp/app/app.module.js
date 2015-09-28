@@ -16,6 +16,7 @@ var app = angular.module('app', [
     'app.games',
     'app.gameSignupConfirm',
     'app.editPlayerDialog',
+    'app.confirmTeamSignupDialog',
     'app.addPlayerDialog',
     'app.addSelectedPlayerDialog',
     'app.createTeamDialog',

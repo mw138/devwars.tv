@@ -83,7 +83,7 @@ angular.module("app.team", [])
         /**
          * Dialogs
          */
-        
+
         $scope.createTeam = function () {
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
@@ -112,6 +112,13 @@ angular.module("app.team", [])
 
 
                 });
+        };
+
+        $scope.confirmTeamSignup = function () {
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/confirmTeamSignupDialog/confirmTeamSignupDialogView.html",
+                controller: "ConfirmTeamSignupDialogController"
+            })
         };
 
         $scope.invitePlayer = function () {

@@ -12,10 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -156,7 +153,12 @@ public class UserTeamService
         if(!file.exists())
             file.createNewFile();
 
-        IOUtils.copy(inputStream, new FileOutputStream(file));
+        OutputStream outputStream = new FileOutputStream(file);
+
+        IOUtils.copy(inputStream, outputStream);
+
+        outputStream.flush();
+        outputStream.close();
     }
 
     public static boolean doesUserOwnUserTeam(User user, UserTeam userTeam)
