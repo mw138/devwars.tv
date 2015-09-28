@@ -207,6 +207,7 @@ angular.module("app.team", [])
         };
 
         //Only run once we have successfully fetched user data
-        AuthService.callbacks.push($scope.updateMyTeam);
+        AuthService.isLoggedIn()
+            .then($scope.updateMyTeam, angular.noop);
 
     }]);
