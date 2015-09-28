@@ -1,5 +1,6 @@
 package com.bezman.model;
 
+import com.bezman.annotation.HibernateDefault;
 import com.bezman.init.DatabaseManager;
 import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +35,9 @@ public class UserTeam extends BaseModel
     @JsonIgnore
     private Set<Team> gameTeams;
 
+    @HibernateDefault("0")
+    private Integer xp;
+
     private Long gamesWon, gamesLost;
 
     public UserTeam(String name, String tag, User owner)
@@ -46,6 +50,11 @@ public class UserTeam extends BaseModel
         this.invites = new HashSet<>();
 
         this.members.add(owner);
+    }
+
+    public void addXP(int xp)
+    {
+        this.setXp(this.getXp() + xp);
     }
 }
 
