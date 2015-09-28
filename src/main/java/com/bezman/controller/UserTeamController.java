@@ -51,6 +51,12 @@ public class UserTeamController
         return new ResponseEntity(session.get(UserTeam.class, id), HttpStatus.OK);
     }
 
+    /**
+     * Get the avatar image for a team
+     * @param id ID of the team
+     * @param response (Resolved)
+     * @throws IOException
+     */
     @RequestMapping("/{id}/avatar")
     public void getTeamAvatar(@PathVariable("id") int id, HttpServletResponse response) throws IOException
     {
@@ -123,10 +129,18 @@ public class UserTeamController
         return new ResponseEntity(userTeam, HttpStatus.OK);
     }
 
+    /**
+     * Kick a player from a team
+     * @param session (Resolved)
+     * @param id ID Of the team to kick from
+     * @param userID User to kick
+     * @return Response
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/kick/{user}")
     public ResponseEntity kickUser(SessionImpl session,
+                                   @AuthedUser User authedUser,
                                    @PathVariable("id") int id,
                                    @PathVariable("user") int userID)
     {
@@ -135,12 +149,22 @@ public class UserTeamController
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
+        if(!UserTeamService.doesUserHaveAuthorization(authedUser, userTeam))
+            return new ResponseEntity("You're not allowed to do that", HttpStatus.FORBIDDEN);
+
         userTeam.getMembers().removeIf(
                 user -> user.getId() == userID);
 
         return new ResponseEntity("Successfully kicked player", HttpStatus.OK);
     }
 
+    /**
+     * Leave the team (Remove yourself from the member list)
+     * @param session (Resolved)
+     * @param user (Resolved)
+     * @param id The ID of the team to leave
+     * @return Response
+     */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/leave")
