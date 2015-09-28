@@ -45,7 +45,7 @@
 						<!--<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>-->
 					<!--</div>-->
 					<div class="roster-players" ng-class="{'editable' : editingRoster}">
-						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member.username, $index)">{{ member.username }}</a>
+						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member, $index)">{{ member.username }}</a>
 					</div>
 
 					<!--TODO: see if invite list is needed for owners.-->
@@ -84,7 +84,7 @@
 				<div class="team-header">
 
 					<a class="team-icon active">
-						<img src="../../../assets/img/test.png"/>
+						<img ng-src="/v1/teams/{{team.id}}/avatar"/>
 					</a>
 
 					<div class="team-info">
