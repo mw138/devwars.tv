@@ -88,13 +88,13 @@
 					</a>
 
 					<div class="team-info">
-						<div class="team-rank"></div>
+						<div class="team-rank rank--no-name" rank="team.rank"></div>
 						<span class="team-name">{{ team.name }}</span>
 						<span class="team-tag">[{{ team.tag }}]</span>
 
 						<div class="team-xp">
-							<span>Bronze I</span>
-							<span>50/200 XP</span>
+							<span>{{ team.rank.rank }}</span>
+							<span>{{ team.xp }}/{{ team.nextRank.xpRequired }} XP</span>
 							<div class="xp-bar">
 								<div class="xp-total"></div>
 							</div>

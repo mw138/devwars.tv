@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PostLoad;
 import java.util.HashSet;
@@ -27,6 +29,8 @@ public class UserTeam extends BaseModel
     private String name;
 
     private String tag;
+
+    private Rank rank, nextRank;
 
     private Set<User> members;
 
@@ -50,6 +54,22 @@ public class UserTeam extends BaseModel
         this.invites = new HashSet<>();
 
         this.members.add(owner);
+    }
+
+    @PostLoad
+    public void setRanks()
+    {
+        Session session = DatabaseManager.getSession();
+
+        this.rank = (Rank) session.createCriteria(Rank.class)
+                .add(Restrictions.le("xpRequired", this.getXp().intValue()))
+                .addOrder(Order.desc("xpRequired"))
+                .setMaxResults(1)
+                .uniqueResult();
+
+        this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
+
+        session.close();
     }
 
     public void addXP(int xp)
