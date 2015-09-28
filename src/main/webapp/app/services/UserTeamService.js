@@ -6,29 +6,6 @@ UserTeamService.http = {};
 /*
 Path Variable {id} : int
 */
-UserTeamService.getStatistics = function(id, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/teams/' + id + '/statistics',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-UserTeamService.http.getStatistics = function(id, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/teams/' + id + '/statistics',
-params: {}
-})};/*
-Path Variable {id} : int
-*/
 UserTeamService.getTeam = function(id, successCallback, errorCallback){
 $http({
 method: 'GET',
@@ -52,13 +29,12 @@ params: {}
 })};/*
 Required Role : PENDING
 Path Variable {id} : int
-Query Parameter {user} : int
 */
-UserTeamService.invitePlayer = function(id, user, successCallback, errorCallback){
+UserTeamService.acceptInvite = function(id, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/teams/' + id + '/invite',
-params: {user : user}
+url: '/v1/teams/' + id + '/invite/accept',
+params: {}
 })
 .then(function(success){
 successCallback(success)
@@ -69,11 +45,36 @@ errorCallback(error)
 
 };
 
-UserTeamService.http.invitePlayer = function(id, user, successCallback, errorCallback){
+UserTeamService.http.acceptInvite = function(id, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/teams/' + id + '/invite',
-params: {user : user}
+url: '/v1/teams/' + id + '/invite/accept',
+params: {}
+})};/*
+Required Role : USER
+Path Variable {id} : int
+Query Parameter {newName} : java.lang.String
+*/
+UserTeamService.editTeamName = function(id, newName, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/' + id + '/changename',
+params: {newName : newName}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.editTeamName = function(id, newName, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/' + id + '/changename',
+params: {newName : newName}
 })};/*
 Required Role : USER
 Query Parameter {image} : org.springframework.web.multipart.MultipartFile
@@ -82,9 +83,9 @@ Query Parameter {tag} : java.lang.String
 */
 UserTeamService.createTeam = function(name, tag, image, successCallback, errorCallback){
 $http({
-method: 'GET',
+method: 'POST',
 url: '/v1/teams/create',
-params: {image : image,name : name,tag : tag}
+data: {image : image,name : name,tag : tag}
 })
 .then(function(success){
 successCallback(success)
@@ -97,9 +98,57 @@ errorCallback(error)
 
 UserTeamService.http.createTeam = function(name, tag, image, successCallback, errorCallback){
 return $http({
-method: 'GET',
+method: 'POST',
 url: '/v1/teams/create',
-params: {image : image,name : name,tag : tag}
+data: {image : image,name : name,tag : tag}
+})};/*
+Path Variable {id} : int
+*/
+UserTeamService.getTeamAvatar = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/' + id + '/avatar',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.getTeamAvatar = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/' + id + '/avatar',
+params: {}
+})};/*
+Required Role : USER
+Path Variable {id} : int
+Path Variable {user} : int
+*/
+UserTeamService.kickUser = function(id, user, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/' + id + '/kick/' + user + '',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.kickUser = function(id, user, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/' + id + '/kick/' + user + '',
+params: {}
 })};/*
 Path Variable {id} : int
 Query Parameter {count} : int
@@ -128,31 +177,6 @@ params: {count : count,page : page}
 })};/*
 Required Role : USER
 Path Variable {id} : int
-Query Parameter {newName} : java.lang.String
-*/
-UserTeamService.editTeamName = function(id, newName, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/teams/' + id + '/changename',
-params: {newName : newName}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-UserTeamService.http.editTeamName = function(id, newName, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/teams/' + id + '/changename',
-params: {newName : newName}
-})};/*
-Required Role : USER
-Path Variable {id} : int
 Query Parameter {name} : java.lang.String
 */
 UserTeamService.deleteTeam = function(id, name, successCallback, errorCallback){
@@ -178,11 +202,35 @@ params: {name : name}
 })};/*
 Required Role : PENDING
 Path Variable {id} : int
+Query Parameter {user} : int
 */
-UserTeamService.acceptInvite = function(id, successCallback, errorCallback){
+UserTeamService.invitePlayer = function(id, user, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/teams/' + id + '/invite/accept',
+url: '/v1/teams/' + id + '/invite',
+params: {user : user}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.invitePlayer = function(id, user, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/' + id + '/invite',
+params: {user : user}
+})};/*
+Path Variable {id} : int
+*/
+UserTeamService.getStatistics = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/' + id + '/statistics',
 params: {}
 })
 .then(function(success){
@@ -194,10 +242,10 @@ errorCallback(error)
 
 };
 
-UserTeamService.http.acceptInvite = function(id, successCallback, errorCallback){
+UserTeamService.http.getStatistics = function(id, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/teams/' + id + '/invite/accept',
+url: '/v1/teams/' + id + '/statistics',
 params: {}
 })};/*
 Required Role : USER
@@ -222,29 +270,6 @@ UserTeamService.http.leaveTeam = function(id, successCallback, errorCallback){
 return $http({
 method: 'GET',
 url: '/v1/teams/' + id + '/leave',
-params: {}
-})};/*
-Path Variable {id} : int
-*/
-UserTeamService.getTeamAvatar = function(id, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/teams/' + id + '/avatar',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-UserTeamService.http.getTeamAvatar = function(id, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/teams/' + id + '/avatar',
 params: {}
 })};return UserTeamService;
 }]);

@@ -125,6 +125,24 @@ public class UserTeamController
 
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/{id}/kick/{user}")
+    public ResponseEntity kickUser(SessionImpl session,
+                                   @PathVariable("id") int id,
+                                   @PathVariable("user") int userID)
+    {
+        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        if (userTeam == null)
+            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
+
+        userTeam.getMembers().removeIf(
+                user -> user.getId() == userID);
+
+        return new ResponseEntity("Successfully kicked player", HttpStatus.OK);
+    }
+
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/leave")
     public ResponseEntity leaveTeam(SessionImpl session,
                                     @AuthedUser User user,
