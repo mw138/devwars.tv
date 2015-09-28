@@ -96,7 +96,7 @@
 							<span>{{ team.rank.rank }}</span>
 							<span>{{ team.xp }}/{{ team.nextRank.xpRequired }} XP</span>
 							<div class="xp-bar">
-								<div class="xp-total"></div>
+								<div class="xp-total" style="width: {{ (team.nextRank.xpRequired - team.xp ) / (team.nextRank.xpRequired - team.rank.xpRequired) * 100 }}%"></div>
 							</div>
 						</div>
 					</div>
