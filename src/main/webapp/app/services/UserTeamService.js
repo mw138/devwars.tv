@@ -5,6 +5,30 @@ UserTeamService.http = {};
 
 /*
 Path Variable {id} : int
+Query Parameter {image} : org.springframework.web.multipart.MultipartFile
+*/
+UserTeamService.changeAvatar = function(id, image, successCallback, errorCallback){
+$http({
+method: 'POST',
+url: '/v1/teams/' + id + '/avatar',
+data: {image : image}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.changeAvatar = function(id, image, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/teams/' + id + '/avatar',
+data: {image : image}
+})};/*
+Path Variable {id} : int
 */
 UserTeamService.getTeam = function(id, successCallback, errorCallback){
 $http({
@@ -271,5 +295,29 @@ return $http({
 method: 'GET',
 url: '/v1/teams/' + id + '/leave',
 params: {}
+})};/*
+Query Parameter {name} : java.lang.String
+Query Parameter {tag} : java.lang.String
+*/
+UserTeamService.checkTeamInformation = function(name, tag, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/teams/check',
+params: {name : name,tag : tag}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+UserTeamService.http.checkTeamInformation = function(name, tag, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/teams/check',
+params: {name : name,tag : tag}
 })};return UserTeamService;
 }]);

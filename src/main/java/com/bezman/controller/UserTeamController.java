@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -95,6 +96,17 @@ public class UserTeamController
         UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity("Successfully changed picture", HttpStatus.OK);
+    }
+
+    @RequestMapping("/check")
+    public ResponseEntity checkTeamInformation(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "tag", required = false, defaultValue = "") String tag)
+    {
+        HashMap info = new HashMap();
+
+        info.put("name", UserTeamService.isNameTaken(name));
+        info.put("tag", UserTeamService.isTagTaken(tag));
+
+        return new ResponseEntity(info, HttpStatus.OK);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.bezman.model.User;
 import com.bezman.model.UserTeam;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
@@ -159,6 +160,34 @@ public class UserTeamService
 
         outputStream.flush();
         outputStream.close();
+    }
+
+    public static boolean isNameTaken(String name)
+    {
+        Session session = DatabaseManager.getSession();
+
+        UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
+                .add(Expression.eq("name", name).ignoreCase())
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.close();
+
+        return userTeam != null;
+    }
+
+    public static boolean isTagTaken(String name)
+    {
+        Session session = DatabaseManager.getSession();
+
+        UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
+                .add(Expression.eq("tag", name).ignoreCase())
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.close();
+
+        return userTeam != null;
     }
 
     public static boolean doesUserOwnUserTeam(User user, UserTeam userTeam)
