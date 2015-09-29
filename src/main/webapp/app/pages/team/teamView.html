@@ -1,13 +1,37 @@
 <div class="teamView inner">
 
+
+
+
+
 	<div class="col-2--dashboard">
 
 		<div class="left">
 			<dashnav></dashnav>
 		</div>
 
-		<div class="right">
-
+	<div class="right">
+		<div class="teamOverlay">
+			<div class="teamOverlay__dialog">
+				<div class="teamDialog__inner">
+					<span>BUILD YOUR OWN TEAM</span>
+					<h1>DEVWARS RANKED</h1>
+					
+					<div class="flex">
+					
+						<!-- add .button--disabled when there are no invites to the button below -->
+						<a href="#" class="button button--clear button--disabled">
+							<!-- when there are invites this div will show and the number of invites is placed inside of it -->
+							<div class="invite-pill">2</div>
+							TEAM INVITES
+						</a>
+						<a href="#" class="button">CREATE YOUR TEAM</a>
+					</div>
+				</div> <!-- .teamDialog__inner -->
+			</div> <!-- .teamOverlay__dialog -->
+			<img src="../assets/img/codexplosion.jpg" />
+		</div> <!-- .teamOverlay -->
+		
 	<div>
 		<div ng-hide="team">
 			<div class="teams-left" style="font-size: 20px">
