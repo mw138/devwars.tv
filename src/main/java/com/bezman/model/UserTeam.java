@@ -1,5 +1,6 @@
 package com.bezman.model;
 
+import com.bezman.annotation.HibernateDefault;
 import com.bezman.init.DatabaseManager;
 import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.PostLoad;
 import java.util.HashSet;
@@ -25,6 +28,10 @@ public class UserTeam extends BaseModel
 
     private String name;
 
+    private String tag;
+
+    private Rank rank, nextRank;
+
     private Set<User> members;
 
     private Set<User> invites;
@@ -32,20 +39,42 @@ public class UserTeam extends BaseModel
     @JsonIgnore
     private Set<Team> gameTeams;
 
+    @HibernateDefault("0")
+    private Integer xp;
+
     private Long gamesWon, gamesLost;
 
-    public UserTeam(String name, User owner)
+    public UserTeam(String name, String tag, User owner)
     {
         this.name = name;
+        this.tag = tag;
         this.owner = owner;
 
         this.members = new HashSet<>();
         this.invites = new HashSet<>();
 
         this.members.add(owner);
-        owner.setTeam(this);
+    }
 
-        this.setId(owner.getId());
+    @PostLoad
+    public void setRanks()
+    {
+        Session session = DatabaseManager.getSession();
+
+        this.rank = (Rank) session.createCriteria(Rank.class)
+                .add(Restrictions.le("xpRequired", this.getXp().intValue()))
+                .addOrder(Order.desc("xpRequired"))
+                .setMaxResults(1)
+                .uniqueResult();
+
+        this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
+
+        session.close();
+    }
+
+    public void addXP(int xp)
+    {
+        this.setXp(this.getXp() + xp);
     }
 }
 

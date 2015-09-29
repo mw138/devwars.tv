@@ -5,25 +5,31 @@
 
 <hibernate-mapping>
     <class name="com.bezman.model.UserTeam" table="user_teams">
-        <id name="id"></id>
+        <id name="id">
+            <generator class="increment"/>
+        </id>
 
-        <property name="name" column="team_name" type="string"></property>
+        <property name="name" column="team_name" type="string"/>
 
-        <one-to-one name="owner" cascade="all" class="com.bezman.model.User"></one-to-one>
+        <property name="tag" column="tag" type="string"/>
+
+        <property name="xp" column="xp" type="integer"/>
+
+        <many-to-one name="owner" class="com.bezman.model.User"/>
 
         <set name="gameTeams" lazy="true">
-            <key></key>
-            <one-to-many class="com.bezman.model.Team"></one-to-many>
+            <key/>
+            <one-to-many class="com.bezman.model.Team"/>
         </set>
 
-        <set name="members" cascade="all">
-            <key column="team_id"></key>
-            <one-to-many class="com.bezman.model.User"></one-to-many>
+        <set name="members" lazy="false" cascade="all">
+            <key column="team"/>
+            <one-to-many class="com.bezman.model.User"/>
         </set>
 
-        <set name="invites" table="team_invites">
-            <key column="team_id"></key>
-            <many-to-many class="com.bezman.model.User" column="user_id"></many-to-many>
+        <set name="invites" lazy="false" table="team_invites">
+            <key column="team_id"/>
+            <many-to-many class="com.bezman.model.User" column="user_id"/>
         </set>
     </class>
 </hibernate-mapping>

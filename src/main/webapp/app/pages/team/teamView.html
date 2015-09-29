@@ -10,9 +10,13 @@
 
 	<div>
 		<div ng-hide="team">
-			<div class="teams-left">
+			<div class="teams-left" style="font-size: 20px">
 				<h1>no team</h1>
 				<a href="" class="create-team" ng-click="createTeam()">Create Team</a>
+				<h1>Team Invites</h1>
+				<ul>
+					<li ng-repeat="team in invites"><a href="" ng-click="joinTeam(team)"> {{ team.name }} [{{ team.tag }}] </a></li>
+				</ul>
 			</div>
 
 		</div>
@@ -41,7 +45,7 @@
 						<!--<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>-->
 					<!--</div>-->
 					<div class="roster-players" ng-class="{'editable' : editingRoster}">
-						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member.username, $index)">{{ member.username }}</a>
+						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member, $index)">{{ member.username }}</a>
 					</div>
 
 					<!--TODO: see if invite list is needed for owners.-->
@@ -60,19 +64,19 @@
 
 				<div class="team-stat games">
 					<span>Games</span>
-					<span>47</span>
+					<span>{{ statistics.gamesPlayed }}</span>
 				</div>
 
 				<div class="team-stat win-stat">
 					<span>W/L Ratio</span>
-					<span>0.74</span>
+					<span>{{ (statistics.gamesWon / (statistics.gamesPlayed > 0.0 ? statistics.gamesPlayed : 1.0)) | number : 2 }}</span>
 				</div>
 
 				<a href="" class="disband-team" ng-show="isOwner" ng-click="disbandTeam()">Disband Team</a>
-				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam()">Leave Team</a>
-				
-				
-				<a href="" class="disband-team" ng-hide="isOwner" ng-click="createTeam()">TEMP LOL HAHAHAHAHAHA - Create Team Dialog View</a>
+
+				<a href="" class="disband-team" ng-hide="isOwner" ng-click="leaveTeam(team)">Leave Team</a>
+
+                <a href="" class="disband-team" ng-click="confirmTeamSignup()">Confirm Team Signup</a>
 
 			</div>
 
@@ -81,19 +85,19 @@
 				<div class="team-header">
 
 					<a class="team-icon active">
-						<img src="../../../assets/img/test.png"/>
+						<img ng-src="/v1/teams/{{team.id}}/avatar"/>
 					</a>
 
 					<div class="team-info">
-						<div class="team-rank"></div>
+						<div class="team-rank rank--no-name" rank="team.rank"></div>
 						<span class="team-name">{{ team.name }}</span>
-						<span class="team-tag">[C9]</span>
+						<span class="team-tag">[{{ team.tag }}]</span>
 
 						<div class="team-xp">
-							<span>Bronze I</span>
-							<span>50/200 XP</span>
+							<span>{{ team.rank.rank }}</span>
+							<span>{{ team.xp }}/{{ team.nextRank.xpRequired }} XP</span>
 							<div class="xp-bar">
-								<div class="xp-total"></div>
+								<div class="xp-total" style="width: {{ (team.nextRank.xpRequired - team.xp ) / (team.nextRank.xpRequired - team.rank.xpRequired) * 100 }}%"></div>
 							</div>
 						</div>
 					</div>
@@ -102,12 +106,12 @@
 				<div class="team-history">
 					<div class="team-history--header">
 						<span class="history-title">Match History</span>
-						<span class="team-losses">L15</span>
-						<span class="team-wins">W25</span>
+						<span class="team-losses">L{{ statistics.gamesLost }}</span>
+						<span class="team-wins">W{{ statistics.gamesWon }}</span>
 					</div>
 					<div class="team-history--content">
-						<div class="team-history--game">
-							<span class="match-stat opposition">vs TeamSoloMid</span>
+						<div class="team-history--game" ng-repeat="match in team.matchHistory">
+							<span class="match-stat opposition">{{  }}</span>
 							<div class="match-stat score">
 								<span class="team-blue">6</span>
 								<span class="divider">-</span>

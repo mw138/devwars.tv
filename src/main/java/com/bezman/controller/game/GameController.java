@@ -589,6 +589,31 @@ public class GameController
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
     }
 
+    @Transactional
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.POST)
+    public ResponseEntity signUpTeamForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @JSONParam("users") User[] users)
+    {
+        Game game = (Game) session.get(Game.class, id);
+
+        UserTeam ownedTeam = user.getOwnedTeam();
+
+        if (ownedTeam == null)
+            return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
+
+        boolean alreadySignedUp = game.getTeamGameSignups().stream()
+                .anyMatch(teamGameSignup ->
+                        teamGameSignup.getId() == ownedTeam.getId());
+
+        if (alreadySignedUp)
+            return new ResponseEntity("Your team has already signed up for this game", HttpStatus.CONFLICT);
+
+        TeamGameSignup teamGameSignup = new TeamGameSignup(game, ownedTeam, users);
+
+        session.save(teamGameSignup);
+
+        return new ResponseEntity(teamGameSignup, HttpStatus.OK);
+    }
 
     /**
      * Method to sign up a twitch user (Meant for chat command)

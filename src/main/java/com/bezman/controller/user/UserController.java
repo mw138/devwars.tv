@@ -10,6 +10,7 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.bezman.service.UserTeamService;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
@@ -53,6 +54,7 @@ public class UserController extends BaseController
 
     /**
      * Gets the signed in user
+     *
      * @param session
      * @param user
      * @return
@@ -64,7 +66,7 @@ public class UserController extends BaseController
     {
         User currentUser = (User) session.merge(user);
 
-        if(currentUser.getRanking() == null)
+        if (currentUser.getRanking() == null)
         {
             Ranking ranking = new Ranking();
             ranking.setId(currentUser.getId());
@@ -89,6 +91,7 @@ public class UserController extends BaseController
 
     /**
      * Retrieves the signed in user's activity
+     *
      * @param request
      * @param response
      * @return Signed in User's Activity
@@ -115,13 +118,14 @@ public class UserController extends BaseController
 
     /**
      * Sign up method for the user
+     *
      * @param request
      * @param response
-     * @param username Username for new user
-     * @param email Email for new user
-     * @param password Password for new user
+     * @param username   Username for new user
+     * @param email      Email for new user
+     * @param password   Password for new user
      * @param rcResponse The Google Recaptcha response sent from the client
-     * @param referral (Optional) The person which referred them
+     * @param referral   (Optional) The person which referred them
      * @return
      */
     @RequestMapping("/create")
@@ -148,17 +152,17 @@ public class UserController extends BaseController
 
         boolean emailValid = false;
 
-        if(emailTaken)
+        if (emailTaken)
         {
             conflictJSONArray.put("Email already taken");
         }
 
-        if(usernameTaken)
+        if (usernameTaken)
         {
             conflictJSONArray.put("Username already taken");
         }
 
-        if(!emailTaken)
+        if (!emailTaken)
         {
             emailValid = EmailValidator.getInstance().isValid(email);
 
@@ -168,27 +172,27 @@ public class UserController extends BaseController
             }
         }
 
-        if(!captchaValid)
+        if (!captchaValid)
         {
             conflictJSONArray.put("Invalid Captcha Response");
         }
 
-        if(!usernameLengthGood)
+        if (!usernameLengthGood)
         {
             conflictJSONArray.put("Username must be at least 4 characters and at most 25 characters");
         }
 
-        if(!passwordLengthGood)
+        if (!passwordLengthGood)
         {
             conflictJSONArray.put("Password must be at least 6 characters");
         }
 
-        if(!usernameValid)
+        if (!usernameValid)
         {
             conflictJSONArray.put("Username can contain characters, numbers and underscores");
         }
 
-        if(!emailTaken && !usernameTaken && emailValid && captchaValid && usernameLengthGood && passwordLengthGood && usernameValid)
+        if (!emailTaken && !usernameTaken && emailValid && captchaValid && usernameLengthGood && passwordLengthGood && usernameValid)
         {
             Session session = DatabaseManager.getSession();
             session.beginTransaction();
@@ -219,7 +223,7 @@ public class UserController extends BaseController
 
             session.close();
 
-            if(referral != null)
+            if (referral != null)
             {
                 User referrer = UserService.userForUsername(referral);
 
@@ -236,7 +240,7 @@ public class UserController extends BaseController
 
             Activity activity = new Activity(user, user, "Created a DevWars account", 0, 0);
             DatabaseUtil.saveObjects(false, activity);
-        }else
+        } else
         {
             responseEntity = new ResponseEntity(conflictJSONArray.toString(), HttpStatus.CONFLICT);
         }
@@ -246,6 +250,7 @@ public class UserController extends BaseController
 
     /**
      * Get a user
+     *
      * @param request
      * @param response
      * @param id
@@ -259,7 +264,7 @@ public class UserController extends BaseController
 
         User user = UserService.getUser(id);
 
-        if(user.getRanking() == null)
+        if (user.getRanking() == null)
         {
             Ranking ranking = new Ranking();
             ranking.setId(user.getId());
@@ -282,6 +287,7 @@ public class UserController extends BaseController
 
     /**
      * Remove a user from the system
+     *
      * @param request
      * @param response
      * @param id
@@ -328,9 +334,10 @@ public class UserController extends BaseController
 
     /**
      * Validate the user's email
+     *
      * @param request
      * @param response
-     * @param uid The UID sent in the email to confirm that they are who they say they are
+     * @param uid      The UID sent in the email to confirm that they are who they say they are
      * @return
      * @throws IOException
      */
@@ -384,6 +391,7 @@ public class UserController extends BaseController
 
     /**
      * Adds xp / devbits to the specified user
+     *
      * @param request
      * @param response
      * @param id
@@ -440,6 +448,7 @@ public class UserController extends BaseController
 
     /**
      * Login the user
+     *
      * @param request
      * @param response
      * @param username
@@ -484,6 +493,7 @@ public class UserController extends BaseController
 
     /**
      * Logs out the current user
+     *
      * @param request
      * @param response
      * @return
@@ -501,6 +511,7 @@ public class UserController extends BaseController
 
     /**
      * Gets the applied games for the signed in user
+     *
      * @param request
      * @param response
      * @return
@@ -587,6 +598,7 @@ public class UserController extends BaseController
 
     /**
      * Method to change password for the signed in user
+     *
      * @param request
      * @param response
      * @param currentPassword
@@ -601,7 +613,7 @@ public class UserController extends BaseController
     {
         User user = (User) request.getAttribute("user");
 
-        if(!user.isNative())
+        if (!user.isNative())
         {
             return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
         }
@@ -626,6 +638,7 @@ public class UserController extends BaseController
 
     /**
      * Method to change the email for the signed in user
+     *
      * @param request
      * @param response
      * @param currentPassword
@@ -642,7 +655,7 @@ public class UserController extends BaseController
 
         if (!user.isNative() || user.getPassword().equals(Security.hash(currentPassword)))
         {
-            if(EmailValidator.getInstance().isValid(newEmail))
+            if (EmailValidator.getInstance().isValid(newEmail))
             {
                 Session session = DatabaseManager.getSession();
                 Query query = session.createQuery("update User set email = :email where id = :id");
@@ -667,6 +680,7 @@ public class UserController extends BaseController
 
     /**
      * Method to change the avatar picture for the signed in user
+     *
      * @param request
      * @param response
      * @param image
@@ -684,7 +698,7 @@ public class UserController extends BaseController
         {
             User currentUser = (User) request.getAttribute("user");
 
-            if(currentUser.getAvatarChanges() > 0)
+            if (currentUser.getAvatarChanges() > 0)
             {
                 File file = new File(Reference.PROFILE_PICTURE_PATH + currentUser.getId() + File.separator + "avatar.jpeg");
 
@@ -699,9 +713,9 @@ public class UserController extends BaseController
                     BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
                     bufferedOutputStream.write(image.getBytes());
                     bufferedOutputStream.close();
-                }catch (IOException e)
+                } catch (IOException e)
                 {
-                    return new ResponseEntity(file.getAbsolutePath() + " : " +  e.toString(), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity(file.getAbsolutePath() + " : " + e.toString(), HttpStatus.BAD_REQUEST);
                 }
 
                 currentUser.setAvatarChanges(currentUser.getAvatarChanges() - 1);
@@ -719,6 +733,7 @@ public class UserController extends BaseController
     /**
      * Returns public information for the user
      * Deprecated due to new json processing
+     *
      * @param request
      * @param response
      * @param username
@@ -742,6 +757,7 @@ public class UserController extends BaseController
 
     /**
      * Gets the Avatar for the given user
+     *
      * @param request
      * @param response
      * @param username
@@ -760,7 +776,7 @@ public class UserController extends BaseController
 
             System.out.println(file.getAbsolutePath());
 
-            if(file.exists())
+            if (file.exists())
             {
                 FileInputStream inputStream = new FileInputStream(file);
                 IOUtils.copy(inputStream, response.getOutputStream());
@@ -780,6 +796,7 @@ public class UserController extends BaseController
 
     /**
      * Gets the signed in user's avatar
+     *
      * @param request
      * @param response
      * @return
@@ -796,7 +813,7 @@ public class UserController extends BaseController
 
         System.out.println(file.getAbsolutePath());
 
-        if(file.exists())
+        if (file.exists())
         {
             FileInputStream inputStream = new FileInputStream(file);
             IOUtils.copy(inputStream, response.getOutputStream());
@@ -811,6 +828,7 @@ public class UserController extends BaseController
 
     /**
      * Method to update the user's personal information
+     *
      * @param request
      * @param response
      * @param username
@@ -831,7 +849,7 @@ public class UserController extends BaseController
 
         if (username != null && !user.getUsername().equalsIgnoreCase(username))
         {
-            if(user.getUsernameChanges() < 1)
+            if (user.getUsernameChanges() < 1)
             {
                 return new ResponseEntity("Not enough username changes", HttpStatus.CONFLICT);
             } else
@@ -863,6 +881,7 @@ public class UserController extends BaseController
 
     /**
      * Method for a veteran to claim his/her old twitch account username
+     *
      * @param request
      * @param response
      * @return
@@ -875,7 +894,7 @@ public class UserController extends BaseController
 
         ConnectedAccount connectedAccount = null;
 
-        for(ConnectedAccount account : user.getConnectedAccounts())
+        for (ConnectedAccount account : user.getConnectedAccounts())
         {
             if (account.getProvider().equals("TWITCH")) connectedAccount = account;
         }
@@ -902,7 +921,7 @@ public class UserController extends BaseController
 
                 session.beginTransaction();
 
-                for(Player player : players)
+                for (Player player : players)
                 {
                     player.setUser(user);
                     session.update(player);
@@ -950,6 +969,7 @@ public class UserController extends BaseController
 
     /**
      * Method for the user to release their twitch account and keep their new username
+     *
      * @param request
      * @param response
      * @return
@@ -962,7 +982,7 @@ public class UserController extends BaseController
 
         ConnectedAccount connectedAccount = null;
 
-        for(ConnectedAccount account : user.getConnectedAccounts())
+        for (ConnectedAccount account : user.getConnectedAccounts())
         {
             if (account.getProvider().equals("TWITCH")) connectedAccount = account;
         }
@@ -989,7 +1009,7 @@ public class UserController extends BaseController
 
                 session.beginTransaction();
 
-                for(Player player : players)
+                for (Player player : players)
                 {
                     player.setUser(user);
                     session.update(player);
@@ -1035,6 +1055,7 @@ public class UserController extends BaseController
 
     /**
      * Made to test sending html emails
+     *
      * @param request
      * @param response
      * @param email
@@ -1086,6 +1107,7 @@ public class UserController extends BaseController
 
     /**
      * Gets the signed in user's unread notifications
+     *
      * @param user
      * @param session
      * @return
@@ -1112,7 +1134,7 @@ public class UserController extends BaseController
                 .map(a -> a.getId())
                 .collect(Collectors.toList());
 
-        if(notificationList.length > 0)
+        if (notificationList.length > 0)
         {
             List<Notification> notifications = session.createCriteria(Notification.class)
                     .add(Restrictions.eq("user.id", user.getId()))
@@ -1129,6 +1151,7 @@ public class UserController extends BaseController
 
     /**
      * Gets the signed in user's badges
+     *
      * @param request
      * @param response
      * @param user
@@ -1143,19 +1166,21 @@ public class UserController extends BaseController
 
     /**
      * Returns the team that the current user owns
+     *
      * @param user (Resolved) The user requesting the data
      * @return Response Entity for the request
      */
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/ownedteam")
-    public ResponseEntity getOwnedTeam(@AuthedUser User user)
+    public ResponseEntity getOwnedTeam(SessionImpl session, @AuthedUser User user)
     {
         UserTeam userTeam = user.getOwnedTeam();
 
         if (userTeam != null)
         {
-            return new ResponseEntity(user.getOwnedTeam(), HttpStatus.OK);
+            userTeam = (UserTeam) session.merge(userTeam);
+            return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
         return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
@@ -1163,22 +1188,32 @@ public class UserController extends BaseController
 
     /**
      * Returns the team that the current user belongs to
+     *
      * @param user (Resolved) The user requesting the data
      * @return Response Entity for the request
      */
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/myteam")
-    public ResponseEntity getMyTeam(@AuthedUser User user)
+    public ResponseEntity getMyTeam(SessionImpl session, @AuthedUser User user)
     {
         UserTeam userTeam = user.getTeam();
 
         if (userTeam != null)
         {
-            return new ResponseEntity(user.getOwnedTeam(), HttpStatus.OK);
+            userTeam = (UserTeam) session.merge(userTeam);
+            return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
         return new ResponseEntity("You don't belong to a team", HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping("/teaminvites")
+    public ResponseEntity getMyTeamInvites(@AuthedUser User user)
+    {
+        List<Team> invites = UserTeamService.teamsInvitedTo(user);
+
+        return new ResponseEntity(invites, HttpStatus.OK);
+    }
 }

@@ -1,14 +1,18 @@
 package com.bezman.service;
 
+import com.bezman.Reference.Reference;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.Game;
 import com.bezman.model.Team;
 import com.bezman.model.User;
 import com.bezman.model.UserTeam;
+import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -121,6 +125,40 @@ public class UserTeamService
         hashMap.put("gamesLost", getNumberOfGamesLostForUserTeam(userTeam));
 
         return hashMap;
+    }
+
+    public static List<Team> teamsInvitedTo(User user)
+    {
+        List<Team> returnList;
+
+        Session session = DatabaseManager.getSession();
+
+        returnList = session.createCriteria(UserTeam.class)
+                .createAlias("invites", "i")
+                .add(Restrictions.eq("i.id", user.getId()))
+                .list();
+
+        session.close();
+
+        return returnList;
+    }
+
+    public static void changeTeamPicture(UserTeam userTeam, InputStream inputStream) throws IOException
+    {
+        File file = new File(Reference.TEAM_PICTURE_PATH + File.separator + userTeam.getId(), "avatar.jpg");
+
+        if(!file.getParentFile().isDirectory())
+            file.getParentFile().mkdirs();
+
+        if(!file.exists())
+            file.createNewFile();
+
+        OutputStream outputStream = new FileOutputStream(file);
+
+        IOUtils.copy(inputStream, outputStream);
+
+        outputStream.flush();
+        outputStream.close();
     }
 
     public static boolean doesUserOwnUserTeam(User user, UserTeam userTeam)

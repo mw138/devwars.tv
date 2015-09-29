@@ -1,14 +1,21 @@
 <md-dialog class="team-dialog">
-	<i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i>
+	<i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i>
 
 	<h3>Are you sure you want to disband your team?</h3>
-	<p>All of your team's data will be lost. <b class="warning">This CANNOT be reversed.</b></p>	
-	<a href="" class="button">Disband team</a>
+	<p>All of your team's data will be lost. <b class="warning">This CANNOT be reversed.</b></p>
+	<a href="" class="button" ng-click="disbandTeam(team.id, team.name)">Disband {{ team.name }}</a>
 	<h3 class="second-header">Aternatively: Leave your team, and hand over leadership.</h3>
 	<p>This is permanent, choose wisely!</p>
-	<select>
-		<option>Team member 1</option>
-		<option>Team member 2</option>
+	<select ng-model="selectedMember" placeholder="Choose Member">
+		<option ng-repeat="member in team.members"
+				ng-hide="team.owner.id === member.id">
+			{{ member.username }}
+		</option>
 	</select>
-	<a href="" class="button">Assign and leave</a>
+	<!--<select ng-model="selectedMember"-->
+			<!--ng-init="selectedMember = member[0]"-->
+			<!--ng-options="member.username for member in team.members">-->
+	<!--</select>-->
+
+	<a href="" class="button" ng-click="assignAndLeave(selectedMember)">Assign and leave</a>
 </md-dialog>

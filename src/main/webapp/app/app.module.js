@@ -16,6 +16,7 @@ var app = angular.module('app', [
     'app.games',
     'app.gameSignupConfirm',
     'app.editPlayerDialog',
+    'app.confirmTeamSignupDialog',
     'app.addPlayerDialog',
     'app.addSelectedPlayerDialog',
     'app.createTeamDialog',
@@ -55,9 +56,11 @@ var app = angular.module('app', [
     'app.modCP',
     'app.scroll-bottom',
     'app.no-scroll-other',
+    'app.stackedInput',
     'app.team',
     'app.addGame',
     'app.UserTeamService',
+    'app.editTeamImage',
 
     //dependencies
     'ngCookies',
