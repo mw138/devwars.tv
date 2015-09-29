@@ -24,7 +24,7 @@
 	
 			
 			-->
-			<input class="field-error" id="dw_teamname" name="dw_teamname" ng-model="team.tag" ng-stacked-input="checkAvailability(team)" time="200" type="text" maxlength="5" />
+			<input id="dw_teamname" name="dw_teamname" ng-model="team.tag" ng-stacked-input="checkAvailability(team)" time="200" type="text" maxlength="5" />
 			<span class="name-avail " ng-class="{'name-avail--true': !availability.tag, 'name-avail--false': availability.tag}">
 				<i class="fa" ng-class="{'fa-check': !availability.tag, 'fa-close': availability.tag}"></i>
                 <span ng-show="availability.tag">Taken!</span>
