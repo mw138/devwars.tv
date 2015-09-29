@@ -1,7 +1,7 @@
-<md-dialog class="team-dialog">
+<md-dialog class="team-dialog invite-player">
     <i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i>
 
-    <h3>Invite</h3>
+    <h3>Invite a player to join your team</h3>
 
     <input ng-stacked-input="searchUser()" time="200" ng-model="userInput"/>
     <select ng-model="selectedPlayer" ng-options="playerFormat(player) for player in results">

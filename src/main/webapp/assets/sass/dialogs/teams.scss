@@ -15,13 +15,13 @@
 	}
 
 	.button {
-		margin-left: 20px;
+		margin: 5px auto;
 	}
 
 	select {
 		margin: 10px auto;
 		padding: 0 10px;
-		height: 35px;
+		height: 41px;
 		width: 270px;
 	}
 	
@@ -76,5 +76,20 @@
 	
 	.field-error {
 		border: 1px solid color($red, light) !important;
+	}
+
+	&.invite-player {
+		padding: 40px 40px 20px;
+
+		input {
+			margin: 10px 0;
+		}
+	}
+
+	&.create-team {
+
+		.button {
+			margin: 0 20px 0 0;
+		}
 	}
 }
