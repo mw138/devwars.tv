@@ -1,9 +1,14 @@
 angular.module('app.createTeamDialog', [])
-    .controller("CreateTeamDialogController", ["$scope", "$mdDialog", function ($scope, $mdDialog) {
+    .controller("CreateTeamDialogController", ["$scope", "$mdDialog", "UserTeamService", function ($scope, $mdDialog, UserTeamService) {
         $scope.$mdDialog = $mdDialog;
         $scope.teamName = '';
         $scope.teamTag = '';
         $scope.teamImage = '';
+
+        $scope.team = {
+            name: '',
+            tag: '',
+        };
 
         var dataURItoBlob = function(dataURI) {
             var binary = atob(dataURI.split(',')[1]);
@@ -30,12 +35,14 @@ angular.module('app.createTeamDialog', [])
             setTimeout(function () {
                 $scope.minSize = 50;
             }, 500);
-
-
-
-
         };
 
+        $scope.checkAvailability = function (team) {
+            UserTeamService.http.checkTeamInformation(team.name, team.tag)
+                .then(function (success) {
+                    $scope.availability = success.data;
+                }, angular.noop);
+        };
 
         $scope.$watch("selectedTeamImage", function (oldVal, newVal) {
 

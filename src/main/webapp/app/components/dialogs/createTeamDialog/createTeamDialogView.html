@@ -7,9 +7,11 @@
 		<div class="dialog-row__left">
 			<label for="dw_teamname">Team Name</label>
 			<!-- team name 3-24 characters in length and no special characters but spaces are allowed -->
-			<input id="dw_teamname" name="dw_teamname" type="text" maxlength="24" />
-			<span class="name-avail name-avail--true">
-				<i class="fa fa-check"></i> Available!
+			<input id="dw_teamname" name="dw_teamname" ng-stacked-input="checkAvailability(team)" ng-model="team.name" type="text" maxlength="24" />
+			<span class="name-avail " ng-class="{'name-avail--true': !availability.name, 'name-avail--false': availability.name}">
+				<i class="fa" ng-class="{'fa-check': !availability.name, 'fa-close': availability.name}"></i>
+                <span ng-show="availability.name">Taken!</span>
+                <span ng-hide="availability.name">Available!</span>
 			</span>
 		</div>
 
@@ -22,16 +24,18 @@
 	
 			
 			-->
-			<input class="field-error" id="dw_teamname" name="dw_teamname" type="text" maxlength="5" />
-			<span class="name-avail name-avail--false">
-				<i class="fa fa-close"></i> Taken
+			<input class="field-error" id="dw_teamname" name="dw_teamname" ng-model="team.tag" ng-stacked-input="checkAvailability(team)" time="200" type="text" maxlength="5" />
+			<span class="name-avail " ng-class="{'name-avail--true': !availability.tag, 'name-avail--false': availability.tag}">
+				<i class="fa" ng-class="{'fa-check': !availability.tag, 'fa-close': availability.tag}"></i>
+                <span ng-show="availability.tag">Taken!</span>
+                <span ng-hide="availability.tag">Available!</span>
 			</span>
 		</div>
 	</div> <!-- .dialog-row -->
 	
 	<div class="dialog-row dialog-btns">
 		<a href="">Cancel</a>
-		<a href="" class="button">Create Team</a>
+		<a href="" class="button" ng-click="submitTeam(team.name, team.tag, null)">Create Team</a>
 	</div> <!-- .dialog-row -->
 </md-dialog>
 

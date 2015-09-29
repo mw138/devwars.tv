@@ -164,6 +164,8 @@ public class UserTeamService
 
     public static boolean isNameTaken(String name)
     {
+        if (name.isEmpty()) return true;
+
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
@@ -178,6 +180,8 @@ public class UserTeamService
 
     public static boolean isTagTaken(String name)
     {
+        if (name.isEmpty()) return true;
+
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
