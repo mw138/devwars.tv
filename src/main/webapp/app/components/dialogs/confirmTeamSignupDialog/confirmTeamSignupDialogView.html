@@ -1,1 +1,35 @@
-<md-dialog></md-dialog>
+<md-dialog class="team-dialog team-join__game">
+    <i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i> 
+
+    <h3 class="dialog-container__header">You are registering your team for a game on:</h3>
+
+    <div class="dialog-container__dateBox">
+            <div class="dateBox-date">
+                    <span>JUN<!-- {{game.timestamp | date : 'MMM' : 'UTC'}} --></span>
+                    <span>23<!-- {{game.timestamp | date : 'dd' : 'UTC'}} --></span>
+            </div>
+            <div class="dateBox-time">
+                    <span>9:30PM UTC<!-- {{game.timestamp | date : 'shortTime' : 'UTC'}} UTC --></span>
+            </div>
+    </div>
+
+    <div class="player-selector">
+    	<h3>Select your players</h3>
+
+    	<span>Beau</span>
+       	<span>reallylongname</span>
+        <span>anotherlongname</span>
+        <span>superduperlongername</span>
+        <span class="selected">Beau</span>
+
+    </div>
+
+    <div class="warning">
+        <h4>WARNING: If your application to play is accepted and you do not turn up to play, your team and it's members will be penalised.</h4>
+    </div>
+
+    <div class="dialog-container__actions">
+        <button class="button" ng-click="confirmSignUp()">Confirm</button>
+        <button class="button button--warn" ng-click="cancelSignUp()">Cancel</button>
+    </div>
+</md-dialog>
