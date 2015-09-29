@@ -1,1 +1,36 @@
-<md-dialog></md-dialog>
+<md-dialog class="team-dialog">
+	<i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i>
+
+	<h2>Create Team</h2>	
+	
+	<div class="dialog-row">
+		<div class="dialog-row__left">
+			<label for="dw_teamname">Team Name</label>
+			<!-- team name 3-24 characters in length and no special characters but spaces are allowed -->
+			<input id="dw_teamname" name="dw_teamname" type="text" maxlength="24" />
+			<span class="name-avail name-avail--true">
+				<i class="fa fa-check"></i> Available!
+			</span>
+		</div>
+
+		<div class="dialog-row__right">
+			<!-- team name 3-5 characters in length and no special characters -->
+			<label for="dw_teamname">Team Tag</label>
+			<!-- 
+			ADD .field-error to inputs when there is an error (i.e. name is taken or field is empty)
+			Have website detect if username is available or taken instantly as long as they typed in a minimum of at least 3 characters.
+	
+			
+			-->
+			<input class="field-error" id="dw_teamname" name="dw_teamname" type="text" maxlength="5" />
+			<span class="name-avail name-avail--false">
+				<i class="fa fa-close"></i> Taken
+			</span>
+		</div>
+	</div> <!-- .dialog-row -->
+	
+	<div class="dialog-row dialog-btns">
+		<a href="">Cancel</a>
+		<a href="" class="button">Create Team</a>
+	</div> <!-- .dialog-row -->
+</md-dialog>
