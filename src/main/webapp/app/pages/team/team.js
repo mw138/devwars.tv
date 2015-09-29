@@ -50,11 +50,11 @@ angular.module("app.team", [])
         };
 
         //removing player
-        $scope.removePlayer = function (member, idx) {
+        $scope.removePlayer = function (member, idx, $event) {
             if ($scope.isOwner && $scope.editingRoster) {
 
                 //see if owner is trying to remove himself.
-                if ($scope.team.owner.id === AuthService.user.id) {
+                if ($scope.isOwner && member.id === AuthService.user.id) {
                     return $scope.disbandTeam();
                 } else {
 

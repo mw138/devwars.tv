@@ -45,7 +45,7 @@
 						<!--<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>-->
 					<!--</div>-->
 					<div class="roster-players" ng-class="{'editable' : editingRoster}">
-						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member, $index)">{{ member.username }}</a>
+						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member, $index, $event)">{{ member.username }}</a>
 					</div>
 
 					<!--TODO: see if invite list is needed for owners.-->
