@@ -170,6 +170,7 @@ public class UserTeamService
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
                 .add(Expression.eq("name", name).ignoreCase())
+                .add(Restrictions.ne("owner", null))
                 .setMaxResults(1)
                 .uniqueResult();
 
@@ -186,6 +187,7 @@ public class UserTeamService
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
                 .add(Expression.eq("tag", name).ignoreCase())
+                .add(Restrictions.ne("owner", null))
                 .setMaxResults(1)
                 .uniqueResult();
 

@@ -51,13 +51,13 @@ angular.module('app.createTeamDialog', [])
         });
 
 
-        $scope.submitTeam = function (teamName, teamTag, croppedImage) {
-            console.log(teamName, teamTag, croppedImage);
+        $scope.submitTeam = function (teamName, teamTag) {
 
-            $mdDialog.hide({
-                name: teamName,
-                tag: teamTag
-            });
+            if(teamName && teamTag)
+                $mdDialog.hide({
+                    name: teamName,
+                    tag: teamTag
+                });
 
         };
 

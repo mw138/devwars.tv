@@ -1,5 +1,5 @@
 <md-dialog class="team-dialog create-team">
-	<i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i>
+	<i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i>
 
 	<h2>Create your Team</h2>	
 	
@@ -80,7 +80,7 @@
 
         <div class="dialog-container__actions">
             <button class="button" ng-click="submitTeam(teamName, teamTag, myCroppedImage)">Submit</button>
-            <button class="button button--warn" ng-click="$mdDialog.hide()">Cancel</button>
+            <button class="button button--warn" ng-click="$mdDialog.cancel()">Cancel</button>
         </div>
     </div>
 </md-dialog>
