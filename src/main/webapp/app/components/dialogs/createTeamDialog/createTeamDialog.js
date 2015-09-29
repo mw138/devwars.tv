@@ -56,8 +56,7 @@ angular.module('app.createTeamDialog', [])
 
             $mdDialog.hide({
                 name: teamName,
-                tag: teamTag,
-                image: dataURItoBlob(croppedImage)
+                tag: teamTag
             });
 
         };
