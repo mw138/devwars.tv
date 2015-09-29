@@ -137,5 +137,16 @@ angular.module("app.DialogService", [])
 
         };
 
+        DialogService.getBase64ForImage = function (image, $event) {
+            return $mdDialog.show({
+                templateUrl: "app/components/dialogs/editAvatarImageDialog/editAvatarImageView.html",
+                controller: "ChangeAvatarImageDialogController",
+
+                locals: {
+                    image: image
+                }
+            });
+        }
+
         return DialogService;
     }]);

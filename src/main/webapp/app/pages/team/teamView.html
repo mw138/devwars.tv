@@ -83,9 +83,11 @@
 
 				<div class="team-header">
 
-					<a class="team-icon active">
+					<a class="team-icon active" onclick="document.getElementById('fileInput').click()">
 						<img ng-src="/v1/teams/{{team.id}}/avatar"/>
 					</a>
+
+                    <input type="file" id="fileInput" style="display: none;" fileread="chosenImage">
 
 					<div class="team-info">
 						<div class="team-rank rank--no-name" rank="team.rank"></div>

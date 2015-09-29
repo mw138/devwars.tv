@@ -18,6 +18,7 @@ var app = angular.module('app', [
     'app.editPlayerDialog',
     'app.confirmTeamSignupDialog',
     'app.addPlayerDialog',
+    'app.changeAvatarImageDialog',
     'app.addSelectedPlayerDialog',
     'app.createTeamDialog',
     'app.invitePlayerDialog',

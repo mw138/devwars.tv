@@ -62,7 +62,7 @@ angular.module("app.team", [])
                         .then(function () {
                             UserTeamService.http.kickUser($scope.team.id, member.id)
                                 .then(function (success) {
-                                    ToastService.showDevwarsToast("fa-success-circle", "Success", "Kicked " + member.username + " from team");
+                                    ToastService.showDevwarsToast("fa-check-circle", "Success", "Kicked " + member.username + " from team");
                                 }, angular.noop);
                         }, angular.noop);
 
@@ -205,6 +205,25 @@ angular.module("app.team", [])
                         })
                 }, angular.noop);
         };
+
+        $scope.$watch('chosenImage', function (newVal, oldVal) {
+            if(newVal !== oldVal) {
+                DialogService.getBase64ForImage($scope.chosenImage)
+                    .then(function (image) {
+                        var fd = new FormData();
+                        fd.append("image", image.blob);
+
+                        $http.post('/v1/teams/' + $scope.team.id + '/avatar', fd, {
+                            withCredentials: true,
+                            headers: {'Content-Type': undefined},
+                            transformRequest: angular.identity
+                        })
+                            .then(function (success) {
+                                location.reload();
+                            }, angular.noop);
+                    }, angular.noop);
+            }
+        });
 
         //Only run once we have successfully fetched user data
         AuthService.isLoggedIn()
