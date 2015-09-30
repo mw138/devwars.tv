@@ -3,12 +3,35 @@
 
 	<h2>My Team Invites</h2>	
 	
-	<div class="dialog-row">
-		<div class=""></div>
-	</div> <!-- .dialog-row -->
+	<!-- when user clicks on a .teamInvite-row then add .selected class to it -->
+	<div class="teamInvite-row selected">
+		<span class="teamName">Cloud9</span>
+		<span class="teamDate">12 Aug, 2015</span>
+	</div> <!-- .teamInvite-row -->
+	
+	<div class="teamInvite-row">
+		<span class="teamName">A 24 Character Team Name</span>
+		<span class="teamDate">12 Aug, 2015</span>
+	</div> <!-- .teamInvite-row -->
+	
+	<div class="teamInvite-row">
+		<span class="teamName">Yorkshire</span>
+		<span class="teamDate">12 Aug, 2015</span>
+	</div> <!-- .teamInvite-row -->
+	
+	<div class="teamInvite-row">
+		<span class="teamName">The Smurfs</span>
+		<span class="teamDate">12 Aug, 2015</span>
+	</div> <!-- .teamInvite-row -->
+	
+	<div class="teamInvite-row">
+		<span class="teamName">Pokemon 247</span>
+		<span class="teamDate">12 Aug, 2015</span>
+	</div> <!-- .teamInvite-row -->
 	
 	<div class="dialog-row dialog-btns">
-		<a href="" class="button">Create Team</a>
-        <a href="">Cancel</a>
+		<a href="">Cancel</a>
+		<!-- add .button--disabled if no rows are selected -->
+		<a href="" class="button">Accept Invite</a>
 	</div> <!-- .dialog-row -->
 </md-dialog>

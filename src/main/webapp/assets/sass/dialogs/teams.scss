@@ -16,7 +16,13 @@
 	}
 
 	.button {
-		margin: 5px auto;
+		margin-left: 20px;
+		
+		&.button--disabled {
+			background-color: $dgray;
+			color: $black;
+			pointer-events: none;
+		}
 	}
 
 	select {
@@ -87,13 +93,6 @@
 		}
 	}
 
-	&.create-team {
-
-		.button {
-			margin: 0 20px 0 0;
-		}
-	}
-
 	&.team-join__game {
 
 		.player-selector {
@@ -156,4 +155,24 @@
 
 		span { font-size: 24px; }
 	}
+	
+	
+	.teamInvite-row {
+		display: flex;
+		justify-content: space-between;
+		padding: 10px;
+		
+		&:hover {
+			background-color: $dgray;
+		}
+		
+		&.selected {
+			border: 1px solid $accent-color;
+			color: $accent-color;
+		}
+		
+		.teamName { padding-right: 40px; }
+		.inviteDate { color: $gray; }
+	}
+	
 }
