@@ -135,6 +135,8 @@ public class UserTeamController
         UserTeam userTeam = new UserTeam(name, tag, user);
 
         session.save(userTeam);
+        session.flush();
+        session.refresh(userTeam);
 
         if (multipartFile != null)
             UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
