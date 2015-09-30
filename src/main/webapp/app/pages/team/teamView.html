@@ -16,9 +16,9 @@
 					<div class="flex">
 					
 						<!-- add .button--disabled when there are no invites to the button below -->
-						<a class="button button--clear button--disabled" ng-click="showTeamInvites()">
+						<a class="button button--clear" ng-class="{'button--disabled': !shouldShowInvites()}" ng-click="showTeamInvites()">
 							<!-- when there are invites this div will show and the number of invites is placed inside of it -->
-							<div class="invite-pill">2</div>
+							<div class="invite-pill" ng-bind="invites.length"></div>
 							TEAM INVITES
 						</a>
 

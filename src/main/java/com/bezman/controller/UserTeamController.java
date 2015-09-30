@@ -303,9 +303,10 @@ public class UserTeamController
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/{id}/invite/accept")
-    public ResponseEntity acceptInvite(@PathVariable("id") int teamID, SessionImpl session, @AuthedUser User user)
+    public ResponseEntity acceptInvite(@PathVariable("id") int teamID, SessionImpl session, @AuthedUser User authedUser)
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, teamID);
+        User user = (User) session.merge(authedUser);
 
         if (userTeam == null)
         {
@@ -326,13 +327,13 @@ public class UserTeamController
                         session.save(notification);
                     });
 
-            userTeam.getMembers().add(user);
+            user.setTeam(userTeam);
 
             Activity activity = new Activity(user, user, "You joined team : " + userTeam.getName(), 0, 0);
 
             session.save(activity);
 
-            return new ResponseEntity("Successfully joined team", HttpStatus.OK);
+            return new ResponseEntity(userTeam, HttpStatus.OK);
         } else
         {
             return new ResponseEntity("You were not invited to that team", HttpStatus.BAD_REQUEST);

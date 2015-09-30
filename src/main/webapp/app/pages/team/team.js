@@ -203,12 +203,27 @@ angular.module("app.team", [])
                 }, angular.noop);
         };
 
+        $scope.shouldShowInvites = function () {
+            if($scope.invites)
+                return $scope.invites.length > 0;
+        };
+
         $scope.showTeamInvites = function () {
-            console.log("Showing");
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/teamInviteDialog/teamInviteDialogView.html",
                 controller: "TeamInviteDialogController",
-            });
+
+                locals: {
+                    invites: $scope.invites
+                }
+            })
+                .then(function (team) {
+                    UserTeamService.http.acceptInvite(team.id)
+                        .then(function (success) {
+                            $scope.updateMyTeam();
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Joined " + team.name);
+                        }, angular.noop)
+                }, angular.noop);
         };
 
         $scope.$watch('chosenImage', function (newVal, oldVal) {
