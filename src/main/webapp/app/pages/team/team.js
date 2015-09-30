@@ -203,6 +203,14 @@ angular.module("app.team", [])
                 }, angular.noop);
         };
 
+        $scope.showTeamInvites = function () {
+            console.log("Showing");
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/teamInviteDialog/teamInviteDialogView.html",
+                controller: "TeamInviteDialogController",
+            });
+        };
+
         $scope.$watch('chosenImage', function (newVal, oldVal) {
             if(newVal !== oldVal) {
                 DialogService.getBase64ForImage($scope.chosenImage)
