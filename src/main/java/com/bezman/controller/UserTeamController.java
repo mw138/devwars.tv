@@ -275,6 +275,9 @@ public class UserTeamController
         if (invitedUser == null)
             return new ResponseEntity("User does not exist", HttpStatus.NOT_FOUND);
 
+        if (invitedUser.getWarrior() == null)
+            return new ResponseEntity("You cannot invite non warriors", HttpStatus.CONFLICT);
+
         if (UserTeamService.inviteUserToTeam(invitedUser, userTeam))
         {
             Activity activity = new Activity(invitedUser, user, "You were invited to the team : " + userTeam.getName(), 0, 0);

@@ -150,12 +150,9 @@ angular.module("app.team", [])
                     console.log("player invite:", player);
                     UserTeamService.http.invitePlayer($scope.team.id, player.id)
                         .then(function (success) {
-                            console.log("success invite:", success);
                             $scope.team.invites.push(player);
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Invite Sent");
-
                         }, function (error) {
-                            console.log("error invite:", error);
                             ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
                         })
                 })
