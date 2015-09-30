@@ -217,8 +217,8 @@ angular.module("app.team", [])
                     invites: $scope.invites
                 }
             })
-                .then(function (team) {
-                    UserTeamService.http.acceptInvite(team.id)
+                .then(function (invite) {
+                    UserTeamService.http.acceptInvite(invite.team.id)
                         .then(function (success) {
                             $scope.updateMyTeam();
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Joined " + team.name);

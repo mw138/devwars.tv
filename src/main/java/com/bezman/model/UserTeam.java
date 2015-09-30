@@ -34,7 +34,8 @@ public class UserTeam extends BaseModel
 
     private Set<User> members;
 
-    private Set<User> invites;
+    @JsonIgnore
+    private Set<UserTeamInvite> invites;
 
     @JsonIgnore
     private Set<Team> gameTeams;

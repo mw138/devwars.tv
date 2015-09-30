@@ -2,10 +2,7 @@ package com.bezman.service;
 
 import com.bezman.Reference.Reference;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.Game;
-import com.bezman.model.Team;
-import com.bezman.model.User;
-import com.bezman.model.UserTeam;
+import com.bezman.model.*;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
@@ -32,17 +29,25 @@ public class UserTeamService
 
     public static boolean inviteUserToTeam(User user, UserTeam userTeam)
     {
-        for(User currentUser : userTeam.getMembers())
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        for (User currentUser : userTeam.getMembers())
         {
-            if(currentUser.getId() == user.getId()) return false;
+            if (currentUser.getId() == user.getId()) return false;
         }
 
-        for(User currentUser : userTeam.getInvites())
+        for (UserTeamInvite currentInvite : userTeam.getInvites())
         {
-            if(currentUser.getId() == user.getId()) return false;
+            User currentUser = currentInvite.getUser();
+
+            if (currentUser.getId() == user.getId()) return false;
         }
 
-        userTeam.getInvites().add(user);
+        session.save(new UserTeamInvite(user, userTeam));
+
+        session.getTransaction().commit();
+        session.close();
 
         return true;
     }
@@ -128,15 +133,14 @@ public class UserTeamService
         return hashMap;
     }
 
-    public static List<Team> teamsInvitedTo(User user)
+    public static List<UserTeamInvite> teamsInvitedTo(User user)
     {
-        List<Team> returnList;
+        List<UserTeamInvite> returnList;
 
         Session session = DatabaseManager.getSession();
 
-        returnList = session.createCriteria(UserTeam.class)
-                .createAlias("invites", "i")
-                .add(Restrictions.eq("i.id", user.getId()))
+        returnList = session.createCriteria(UserTeamInvite.class)
+                .add(Restrictions.eq("user.id", user.getId()))
                 .list();
 
         session.close();

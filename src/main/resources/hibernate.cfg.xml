@@ -65,6 +65,7 @@
         <mapping resource="config/hibernate/mapping/Notification.hbm.xml"/>
         <mapping resource="config/hibernate/mapping/UserTeam.hbm.xml"/>
         <mapping resource="config/hibernate/mapping/TeamGameSignup.hbm.xml"/>
+        <mapping resource="config/hibernate/mapping/UserTeamInvite.hbm.xml"/>
 
 
         <mapping resource="config/hibernate/mapping/Access.hbm.xml"/>

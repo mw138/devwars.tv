@@ -28,8 +28,8 @@
         </set>
 
         <set name="invites" lazy="false" table="team_invites">
-            <key column="team_id"/>
-            <many-to-many class="com.bezman.model.User" column="user_id"/>
+            <key column="team"/>
+            <one-to-many class="com.bezman.model.UserTeamInvite"/>
         </set>
     </class>
 </hibernate-mapping>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.bezman.model.UserTeamInvite" table="team_invites">
+        <id name="id"/>
+
+        <property name="createdAt" type="date"/>
+
+        <many-to-one name="user" class="com.bezman.model.User"/>
+        <many-to-one name="team" lazy="false" class="com.bezman.model.UserTeam"/>
+    </class>
+
+</hibernate-mapping>

@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Terence on 7/21/2015.
@@ -313,11 +314,14 @@ public class UserTeamController
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
         }
 
-        boolean removed = userTeam.getInvites()
-                .removeIf(invite -> invite.getId() == user.getId());
+        Optional<UserTeamInvite> removed = userTeam.getInvites().stream()
+                .filter(invite -> invite.getUser().getId() == user.getId())
+                .findFirst();
 
-        if (removed)
+        if (removed.isPresent())
         {
+            session.delete(removed.get());
+
             userTeam.getMembers().stream()
                     .forEach(currentUser -> {
                         Activity activity = new Activity(currentUser, user, user.getUsername() + " joined your team : " + userTeam.getName(), 0, 0);

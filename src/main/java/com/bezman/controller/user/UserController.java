@@ -1214,7 +1214,7 @@ public class UserController extends BaseController
     @RequestMapping("/teaminvites")
     public ResponseEntity getMyTeamInvites(@AuthedUser User user)
     {
-        List<Team> invites = UserTeamService.teamsInvitedTo(user);
+        List<UserTeamInvite> invites = UserTeamService.teamsInvitedTo(user);
 
         return new ResponseEntity(invites, HttpStatus.OK);
     }
