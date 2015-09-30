@@ -99,6 +99,12 @@ public class UserTeamController
         return new ResponseEntity("Successfully changed picture", HttpStatus.OK);
     }
 
+    /**
+     * Validates if names or tags are taken
+     * @param name The name to check
+     * @param tag The tag to check
+     * @return JSON with true if the name is taken
+     */
     @RequestMapping("/check")
     public ResponseEntity checkTeamInformation(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "tag", required = false, defaultValue = "") String tag)
     {
