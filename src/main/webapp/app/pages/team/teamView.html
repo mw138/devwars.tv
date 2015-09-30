@@ -1,9 +1,5 @@
 <div class="teamView inner">
 
-
-
-
-
 	<div class="col-2--dashboard">
 
 		<div class="left">
@@ -11,7 +7,7 @@
 		</div>
 
 	<div class="right">
-		<div class="teamOverlay">
+		<div class="teamOverlay" ng-hide="team">
 			<div class="teamOverlay__dialog">
 				<div class="teamDialog__inner">
 					<span>BUILD YOUR OWN TEAM</span>
@@ -25,7 +21,7 @@
 							<div class="invite-pill">2</div>
 							TEAM INVITES
 						</a>
-						<a href="#" class="button">CREATE YOUR TEAM</a>
+						<a href="#" class="button" ng-click="createTeam()">CREATE YOUR TEAM</a>
 					</div>
 				</div> <!-- .teamDialog__inner -->
 			</div> <!-- .teamOverlay__dialog -->
@@ -33,19 +29,6 @@
 		</div> <!-- .teamOverlay -->
 		
 	<div>
-		<div ng-hide="team">
-			<div class="teams-left" style="font-size: 20px">
-				<h1>no team</h1>
-				<a href="" class="create-team" ng-click="createTeam()">Create Team</a>
-				<h1>Team Invites</h1>
-				<ul>
-					<li ng-repeat="team in invites"><a href="" ng-click="joinTeam(team)"> {{ team.name }} [{{ team.tag }}] </a></li>
-				</ul>
-			</div>
-
-		</div>
-
-
 		<div ng-hide="isOwner">
 			<h1>member</h1>
 		</div>

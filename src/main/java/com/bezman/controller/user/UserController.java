@@ -1180,6 +1180,7 @@ public class UserController extends BaseController
         if (userTeam != null)
         {
             userTeam = (UserTeam) session.merge(userTeam);
+
             return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
@@ -1202,6 +1203,7 @@ public class UserController extends BaseController
         if (userTeam != null)
         {
             userTeam = (UserTeam) session.merge(userTeam);
+
             return new ResponseEntity(userTeam, HttpStatus.OK);
         }
 
