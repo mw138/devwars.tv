@@ -4,11 +4,13 @@
     <h2>My Team Invites</h2>
 
     <!-- when user clicks on a .teamInvite-row then add .selected class to it -->
-    <div class="teamInvite-row" ng-click="updateSelectedTeam(team)" ng-repeat="team in teams" ng-class="{'selected': team.id == selectedTeam.id}">
-        <span class="teamName" ng-bind="team.name"></span>
-        <span class="teamDate" ng-bind="team.tag"></span>
-    </div> <!-- .teamInvite-row -->
-
+	<div class="teamInviteScroll">
+		<div class="teamInvite-row" ng-click="updateSelectedTeam(team)" ng-repeat="team in teams" ng-class="{'selected': team.id == selectedTeam.id}">
+			<span class="teamName" ng-bind="team.name"></span>
+			<span class="teamDate" ng-bind="team.tag"></span>
+		</div> <!-- .teamInvite-row -->
+	</div> <!-- .teamInviteScroll -->
+   
     <div class="dialog-row dialog-btns">
         <a href="" ng-click="$mdDialog.cancel()">Cancel</a>
         <!-- add .button--disabled if no rows are selected -->
