@@ -5,18 +5,13 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by teren on 9/16/2015.
- */
 @Service
 public class UserTeamService
 {
@@ -173,8 +168,8 @@ public class UserTeamService
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
-                .add(Expression.eq("name", name).ignoreCase())
-                .add(Restrictions.ne("owner", null))
+                .add(Restrictions.ilike("name", name))
+                .add(Restrictions.isNotNull("owner"))
                 .setMaxResults(1)
                 .uniqueResult();
 
@@ -190,8 +185,8 @@ public class UserTeamService
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
-                .add(Expression.eq("tag", name).ignoreCase())
-                .add(Restrictions.ne("owner", null))
+                .add(Restrictions.ilike("tag", name))
+                .add(Restrictions.isNotNull("owner"))
                 .setMaxResults(1)
                 .uniqueResult();
 
@@ -208,5 +203,10 @@ public class UserTeamService
     public static boolean doesUserHaveAuthorization(User user, UserTeam userTeam)
     {
         return doesUserOwnUserTeam(user, userTeam) || UserService.isUserAtLeast(user, User.Role.ADMIN);
+    }
+
+    public static boolean doesUserBelongToTeam(User user)
+    {
+        return user.getTeam() != null && user.getTeam().getOwner() != null;
     }
 }

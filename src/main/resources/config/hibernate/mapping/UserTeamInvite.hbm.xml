@@ -6,7 +6,9 @@
 <hibernate-mapping>
 
     <class name="com.bezman.model.UserTeamInvite" table="team_invites">
-        <id name="id"/>
+        <id name="id">
+            <generator class="increment"/>
+        </id>
 
         <property name="createdAt" type="date"/>
 

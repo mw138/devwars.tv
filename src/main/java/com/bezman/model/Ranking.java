@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Ranking extends BaseModel
 {
 
@@ -24,6 +23,12 @@ public class Ranking extends BaseModel
 
     @JsonIgnore
     private User user;
+
+    public Ranking()
+    {
+        this.setXp((double) 0);
+        this.setPoints((double) 0);
+    }
 
     public void addPoints(int points)
     {

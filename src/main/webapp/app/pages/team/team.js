@@ -105,6 +105,11 @@ angular.module("app.team", [])
         };
 
         $scope.createTeam = function () {
+            if(!AuthService.user.warrior) {
+                ToastService.showDevwarsToast("fa-check-circle", "Error", "You must be a warrior");
+                return;
+            }
+
             $mdDialog.show({
                 templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
                 controller: "CreateTeamDialogController"
@@ -123,11 +128,11 @@ angular.module("app.team", [])
                         transformRequest: angular.identity
                     })
                         .then(function (success) {
-                            console.log("success", success);
                             $scope.team = success.data;
 
                         }, function (error) {
-                            console.log("error", error);
+                            if(error.status === 400)
+                                ToastService.showErrorList(error.data);
                         })
 
 

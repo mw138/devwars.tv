@@ -10,8 +10,10 @@ import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.PostLoad;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +28,13 @@ public class UserTeam extends BaseModel
 
     private User owner;
 
+
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "must be alphanumeric")
+    @Length(min = 0, max = 24)
     private String name;
 
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "must be alphanumeric")
+    @Length(min = 2, max = 4)
     private String tag;
 
     private Rank rank, nextRank;

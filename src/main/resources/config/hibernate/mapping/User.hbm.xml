@@ -26,7 +26,7 @@
         <property name="location" type="string"/>
         <property name="url" type="string"/>
         <property name="company" type="string"/>
-        <property name="usernameChanges" column="username_changes" type="integer"></property>
+        <property name="usernameChanges" column="username_changes" type="integer"/>
         <property name="veteran" column="veteran" type="boolean"/>
         <property name="bettingBitsEarned" column="betting_bits_earned" type="integer"/>
         <property name="gamesWatched" column="games_watched" type="integer"/>
@@ -37,7 +37,7 @@
         <one-to-one name="warrior" class="Warrior" lazy="false" cascade="save-update"/>
         <one-to-one name="emailConfirmation" class="EmailConfirmation"/>
 
-        <many-to-one name="team" class="UserTeam" lazy="false"/>
+        <many-to-one name="team" column="team" class="UserTeam" lazy="false"/>
 
         <set name="ownedTeams" table="user_teams" lazy="true">
             <key column="owner"></key>
