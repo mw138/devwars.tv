@@ -150,7 +150,8 @@ angular.module("app.team", [])
                     console.log("player invite:", player);
                     UserTeamService.http.invitePlayer($scope.team.id, player.id)
                         .then(function (success) {
-                            $scope.team.invites.push(player);
+                            //invites are no longer shown client side.
+                            //$scope.team.invites.push(player);
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Invite Sent");
                         }, function (error) {
                             ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
@@ -190,16 +191,22 @@ angular.module("app.team", [])
                     team: $scope.team
                 }
             })
-                .then(function (team) {
-                    UserTeamService.http.deleteTeam($scope.team.id, $scope.team.name)
-                        .then(function (success) {
-                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Team Disbanded");
+                .then(function (response) {
+                    if (response.action === 'disband')
+                        UserTeamService.http.deleteTeam(response.id, response.name)
+                            .then(function (success) {
+                                ToastService.showDevwarsToast("fa-check-circle", "Success", "Team Disbanded");
 
-                            $scope.team = null;
-                        }, function (error) {
-                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                                $scope.team = null;
+                            }, function (error) {
+                                ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
 
-                        })
+                            });
+
+                    else if (response.action === 'assignAndLeave')
+                        console.log(response);
+
+
                 }, angular.noop);
         };
 
@@ -221,7 +228,7 @@ angular.module("app.team", [])
                     UserTeamService.http.acceptInvite(invite.team.id)
                         .then(function (success) {
                             $scope.updateMyTeam();
-                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Joined " + team.name);
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Joined Team");
                         }, angular.noop)
                 }, angular.noop);
         };

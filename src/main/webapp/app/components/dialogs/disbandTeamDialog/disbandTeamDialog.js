@@ -2,19 +2,23 @@ angular.module("app.disbandTeamDialog", [])
     .controller("DisbandTeamDialogController", ["$scope", "$mdDialog", "team", function ($scope, $mdDialog, team) {
         $scope.$mdDialog = $mdDialog;
         $scope.team = team;
-        console.log("team", team);
+        $scope.selectedMember = '';
 
-        $scope.disbandTeam = function (id, name) {
+        $scope.disbandTeam = function (team) {
             $mdDialog.hide({
-                id: id,
-                name: name
+                action: 'disband',
+                id: team.id,
+                name: team.name
             });
         };
 
 
-        $scope.selectedMember = '';
         $scope.assignAndLeave = function (selectedMember) {
-            console.log("selectedMember", selectedMember);
-
+            //if (selectedMember)
+            //    $mdDialog.hide({
+            //        action: 'assignAndLeave',
+            //        id: team.id,
+            //        name: selectedMember
+            //    });
         }
     }]);
