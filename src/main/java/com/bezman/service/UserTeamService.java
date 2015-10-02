@@ -142,6 +142,22 @@ public class UserTeamService
         return gamesCount;
     }
 
+    public static Integer getPositionInLeaderBoards(UserTeam userTeam)
+    {
+        Long place = 0L;
+
+        Session session = DatabaseManager.getSession();
+
+        place = (Long) session.createQuery("select count(*) from UserTeam u where u.gamesWon >= :gamesWon")
+                .setLong("gamesWon", userTeam.getGamesWon())
+                .setMaxResults(0)
+                .uniqueResult();
+
+        session.close();
+
+        return place.intValue();
+    }
+
     public static HashMap<Object, Object> getStatisticsForUserTeam(UserTeam userTeam)
     {
         HashMap hashMap = new HashMap();
@@ -149,6 +165,7 @@ public class UserTeamService
         hashMap.put("gamesPlayed", getNumberOfGamesPlayedForUserTeam(userTeam));
         hashMap.put("gamesWon", getNumberOfGamesWonForUserTeam(userTeam));
         hashMap.put("gamesLost", getNumberOfGamesLostForUserTeam(userTeam));
+        hashMap.put("position", getPositionInLeaderBoards(userTeam));
 
         return hashMap;
     }
