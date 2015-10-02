@@ -4,6 +4,7 @@ import com.bezman.Reference.Reference;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import org.apache.commons.io.IOUtils;
+import org.fusesource.hawtbuf.DataByteArrayInputStream;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,30 @@ public class UserTeamService
     {
         return team.getInvites().stream()
                 .anyMatch(current -> current.getId() == user.getId());
+    }
+
+    public static void disbandTeam(UserTeam userTeam, Integer newOwner)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        userTeam = (UserTeam) session.merge(userTeam);
+
+        if (newOwner != null)
+        {
+            User newOwnerUser = (User) session.get(User.class, newOwner);
+
+            userTeam.setOwner(newOwnerUser);
+        } else
+        {
+            userTeam.getInvites().stream()
+                    .forEach(session::delete);
+
+            userTeam.setOwner(null);
+        }
+
+        session.getTransaction().commit();
+        session.close();
     }
 
     public static boolean inviteUserToTeam(User user, UserTeam userTeam)

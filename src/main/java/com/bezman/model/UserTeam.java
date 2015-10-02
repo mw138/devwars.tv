@@ -29,11 +29,11 @@ public class UserTeam extends BaseModel
     private User owner;
 
 
-    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "must be alphanumeric")
+    @Pattern(regexp = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$", message = "must be alphanumeric")
     @Length(min = 0, max = 24)
     private String name;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "must be alphanumeric")
+    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "must be alphanumeric (No Spaces)")
     @Length(min = 2, max = 4)
     private String tag;
 

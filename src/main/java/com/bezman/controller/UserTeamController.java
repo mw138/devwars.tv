@@ -180,8 +180,6 @@ public class UserTeamController
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName, @RequestParam(value = "newOwner", required = false) Integer newOwner)
     {
-        user = (User) session.merge(user);
-
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (!teamName.equals(userTeam.getName()))
@@ -190,13 +188,7 @@ public class UserTeamController
         if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
-        if (newOwner != null)
-        {
-            User newOwnerUser = (User) session.get(User.class, newOwner);
-
-            userTeam.setOwner(newOwnerUser);
-        } else userTeam.setOwner(null);
-
+        UserTeamService.disbandTeam(userTeam, newOwner);
         user.setTeam(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
