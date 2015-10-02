@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.annotation.HibernateDefault;
+import com.bezman.hibernate.validation.annotation.AlphaNumeric;
 import com.bezman.init.DatabaseManager;
 import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,11 +30,11 @@ public class UserTeam extends BaseModel
     private User owner;
 
 
-    @Pattern(regexp = "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$", message = "must be alphanumeric")
+    @AlphaNumeric(message = "must be alphanumeric with spaces")
     @Length(min = 0, max = 24)
     private String name;
 
-    @Pattern(regexp = "^[a-zA-Z0-9_]*$", message = "must be alphanumeric (No Spaces)")
+    @AlphaNumeric(spaces = false, message = "must be alphanumeric")
     @Length(min = 2, max = 4)
     private String tag;
 
