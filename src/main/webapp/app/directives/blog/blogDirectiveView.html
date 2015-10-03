@@ -1,4 +1,4 @@
-<h1>{{ post.title }}</h1>
+<h1>{{ post.title }}<a href="#" ng-click="editPost(post, $event)" ng-show="AuthService.isAtLeast('BLOGGER')"><i class="fa fa-edit"></i></a></h1>
 
 <div class="post-info">
     <span>{{ post.user.username }}</span>

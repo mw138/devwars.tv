@@ -50,29 +50,4 @@ angular.module("app.blogList", [])
                     }
                 })
         };
-
-        $scope.editPost = function (post, $event) {
-            $mdDialog.show({
-                    templateUrl: "/app/components/dialogs/addBlogPostDialog/addBlogPostDialogView.html",
-                    controller: "EditBlogPostDialogController",
-                    targetEvent: $event,
-
-                    locals: {
-                        post: post
-                    }
-                })
-                .then(function (success) {
-                    ToastService.showDevwarsToast("fa-check-circle", "Success", "Edited post");
-                    $scope.updatePosts();
-                }, angular.noop)
-        };
-
-        $scope.deletePost = function (post) {
-            BlogService.deleteBlog(post.id, function (success) {
-                ToastService.showDevwarsToast("fa-check-circle", "Successfully deleted post", success.data.title);
-                $scope.updatePosts();
-            }, function () {
-                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not delete post");
-            })
-        }
     }]);
