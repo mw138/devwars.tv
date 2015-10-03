@@ -29,20 +29,23 @@ home.config(['$stateProvider',
 
                     blogPosts: ['BlogService', function (BlogService) {
                         return BlogService.http.allPosts();
+                    }],
+
+                    upcomingTournament: ['GameService', function (GameService) {
+                        return GameService.http.nearestTournament();
                     }]
                 }
             });
 
     }]);
 
-home.controller("HomeController", function ($scope, InfoService, DialogService, BlogService, $location, $anchorScroll, AuthService, allInfo, bitsLeaderboard, xpLeaderboard, blogPosts) {
-
-    console.log(blogPosts);
+home.controller("HomeController", function ($scope, InfoService, DialogService, BlogService, $location, $anchorScroll, AuthService, allInfo, bitsLeaderboard, xpLeaderboard, blogPosts, upcomingTournament) {
 
     $scope.info = allInfo.data;
     $scope.bitsLeaderboard = bitsLeaderboard.data;
     $scope.xpLeaderboard = xpLeaderboard.data;
     $scope.posts = blogPosts.data.slice(0, 3);
+    $scope.upcomingTournament = upcomingTournament.data;
 
     $scope.DialogService = DialogService;
     $scope.AuthService = AuthService;

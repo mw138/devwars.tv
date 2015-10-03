@@ -61,6 +61,7 @@ var app = angular.module('app', [
     'app.scroll-bottom',
     'app.no-scroll-other',
     'app.stackedInput',
+    'app.ngSignupTournament',
     'app.team',
     'app.addGame',
     'app.UserTeamService',

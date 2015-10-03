@@ -255,7 +255,7 @@ public class GameService
          */
         Criteria criteria = session.createCriteria(Game.class)
                 .setProjection(Projections.projectionList()
-                                .add(Projections.groupProperty("season"))
+                        .add(Projections.groupProperty("season"))
                 );
 
         HashMap pastGames = new HashMap<>();
@@ -276,6 +276,41 @@ public class GameService
         session.close();
 
         return pastGames;
+    }
+
+    public static Game getMostUpcomingTournament()
+    {
+        Game game;
+
+        Session session = DatabaseManager.getSession();
+
+        game = (Game) session.createCriteria(Game.class)
+                .add(Restrictions.eq("tournament", true))
+                .add(Restrictions.ge("timestamp", new Date()))
+                .addOrder(Order.desc("timestamp"))
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.close();
+
+        return game;
+    }
+
+    public static List<Game> getUpcomingTournaments()
+    {
+        List<Game> games = null;
+
+        Session session = DatabaseManager.getSession();
+
+        games = session.createCriteria(Game.class)
+                .add(Restrictions.eq("tournament", true))
+                .add(Restrictions.ge("timestamp", new Date()))
+                .addOrder(Order.desc("timestamp"))
+                .list();
+
+        session.close();
+
+        return games;
     }
 
 }

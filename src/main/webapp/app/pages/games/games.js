@@ -153,7 +153,7 @@ angular.module("app.games", [])
             if($scope.myTeam.owner.id !== AuthService.user.id) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must own the team to do that");
                 return;
-            };
+            }
 
             $mdDialog.show({
                     templateUrl: "app/components/dialogs/confirmTeamSignupDialog/confirmTeamSignupDialogView.html",

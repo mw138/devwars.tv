@@ -103,6 +103,18 @@ public class GameController
         }
     }
 
+    @RequestMapping("/tournament/upcoming")
+    public ResponseEntity upcomingTournaments()
+    {
+        return new ResponseEntity(GameService.getUpcomingTournaments(), HttpStatus.OK);
+    }
+
+    @RequestMapping("/tournament/nearest")
+    public ResponseEntity nearestTournament()
+    {
+        return new ResponseEntity(GameService.getMostUpcomingTournament(), HttpStatus.OK);
+    }
+
     /**
      * Retrieves games that have been done in the past
      *
