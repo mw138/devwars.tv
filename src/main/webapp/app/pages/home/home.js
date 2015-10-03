@@ -66,7 +66,7 @@ home.controller("HomeController", function ($scope, InfoService, DialogService, 
             console.log(error);
         });
 
-        BlogService.allPosts(function (success) {
+        BlogService.allPosts(null, null, null, function (success) {
             success.data.splice(3, success.data.length - 3);
             $scope.posts = success.data;
         }, function (error) {
@@ -77,4 +77,10 @@ home.controller("HomeController", function ($scope, InfoService, DialogService, 
     $scope.scrollToBlogPost = function (id) {
         location.href = "/blog#" + id;
     };
+
+    $scope.readMore = function (post) {
+        $location.path('/blog/' + post.title.substr(0, 30).replace(/ /g, '-'));
+    };
+
+    $scope.updateInfo();
 });

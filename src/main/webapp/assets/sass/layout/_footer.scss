@@ -25,6 +25,33 @@ footer {
 	  font-size: 16px;
 	}
 
+	.footer-advertise {
+		margin: 20px 0;
+		height: 150px;
+
+		.advert {
+			height: 150px;
+			width: 48%;
+			padding: 55px;
+			float: left;
+			text-align: center;
+			border: 1px solid $gray;
+			background: $dgray;
+
+			&:first-child {
+				float: right;
+			}
+
+			span {
+				display: block;
+			}
+
+			&:hover {
+				background: $gray;
+			}
+		}
+	}
+
 	.sitemap {
 		@include flex;
 		justify-content: space-between;

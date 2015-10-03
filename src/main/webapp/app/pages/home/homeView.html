@@ -1,4 +1,12 @@
 <div class="homeView">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@devwarstv">
+    <meta name="twitter:title" content="DevWars - The Developers Battleground">
+    <meta name="twitter:description" content="Two teams of three battle to produce the best work of their coding ability, taking the reigns of a single programming language each: HTML, CSS and JavaScript.">
+    <meta name="twitter:creator" content="@beauaugust">
+    <meta name="twitter:image" content="http://devwars.tv/assets/img/socialmeta/twitter.png">
+
+
 	<div class="featured">
 		<div class="scanlines"></div>
 		<div class="inner">
@@ -53,10 +61,10 @@
 				<div class="blogpost__preview" ng-repeat="post in posts" layout="row">
 					<div flex="25" class="blogpost__image" flex style="background-image: url('{{post.image_url}}')"></div>
 					<div layout="column" flex>
-						<h3 class="blogpost__header">{{post.title}}</h3>
+						<h3 class="blogpost__header" ng-click="readMore(post)">{{post.title}}</h3>
 						<h6>By {{post.user.username}} - {{post.timestamp | date : 'mediumDate' : 'UTC'}}</h6>
 						<p class="blogpost__content">{{post.description}}</p>
-						<a class="readMoreLink" ng-click="scrollToBlogPost(post.id)">Read More</a>
+						<a class="readMoreLink" ng-click="readMore(post)">Read More</a>
 					</div>
 				</div>
 			</div> <!-- .left -->
