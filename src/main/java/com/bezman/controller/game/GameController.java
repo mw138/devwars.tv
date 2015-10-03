@@ -627,7 +627,8 @@ public class GameController
         if (ownedTeam == null)
             return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
 
-
+        if (users.length < 3)
+            return new ResponseEntity("You must choose at least three players", HttpStatus.BAD_REQUEST);
 
         boolean alreadySignedUp = game.getTeamGameSignups().stream()
                 .anyMatch(signup -> signup.getUserTeam().getId() == ownedTeam.getId());

@@ -154,7 +154,7 @@ angular.module("app.games", [])
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must own the team to do that");
                 return;
             };
-            
+
             $mdDialog.show({
                     templateUrl: "app/components/dialogs/confirmTeamSignupDialog/confirmTeamSignupDialogView.html",
                     controller: "ConfirmTeamSignupDialogController",
