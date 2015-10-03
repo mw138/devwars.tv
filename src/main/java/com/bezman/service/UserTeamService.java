@@ -4,19 +4,15 @@ import com.bezman.Reference.Reference;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import org.apache.commons.io.IOUtils;
+import org.fusesource.hawtbuf.DataByteArrayInputStream;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.SessionImpl;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by teren on 9/16/2015.
- */
 @Service
 public class UserTeamService
 {
@@ -25,6 +21,30 @@ public class UserTeamService
     {
         return team.getInvites().stream()
                 .anyMatch(current -> current.getId() == user.getId());
+    }
+
+    public static void disbandTeam(UserTeam userTeam, Integer newOwner)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        userTeam = (UserTeam) session.merge(userTeam);
+
+        if (newOwner != null)
+        {
+            User newOwnerUser = (User) session.get(User.class, newOwner);
+
+            userTeam.setOwner(newOwnerUser);
+        } else
+        {
+            userTeam.getInvites().stream()
+                    .forEach(session::delete);
+
+            userTeam.setOwner(null);
+        }
+
+        session.getTransaction().commit();
+        session.close();
     }
 
     public static boolean inviteUserToTeam(User user, UserTeam userTeam)
@@ -122,6 +142,22 @@ public class UserTeamService
         return gamesCount;
     }
 
+    public static Integer getPositionInLeaderBoards(UserTeam userTeam)
+    {
+        Long place = 0L;
+
+        Session session = DatabaseManager.getSession();
+
+        place = (Long) session.createQuery("select count(*) from UserTeam u where u.gamesWon >= :gamesWon")
+                .setLong("gamesWon", userTeam.getGamesWon())
+                .setMaxResults(0)
+                .uniqueResult();
+
+        session.close();
+
+        return place.intValue();
+    }
+
     public static HashMap<Object, Object> getStatisticsForUserTeam(UserTeam userTeam)
     {
         HashMap hashMap = new HashMap();
@@ -129,6 +165,7 @@ public class UserTeamService
         hashMap.put("gamesPlayed", getNumberOfGamesPlayedForUserTeam(userTeam));
         hashMap.put("gamesWon", getNumberOfGamesWonForUserTeam(userTeam));
         hashMap.put("gamesLost", getNumberOfGamesLostForUserTeam(userTeam));
+        hashMap.put("position", getPositionInLeaderBoards(userTeam));
 
         return hashMap;
     }
@@ -173,8 +210,8 @@ public class UserTeamService
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
-                .add(Expression.eq("name", name).ignoreCase())
-                .add(Restrictions.ne("owner", null))
+                .add(Restrictions.ilike("name", name))
+                .add(Restrictions.isNotNull("owner"))
                 .setMaxResults(1)
                 .uniqueResult();
 
@@ -190,8 +227,8 @@ public class UserTeamService
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
-                .add(Expression.eq("tag", name).ignoreCase())
-                .add(Restrictions.ne("owner", null))
+                .add(Restrictions.ilike("tag", name))
+                .add(Restrictions.isNotNull("owner"))
                 .setMaxResults(1)
                 .uniqueResult();
 
@@ -208,5 +245,10 @@ public class UserTeamService
     public static boolean doesUserHaveAuthorization(User user, UserTeam userTeam)
     {
         return doesUserOwnUserTeam(user, userTeam) || UserService.isUserAtLeast(user, User.Role.ADMIN);
+    }
+
+    public static boolean doesUserBelongToTeam(User user)
+    {
+        return user.getTeam() != null && user.getTeam().getOwner() != null;
     }
 }

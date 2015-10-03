@@ -1,6 +1,7 @@
 package com.bezman.model;
 
 import com.bezman.annotation.HibernateDefault;
+import com.bezman.hibernate.validation.annotation.AlphaNumeric;
 import com.bezman.init.DatabaseManager;
 import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,8 +11,10 @@ import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.PostLoad;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,8 +29,13 @@ public class UserTeam extends BaseModel
 
     private User owner;
 
+
+    @AlphaNumeric(message = "must be alphanumeric with spaces")
+    @Length(min = 0, max = 24)
     private String name;
 
+    @AlphaNumeric(spaces = false, message = "must be alphanumeric")
+    @Length(min = 2, max = 4)
     private String tag;
 
     private Rank rank, nextRank;

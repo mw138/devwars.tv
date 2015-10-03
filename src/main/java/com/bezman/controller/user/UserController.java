@@ -1200,7 +1200,7 @@ public class UserController extends BaseController
     {
         UserTeam userTeam = user.getTeam();
 
-        if (userTeam != null)
+        if (userTeam != null && userTeam.getOwner() != null)
         {
             userTeam = (UserTeam) session.merge(userTeam);
 

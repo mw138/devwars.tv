@@ -110,12 +110,20 @@ public class User extends BaseModel
     @HibernateDefault("0")
     private Integer bettingBitsEarned;
 
+    @HibernateDefault("0")
     private Integer gamesWatched;
 
     @JsonIgnore
     public boolean isNative()
     {
         return this.getProvider() == null || this.getProvider().isEmpty();
+    }
+
+    public UserTeam getMyTeam()
+    {
+        UserTeam userTeam = this.getTeam();
+
+        return userTeam.getOwner() == null ? null : userTeam;
     }
 
     public void logout()

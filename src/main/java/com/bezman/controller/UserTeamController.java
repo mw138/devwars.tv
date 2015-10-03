@@ -12,9 +12,13 @@ import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +42,9 @@ import java.util.Optional;
 @RequestMapping("/v1/teams")
 public class UserTeamController
 {
+
+    @Autowired
+    Validator validator;
 
     /**
      * Returns a team for a given ID
@@ -135,10 +142,21 @@ public class UserTeamController
     {
         user = (User) session.merge(user);
 
-        if (user.getTeam() != null)
+        if (UserTeamService.doesUserBelongToTeam(user))
             return new ResponseEntity("You already belong to a team", HttpStatus.CONFLICT);
 
+        if (user.getWarrior() == null)
+            return new ResponseEntity("You must be a warrior", HttpStatus.CONFLICT);
+
         UserTeam userTeam = new UserTeam(name, tag, user);
+
+        Errors errors = new BeanPropertyBindingResult(userTeam, "userTeam");
+        validator.validate(userTeam, errors);
+
+        if (errors.hasErrors())
+        {
+            return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+        }
 
         session.save(userTeam);
         session.flush();
@@ -160,10 +178,8 @@ public class UserTeamController
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName)
+    public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName, @RequestParam(value = "newOwner", required = false) Integer newOwner)
     {
-        user = (User) session.merge(user);
-
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (!teamName.equals(userTeam.getName()))
@@ -172,7 +188,7 @@ public class UserTeamController
         if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
-        userTeam.setOwner(null);
+        UserTeamService.disbandTeam(userTeam, newOwner);
         user.setTeam(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
@@ -278,6 +294,9 @@ public class UserTeamController
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
+        if (userTeam.getMembers().size() >= 3)
+            return new ResponseEntity("This team has too many players", HttpStatus.CONFLICT);
+
         if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
@@ -298,7 +317,7 @@ public class UserTeamController
             return new ResponseEntity("Successfully Invited User", HttpStatus.OK);
         } else
         {
-            return new ResponseEntity("Could not invite user", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("User already has an invite", HttpStatus.BAD_REQUEST);
         }
     }
 

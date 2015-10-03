@@ -116,7 +116,9 @@ angular.module("app.AuthService", [])
             return $http({
                 url: "/v1/user/",
                 method: "GET"
-            })
+            }).then(function (success) {
+                AuthService.user = success.data;
+            }, angular.noop)
         };
 
         return AuthService;
