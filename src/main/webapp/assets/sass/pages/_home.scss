@@ -1,22 +1,14 @@
 .homeView {
 	.featured {
-		height: auto;
+		min-height: 400px;
 		position: relative;
 		margin-bottom: 30px;
 		overflow: hidden;
-		background: url('../../../assets/img/featuredbg.jpg');
-		background-position: center;
+		background-color: #0A0A0A;
 
 		.inner { 
 		  position: relative;
 			z-index: 2;
-		}
-
-		.signup {
-			font-size: 16px;
-			text-align: center;
-			padding: 10px 0;
-			display: block;
 		}
 
 		.scanlines {
@@ -26,10 +18,51 @@
 			width: 100%;
 			height: 100%;
 			z-index: 1;
-			background: url("../../../assets/img/overlay.png") rgba(0, 0, 0, 0.5);
+			background: url("../../../assets/img/overlay.png") rgba(0, 0, 0, 0.2);
 		}
 	}
 
+	.herocode1-container {
+		@include animation(herocode-1-pulse, 10s, linear, infinite);
+	}
+	
+	.herocode2-container {
+		@include animation(herocode-2-pulse, 10s, linear, infinite);
+	}
+	
+	.herocode {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		
+		&.herocode--1 {
+			width: $herocode1-width * 2;
+			height: $herocode1-height + ($herocode-space * $herocode-dec);
+			background: url("../../../assets/img/herocode-1.png") repeat;
+			background-size: $herocode-bgsize;
+			position: absolute;
+			@include animation(herocode-1, 120s, linear, infinite);
+		}
+		
+		&.herocode--2 { 
+			width: $herocode2-width * 2;
+			height: $herocode2-height + ($herocode-space * $herocode-dec);
+			background: url("../../../assets/img/herocode-2.png") repeat;
+			top: $herocode-space * ($herocode-dec * 2); 
+			background-size: $herocode-bgsize;
+			position: absolute;
+			@include animation(herocode-2, 240s, linear, infinite);
+		}
+	}
+	
+	.logo--tournament {
+		width: 75%;
+		height: auto;
+		margin: 0 auto;
+		display: block;
+	}
+	
 	.featuredInner {
 	  width: 100%;
 	  max-width: 80%;
@@ -37,12 +70,19 @@
 	  height: auto;
 	  //margin: 0 auto;
 	  display: block;
-
+		opacity: 0;
 	}
-
+	
+	.surfacepro {
+		height: 85%;
+		position: absolute;
+		left: 0;
+		top: 10%;
+	}
+	
 	.featuredText {
 		position: absolute;
-		width: 30%;
+		width: 50%;
 		padding: 40px 0 0 40px;
 		height: auto;
 		top: 0;
@@ -54,21 +94,34 @@
 			font-weight: 200;
 			font-size: 41px;
 			display: inline-block;
-			vertical-align: middle;
-		}
-		span {
-			font-size: 24px;
-			color: $accent-color;
-			border: 1px solid $accent-color;
-			vertical-align: middle;
-			padding: 3px;
-			display: inline-block;
-		}
-		p {
-			font-size: 13px;
-			padding: 10px 0;
+			
+			span {
+				color: $accent-color;
+				font-size: inherit;
+			}
 		}
 
+		span {
+			font-size: 18px;
+			display: block;
+			letter-spacing: 1px;
+		}
+		
+		.signup {
+			width: 50%;
+			margin: 0 auto;
+			font-size: 16px;
+			text-align: center;
+			padding: 15px 0;
+			display: block;
+			font-weight: bold;
+			margin-top: 20px;
+		}
+	}
+	
+	
+	.sponsor {
+		width: 65%;
 	}
 
 	.featured__stats {
@@ -94,18 +147,21 @@
 		color: $lgray;
 		display: block;
 		text-align: center;
-		padding: 10px 0;
-		font-size: 14px;
+		font-size: 24px;
 		position: relative;
+		padding: 10px 0;
+		
+		i { padding-right: 10px; }
 		&:before, &:after {
 			content: "";
 			border-top: 1px solid $lgray;
 			position: absolute;
 			top: 50%;
-			width: 40%;
+			width: 20%;
 		}
 		&:before { left: 0; }
 		&:after { right: 0; }
+
 	}
 
 	.featured-links__social {
