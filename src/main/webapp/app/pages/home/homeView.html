@@ -1,21 +1,19 @@
 <div class="homeView">
 	<div class="featured">
 		<div class="scanlines"></div>
+		<div class="herocode1-container"><div class="herocode herocode--1"></div></div>
+		<div class="herocode2-container"><div class="herocode herocode--2"></div></div>
 		<div class="inner">
 			<img src="../../../assets/img/featuredinner.png" class="featuredInner" />
-			<div class="featuredText" ng-hide="AuthService.user">
-				<h1>DevWars</h1>
-				<span>S2</span>
-				<p>Sign Up With:</p>
-				<div class="featured-links__social">
-					<i class="socialConnect fa fa-facebook" oauth provider="facebook"><a href="/v1/oauth/facebook"></a></i>
-					<i class="socialConnect fa fa-twitter" oauth provider="twitter"><a href="/v1/oauth/twitter"></a></i>
-					<i class="socialConnect fa fa-google-plus" oauth provider="google"><a href="/v1/oauth/google"></a></i>
-					<i class="socialConnect fa fa-twitch" oauth provider="twitch"><a href="/v1/oauth/twitch"></a></i>
-					<i class="socialConnect fa fa-github-alt" oauth provider="github"><a href="/v1/oauth/github"></a></i>
-				</div>
-				<div class="or-seperator">OR</div>
-				<div class="button signup" ng-click="DialogService.signup($event)">Sign Up With DevWars</div>
+			<img class="surfacepro" src="../../../assets/img/surfacepro.png" />
+						
+			<div class="featuredText">
+				<img class="logo--tournament" src="../../../assets/img/dwtournament.png" />
+				<div class="or-seperator"><i class="fa fa-trophy"></i>Win 3 Surface Pros!</div>
+				<span>Every Saturday, in November @ 5:30 (UTC)</span>
+				
+				<div class="button signup">Sign Up For Tournament</div>
+				<img class="sponsor" src="../../../assets/img/sponsor.png" />
 			</div>
 		</div>
 
