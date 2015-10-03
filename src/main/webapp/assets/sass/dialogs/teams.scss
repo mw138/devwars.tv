@@ -16,7 +16,7 @@
 	}
 
 	.button {
-		margin-left: 20px;
+		margin: 10px auto;
 		
 		&.button--disabled {
 			background-color: $dgray;
@@ -64,11 +64,6 @@
 		padding: 10px;
 	}
 	
-	.dialog-row__left, .dialog-row__right {
-		
-
-	}
-	
 	.dialog-row__left { width: 70%; }
 	.dialog-row__right { width: calc(30% - 20px); }
 	
@@ -90,6 +85,14 @@
 
 		input {
 			margin: 10px 0;
+		}
+	}
+
+
+	&.create-team {
+
+		.button {
+			margin-right: 20px;
 		}
 	}
 
