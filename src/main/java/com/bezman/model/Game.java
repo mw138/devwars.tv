@@ -45,6 +45,9 @@ public class Game extends BaseModel
     @HibernateDefault("2")
     private Integer season;
 
+    @HibernateDefault("0")
+    private Boolean tournament;
+
     public Team getTeamByID(int id)
     {
         for (Team team : this.getTeams().values())

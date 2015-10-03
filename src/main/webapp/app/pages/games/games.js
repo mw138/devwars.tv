@@ -9,7 +9,7 @@ angular.module("app.games", [])
                     controller: "GameController"
                 });
         }])
-    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", "$location", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location) {
+    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", "$location", "UserService", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location, UserService) {
         $scope.games = [];
         $scope.AuthService = AuthService;
 
@@ -133,7 +133,12 @@ angular.module("app.games", [])
         };
 
         $scope.signupForGame = function (game, $event) {
-            if (AuthService.user && AuthService.user.role !== "PENDING") {
+            if(game.tournament) {
+                $scope.applyMyTeamForGame(game, $event);
+                return;
+            };
+
+            if (AuthService.user && AuthService.user.role !== "PEDINNG") {
                 DialogService.applyForGame(game, $event);
             } else {
                 if(!AuthService.user) {
@@ -142,6 +147,32 @@ angular.module("app.games", [])
                     ToastService.showDevwarsErrorToast("fa-envelope-o", "Error", "Please confirm your email before applying for games.")
                 }
             }
+        };
+
+        $scope.applyMyTeamForGame = function (game, $event) {
+            if($scope.myTeam.owner.id !== AuthService.user.id) {
+                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must own the team to do that");
+                return;
+            };
+            
+            $mdDialog.show({
+                    templateUrl: "app/components/dialogs/confirmTeamSignupDialog/confirmTeamSignupDialogView.html",
+                    controller: "ConfirmTeamSignupDialogController",
+                    event: $event,
+
+                    locals: {
+                        game: game,
+                        team: $scope.myTeam
+                    }
+                })
+                .then(function (users) {
+                    GameService.http.signUpTeamForGame(game.id, JSON.stringify(users))
+                        .then(function (success) {
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Applied " + $scope.myTeam.name + " for game");
+                        }, function (error) {
+                            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
+                        });
+                }, angular.noop);
         };
 
         $scope.resignFromGame = function (game, $event) {
@@ -257,6 +288,11 @@ angular.module("app.games", [])
         GameService.nearestGame(function (success) {
             $scope.games.push(success.data);
         }, angular.noop);
+
+        UserService.http.getMyTeam()
+            .then(function (success) {
+                $scope.myTeam = success.data;
+            }, angular.noop);
 
         $scope.lastTimeClicked = new Date().getTime();
     }]);
