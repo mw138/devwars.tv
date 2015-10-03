@@ -58,15 +58,17 @@ import java.util.zip.ZipOutputStream;
 @RequestMapping(value = "/v1/game")
 public class GameController
 {
-    @Autowired @Qualifier("pastGamesLoadingCache")
+    @Autowired
+    @Qualifier("pastGamesLoadingCache")
     LoadingCache<String, HashMap> pastGamesCache;
 
     /**
      * Retrieved all games with criteria
+     *
      * @param request
      * @param response
-     * @param count Number of games wanted
-     * @param offset How many games to skip in DB
+     * @param count    Number of games wanted
+     * @param offset   How many games to skip in DB
      * @return
      */
     @RequestMapping(value = "/")
@@ -79,6 +81,7 @@ public class GameController
 
     /**
      * Retrieves upcoming DevWars games
+     *
      * @return
      */
     @UnitOfWork
@@ -102,6 +105,7 @@ public class GameController
 
     /**
      * Retrieves games that have been done in the past
+     *
      * @param queryCount
      * @param queryOffset
      * @return
@@ -121,6 +125,7 @@ public class GameController
 
     /**
      * Get list of games moving backwards from starting point
+     *
      * @return List of games in descending order
      */
     @UnitOfWork
@@ -141,8 +146,9 @@ public class GameController
 
     /**
      * Creates a game with the default information
+     *
      * @param timestamp The time in UTC which the game will start
-     * @param name Name of the game (Classic or Zen Garden)
+     * @param name      Name of the game (Classic or Zen Garden)
      * @return
      */
     @Transactional
@@ -152,7 +158,12 @@ public class GameController
     {
         Game game = GameService.defaultGame();
 
-        if(timestamp != 0)
+        if (name.equals("Tournament"))
+        {
+            game.setTournament(true);
+        }
+
+        if (timestamp != 0)
         {
             game.setTimestamp(new Timestamp(timestamp));
         }
@@ -169,9 +180,10 @@ public class GameController
 
     /**
      * Retrieves a game with a given ind
+     *
      * @param request
      * @param response
-     * @param id ID of the game to get
+     * @param id       ID of the game to get
      * @return
      */
     @RequestMapping("/{id}")
@@ -191,15 +203,17 @@ public class GameController
 
     /**
      * Edits a game with new information
+     *
      * @param request
      * @param response
-     * @param id The ID of the game to update
-     * @param json JSON to update the game with
+     * @param id       The ID of the game to update
+     * @param json     JSON to update the game with
      * @return
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/update", method =  RequestMethod.POST)
-    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException {
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException
+    {
         Session session = DatabaseManager.getSession();
 
         Game oldGame = GameService.getGame(id);
@@ -231,7 +245,7 @@ public class GameController
 
             session.close();
 
-            if(game.isActive())
+            if (game.isActive())
             {
                 Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
                         .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
@@ -246,6 +260,7 @@ public class GameController
 
     /**
      * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
+     *
      * @param id ID of game to activate
      * @return
      */
@@ -272,6 +287,7 @@ public class GameController
 
     /**
      * Sets the game to inactive
+     *
      * @param id ID of game to deactivate
      * @return
      */
@@ -295,9 +311,10 @@ public class GameController
 
     /**
      * Ends the game and wards winning team
+     *
      * @param request
      * @param response
-     * @param gameID ID of game to end
+     * @param gameID   ID of game to end
      * @param winnerID The ID of the winning team (Awards corresponding values)
      * @return
      */
@@ -305,7 +322,8 @@ public class GameController
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("id") int gameID,
-                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException {
+                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException
+    {
         ResponseEntity responseEntity = null;
 
         Game game = GameService.getGame(gameID);
@@ -321,7 +339,7 @@ public class GameController
                 game.setDone(true);
                 game.setActive(false);
 
-                for(Team otherTeam : game.getTeams().values())
+                for (Team otherTeam : game.getTeams().values())
                 {
                     otherTeam.setWin(false);
                 }
@@ -424,9 +442,10 @@ public class GameController
 
     /**
      * Deletes a game
+     *
      * @param request
      * @param response
-     * @param id ID of game to delete
+     * @param id       ID of game to delete
      * @return
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
@@ -449,6 +468,7 @@ public class GameController
 
     /**
      * Gets the current active game
+     *
      * @return The only  game which is active
      */
     @AllowCrossOrigin(from = "*")
@@ -468,6 +488,7 @@ public class GameController
 
     /**
      * Gets the most recently created game
+     *
      * @return The most recent game
      */
     @RequestMapping(value = "/latestgame")
@@ -486,6 +507,7 @@ public class GameController
 
     /**
      * Gets the game which is nearest to the current date in the future
+     *
      * @return The next game (Nearest Game)
      */
     @RequestMapping("/nearestgame")
@@ -504,6 +526,7 @@ public class GameController
 
     /**
      * Gets all signed up users for given game
+     *
      * @param id ID of game to get sign ups for
      * @return A list of players that have signed up for the game
      */
@@ -532,8 +555,9 @@ public class GameController
 
     /**
      * Removes a user from the game and penlizes them with some value
+     *
      * @param session
-     * @param player The player to remove
+     * @param player  The player to remove
      * @return
      */
     @Transactional
@@ -555,13 +579,14 @@ public class GameController
 
     /**
      * Signs a user up for a game
+     *
      * @param id ID of game to sign up for
      * @return Message
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
-    public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user,  @PathVariable("id") int id)
+    public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id)
     {
         Game game = (Game) session.get(Game.class, id);
 
@@ -581,7 +606,8 @@ public class GameController
                 session.save(activity);
 
                 return new ResponseEntity("Signed up user", HttpStatus.OK);
-            } else {
+            } else
+            {
                 return new ResponseEntity("You have already signed up for that game", HttpStatus.CONFLICT);
             }
         }
@@ -601,9 +627,11 @@ public class GameController
         if (ownedTeam == null)
             return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
 
+        if (users.length < 3)
+            return new ResponseEntity("You must choose at least three players", HttpStatus.BAD_REQUEST);
+
         boolean alreadySignedUp = game.getTeamGameSignups().stream()
-                .anyMatch(teamGameSignup ->
-                        teamGameSignup.getId() == ownedTeam.getId());
+                .anyMatch(signup -> signup.getUserTeam().getId() == ownedTeam.getId());
 
         if (alreadySignedUp)
             return new ResponseEntity("Your team has already signed up for this game", HttpStatus.CONFLICT);
@@ -617,23 +645,26 @@ public class GameController
 
     /**
      * Method to sign up a twitch user (Meant for chat command)
+     *
      * @param username Username of twitch user to apply
-     * @param id ID of game to apply user to
+     * @param id       ID of game to apply user to
      * @return Response Entity
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @Transactional
     @RequestMapping(value = "/{id}/signuptwitchuser", method = RequestMethod.POST)
-    public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id,  SessionImpl session)
+    public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id, SessionImpl session)
     {
         User theTwitchUser = UserService.userForTwitchUsername(username);
 
-        if (theTwitchUser != null) {
-            User twitchUser  = (User) session.merge(theTwitchUser);
+        if (theTwitchUser != null)
+        {
+            User twitchUser = (User) session.merge(theTwitchUser);
 
             Game game = (Game) session.get(Game.class, id);
 
-            if (game == null) {
+            if (game == null)
+            {
                 return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
             }
 
@@ -654,7 +685,8 @@ public class GameController
                 return new ResponseEntity("Successfully signed up " + twitchUser.getUsername(), HttpStatus.OK);
             } else return new ResponseEntity("You are already signed up for that game.", HttpStatus.CONFLICT);
 
-        } else return new ResponseEntity("Twitch user not found. Please connect your twitch account with your DevWars account.", HttpStatus.NOT_FOUND);
+        } else
+            return new ResponseEntity("Twitch user not found. Please connect your twitch account with your DevWars account.", HttpStatus.NOT_FOUND);
     }
 
     @Transactional
@@ -680,11 +712,12 @@ public class GameController
 
     /**
      * Adds votes to a team for voting part of game
-     * @param id ID of game
+     *
+     * @param id     ID of game
      * @param teamID ID of team
-     * @param func How many to add on the functionality vote
+     * @param func   How many to add on the functionality vote
      * @param design How many to add on the design vote
-     * @param code How many to add on the code vote
+     * @param code   How many to add on the code vote
      * @return
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
@@ -726,12 +759,13 @@ public class GameController
 
     /**
      * Adds points to every player in a team
+     *
      * @param request
      * @param response
-     * @param id ID of game
-     * @param teamID ID of team
-     * @param points How many points to add to each player
-     * @param xp How much xp to add to each player
+     * @param id       ID of game
+     * @param teamID   ID of team
+     * @param points   How many points to add to each player
+     * @param xp       How much xp to add to each player
      * @return
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
@@ -791,15 +825,17 @@ public class GameController
 
     /**
      * Edits a players information
+     *
      * @param request
      * @param response
      * @param playerID ID of player to update
-     * @param json JSON of new information
+     * @param json     JSON of new information
      * @return
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/player/{playerID}/edit")
-    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json) throws IOException {
+    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json) throws IOException
+    {
         Team team = new Team();
         team.setId(teamID);
         Player player = Reference.objectMapper.readValue(json, Player.class);
@@ -837,6 +873,7 @@ public class GameController
 
     /**
      * Pulls the Cloud Nine website and stores it in a folder with appropiate game name
+     *
      * @param id ID of game to correspond save to
      * @return
      * @throws UnirestException
@@ -862,17 +899,20 @@ public class GameController
 
     /**
      * Method to pull the Cloud Nine website for a specific game
-     * @param id The ID of the games websites you would like to pull
+     *
+     * @param id       The ID of the games websites you would like to pull
      * @param response
      * @throws IOException
      */
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/sitearchive")
-    public void siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
+    public void siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException
+    {
 
         Game game = GameService.getGame(id);
 
-        if(game != null) {
+        if (game != null)
+        {
             SimpleDateFormat gameFormat = new SimpleDateFormat("yyyy-mm-dd");
 
             response.setHeader("Content-Disposition", "attachment; filename=\"" + gameFormat.format(game.getTimestamp()) + "_" + game.getName() + ".zip" + "\"");

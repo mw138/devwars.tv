@@ -5,7 +5,9 @@
 
         <hibernate-mapping>
     <class name="com.bezman.model.TeamGameSignup" table="team_signups">
-        <id name="id"></id>
+        <id name="id">
+            <generator class="increment"/>
+        </id>
 
         <many-to-one name="game" class="com.bezman.model.Game"/>
 

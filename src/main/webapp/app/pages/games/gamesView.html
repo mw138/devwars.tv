@@ -12,7 +12,7 @@
 
                 <div class="gameListColumn__container" ng-scroll-bottom="loadMore()" ng-no-scroll-other>
 
-                    <div class="game game--disabled" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
+                    <div class="game game--disabled" ng-class="{'tournament' : upcomingGame.tournament}" ng-if="$index < 2" ng-repeat="upcomingGame in upcomingGames">
                         <div class="gameDate">
                             <span>{{upcomingGame.timestamp | date : 'MMM' : 'UTC'}}</span>
                             <span>{{upcomingGame.timestamp | date : 'dd' : 'UTC'}}</span>
@@ -29,7 +29,7 @@
                         </div>
                     </div> <!-- .game -->
 
-                    <div class="game" ng-click="setSelectedGame(game)" ng-class="{'game--active' : isGameSelected(game)}" ng-repeat="game in pastGames" ng-if="shouldGameShow(game)">
+                    <div class="game" ng-click="setSelectedGame(game)" ng-class="{'game--active' : isGameSelected(game), 'tournament' : game.tournament}" ng-repeat="game in pastGames" ng-if="shouldGameShow(game)">
                         <div class="gameDate">
                             <span class="gameDate__month">{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
                             <span class="gameDate__day">{{game.timestamp | date : 'dd' : 'UTC'}}</span>
