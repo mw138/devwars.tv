@@ -30,6 +30,6 @@
 
     <div class="dialog-container__actions">
         <button class="button" ng-class="{'button--disabled' : selectedPlayers.length < 3}" ng-click="confirmSignUp()">Confirm</button>
-        <button class="button button--warn" ng-click="cancelSignUp()">Cancel</button>
+        <button class="button button--warn" ng-click="$mdDialog.cancel()">Cancel</button>
     </div>
 </md-dialog>

@@ -112,6 +112,7 @@
           span:nth-child(2) {
             font-weight: 500;
             color: $devbit-color;
+            font-family: $fontawesome;
             
             &:before {
               content: "\f091";
