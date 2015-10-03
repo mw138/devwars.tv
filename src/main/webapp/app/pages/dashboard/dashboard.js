@@ -8,7 +8,18 @@ angular.module("app.dashboard", [])
                     abstract: true,
 
                     templateUrl: '/app/pages/dashboard/dashboardView.html',
-                    controller: "DashboardController"
+                    controller: "DashboardController",
+
+                    resolve: {
+                        myBadges: ['UserService', function (UserService) {
+                            return UserService.http.getBadges();
+                        }],
+
+                        'activity': ['UserService', function (UserService) {
+                            return UserService.http.getActivities();
+                        }]
+                    }
+
                 })
                 .state('dashboard.home', {
                     url: '',
@@ -78,17 +89,12 @@ angular.module("app.dashboard", [])
                     }
                 });
         }])
-    .controller("DashboardController", ["$scope", "AuthService", "UserService", function ($scope, AuthService, UserService) {
+    .controller("DashboardController", ["$scope", "AuthService", "UserService", "myBadges", "activity", function ($scope, AuthService, UserService, myBadges, activity) {
         $scope.AuthService = AuthService;
+        $scope.myBadges = myBadges.data;
+        $scope.activities = activity.data;
 
         $scope.onLoad = function () {
-            UserService.getActivities(function (success) {
-                AuthService.user.activityLog = success.data;
-            }, angular.noop);
-
-            UserService.getBadges(function (success) {
-                AuthService.user.badges = success.data;
-            }, angular.noop);
         };
 
         if(!AuthService.user) {

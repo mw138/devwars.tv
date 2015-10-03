@@ -5,7 +5,7 @@
             <h4>Badge Statistics</h4>
         </div>
         <div class="innerLineHeight">
-            <p class="profile-badges__total">{{ AuthService.user.badges.length }}</p>
+            <p class="profile-badges__total">{{ myBadges.length }}</p>
             <a href="/#/dashboard/badges" class="profile-view-button">View Badges</a>
 
             <div class="row--flexbox xp--row">
@@ -13,7 +13,7 @@
                     <span>BADGES</span>
                 </div> <!-- .statBox -->
                 <div class="statBox">
-                    <span>{{ AuthService.user.badges.length || 0 }}/28</span>
+                    <span>{{ myBadges.length || 0 }}/28</span>
                 </div> <!-- .statBox -->
             </div> <!-- .row--flexbox -->
             <div class="bar">
@@ -80,7 +80,7 @@
         </div> <!-- .profile__header -->
 
         <ul class="activityList">
-            <li ng-repeat="activity in AuthService.user.activityLog">
+            <li ng-repeat="activity in activities">
                 <div class="activityDate">{{activity.timestamp | date : 'mediumDate' : 'UTC'}}</div>
                 <div class="activityTitle">{{activity.description}}</div>
                 <div class="activityReward">
