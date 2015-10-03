@@ -104,6 +104,23 @@
         color: $black;
         .gameDate { border-color: $black; }
       }
+
+      &.tournament {
+
+        .gameName {
+
+          span:nth-child(2) {
+            font-weight: 500;
+            color: $devbit-color;
+            
+            &:before {
+              content: "\f091";
+              margin: 0 10px 0 0;
+            }
+          }
+        }
+
+      }
 		
 		&:last-of-type {
 			margin-bottom: 0;
