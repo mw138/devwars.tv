@@ -55,6 +55,16 @@ angular.module("app.dashboard", [])
 
                     auth: true,
 
+                    resolve: {
+                        'myBadges': ['UserService', function (UserService) {
+                            return UserService.http.getBadges();
+                        }],
+
+                        'allBadges': ['BadgeService', function (BadgeService) {
+                            return BadgeService.http.getAll();
+                        }]
+                    },
+
                     views: {
                         '' : {
                             templateUrl: '/app/pages/dashboard/dashboardView.html',

@@ -9,19 +9,21 @@ angular.module("app.badges", [])
                 });
 
         }])
-    .controller("BadgesController", ["$scope", "$http", "BadgeService", "AuthService", function ($scope, $http, BadgeService, AuthService) {
+    .controller("BadgesController", ["$scope", "$http", "BadgeService", "AuthService", "myBadges", "allBadges", function ($scope, $http, BadgeService, AuthService, myBadges, allBadges) {
+
+        $scope.myBadges = myBadges.data;
+        $scope.badges = allBadges.data.badges;
+        $scope.userCount = allBadges.data.userCount;
 
         $scope.imageNameFromName = function (name) {
             return name.toLowerCase().replace(/\s+/g, "-");
         };
 
         $scope.userHasBadge = function (badge) {
-            if(AuthService.user) {
-                for(var badgeKey in AuthService.user.badges) {
-                    var currentBadge = AuthService.user.badges[badgeKey];
+            for(var badgeKey in $scope.myBadges) {
+                var currentBadge = $scope.myBadges[badgeKey];
 
-                    if(badge.id === currentBadge.id) return true;
-                }
+                if(badge.id == currentBadge.id) return true;
             }
 
             return false;
@@ -36,11 +38,6 @@ angular.module("app.badges", [])
 
             return null;
         };
-
-        BadgeService.getAll(function (success) {
-            $scope.badges = success.data.badges;
-            $scope.userCount = success.data.userCount;
-        }, angular.noop);
 
         $scope.badgePercentCalculators = {
             "Authentic" : function () {
