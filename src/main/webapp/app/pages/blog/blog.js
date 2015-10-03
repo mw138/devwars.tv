@@ -14,7 +14,7 @@ angular.module("app.blogList", [])
                     }
                 });
         }])
-    .controller("BlogController", ['$scope', 'BlogService', '$mdDialog', 'ToastService', 'AuthService', '$anchorScroll', '$sce', 'posts', function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce, posts) {
+    .controller("BlogController", ['$scope', 'BlogService', '$mdDialog', 'ToastService', 'AuthService', '$anchorScroll', '$sce', 'posts', "$stateParams", function ($scope, BlogService, $mdDialog, ToastService, AuthService, $anchorScroll, $sce, posts, $stateParams) {
         $scope.posts = posts.data;
 
         $scope.AuthService = AuthService;
