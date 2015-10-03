@@ -25,7 +25,7 @@ angular.module('app.ngSignupTournament', [])
                             }
                         })
                         .then(function (users) {
-                            GameService.http.signUpTeamForGame(game.id, JSON.stringify(users))
+                            GameService.http.signUpTeamForGame($scope.game.id, JSON.stringify(users))
                                 .then(function (success) {
                                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Applied " + $scope.myTeam.name + " for game");
                                 }, function (error) {
@@ -35,4 +35,4 @@ angular.module('app.ngSignupTournament', [])
                 });
             }
         }
-    })
+    });
