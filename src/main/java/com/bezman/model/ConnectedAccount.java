@@ -17,6 +17,16 @@ public class ConnectedAccount extends BaseModel
 
     private Boolean disconnected;
 
+    public ConnectedAccount(){}
+
+    public ConnectedAccount(User user, String provider, String username)
+    {
+        this.user = user;
+        this.provider = provider;
+        this.username = username;
+        this.disconnected = false;
+    }
+
     public int getId()
     {
         return id;

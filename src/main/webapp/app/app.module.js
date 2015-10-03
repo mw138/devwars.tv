@@ -53,6 +53,7 @@ var app = angular.module('app', [
     'app.blogDirective',
     'app.scroll-bottom',
     'app.no-scroll-other',
+    'app.addGame',
 
     //dependencies
     'ngCookies',
@@ -66,7 +67,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
-    if(false) {
+    if(true) {
         $httpProvider.interceptors.push(function () {
 
             var Interceptor = {};
@@ -123,6 +124,15 @@ app.filter("players", function () {
         return data;
     })
 });
+
+app.filter('camel', function () {
+    return function (data) {
+        var result = data.replace( /([A-Z])/g, " $1" );
+        var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+
+        return finalResult;
+    }
+})
 
 app.run(function ($rootScope, $location, AuthService) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {

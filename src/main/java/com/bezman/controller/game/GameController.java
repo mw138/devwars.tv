@@ -10,6 +10,7 @@ import com.bezman.model.*;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
+import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Criteria;
@@ -23,6 +24,9 @@ import org.hibernate.internal.SessionImpl;
 import org.hibernate.sql.Select;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,6 +34,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
+import sun.misc.Cache;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +44,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +58,9 @@ import java.util.zip.ZipOutputStream;
 @RequestMapping(value = "/v1/game")
 public class GameController
 {
+    @Autowired @Qualifier("pastGamesLoadingCache")
+    LoadingCache<String, HashMap> pastGamesCache;
+
     /**
      * Retrieved all games with criteria
      * @param request
@@ -102,43 +112,11 @@ public class GameController
             SessionImpl session,
             @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
             @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
-    )
+    ) throws ExecutionException
     {
-        /**
-         * Make sure count isn't too high
-         */
-        final Integer count = queryCount > 8 ? 8 : queryCount;
+        HashMap games = (HashMap) pastGamesCache.get(queryCount + ":" + queryOffset);
 
-        /**
-         * Get all seasons
-         */
-        Criteria criteria = session.createCriteria(Game.class)
-                .setProjection(Projections.projectionList()
-                                .add(Projections.groupProperty("season"))
-                );
-
-        HashMap pastGames = new HashMap<>();
-
-        criteria.list().stream()
-                .forEach(season ->
-                {
-                    Criteria seasonCriteria = session.createCriteria(Game.class)
-                            .add(Restrictions.eq("season", season))
-                            .add(Restrictions.eq("done", true))
-                            .addOrder(Order.desc("id"))
-                            .setMaxResults(count)
-                            .setFirstResult(queryOffset);
-
-                    pastGames.put(season, seasonCriteria.list());
-                });
-
-        if (pastGames != null || (pastGames != null && pastGames.size() > 0))
-        {
-            return new ResponseEntity(pastGames, HttpStatus.OK);
-        } else
-        {
-            return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity(games, HttpStatus.OK);
     }
 
     /**
@@ -255,7 +233,6 @@ public class GameController
 
             if(game.isActive())
             {
-                System.out.println(Reference.objectMapper.writeValueAsString(game));
                 Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
                         .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
                         .body(Reference.objectMapper.writeValueAsString(game))
@@ -414,7 +391,7 @@ public class GameController
             session.close();
         }
 
-
+        pastGamesCache.invalidateAll();
 
         return responseEntity;
     }

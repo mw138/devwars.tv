@@ -335,8 +335,19 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.3.2.Final</version>
+        </dependency>
 
-        <!-- SFTP Connection via JSch -->
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+       <!-- SFTP Connection via JSch -->
 		<!-- dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>

@@ -4,24 +4,25 @@ import com.bezman.Reference.DevBits;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
+import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.annotation.Transactional;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
+import com.bezman.model.User;
 import com.bezman.oauth.*;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.User;
+import twitter4j.*;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Optional;
 
 /**
  * Created by root on 4/25/15.
@@ -38,6 +40,27 @@ import java.util.Enumeration;
 @RequestMapping("/v1/connect")
 public class UserConnectionController
 {
+
+    @PreAuthorization(minRole = com.bezman.model.User.Role.USER)
+    @RequestMapping("/testtwitch")
+    @Transactional
+    public ResponseEntity testConnectTwitchUser(SessionImpl session, @RequestParam("username") String username, @AuthedUser User currentUser)
+    {
+        TwitchPointStorage twitchPointStorage = (TwitchPointStorage) session.createQuery("from TwitchPointStorage s where s.username = :username")
+                .setString("username", username)
+                .setMaxResults(1)
+                .uniqueResult();
+
+        if (twitchPointStorage != null)
+        {
+            currentUser.getRanking().addXP(twitchPointStorage.getXp());
+            currentUser.getRanking().addPoints(twitchPointStorage.getPoints());
+
+            session.delete(twitchPointStorage);
+            session.merge(currentUser);
+        }
+        return new ResponseEntity(twitchPointStorage, HttpStatus.OK);
+    }
 
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
     @RequestMapping("/{provider}/disconnect")
@@ -205,7 +228,7 @@ public class UserConnectionController
         Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
         twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
 
-        User twitterUser = twitter.showUser(twitter.getId());
+        twitter4j.User twitterUser = twitter.showUser(twitter.getId());
         com.bezman.model.User user = TwitterProvider.userForTwitterUser(twitterUser);
 
         com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
@@ -258,64 +281,44 @@ public class UserConnectionController
         return null;
     }
 
+    @Transactional
     @RequestMapping("/twitch_callback")
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity twitchCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws IOException
+    public ResponseEntity twitchCallback(SessionImpl session, @AuthedUser User user, HttpServletResponse response, @RequestParam("code") String code) throws IOException
     {
+        User twitchUser = TwitchProvider.userForCode2(code);
+        User veteranUser = UserService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
-        com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
+        boolean alreadyConnected = user.getConnectedAccounts().stream()
+                .anyMatch(account -> account.getDisconnected() == false && "TWITCH".equals(account.getProvider()));
 
-        com.bezman.model.User user = TwitchProvider.userForCode2(code);
-        boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "TWITCH", currentUser);
-
-        if (user != null && !connectedAccountExists)
+        if(alreadyConnected)
         {
-            Session session = DatabaseManager.getSession();
-
-            Query pointsQuery = session.createQuery("from TwitchPointStorage s where s.username = :username");
-            pointsQuery.setString("username", user.getUsername());
-
-            TwitchPointStorage twitchPointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(pointsQuery);
-
-            session.close();
-
-            if (twitchPointStorage != null)
-            {
-                Ranking ranking = currentUser.getRanking() == null ? new Ranking() : currentUser.getRanking();
-
-                ranking.setXp((double) twitchPointStorage.getXp() + ranking.getXp());
-                ranking.setPoints((double) twitchPointStorage.getPoints() + ranking.getPoints());
-                ranking.setId(currentUser.getId());
-
-                DatabaseUtil.saveOrUpdateObjects(false, ranking);
-            }
-
-            Activity activity = new Activity(currentUser, currentUser, "Connected your Twitch account", DevBits.ACCOUNT_CONNECTION, 0);
-
-            currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
-            DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
-            DatabaseUtil.saveObjects(true, connectedAccountForUser(user, currentUser, "TWITCH"), activity);
-
-            if(twitchPointStorage != null) DatabaseUtil.deleteObjects(twitchPointStorage);
-        }  else
-        {
-            Session session = DatabaseManager.getSession();
-            Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
-            query.setString("provider", "TWITCH");
-            query.setParameter("user", currentUser);
-            query.setString("username", user.getUsername().substring(0, user.getUsername().length() - 4));
-
-            query.executeUpdate();
-
-            session.close();
-
-            DatabaseUtil.saveObjects(false, new Activity(currentUser, currentUser, "Connected your Twitch account", 0, 0));
+            return new ResponseEntity("Already Connected", HttpStatus.CONFLICT);
         }
 
-        System.out.println("Cut: " + user.getUsername().substring(0, user.getUsername().length() - 4));
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
+                .filter(account ->
+                        "TWITCH".equals(account.getProvider()) && account.getDisconnected() == true)
+                .findFirst();
 
-        com.bezman.model.User veteranUser = UserService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
+        if (connectedAccount.isPresent())
+        {
+            connectedAccount.get().setUsername(twitchUser.getUsername().substring(0, twitchUser.getUsername().length() - 4));
+            connectedAccount.get().setDisconnected(false);
 
+            session.merge(connectedAccount.get());
+        } else
+        {
+            ConnectedAccount newConnection = new ConnectedAccount(user, "TWITCH", twitchUser.getUsername().substring(0, twitchUser.getUsername().length() - 4));
+            user.getConnectedAccounts().add(newConnection);
+
+            session.save(newConnection);
+        }
+
+        UserService.addTwitchPointsToUser(user);
+
+        session.merge(user);
 
         if (veteranUser != null && veteranUser.getVeteran())
         {

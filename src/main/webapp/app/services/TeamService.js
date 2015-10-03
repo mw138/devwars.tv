@@ -1,6 +1,7 @@
 angular.module('app.TeamService', [])
    .factory('TeamService', ['$http', function($http){
  var TeamService = {};
+TeamService.http = {};
 
 /*
 Required Role : ADMIN
@@ -21,5 +22,10 @@ errorCallback(error)
 
 };
 
-return TeamService;
+TeamService.http.uploadSite = function(id, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/team/' + id + '/upload',
+data: {}
+})};return TeamService;
 }]);
