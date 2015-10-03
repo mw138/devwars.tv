@@ -294,7 +294,7 @@ public class UserTeamController
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
-        if (userTeam.getMembers().size() >= 5)
+        if (userTeam.getMembers().size() >= 3)
             return new ResponseEntity("This team has too many players", HttpStatus.CONFLICT);
 
         if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
