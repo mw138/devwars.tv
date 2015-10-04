@@ -97,10 +97,6 @@ angular.module("app.dashboard", [])
         $scope.onLoad = function () {
         };
 
-        if(!AuthService.user) {
-            AuthService.callbacks.push($scope.onLoad);
-        } else $scope.onLoad();
-
         $scope.imageForRank = function (rank) {
             var mapping = {
                 'Bronze I': "bronze1",
