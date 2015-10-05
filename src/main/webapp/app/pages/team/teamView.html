@@ -52,7 +52,8 @@
 						<!--<a href="" class="player offline" ng-repeat="member in team.members">{{ member.username }}</a>-->
 					<!--</div>-->
 					<div class="roster-players" ng-class="{'editable' : editingRoster}">
-						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-click="removePlayer(member, $index, $event)">{{ member.username }}</a>
+                        <a href="" class="player offline" ng-click="removePlayer(team.owner, $index, $event)">{{ team.owner.username }}</a>
+						<a href="" class="player offline" ng-repeat="member in team.members track by $index" ng-hide="team.owner.id == member.id" ng-click="removePlayer(member, $index, $event)">{{ member.username }}</a>
 					</div>
 				</div>
 
