@@ -77,16 +77,16 @@ angular.module("app.team", [])
 
         $scope.joinTeam = function (team) {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
-                controller: "ConfirmDialogController",
+                    templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                    controller: "ConfirmDialogController",
 
-                locals: {
-                    title: "Team",
-                    message: "Invitation to join " + team.name,
-                    yes: "Accept",
-                    no: "Decline"
-                }
-            })
+                    locals: {
+                        title: "Team",
+                        message: "Invitation to join " + team.name,
+                        yes: "Accept",
+                        no: "Decline"
+                    }
+                })
                 .then(function () {
                     console.log("accept");
                     UserTeamService.http.acceptInvite(team.id)
@@ -111,9 +111,9 @@ angular.module("app.team", [])
             }
 
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
-                controller: "CreateTeamDialogController"
-            })
+                    templateUrl: "app/components/dialogs/createTeamDialog/createTeamDialogView.html",
+                    controller: "CreateTeamDialogController"
+                })
                 .then(function (team) {
                     console.log(team);
                     var fd = new FormData();
@@ -123,10 +123,10 @@ angular.module("app.team", [])
                     fd.append('tag', team.tag);
 
                     $http.post("/v1/teams/create", fd, {
-                        withCredentials: true,
-                        headers: {'Content-Type': undefined},
-                        transformRequest: angular.identity
-                    })
+                            withCredentials: true,
+                            headers: {'Content-Type': undefined},
+                            transformRequest: angular.identity
+                        })
                         .then(function (success) {
                             $scope.team = success.data;
 
@@ -148,9 +148,9 @@ angular.module("app.team", [])
 
         $scope.invitePlayer = function () {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/invitePlayerDialog/invitePlayerDialogView.html",
-                controller: "InvitePlayerDialogController"
-            })
+                    templateUrl: "app/components/dialogs/invitePlayerDialog/invitePlayerDialogView.html",
+                    controller: "InvitePlayerDialogController"
+                })
                 .then(function (player) {
                     console.log("player invite:", player);
                     UserTeamService.http.invitePlayer($scope.team.id, player.id)
@@ -166,16 +166,16 @@ angular.module("app.team", [])
 
         $scope.leaveTeam = function (team) {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
-                controller: "ConfirmDialogController",
+                    templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                    controller: "ConfirmDialogController",
 
-                locals: {
-                    title: "Team",
-                    message: "Leave " + team.name,
-                    yes: "Yes",
-                    no: "No"
-                }
-            })
+                    locals: {
+                        title: "Team",
+                        message: "Leave " + team.name,
+                        yes: "Yes",
+                        no: "No"
+                    }
+                })
                 .then(function () {
                     UserTeamService.http.leaveTeam(team.id)
                         .then(function (success) {
@@ -189,13 +189,13 @@ angular.module("app.team", [])
 
         $scope.disbandTeam = function () {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/disbandTeamDialog/disbandTeamDialogView.html",
-                controller: "DisbandTeamDialogController",
+                    templateUrl: "app/components/dialogs/disbandTeamDialog/disbandTeamDialogView.html",
+                    controller: "DisbandTeamDialogController",
 
-                locals: {
-                    team: $scope.team
-                }
-            })
+                    locals: {
+                        team: $scope.team
+                    }
+                })
                 .then(function (response) {
                     if (response.action === 'disband')
                         UserTeamService.http.deleteTeam(response.id, response.name)
@@ -222,13 +222,13 @@ angular.module("app.team", [])
 
         $scope.showTeamInvites = function () {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/teamInviteDialog/teamInviteDialogView.html",
-                controller: "TeamInviteDialogController",
+                    templateUrl: "app/components/dialogs/teamInviteDialog/teamInviteDialogView.html",
+                    controller: "TeamInviteDialogController",
 
-                locals: {
-                    invites: $scope.invites
-                }
-            })
+                    locals: {
+                        invites: $scope.invites
+                    }
+                })
                 .then(function (invite) {
                     UserTeamService.http.acceptInvite(invite.team.id)
                         .then(function (success) {
@@ -236,6 +236,11 @@ angular.module("app.team", [])
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Joined Team");
                         }, angular.noop)
                 }, angular.noop);
+        };
+
+        $scope.clickAvatarImage = function () {
+            if($scope.isOwner)
+                document.getElementById('fileInput').click();
         };
 
         $scope.$watch('chosenImage', function (newVal, oldVal) {
@@ -246,10 +251,10 @@ angular.module("app.team", [])
                         fd.append("image", image.blob);
 
                         $http.post('/v1/teams/' + $scope.team.id + '/avatar', fd, {
-                            withCredentials: true,
-                            headers: {'Content-Type': undefined},
-                            transformRequest: angular.identity
-                        })
+                                withCredentials: true,
+                                headers: {'Content-Type': undefined},
+                                transformRequest: angular.identity
+                            })
                             .then(function (success) {
                                 location.reload();
                             }, angular.noop);
