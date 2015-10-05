@@ -9,5 +9,5 @@
     </select>
 
 
-    <a href="" class="button" ng-click="invitePlayer(selectedPlayer)">Invite {{ selectedPlayer.username }}</a>
+    <a href="" class="button" ng-class="{'button--disabled': !selectedPlayer}" ng-click="invitePlayer(selectedPlayer)">Invite {{ selectedPlayer.username }}</a>
 </md-dialog>

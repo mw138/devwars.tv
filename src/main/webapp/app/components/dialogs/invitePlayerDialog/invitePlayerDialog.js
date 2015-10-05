@@ -5,7 +5,7 @@ angular.module("app.invitePlayerDialog", [])
         console.log("invitePlayer");
 
         $scope.userInput = '';
-        $scope.selectedPlayer = '';
+        $scope.selectedPlayer = null;
         $scope.results = [];
 
         $scope.searchUser = function () {
