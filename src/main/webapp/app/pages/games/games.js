@@ -47,11 +47,11 @@ angular.module("app.games", [])
                         newPlayers.push(player);
                     });
 
-                    team.players.filter(function(player) { return player.language.toLowerCase() === "js"}).forEach(function (player) {
+                    team.players.filter(function(player) { return player.language.toLowerCase() === "css"}).forEach(function (player) {
                         newPlayers.push(player);
                     });
 
-                    team.players.filter(function(player) { return player.language.toLowerCase() === "css"}).forEach(function (player) {
+                    team.players.filter(function(player) { return player.language.toLowerCase() === "js"}).forEach(function (player) {
                         newPlayers.push(player);
                     });
 
