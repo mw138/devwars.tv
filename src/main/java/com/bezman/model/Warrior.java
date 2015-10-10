@@ -59,7 +59,6 @@ public class Warrior extends BaseModel
     @JsonIgnore
     private User user;
 
-    @PreFlushHibernateDefault
     private Date updatedAt;
 
     public Warrior(String firstName, String favFood, String favTool, String about, String c9Name, String company, String location, Integer htmlRate, Integer cssRate, Integer jsRate, Date dob, int id)

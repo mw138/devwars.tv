@@ -111,8 +111,6 @@ public class WarriorController
             return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(Reference.objectMapper.writeValueAsString(errors.getAllErrors()));
-
         if(user.getWarrior() == null) return new ResponseEntity("You are not a warrior", HttpStatus.CONFLICT);
 
         user = (User) session.merge(user);
