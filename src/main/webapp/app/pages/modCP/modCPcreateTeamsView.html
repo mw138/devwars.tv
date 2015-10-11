@@ -8,7 +8,7 @@
                 <span class="username">USERNAME</span>
                 <span class="cloud9">CLOUD9</span>
             </div> <!-- .leaderRow.leaderRow--header -->
-            <div class="leaderRow" ng-repeat="player in selectedGame.teams.red.players" ng-click="removePlayer(player)">
+            <div class="leaderRow" ng-repeat="player in selectedGame.teams.red.players" ng-click="removePlayer(player, selectedGame.teams.red)">
                 <span class="position">{{ player.language }}</span>
                 <span class="username">{{ player.user.username }}</span>
                 <span class="cloud9">{{ player.user.warrior.c9Name }}</span>
@@ -21,7 +21,7 @@
                 <span class="username">USERNAME</span>
                 <span class="cloud9">CLOUD9</span>
             </div> <!-- .leaderRow.leaderRow--header -->
-            <div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players" ng-click="removePlayer(player)">
+            <div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players" ng-click="removePlayer(player, selectedGame.teams.blue)">
                 <span class="position">{{ player.language }}</span>
                 <span class="username">{{ player.user.username }}</span>
                 <span class="cloud9">{{ player.user.warrior.c9Name }}</span>

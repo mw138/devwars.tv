@@ -84,6 +84,11 @@ public class WarriorController
             user.setEmail(email);
         }
 
+        if (month < 1)
+        {
+            return new ResponseEntity("Invalid DOB", HttpStatus.CONFLICT);
+        }
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, day);
 

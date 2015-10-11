@@ -169,8 +169,8 @@ angular.module('app.modCP', [
                 }
             })
                 .then(function (success) {
-                    PlayerService.addPlayer(success.team.id, success.language, JSON.stringify(player), function (success) {
-                        $scope.updateSelectedGame();
+                    PlayerService.addPlayer(success.team.id, success.language, JSON.stringify(player), function (playerSuccess) {
+                        success.team.players.push(playerSuccess.data);
                     }, function () {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not add player");
                     });
@@ -185,9 +185,10 @@ angular.module('app.modCP', [
             })
         };
 
-        $scope.removePlayer = function (player) {
+        $scope.removePlayer = function (player, team) {
             PlayerService.removePlayer(player.id, function () {
-                $scope.updateSelectedGame();
+                console.log(team);
+                team.players.splice(team.players.indexOf(player), 1);
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Removed " + player.user.username);
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamtion-circle", "Error", "Could not remove player");
@@ -239,7 +240,7 @@ angular.module('app.modCP', [
             GameService.activateGame(game.id, function (success) {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Activated Game");
 
-                $scope.updateSelectedGame();
+                game.active = true;
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle",  "Error", "Could not activate game");
             })
@@ -249,7 +250,7 @@ angular.module('app.modCP', [
             GameService.deactivateGame(game.id, function (success) {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Deactivated Game");
 
-                $scope.updateSelectedGame();
+                game.active = false;
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle",  "Error", "Could not deactivate game");
             })
