@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -141,6 +142,7 @@ public class UserTeamController
                                      @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException
     {
         user = (User) session.merge(user);
+
 
         if (UserTeamService.doesUserBelongToTeam(user))
             return new ResponseEntity("You already belong to a team", HttpStatus.CONFLICT);
@@ -325,7 +327,7 @@ public class UserTeamController
      * Accept an invite to a team
      * @param teamID ID of the team to accept invite from
      * @param session (Resolved)
-     * @param user (Resolved)
+     * @param authedUser (Resolved)
      * @return Message
      */
     @Transactional

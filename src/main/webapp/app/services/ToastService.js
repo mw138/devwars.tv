@@ -18,7 +18,7 @@ angular.module("app.toastService", [])
 
                 delay: delay ? delay : 3000
             });
-        }
+        };
 
         ToastService.showDevwarsErrorToast = function (icon, title, message, delay) {
             return $mdToast.show({
@@ -33,6 +33,10 @@ angular.module("app.toastService", [])
 
                 delay: delay ? delay : 3000
             });
+        };
+
+        ToastService.showError = function (error, delay) {
+            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error, delay);
         };
 
         ToastService.showErrorList = function (errors) {

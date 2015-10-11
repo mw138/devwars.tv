@@ -104,10 +104,10 @@ angular.module("app.warriorReg", [])
         $scope.update = function (warrior) {
             warrior.dob = new Date(warrior.year, warrior.month - 1, warrior.day).getTime();
 
-            WarriorService.updateWarrior(JSON.stringify(warrior), function (success) {
+            WarriorService.updateWarrior(JSON.stringify(warrior), function () {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Updated Warrior");
             }, function (error) {
-                ToastService.showErrorList(error.data);
+                ToastService.showError(error.data);
             });
         };
 
