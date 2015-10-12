@@ -187,13 +187,11 @@ public class GameController
     /**
      * Retrieves a game with a given ind
      *
-     * @param request
-     * @param response
-     * @param id       ID of the game to get
-     * @return
+     * @param id ID of the game to get
+     * @return The Game
      */
     @RequestMapping("/{id}")
-    public ResponseEntity getGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
+    public ResponseEntity getGame(@PathVariable("id") int id)
     {
         Game game = GameService.getGame(id);
 
@@ -210,15 +208,13 @@ public class GameController
     /**
      * Edits a game with new information
      *
-     * @param request
-     * @param response
      * @param id       The ID of the game to update
      * @param json     JSON to update the game with
-     * @return
+     * @return The updated Game
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public ResponseEntity editGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException
+    public ResponseEntity editGame(@PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException
     {
         Session session = DatabaseManager.getSession();
 
@@ -260,7 +256,7 @@ public class GameController
                         .getBody();
             }
 
-            return getGame(request, response, id);
+            return getGame(id);
         }
     }
 
