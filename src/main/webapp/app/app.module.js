@@ -66,6 +66,7 @@ var app = angular.module('app', [
     'app.addGame',
     'app.UserTeamService',
     'app.editTeamImage',
+	'app.modDoc',
 
     //dependencies
     'ngCookies',
