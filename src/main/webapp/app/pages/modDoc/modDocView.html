@@ -6,10 +6,10 @@
     <div class="col-2">
 		<div class="inner">
 			<div class="left">
-				<div class="modDoc__panel modDoc__row">
+				<div id="mdoc-panel" class="modDoc__panel modDoc__row">
 					<h2>Mod Panel</h2>
 					<p>This is the mod panel you know?</p>
-					<section>
+					<section id="mdoc-panel-auth">
 						<h3>Authorization</h3>
 						<ul>
 							<li>Before you can access the mode panel, you must be an Administrator on DevWars</li>
@@ -18,7 +18,7 @@
 						</ul>
 </section>
 
-					<section>
+					<section id="mdoc-panel-access">
 						<h3>Accessibility</h3>
 						<img src="http://i.imgur.com/49lMQ1g.png" alt="">
 						<img src="http://i.imgur.com/OYQjqXQ.png" alt="">
@@ -28,7 +28,7 @@
 						</ul>
 </section>
 
-					<section>
+					<section id="mdoc-panel-game">
 						<h3>Create Game</h3>
 						<img src="http://i.imgur.com/wlxWTCf.png" alt="">
 						<ul>
@@ -37,7 +37,7 @@
 						</ul>
 </section>
 
-					<section>
+					<section id="mdoc-panel-teams">
 						<h3>Create Teams</h3>
 						<img src="http://i.imgur.com/tpbDy0A.png" alt="">
 						<ul>
@@ -47,7 +47,7 @@
 						</ul>
 </section>
 
-					<section>
+					<section id="mdoc-panel-objectives">
 						<h3>Create Objectives</h3>
 						<img src="http://i.imgur.com/2ebYnKX.png" alt="">
 						<ul>
@@ -56,7 +56,7 @@
 						</ul>
 </section>
 
-					<section>
+					<section id="mdoc-panel-live-game">
 						<h3>Live Game</h3>
 						<img src="http://i.imgur.com/Ww498xV.png" alt="">
 						<ul>
@@ -79,13 +79,13 @@
 				</div>
 
 
-				<div class="modDoc__c9 modDoc__row">
+				<div id="mdoc-c9" class="modDoc__c9 modDoc__row">
 					<h2>Cloud 9</h2>
 					<p>This is the editor where all player write their code. Go to c9.io and login as “devwars”. The password will be given to you by Steven or Beau.
 						We have two workspaces, one for red and one for blue. We do not change these workspaces, because some tools (preview, codeview), depend on the url of the workspace.
 						Before the game, open both workspaces. Make sure, that the HTML for the ZenGarden game is already uploaded, or you know when and how to upload it.</p>
 
-					<section>
+					<section id="mdoc-c9-add-users">
 						<h3>Adding New Users</h3>
 						<p>To add a new user to the c9 workspace, click on <span class="highlight">Share</span> in the top right. In the popup enter the c9-username and click on the Invite Button.</p>
 						<img src="http://i.imgur.com/Jne0Xz9.png" alt="">
@@ -94,27 +94,27 @@
 						<span>Ask each player via teamspeak to write something in his file, so you can see, that they have correct access.</span>
 </section>
 
-					<section>
+					<section id="mdoc-c9-remove-users">
 						<h3>Remove Players from C9</h3>
 						<p>When the game is over, disable the write access for each player. For that, click on the button in the Collaborate panel. Before adding the players for the next round, remove the old players. For that, click on the bin icon next to their name, to remove them.</p>
 						<img src="http://i.imgur.com/oTRilYP.png" alt="">
 </section>
 
-					<section>
+					<section id="mdoc-c9-sass">
 						<h3>Sass/SCSS</h3>
 						<p>If players want to use SCSS, open a terminal (Alt-t) in the c9 workspace and execute: <span class="highlight">scss --watch style.scss:style.css</span>
 							If players will use css, disable the compiler by pressing CTRL-c in the terminal, where the command is running.</p>
 						<img src="http://i.imgur.com/67gX5Fa.png" alt="">
 </section>
 
-					<section>
+					<section id="mdoc-c9-saving">
 						<h3>Saving Projects</h3>
 						<p>After each game, back up the workspace. For this click on <span class="highlight">File -> Download Project</span> and save the blue.tar.gz or red.tar.gz on your local machine. After the games the files should be uploaded to the Google Drive at <span class="highlight">Games > Game Archive > YYYY-MM-DD [Game NUMBER]</span> If you don’t have access to the drive, send the files to Steven after the game.</p>
 						<img src="http://i.imgur.com/xchGAEU.png" alt="">
 </section>
 				</div>
 
-				<div class="modDoc__frame modDoc__row">
+				<div id="mdoc-frame" class="modDoc__frame modDoc__row">
 					<h2>Frame</h2>
 					<p>Frame is the web app used to pull data from Firebase and dynamically update what viewers see on stream. Some things all Mods should know:</p>
 					<ul>
@@ -124,7 +124,7 @@
 						<li>Stage values are held in Firebase and are switched out by the DW_Bot commands.</li>
 					</ul>
 
-					<section>
+					<section id="mdoc-frame-scenes">
 						<h3>Scenes &amp; Stages</h3>
 						<img src="http://i.imgur.com/LTamYHk.png" alt="">
 						<p>Scenes and Stages are very important. You should get familiar with them all (pictures will be added later):</p>
@@ -145,16 +145,16 @@
 </section>	
 				</div>
 
-				<div class="modDoc__bot modDoc__row">
+				<div id="mdoc-bot" class="modDoc__bot modDoc__row">
 					<h2>Twitch Bot</h2>
 					<span>DW_Bot is a nodejs server that reads Twitch chat. Some things all Mods should know:</span>
 					<ul>
-						<li>DW_Bot can read and write to Firebase. </li>
+						<li>DW_Bot can read and write to Firebase.</li>
 						<li>DW_Bot can read and write to DevWars Server.</li>
 						<li>DW_Bot can read and write to Twitch chat. This includes sending whispers.</li>
 					</ul>
 
-					<section>
+					<section id="mdoc-bot-starting">
 						<h3>Starting Game</h3>
 						<span>To make sure the bot can connect to the server you can type <span class="highlight">!ping server</span>.</span>
 
@@ -172,7 +172,7 @@
 
 					</section>
 
-					<section>
+					<section id="mdoc-bot-betting">
 						<h3>Betting</h3>
 						<span>You should never need to put these commands in. Bets should start 5mins after <span class="highlight">!startgame</span> and will close after 10mins.</span>
 						
@@ -191,7 +191,7 @@
 						</ul>
 					</section>
 
-					<section>
+					<section id="mdoc-bot-timer">
 						<h3>Timer</h3>
 						<span>You can’t pause the game but you can add/subtract time.</span>
 
@@ -207,7 +207,7 @@
 						</ul>
 					</section>
 
-					<section>
+					<section id="mdoc-bot-applying">
 						<h3>Applying</h3>
 						
 						<span class="highlight">!applyfor [gameID]</span>
@@ -216,7 +216,7 @@
 						</ul>
 					</section>
 
-					<section>
+					<section id="mdoc-bot-voting">
 						<h3>Voting</h3>
 						<span>There are 3 different voting categories; design, functionality, tiebreaker.</span>
 						
@@ -227,7 +227,7 @@
 						</ul>
 					</section>
 
-					<section>
+					<section id="mdoc-bot-ending">
 						<h3>Ending Game</h3>
 
 						<span class="highlight">!winner [teamcolor]</span>
@@ -254,38 +254,37 @@
 			<div class="right">
 				<ul class="sitemap">
 					<li class="active sitemap__title">
-						<a href="#panel">Mod Panel</a>
+						<a href="#mdoc-panel">Mod Panel</a>
 					</li>
-					<li><a href="#panel-auth">Authorization</a></li>
-					<li><a href="#panel-accessibility">Accessibility</a></li>
-					<li><a href="#panel-create-game">Create Game</a></li>
-					<li><a href="#panel-create-teams">Create Teams</a></li>
-					<li><a href="#panel-objectivers">Create Objectives</a></li>
-					<li><a href="#panel-live-game">Live Game</a></li>
-
+					<li><a href="#mdoc-panel-auth">Authorization</a></li>
+					<li><a href="#mdoc-panel-access">Accessibility</a></li>
+					<li><a href="#mdoc-panel-game">Create Game</a></li>
+					<li><a href="#mdoc-panel-teams">Create Teams</a></li>
+					<li><a href="#mdoc-panel-objectives">Create Objectives</a></li>
+					<li><a href="#mdoc-panel-live-game">Live Game</a></li>
 
 					<li class="sitemap__title">
-						<a href="#c9">Cloud 9</a>
+						<a href="#mdoc-c9">Cloud 9</a>
 					</li>
-					<li><a href="#c9-add-users">Adding New Users</a></li>
-					<li><a href="#c9-remove-users">Remove Players from C9</a></li>
-					<li><a href="#c9-sass">Sass/SCSS</a></li>
-					<li><a href="#c9-saving">Saving Projects</a></li>
+					<li><a href="#mdoc-c9-add-users">Adding New Users</a></li>
+					<li><a href="#mdoc-c9-remove-users">Remove Players from C9</a></li>
+					<li><a href="#mdoc-c9-sass">Sass/SCSS</a></li>
+					<li><a href="#mdoc-c9-saving">Saving Projects</a></li>
 
 					<li class="sitemap__title">
-						<a href="#frame">Frame</a>
+						<a href="#mdoc-frame">Frame</a>
 					</li>
-					<li><a href="#frame-scenes">Scenes &amp; Stages</a></li>
-
+					<li><a href="#mdoc-frame-scenes">Scenes &amp; Stages</a></li>
 
 					<li class="sitemap__title">
-						<a href="#bot">Twitch Bot</a>
+						<a href="#mdoc-bot">Twitch Bot</a>
 					</li>
-					<li><a href="#bot-starting">Starting Game</a></li>
-					<li><a href="#bot-betting">Betting</a></li>
-					<li><a href="#bot-timer">Timer</a></li>
-					<li><a href="#bot-applying">Applying</a></li>
-					<li><a href="#bot-ending">Ending Game</a></li>
+					<li><a href="#mdoc-bot-starting">Starting Game</a></li>
+					<li><a href="#mdoc-bot-betting">Betting</a></li>
+					<li><a href="#mdoc-bot-timer">Timer</a></li>
+					<li><a href="#mdoc-bot-applying">Applying</a></li>
+					<li><a href="#mdoc-bot-voting">Voting</a></li>
+					<li><a href="#mdoc-bot-ending">Ending Game</a></li>
 
 				</ul> <!-- ul.sitemap -->
 			</div> <!-- .right -->
