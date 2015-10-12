@@ -53,7 +53,7 @@ public class TransactionalInterceptor implements HandlerInterceptor
                 session.getTransaction().commit();
                 session.close();
             }
-        }catch (Exception e){}
+        }catch (Exception ignored){}
     }
 
     @Override

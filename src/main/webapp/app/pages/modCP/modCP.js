@@ -291,8 +291,6 @@ angular.module('app.modCP', [
 
             GameService.editGame(game.id, JSON.stringify(game), function (success) {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Saved game");
-
-                $scope.selectedGame = success.data;
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not save game");
             })

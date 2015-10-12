@@ -208,56 +208,24 @@ public class GameController
     /**
      * Edits a game with new information
      *
-     * @param id       The ID of the game to update
-     * @param json     JSON to update the game with
      * @return The updated Game
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public ResponseEntity editGame(@PathVariable("id") int id, @RequestParam(value = "json", required = false) String json) throws IOException, UnirestException
+    @RequestMapping(value = "/{id}/update", method = {RequestMethod.POST})
+    public ResponseEntity editGame(@PathModel("id") Game game, @JSONParam("game") Game newGame) throws IOException, UnirestException
     {
-        Session session = DatabaseManager.getSession();
+        GameService.updateGame(game, newGame);
 
-        Game oldGame = GameService.getGame(id);
-        boolean gameAlreadyExists = oldGame != null;
-
-        if (!gameAlreadyExists)
+        if (newGame.isActive())
         {
-            return new ResponseEntity("Game for given id doesn't exist", HttpStatus.NOT_FOUND);
-        } else
-        {
-            Game game = Reference.objectMapper.readValue(json, Game.class);
-
-            game.setSignups(oldGame.getSignups());
-
-            session = DatabaseManager.getSession();
-            session.beginTransaction();
-
-            session.saveOrUpdate(game);
-
-            session.getTransaction().commit();
-            session.beginTransaction();
-
-            session.createQuery("delete from CompletedObjective where team_id = null").executeUpdate();
-            session.createQuery("delete from Objective where game = null").executeUpdate();
-
-            session.getTransaction().commit();
-
-            session.flush();
-
-            session.close();
-
-            if (game.isActive())
-            {
-                Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
-                        .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
-                        .body(Reference.objectMapper.writeValueAsString(game))
-                        .asString()
-                        .getBody();
-            }
-
-            return getGame(id);
+            Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
+                    .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
+                    .body(Reference.objectMapper.writeValueAsString(newGame))
+                    .asString()
+                    .getBody();
         }
+
+        return getGame(game.getId());
     }
 
     /**

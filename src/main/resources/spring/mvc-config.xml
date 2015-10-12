@@ -15,6 +15,7 @@
             <beans:bean class="com.bezman.resolver.UserResolver"></beans:bean>
             <beans:bean class="com.bezman.resolver.SessionResolver"></beans:bean>
             <beans:bean class="com.bezman.resolver.JSONParamResolver"></beans:bean>
+            <beans:bean class="com.bezman.resolver.PathModelResolver"></beans:bean>
         </mvc:argument-resolvers>
 
         <mvc:message-converters>

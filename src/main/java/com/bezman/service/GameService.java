@@ -161,6 +161,20 @@ public class GameService
         downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
     }
 
+    public static Game updateGame(Game game, Game newGame)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        newGame.setSignups(game.getSignups());
+        session.merge(newGame);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return newGame;
+    }
+
     public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException
     {
         Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
