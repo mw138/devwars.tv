@@ -13,20 +13,13 @@ import com.bezman.service.UserService;
 import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
-import org.hibernate.sql.Select;
-import org.hibernate.transform.Transformers;
-import org.hibernate.type.IntegerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,8 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.WebApplicationContext;
-import sun.misc.Cache;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,17 +34,13 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Created by Terence on 1/21/2015.
- */
 @Controller
 @RequestMapping(value = "/v1/game")
 public class GameController
@@ -65,14 +52,13 @@ public class GameController
     /**
      * Retrieved all games with criteria
      *
-     * @param request
-     * @param response
      * @param count    Number of games wanted
      * @param offset   How many games to skip in DB
-     * @return
+     * @return All games
      */
     @RequestMapping(value = "/")
-    public ResponseEntity allGames(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "count", defaultValue = "5", required = false) int count, @RequestParam(value = "offset", defaultValue = "0", required = false) int offset)
+    public ResponseEntity allGames(@RequestParam(value = "count", defaultValue = "5", required = false) int count,
+                                   @RequestParam(value = "offset", defaultValue = "0", required = false) int offset)
     {
         count = count > 50 ? 50 : count;
 
@@ -82,7 +68,7 @@ public class GameController
     /**
      * Retrieves upcoming DevWars games
      *
-     * @return
+     * @return List of games
      */
     @UnitOfWork
     @AllowCrossOrigin(from = "*")
@@ -94,7 +80,7 @@ public class GameController
 
         List<Game> upcomingGames = query.list();
 
-        if (upcomingGames != null || (upcomingGames != null && upcomingGames.size() > 0))
+        if (upcomingGames.size() > 0)
         {
             return new ResponseEntity(upcomingGames, HttpStatus.OK);
         } else
@@ -103,12 +89,21 @@ public class GameController
         }
     }
 
+    /**
+     * Get the most upcoming tournament games
+     * @return List of games that are apart of a tournament
+     */
     @RequestMapping("/tournament/upcoming")
     public ResponseEntity upcomingTournaments()
     {
         return new ResponseEntity(GameService.getUpcomingTournaments(), HttpStatus.OK);
     }
 
+
+    /**
+     * Get the nearest tournament game
+     * @return The nearest Tournament game
+     */
     @RequestMapping("/tournament/nearest")
     public ResponseEntity nearestTournament()
     {
@@ -118,19 +113,18 @@ public class GameController
     /**
      * Retrieves games that have been done in the past
      *
-     * @param queryCount
-     * @param queryOffset
-     * @return
+     * @param queryCount Number of results (Max 16)
+     * @param queryOffset Result Offset
+     * @return Response
      */
     @UnitOfWork
     @RequestMapping("/pastgames")
     public ResponseEntity pastGames(
-            SessionImpl session,
             @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
             @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
     ) throws ExecutionException
     {
-        HashMap games = (HashMap) pastGamesCache.get(queryCount + ":" + queryOffset);
+        HashMap games = pastGamesCache.get(queryCount + ":" + queryOffset);
 
         return new ResponseEntity(games, HttpStatus.OK);
     }
@@ -161,7 +155,7 @@ public class GameController
      *
      * @param timestamp The time in UTC which the game will start
      * @param name      Name of the game (Classic or Zen Garden)
-     * @return
+     * @return New game
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
