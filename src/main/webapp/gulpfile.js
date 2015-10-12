@@ -15,6 +15,7 @@ var rename = require('gulp-rename');
 var pipe = require('multipipe');
 var url = require('url');
 var fs = require('fs');
+var minifyCss = require('gulp-minify-css');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -33,7 +34,7 @@ gulp.task('styles', function () {
     // For best performance, don't add Sass partials to `gulp.src`
     return gulp.src([
         'assets/sass/*.scss',
-        'assets/sass/**/*.css',
+        'assets/sass/**/*.css'
     ])
         .pipe($.changed('styles', {extension: '.scss'}))
         .pipe($.rubySass({
@@ -57,6 +58,7 @@ gulp.task('dist', function () {
         .pipe(rename('index.min.html'))
         .pipe(assets)
         .pipe($.if('*.js', pipe(ngmin(), uglify())))
+        .pipe($.if('*.css', $.csso()))
         .pipe(assets.restore())
         .pipe($.useref())
         .pipe(gulp.dest('./'));
