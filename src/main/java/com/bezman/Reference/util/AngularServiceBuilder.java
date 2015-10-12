@@ -1,6 +1,7 @@
 package com.bezman.Reference.util;
 
 import com.bezman.annotation.JSONParam;
+import com.bezman.annotation.PathModel;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.controller.UserTeamController;
 import com.bezman.controller.game.GameController;
@@ -23,9 +24,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Created by Terence on 3/27/2015.
- */
 public class AngularServiceBuilder
 {
     public static void buildServicesFromPackage(String packageName, String outputDir, String rootURL, String moduleNamePrefix)
@@ -40,8 +38,6 @@ public class AngularServiceBuilder
 
         for(Class controller : controllers)
         {
-            System.out.println(controller.getName());
-
             RequestMapping controllerRequestMapping = (RequestMapping) controller.getAnnotation(RequestMapping.class);
 
             try
@@ -60,6 +56,7 @@ public class AngularServiceBuilder
                     {
                         HashMap<String, RequestParam> queryParams = new HashMap<>();
                         HashMap<String, PathVariable> pathParams = new HashMap<>();
+                        HashMap<String, PathModel> pathModels = new HashMap<>();
                         HashMap<String, JSONParam> jsonParams = new HashMap<>();
 
                         HashMap<String, Class> queryParamsTypes = new HashMap<>();
@@ -120,6 +117,11 @@ public class AngularServiceBuilder
                                         JSONParam param = (JSONParam) annotation;
                                         jsonParams.put(param.value(), param);
                                         queryParamsTypes.put(param.value(), parameter.getType());
+                                    } else if (annotation.annotationType().equals(PathModel.class))
+                                    {
+                                        PathModel pathModel = (PathModel) annotation;
+                                        pathModels.put(pathModel.value(), pathModel);
+                                        pathParamsTypes.put(pathModel.value(), parameter.getType());
                                     }
                                 }
                             }
@@ -148,6 +150,9 @@ public class AngularServiceBuilder
                             pathParams.keySet()
                                     .stream()
                                     .forEach(p -> methodParamsList.add(p));
+
+                            pathModels.keySet().stream()
+                                    .forEach(s -> methodParamsList.add(s));
 
                             queryParams.keySet()
                                     .stream()
