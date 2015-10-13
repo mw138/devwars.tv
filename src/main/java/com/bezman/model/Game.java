@@ -3,6 +3,7 @@ package com.bezman.model;
 import com.bezman.annotation.HibernateDefault;
 import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

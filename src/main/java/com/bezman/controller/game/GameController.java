@@ -7,6 +7,7 @@ import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
+import com.bezman.request.model.LegacyGame;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
@@ -182,6 +183,13 @@ public class GameController
         session.save(game);
 
         return new ResponseEntity(game.toString(), HttpStatus.OK);
+    }
+
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/createlegacy", method = RequestMethod.POST)
+    public ResponseEntity createLegacyGame(@JSONParam("game") LegacyGame legacyGame)
+    {
+        return new ResponseEntity(GameService.createGameFromLegacyGame(legacyGame), HttpStatus.OK);
     }
 
     /**

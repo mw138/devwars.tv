@@ -75,6 +75,36 @@ public class UserService
         return user;
     }
 
+    public static User userForUsernameOrNewVeteranUser(String username)
+    {
+        User user = UserService.userForUsername(username);
+
+        if (user != null)
+        {
+            return user;
+        } else {
+            return UserService.createVeteranUserForUsername(username);
+        }
+    }
+
+    public static User createVeteranUserForUsername(String username)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        User user = new User();
+        user.setUsername(username);
+        user.setVeteran(true);
+        user.setProvider("TWITCH");
+
+        session.save(user);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return user;
+    }
+
     public static User userForEmail(String email)
     {
         Session session = DatabaseManager.getSession();

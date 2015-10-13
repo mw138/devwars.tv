@@ -9,7 +9,7 @@
             <generator class="increment"></generator>
         </id>
 
-        <property name="team_id" column="team" type="integer"></property>
-        <many-to-one name="objective" class="com.bezman.model.Objective"></many-to-one>
+        <many-to-one name="team" class="com.bezman.model.Team"/>
+        <many-to-one name="objective" class="com.bezman.model.Objective"/>
     </class>
 </hibernate-mapping>
