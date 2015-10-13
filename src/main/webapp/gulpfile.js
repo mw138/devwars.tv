@@ -15,7 +15,6 @@ var rename = require('gulp-rename');
 var pipe = require('multipipe');
 var url = require('url');
 var fs = require('fs');
-var minifyCss = require('gulp-minify-css');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',

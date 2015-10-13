@@ -8,7 +8,8 @@ angular.module('app.modDoc', [
 				.state('modDoc', {
 					url: '/modDoc',
 					templateUrl: 'app/pages/modDoc/modDocView.html',
-					controller: "modDocController"
+					controller: "modDocController",
+                    auth: 'ADMIN'
                 });
         }])
 	.controller("modDocController", ["$scope", function ($scope) {
