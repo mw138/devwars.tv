@@ -45,6 +45,7 @@ var app = angular.module('app', [
     'app.verify',
     'app.enterDirective',
     'app.subscribeDirective',
+    'app.smoothHref',
     'app.shop',
     'app.OAuthDirective',
     'app.sidebar',
