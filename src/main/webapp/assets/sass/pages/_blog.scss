@@ -29,13 +29,14 @@ blog {
   }
 
   .post-tags {
-    padding: 0 0 15px;
+    padding: 15px 0 0;
     list-style-type: none;
     color: #636363;
 
     li {
       display: inline-block;
-      margin: 0 5px;
+      margin: 0 3px;
+      font-size: 13px;
 
       &:first-child {
         margin: 0 5px 0 0;
@@ -45,8 +46,8 @@ blog {
     a {
       color: #636363;
       text-decoration: none;
-      font-size: 14px;
       font-family: 'Open Sans', sans-serif;
+      font-size: 13px;
 
       &:hover {
         color: lighten(#636363, 15%);
