@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -31,6 +32,7 @@ import java.util.zip.GZIPInputStream;
 @RequestMapping("/v1/team")
 public class TeamController extends BaseController
 {
+    private static String[] ignored = {".c9"};
 
     /**
      * Upload for the teams data straight from cloud nine
@@ -54,20 +56,30 @@ public class TeamController extends BaseController
         TarArchiveEntry tarArchiveEntry = null;
         while((tarArchiveEntry = tarArchiveInputStream.getNextTarEntry()) != null)
         {
-            String fileName = tarArchiveEntry.getName().replaceAll("[^a-zA-Z0-9.-]", "_");
+            String fileName = tarArchiveEntry.getName();
 
             fileName = fileName.split("_")[fileName.split("_").length -1];
+            fileName = fileName.replace("workspace", "");
 
             File file = new File(destPath, fileName);
 
-            if (tarArchiveEntry.isDirectory())
-            {
-                file.mkdirs();
-            } else
-            {
-                file.createNewFile();
+            boolean isIgnored = Arrays.asList(ignored).stream().anyMatch(fileName::contains);
 
-                IOUtils.copy(tarArchiveInputStream, new FileOutputStream(file));
+            if (!isIgnored)
+            {
+                System.out.println(fileName);
+
+                if (tarArchiveEntry.isDirectory())
+                {
+                    file.mkdirs();
+                } else
+                {
+                    System.out.println(fileName);
+
+                    file.createNewFile();
+
+                    IOUtils.copy(tarArchiveInputStream, new FileOutputStream(file));
+                }
             }
 
         }

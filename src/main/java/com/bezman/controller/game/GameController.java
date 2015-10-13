@@ -14,6 +14,7 @@ import com.bezman.service.UserService;
 import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.compress.utils.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -193,7 +196,7 @@ public class GameController
     }
 
     /**
-     * Retrieves a game with a given ind
+     * Retrieves a game with a given id
      *
      * @param id ID of the game to get
      * @return The Game
@@ -212,6 +215,15 @@ public class GameController
         }
 
     }
+
+    @RequestMapping("/{id}/{team}/preview/{slug:.+}")
+    public void previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException
+    {
+        FileInputStream fileInputStream = new FileInputStream(new File(Reference.SITE_STORAGE_PATH + File.separator + gameID + File.separator + team + File.separator + slug));
+
+        IOUtils.copy(fileInputStream, response.getOutputStream());
+    }
+
 
     /**
      * Edits a game with new information
@@ -237,7 +249,7 @@ public class GameController
     }
 
     /**
-     * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
+     * Sets the game to active and all other games to inactive (Allows the currentGame method to bring back result)
      *
      * @param id ID of game to activate
      * @return
