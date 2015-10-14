@@ -116,12 +116,12 @@
                         </a> <!-- .teamPlayer -->
                     </div> <!-- .team .team--blue -->
 
-                    <!--<div class="teamFiles">-->
-                    <!--<div class="fileBox" ng-repeat="team in selectedGame.teams">-->
-                    <!--<a href="{{team.websiteUrl}}" target="_blank" class="button button-blue">View Website</a>-->
-                    <!--<a href="{{team.codeUrl}}" target="_blank" class="button button-blue">View Code</a>-->
-                    <!--</div>-->
-                    <!--</div>-->
+                    <div class="teamFiles">
+                        <div class="fileBox" ng-repeat="team in selectedGame.teams">
+                            <a href="/v1/game/{{selectedGame.id}}/{{team.name}}/preview/index.html" target="_blank" class="button button-blue">View Website</a>
+                            <a href="/codeview?game={{selectedGame.id}}" target="_blank" class="button button-blue">View Code</a>
+                        </div>
+                    </div>
                 </div> <!-- .teamBox -->
 
                 <div class="objBox" ng-if="selectedGame.objectives.length > 0">

@@ -216,12 +216,21 @@ public class GameController
 
     }
 
+    @AllowCrossOrigin(from = "*")
     @RequestMapping("/{id}/{team}/preview/{slug:.+}")
-    public void previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException
+    public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException
     {
-        FileInputStream fileInputStream = new FileInputStream(new File(Reference.SITE_STORAGE_PATH + File.separator + gameID + File.separator + team + File.separator + slug));
+        try{
+            File file = new File(Reference.SITE_STORAGE_PATH + File.separator + gameID + File.separator + team + File.separator + slug);
+            FileInputStream fileInputStream = new FileInputStream(file);
 
-        IOUtils.copy(fileInputStream, response.getOutputStream());
+            IOUtils.copy(fileInputStream, response.getOutputStream());
+
+            return null;
+        }catch (Exception e)
+        {
+            return new ResponseEntity("File not uploaded yet", HttpStatus.NOT_FOUND);
+        }
     }
 
 

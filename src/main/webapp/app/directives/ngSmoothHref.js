@@ -15,9 +15,9 @@ angular.module('app.smoothHref', [])
                         $('html, body').animate({
                             scrollTop: $(targetID).offset().top
                         }, 500);
-                    }
 
-                    event.preventDefault();
+                        event.preventDefault();
+                    }
                 })
             }
         }
