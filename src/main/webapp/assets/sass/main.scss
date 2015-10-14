@@ -156,16 +156,16 @@
 			position: relative;
 			padding: 0;
 			h1 { font-size: 4rem; }
-			span { font-size: 3rem; }
+			span { font-size: 1.5rem; }
 			p { display: block; }
 		}
 		
-		.featured__stats { display: none; }
+		.featured__stats, .surfacepro { display: none; }
 		
 		.featured-links__social, .or-seperator, .button.signup {
 			width: 90%;
 			display: block;
-			margin: 0 auto;
+			margin: 20px auto 10px auto;
 		}
 		
 		.inner {
