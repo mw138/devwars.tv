@@ -55,6 +55,11 @@
             <mvc:mapping path="/**"/>
             <beans:bean class="com.bezman.interceptor.TransactionalInterceptor"></beans:bean>
         </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <beans:bean class="com.bezman.interceptor.AllowCrossOriginInterceptor"></beans:bean>
+        </mvc:interceptor>
     </mvc:interceptors>
 
     <mvc:resources mapping="/**" location="/" />

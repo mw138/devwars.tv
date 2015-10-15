@@ -1,3 +1,14 @@
+var getQueryParams = function() {
+    var pairs = location.search.slice(1).split('&');
+
+    var result = {};
+    pairs.forEach(function(pair) {
+        pair = pair.split('=');
+        result[pair[0]] = decodeURIComponent(pair[1] || '');
+    });
+
+    return JSON.parse(JSON.stringify(result));
+};
 
 var actions = [
     {"url": "http://blue.devwars.tv/index.html", "id": "htmlBlue"},
@@ -7,9 +18,27 @@ var actions = [
     {"url": "http://red.devwars.tv/style.css", "id": "cssRed"},
     {"url": "http://red.devwars.tv/main.js", "id": "jsRed"}
 ];
+
+var queryParams = getQueryParams();
+
+var devwarsRoot = "";
+var devwarsGameRoot = devwarsRoot + '/v1/game/' + queryParams.game;
+
+var dynamicActions = [
+    {"url": devwarsGameRoot + '/blue/preview/index.html', "id": "htmlBlue"},
+    {"url": devwarsGameRoot + '/blue/preview/style.css', "id": "cssBlue"},
+    {"url": devwarsGameRoot + '/blue/preview/main.js', "id": "jsBlue"},
+    {"url": devwarsGameRoot + '/red/preview/index.html', "id": "htmlRed"},
+    {"url": devwarsGameRoot + '/red/preview/style.css', "id": "cssRed"},
+    {"url": devwarsGameRoot + '/red/preview/main.js', "id": "jsRed"},
+];
+
+
 var reload = false;
 
-updateAll();
+if(queryParams.game) {
+    updateAllDynamic();
+} else updateAll();
 
 setInterval(function () {
     if(reload) {
@@ -27,6 +56,10 @@ function updateAll() {
         console.log("Getting", action);
         set(action)
     }
+}
+
+function updateAllDynamic() {
+    dynamicActions.forEach(set);
 }
 
 function set(action) {
