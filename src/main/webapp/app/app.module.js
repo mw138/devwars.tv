@@ -30,6 +30,7 @@ var app = angular.module('app', [
     'app.devwarsToast',
     'app.toastService',
     'app.BadgeService',
+    'app.socketService',
     'app.blog',
     'app.user',
     'pickadate',
@@ -149,7 +150,7 @@ app.filter('camel', function () {
     }
 });
 
-app.run(function ($rootScope, $location, AuthService) {
+app.run(function ($rootScope, $location, AuthService, SocketService, $cookies) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {
         //Is the route protected
         if(toState.auth) {
@@ -173,4 +174,14 @@ app.run(function ($rootScope, $location, AuthService) {
             }
         }
     });
+
+    SocketService.init('192.168.1.11:83', function () {
+        setTimeout(function () {
+            SocketService.emit('some', 6)
+                .then(function (data) {
+                    console.log(data);
+                });
+        }, 1)
+    });
+
 });

@@ -41,6 +41,7 @@ public class SocketIO
     public SocketIOServer socketIOServer()
     {
         Configuration configuration = new Configuration();
+//        configuration.setOrigin("http://local.bezcode.com:9090");
         configuration.setHostname("192.168.1.11");
         configuration.setPort(83);
 
@@ -59,6 +60,8 @@ public class SocketIO
         reflections.getMethodsAnnotatedWith(OnSocketEvent.class).stream()
                 .forEach(method -> eventListeners.put(method.getAnnotation(OnSocketEvent.class), method));
 
+        System.out.println(eventListeners);
+
         socketIOServer.addConnectListener(socketIOClient -> {
             connectionListeners.values().forEach(method -> {
                 if (method.getParameterCount() == 1)
@@ -74,32 +77,37 @@ public class SocketIO
             });
         });
 
-        socketIOServer.addEventListener("global", GlobalEvent.class, (socketIOClient, globalEvent, ackRequest) -> eventListeners.
-                forEach((onEvent, method) -> {
-                    try
-                    {
-                        if (globalEvent.getEvent().equals(onEvent.value()))
+        socketIOServer.addEventListener("global", GlobalEvent.class, (socketIOClient, globalEvent, ackRequest) -> {
+            System.out.println(globalEvent.getEvent());
+            eventListeners.
+                    forEach((onEvent, method) -> {
+                        try
                         {
-                            Object instance = applicationContext.getBean(method.getDeclaringClass());
-                            Class type = method.getParameterTypes()[1];
-
-                            Object castedValue = null;
-
-                            if (Arrays.asList(nonSerializable).stream().anyMatch(type::equals))
+                            if (globalEvent.getEvent().equals(onEvent.value()))
                             {
-                                castedValue = Util.toObject(type, globalEvent.getData());
-                            } else
-                            {
-                                castedValue  = Reference.objectMapper.readValue(globalEvent.getData(), method.getParameterTypes()[1]);
+                                Object instance = applicationContext.getBean(method.getDeclaringClass());
+                                Class type = method.getParameterTypes()[1];
+
+                                Object castedValue = null;
+
+                                if (Arrays.asList(nonSerializable).stream().anyMatch(type::equals))
+                                {
+                                    castedValue = Util.toObject(type, globalEvent.getData());
+                                } else
+                                {
+                                    castedValue  = Reference.objectMapper.readValue(globalEvent.getData(), method.getParameterTypes()[1]);
+                                }
+
+                                method.invoke(instance, socketIOClient, castedValue, ackRequest);
                             }
-
-                            method.invoke(instance, socketIOClient, castedValue, ackRequest);
+                        } catch (Exception ignored) {
+                            ignored.printStackTrace();
                         }
-                    } catch (Exception ignored) {
-                        ignored.printStackTrace();
-                    }
-                }));
+                    });
+        });
 
         return socketIOServer;
     }
+
+
 }
