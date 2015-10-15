@@ -361,6 +361,12 @@
 			<version>0.1.51</version>
 		</dependency -->
 
+        <!--Netty Socket -->
+        <dependency>
+            <groupId>com.corundumstudio.socketio</groupId>
+            <artifactId>netty-socketio</artifactId>
+            <version>1.7.6</version>
+        </dependency>
 	</dependencies>	
 
 	<repositories>

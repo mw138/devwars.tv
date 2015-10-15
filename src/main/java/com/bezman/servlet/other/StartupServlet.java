@@ -6,6 +6,8 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.init.FirebaseInit;
 import com.bezman.init.IInit;
 import com.bezman.init.TwitterInit;
+import com.corundumstudio.socketio.SocketIOServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,10 +20,21 @@ import java.sql.SQLException;
 public class StartupServlet
 {
 
+    @Autowired
+    SocketIOServer socketIOServer;
+
+    private static boolean hasSocketStarted = false;
+
     @PostConstruct
     public void postConstruct()
     {
         Reference.loadDevWarsProperties();
+
+        if (!hasSocketStarted)
+        {
+            hasSocketStarted = true;
+            socketIOServer.start();
+        }
 
         Class[] initializations = new  Class[]{
                 FirebaseInit.class,
@@ -48,6 +61,8 @@ public class StartupServlet
     @PreDestroy
     public void preDestroy()
     {
+        socketIOServer.stop();
+
         try
         {
             Reference.connection.close();

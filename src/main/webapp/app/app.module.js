@@ -67,7 +67,7 @@ var app = angular.module('app', [
     'app.addGame',
     'app.UserTeamService',
     'app.editTeamImage',
-	'app.modDoc',
+    'app.modDoc',
 
     //dependencies
     'ngCookies',
@@ -157,9 +157,9 @@ app.run(function ($rootScope, $location, AuthService) {
             if(typeof(toState.auth) === "boolean")
             {
                 AuthService.isLoggedIn()
-                .then(angular.noop, function (error) {
-                    $location.path('/');
-                });
+                    .then(angular.noop, function (error) {
+                        $location.path('/');
+                    });
 
             } else {
                 AuthService.isLoggedIn()
