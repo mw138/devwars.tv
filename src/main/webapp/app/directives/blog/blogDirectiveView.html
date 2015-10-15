@@ -4,14 +4,12 @@
     <span>{{ post.user.username }}</span>
     <span class="divider">|</span>
     <span>{{ post.timestamp | date}}</span>
+
+    <ul class="post-tags" ng-show="shouldShowTags(post)">
+        <li>Tags: </li>
+        <li ng-repeat="tag in post.tags"><a href="">{{ tag }}</a></li>
+    </ul>
 </div>
-
-<ul class="post-tags" ng-show="shouldShowTags(post)">
-    <li>Tags: </li>
-    <li ng-repeat="tag in post.tags"><a href="">{{ tag }}</a></li>
-</ul>
-
-<hr />
 
 <img class="featured-image" ng-src="{{ post.image_url }}" alt="Image of things"/>
 

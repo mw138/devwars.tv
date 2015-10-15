@@ -18,4 +18,11 @@ public class Objective extends BaseModel
     private Game game;
 
     private String objectiveText;
+
+    public Objective(String objectiveText, Game game, int orderID)
+    {
+        this.objectiveText = objectiveText;
+        this.game = game;
+        this.orderID = orderID;
+    }
 }

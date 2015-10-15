@@ -11,13 +11,12 @@
 	.help__sidebar-list {
 		font-size: 16px;
 		list-style-type: none;
-		li {
+		a {
 			padding: 7px 0 7px 15px;
 			cursor: pointer;
-			&:active {
-				color: $lgray;
-			}
+			display: block;
 		}
+		
 		li:nth-of-type(7) {
 			margin-top: 40px;
 		}

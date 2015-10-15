@@ -45,6 +45,7 @@ var app = angular.module('app', [
     'app.verify',
     'app.enterDirective',
     'app.subscribeDirective',
+    'app.smoothHref',
     'app.shop',
     'app.OAuthDirective',
     'app.sidebar',
@@ -66,6 +67,7 @@ var app = angular.module('app', [
     'app.addGame',
     'app.UserTeamService',
     'app.editTeamImage',
+	'app.modDoc',
 
     //dependencies
     'ngCookies',
@@ -79,7 +81,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
-    if(false) {
+    if(true) {
         $httpProvider.interceptors.push(function () {
 
             var Interceptor = {};
@@ -145,17 +147,30 @@ app.filter('camel', function () {
 
         return finalResult;
     }
-})
+});
 
 app.run(function ($rootScope, $location, AuthService) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {
         //Is the route protected
         if(toState.auth) {
             //Are we logged in?
-            AuthService.isLoggedIn()
+            if(typeof(toState.auth) === "boolean")
+            {
+                AuthService.isLoggedIn()
                 .then(angular.noop, function (error) {
                     $location.path('/');
                 });
+
+            } else {
+                AuthService.isLoggedIn()
+                    .then(function () {
+                        if(!AuthService.isAtLeast(toState.auth)) {
+                            $location.path("/");
+                        }
+                    }, function () {
+                        $location.path("/");
+                    })
+            }
         }
     });
 });

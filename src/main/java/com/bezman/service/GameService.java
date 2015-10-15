@@ -3,8 +3,9 @@ package com.bezman.service;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.Game;
-import com.bezman.model.Team;
+import com.bezman.model.*;
+import com.bezman.request.model.LegacyGame;
+import com.bezman.request.model.LegacyObjective;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
@@ -24,10 +25,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Terence on 1/21/2015.
@@ -327,4 +325,73 @@ public class GameService
         return games;
     }
 
+    public static Game createGameFromLegacyGame(LegacyGame legacyGame)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        Game game = GameService.defaultGame();
+
+        session.save(game);
+
+        game.setName(legacyGame.getName());
+        game.setTimestamp(legacyGame.getTimestamp());
+        game.setSeason(1);
+        game.setTheme(legacyGame.getTheme());
+        game.setYoutubeURL(legacyGame.getYoutubeURL());
+        game.setDone(true);
+
+        Team redTeam = game.getTeams().get("red");
+        Team blueTeam = game.getTeams().get("blue");
+
+        redTeam.setPlayers(new HashSet<>());
+        blueTeam.setPlayers(new HashSet<>());
+
+        redTeam.setGame(game);
+        blueTeam.setGame(game);
+
+        legacyGame.getRedTeam().forEach((lang, username) -> {
+            Player player = new Player(redTeam, UserService.userForUsernameOrNewVeteranUser(username), lang);
+            session.save(player);
+
+            redTeam.getPlayers().add(player);
+        });
+
+        legacyGame.getBlueTeam().forEach((lang, username) -> {
+            Player player = new Player(blueTeam, UserService.userForUsernameOrNewVeteranUser(username), lang);
+            session.save(player);
+
+            blueTeam.getPlayers().add(player);
+        });
+
+        redTeam.setDesignVotes(legacyGame.getDesignVotesRed());
+        blueTeam.setDesignVotes(legacyGame.getDesignVotesBlue());
+
+        redTeam.setFuncVotes(legacyGame.getFuncVotesRed());
+        blueTeam.setFuncVotes(legacyGame.getFuncVotesBlue());
+
+        for (int i = 0; i < legacyGame.getObjectives().size(); i++)
+        {
+            LegacyObjective legacyObjective = legacyGame.getObjectives().get(i);
+
+            Objective objective = new Objective(legacyObjective.getName(), game, i);
+
+            session.save(objective);
+
+            if (legacyObjective.getRed())
+            {
+                TeamService.addObjectiveToCompleted(redTeam, objective);
+            }
+
+            if (legacyObjective.getBlue())
+            {
+                TeamService.addObjectiveToCompleted(blueTeam, objective);
+            }
+        }
+
+        session.getTransaction().commit();
+        session.close();
+
+        return game;
+    }
 }

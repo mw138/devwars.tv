@@ -2,7 +2,7 @@
  * Created by Terence on 3/22/2015.
  */
 angular.module("app.AuthService", [])
-    .factory("AuthService", ["$http", function ($http) {
+    .factory("AuthService", ["$http", "$q", function ($http, $q) {
         var AuthService = {};
 
         AuthService.callbacks = [];
@@ -118,7 +118,21 @@ angular.module("app.AuthService", [])
                 method: "GET"
             }).then(function (success) {
                 AuthService.user = success.data;
-            }, angular.noop)
+            });
+        };
+
+        AuthService.getUser = function () {
+            var deferred = $q.defer();
+
+            $http({
+                url: "/v1/user"
+            }).then(function (success) {
+                deferred.resolve(success.data);
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
         };
 
         return AuthService;

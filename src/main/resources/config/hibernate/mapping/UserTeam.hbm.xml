@@ -20,7 +20,7 @@
         <many-to-one name="owner" class="com.bezman.model.User"/>
 
         <set name="gameTeams" lazy="true">
-            <key/>
+            <key column="userTeam"/>
             <one-to-many class="com.bezman.model.Team"/>
         </set>
 

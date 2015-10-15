@@ -45,9 +45,6 @@
 
     <link rel="icon" type="image/ico" href="/assets/img/favicon.ico"/>
 
-    <!-- CSS -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,400italic,300|Montserrat' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
     <!-- build:css /dist/all.css -->
@@ -150,6 +147,7 @@
 <script src="/app/directives/ngNoScrollOther.js"></script>
 <script src="/app/directives/ngStackedInput.js"></script>
 <script src="/app/directives/ngSignupTournament.js"></script>
+<script src="/app/directives/ngSmoothHref.js"></script>
 
 <!--Pages-->
 <script src="/app/pages/coming/coming.js"></script>
@@ -173,6 +171,7 @@
 <script src="/app/pages/modCP/modCP.js"></script>
 <script src="/app/pages/team/team.js"></script>
 <script src="/app/pages/addgame/addGame.js"></script>
+<script src="/app/pages/modDoc/modDoc.js"></script>
 
 <!--Components-->
 <script src="/app/components/header/header.js"></script>
@@ -192,6 +191,8 @@
 <script src="/app/services/PlayerService.js"></script>
 <script src="/app/services/UserTeamService.js"></script>
 <!-- endbuild -->
+
+<!-- Smooth Scroll -->
 </body>
 
 <!-- Google Analytics -->
@@ -206,10 +207,13 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $.mobile.loading().hide();
-    });
+$(document).ready(function () {
+	$.mobile.loading().hide();
+});
 </script>
+
+
+
 
 <!-- End Google Analytics -->
 </html>

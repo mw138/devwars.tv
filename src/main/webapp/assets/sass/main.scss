@@ -29,6 +29,7 @@
 @import "components/cover";
 @import "components/dropdown";
 @import "components/buttons";
+@import "components/fontawesome";
 
 // 6. pages/
 @import "pages/home";
@@ -60,6 +61,7 @@
 @import "pages/leaderboards";
 @import "pages/modCP";
 @import "pages/team";
+@import "pages/modDoc";
 
 // 7. themes/
 @import "themes/theme";
@@ -154,16 +156,16 @@
 			position: relative;
 			padding: 0;
 			h1 { font-size: 4rem; }
-			span { font-size: 3rem; }
+			span { font-size: 1.5rem; }
 			p { display: block; }
 		}
 		
-		.featured__stats { display: none; }
+		.featured__stats, .surfacepro { display: none; }
 		
 		.featured-links__social, .or-seperator, .button.signup {
 			width: 90%;
 			display: block;
-			margin: 0 auto;
+			margin: 20px auto 10px auto;
 		}
 		
 		.inner {

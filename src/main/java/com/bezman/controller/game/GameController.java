@@ -7,12 +7,14 @@ import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
+import com.bezman.request.model.LegacyGame;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
 import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.apache.commons.compress.utils.IOUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -31,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -184,8 +188,15 @@ public class GameController
         return new ResponseEntity(game.toString(), HttpStatus.OK);
     }
 
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/createlegacy", method = RequestMethod.POST)
+    public ResponseEntity createLegacyGame(@JSONParam("game") LegacyGame legacyGame)
+    {
+        return new ResponseEntity(GameService.createGameFromLegacyGame(legacyGame), HttpStatus.OK);
+    }
+
     /**
-     * Retrieves a game with a given ind
+     * Retrieves a game with a given id
      *
      * @param id ID of the game to get
      * @return The Game
@@ -204,6 +215,24 @@ public class GameController
         }
 
     }
+
+    @AllowCrossOrigin(from = "*")
+    @RequestMapping("/{id}/{team}/preview/{slug:.+}")
+    public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException
+    {
+        try{
+            File file = new File(Reference.SITE_STORAGE_PATH + File.separator + gameID + File.separator + team + File.separator + slug);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            IOUtils.copy(fileInputStream, response.getOutputStream());
+
+            return null;
+        }catch (Exception e)
+        {
+            return new ResponseEntity("File not uploaded yet", HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     /**
      * Edits a game with new information
@@ -229,7 +258,7 @@ public class GameController
     }
 
     /**
-     * Sets the game to active and all other games to inactive (Allows the currentgame method to bring back result)
+     * Sets the game to active and all other games to inactive (Allows the currentGame method to bring back result)
      *
      * @param id ID of game to activate
      * @return
