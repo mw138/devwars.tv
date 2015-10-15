@@ -33,11 +33,29 @@ public class PreAuthInterceptor implements HandlerInterceptor
         {
             HandlerMethod handlerMethod = (HandlerMethod) o;
 
+            Access access = new Access();
+            access.setRoute(request.getRequestURL().toString());
+            DatabaseUtil.saveObjects(false, access);
+
             boolean hasSecretKey  = Reference.requestHasSecretKey(request);
+
             request.setAttribute("hasSecretKey" , hasSecretKey);
 
             PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
+            AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
             User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
+
+            //Make sure it's not a double header
+            if(!Reference.isProduction())
+            {
+                response.addHeader("Access-Control-Allow-Origin", "http://localhost:81");
+                response.addHeader("Access-Control-Allow-Credentials", "true");
+            }
+
+            if (Reference.isProduction() && crossOrigin != null)
+            {
+                response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
+            }
 
             Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
 
@@ -60,6 +78,8 @@ public class PreAuthInterceptor implements HandlerInterceptor
 
                         User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
+                        session.close();
+
                         if (requiredRole == User.Role.NONE)
                         {
                             request.setAttribute("user", user);
@@ -76,9 +96,8 @@ public class PreAuthInterceptor implements HandlerInterceptor
                                 return true;
                             }
                         }
-                    }
+                    } else session.close();
 
-                    session.close();
                 }
             }
 
