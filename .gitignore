@@ -1,5 +1,6 @@
 .DS_Store
 node_modules/
+out/
 bower_components/
 src/main/webapp/node_modules/
 src/main/webapp/bower_components/
