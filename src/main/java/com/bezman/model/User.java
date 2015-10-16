@@ -126,18 +126,7 @@ public class User extends BaseModel
         return userTeam.getOwner() == null ? null : userTeam;
     }
 
-    public void logout()
-    {
-        Session hibernateSession = DatabaseManager.getSession();
-        hibernateSession.beginTransaction();
-
-        hibernateSession.delete(this.session);
-
-        hibernateSession.getTransaction().commit();
-        hibernateSession.close();
-    }
-
-    public String newSession()
+   public String newSession()
     {
         Session hibernateSession = DatabaseManager.getSession();
         hibernateSession.beginTransaction();

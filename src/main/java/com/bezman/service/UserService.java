@@ -5,6 +5,7 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.ConnectedAccount;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
+import com.bezman.model.UserSession;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
@@ -96,6 +97,7 @@ public class UserService
         user.setUsername(username);
         user.setVeteran(true);
         user.setProvider("TWITCH");
+        user.setRole(User.Role.USER);
 
         session.save(user);
 
@@ -227,5 +229,37 @@ public class UserService
         User.Role userRole = user.getRole();
 
         return (userRole.ordinal() >= role.ordinal());
+    }
+
+    public static User userForToken(String token)
+    {
+        Session session = DatabaseManager.getSession();
+
+        User user = (User) session.createQuery("from User user where user.session.sessionID = :token")
+                .setString("token", token)
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.flush();
+        session.close();
+
+        return user;
+    }
+
+    public static void logoutUser(User user)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        UserSession userSession = (UserSession) session.createQuery("from UserSession session where session.id = :id")
+                .setInteger("id", user.getId())
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.delete(userSession);
+
+        session.getTransaction().commit();
+        session.flush();
+        session.close();
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Ref;
 
 /**
  * Created by Terence on 3/22/2015.
@@ -33,29 +34,10 @@ public class PreAuthInterceptor implements HandlerInterceptor
         {
             HandlerMethod handlerMethod = (HandlerMethod) o;
 
-            Access access = new Access();
-            access.setRoute(request.getRequestURL().toString());
-            DatabaseUtil.saveObjects(false, access);
+            PreAuthorization preAuthorization = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
+            User.Role requiredRole = preAuthorization == null ? User.Role.NONE : preAuthorization.minRole();
 
-            boolean hasSecretKey  = Reference.requestHasSecretKey(request);
-
-            request.setAttribute("hasSecretKey" , hasSecretKey);
-
-            PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
-            AllowCrossOrigin crossOrigin = handlerMethod.getMethod().getAnnotation(AllowCrossOrigin.class);
-            User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
-
-            //Make sure it's not a double header
-            if(!Reference.isProduction())
-            {
-                response.addHeader("Access-Control-Allow-Origin", "http://localhost:81");
-                response.addHeader("Access-Control-Allow-Credentials", "true");
-            }
-
-            if (Reference.isProduction() && crossOrigin != null)
-            {
-                response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
-            }
+            request.setAttribute("hasSecretKey", Reference.requestHasSecretKey(request));
 
             Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
 
@@ -63,57 +45,22 @@ public class PreAuthInterceptor implements HandlerInterceptor
             {
                 String token = cookie.getValue();
 
-                if (token != null)
+                User user = UserService.userForToken(token);
+
+                request.setAttribute("user", user);
+
+                if (user == null && requiredRole == User.Role.NONE)
                 {
-                    Session session = DatabaseManager.getSession();
-                    Query query = session.createQuery("from UserSession where sessionID = :session");
-                    query.setString("session", token);
+                    return true;
+                }
 
-                    UserSession userSession = (UserSession) DatabaseUtil.getFirstFromQuery(query);
-
-                    if (userSession != null)
-                    {
-                        Query userQuery = session.createQuery("from User where id = :id");
-                        userQuery.setInteger("id", userSession.getId());
-
-                        User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
-
-                        session.close();
-
-                        if (requiredRole == User.Role.NONE)
-                        {
-                            request.setAttribute("user", user);
-                            return true;
-                        }
-
-                        if (user != null)
-                        {
-                            User.Role userRole = user.getRole();
-
-                            if (userRole.ordinal() >= requiredRole.ordinal())
-                            {
-                                request.setAttribute("user", user);
-                                return true;
-                            }
-                        }
-                    } else session.close();
-
+                if (user != null && user.getRole().ordinal() >= requiredRole.ordinal())
+                {
+                    return true;
                 }
             }
 
-            if(hasSecretKey)
-            {
-                return true;
-            }
-
-            if (requiredRole == User.Role.NONE)
-            {
-                return true;
-            }
-
-            response.setStatus(403);
-            response.getWriter().print("You need to be at least " + requiredRole.toString());
-
+            response.getWriter().println("You need to be at least : " + requiredRole.toString());
             return false;
         }catch (Exception e){}
 
