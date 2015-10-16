@@ -61,6 +61,7 @@ public class PreAuthInterceptor implements HandlerInterceptor
             }
 
             response.getWriter().println("You need to be at least : " + requiredRole.toString());
+            response.setStatus(403);
             return false;
         }catch (Exception e){}
 
