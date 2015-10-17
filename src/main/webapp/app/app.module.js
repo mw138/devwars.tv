@@ -68,6 +68,7 @@ var app = angular.module('app', [
     'app.UserTeamService',
     'app.editTeamImage',
 	'app.modDoc',
+    'app.tournament',
 
     //dependencies
     'ngCookies',
