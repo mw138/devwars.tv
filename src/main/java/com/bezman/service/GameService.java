@@ -165,7 +165,8 @@ public class GameService
         session.beginTransaction();
 
         newGame.setSignups(game.getSignups());
-        session.merge(newGame);
+
+        session.saveOrUpdate(newGame);
 
         session.getTransaction().commit();
         session.close();
