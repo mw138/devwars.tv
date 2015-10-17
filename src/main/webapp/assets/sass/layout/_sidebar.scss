@@ -1,14 +1,40 @@
 .sidebarView {
-
+	background: $foreground-color;
+	padding: 20px;
+	
     .sidebar-box {
 		text-align: center;
 		display: block;
 		padding: 10px 10px;
 		height: auto;
         margin-bottom: 20px;
+		position: relative;
 		h3 { font-size: 2rem; font-weight: 200; }
-		span { display: block; font-size: 14px; }	
+		span { display: block; font-size: 14px; }
+		
+		&.merch {
+			background: url('../img/dw-tshirt.jpg');
+			background-position: center;
+			background-size: 100%;
+			transition: all 300ms ease;
+			height: 118px;
+			padding: 0;
+			font-size: 24px;
+			
+			h3 { 
+				width: 100%;
+				position: absolute; 
+				z-index: 2;
+				top: 50%;
+				transform: translateY(-50%);
 
+			}
+			
+			&:hover {
+				background-size: 110%;
+			}
+		}
+		
 		&.explain {
             background: $main-color;
             &:hover {
@@ -44,6 +70,9 @@
         		background: $gray;
         	}
         }
+		&:last-child {
+			margin-bottom: 0;
+		}
     }
 
 	.leaderboard {
