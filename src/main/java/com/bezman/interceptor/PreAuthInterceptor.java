@@ -58,6 +58,8 @@ public class PreAuthInterceptor implements HandlerInterceptor
                 {
                     return true;
                 }
+            } else if(requiredRole == User.Role.NONE) {
+                return true;
             }
 
             response.getWriter().println("You need to be at least : " + requiredRole.toString());
