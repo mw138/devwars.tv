@@ -72,4 +72,10 @@ public class RedirectServlet
     {
         return "redirect:/games?game=" + gameID + "&season=" + seasonID;
     }
+
+    @RequestMapping({"/font/{slug:.+}", "/assets/fonts/{slug:.+}"})
+    public String getFontAwesome(@PathVariable("slug") String slug)
+    {
+        return "redirect:/bower_components/font-awesome/fonts/" + slug;
+    }
 }
