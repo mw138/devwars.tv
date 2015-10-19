@@ -44,6 +44,8 @@ public class Reference
 
     public static String SITE_STORAGE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator + "site-storage";
 
+    public static String CROPPED_IMAGE_CACHE_PATH = File.separator + "home" + File.separator + "share" + File.separator + "devwarspics" + File.separator + "cropped-cache";
+
     public static Connection connection;
 
     public static ObjectMapper objectMapper;
