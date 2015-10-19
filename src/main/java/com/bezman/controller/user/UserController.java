@@ -6,6 +6,8 @@ import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.controller.BaseController;
+import com.bezman.exception.NonDevWarsUserException;
+import com.bezman.exception.UserNotFoundException;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.Security;
@@ -529,67 +531,6 @@ public class UserController extends BaseController
         return new ResponseEntity(games, HttpStatus.OK);
     }
 
-//    @RequestMapping("/initreset")
-//    public ResponseEntity initReset(HttpServletRequest request, HttpServletResponse response,
-//                                    @RequestParam("email") String email)
-//    {
-//
-//        Session session = DatabaseManager.getSession();
-//
-//        Query query = session.createQuery("from User where email = :email and provider = null");
-//        query.setString("email", email);
-//
-//        User user = (User) DatabaseUtil.getFirstFromQuery(query);
-//
-//        session.close();
-//
-//        if (user != null)
-//        {
-//            String token = Util.randomText(64);
-//
-//            UserReset userReset = new UserReset();
-//            userReset.setUid(token);
-//            userReset.setId(user.getId());
-//
-//            DatabaseUtil.saveOrUpdateObjects(false, userReset);
-//
-//            Util.sendEmail(Security.emailUsername, Security.emailPassword, "DevWars password reset", token, user.getEmail());
-//        } else
-//        {
-//            return new ResponseEntity("Can't find user for given email", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        return null;
-//    }
-//
-//    @RequestMapping("/resetpassword")
-//    public ResponseEntity resetPassword(HttpServletRequest request, HttpServletResponse response,
-//                                        @RequestParam("newpassword") String password,
-//                                        @RequestParam("uid") String uid)
-//    {
-//
-//        Session session = DatabaseManager.getSession();
-//
-//        Query query = session.createQuery("from User u where u.passwordReset.uid = :uid");
-//        query.setString("uid", uid);
-//
-//        User user = (User) DatabaseUtil.getFirstFromQuery(query);
-//
-//        session.close();
-//
-//        if (user != null)
-//        {
-//            user.setEncryptedPassword(password);
-//
-//            DatabaseUtil.saveOrUpdateObjects(false, user);
-//            DatabaseUtil.deleteObjects(user.getPasswordReset());
-//
-//            return new ResponseEntity("Successfully changed password", HttpStatus.OK);
-//        } else
-//        {
-//            return new ResponseEntity("User not found", HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     /**
      * Method to change password for the signed in user
@@ -629,6 +570,50 @@ public class UserController extends BaseController
         {
             return new ResponseEntity("Incorrect Password", HttpStatus.FORBIDDEN);
         }
+    }
+
+    /**
+     * Starts the reset password process
+     * @param response (Resolved)
+     * @param email Email of the user for the password to be reset
+     * @return Appropriate response
+     */
+    @RequestMapping(value = "/initreset", method = RequestMethod.GET)
+    public ResponseEntity initResetPassword(HttpServletResponse response, @RequestParam("email") String email)
+    {
+        try
+        {
+            UserService.beginResetPasswordForEmail(email);
+
+            return new ResponseEntity("An email has been sent to your email with a link to reset your password", HttpStatus.OK);
+        }catch (NonDevWarsUserException e)
+        {
+            return new ResponseEntity("You must be a native DevWars User", HttpStatus.CONFLICT);
+        } catch (UserNotFoundException e)
+        {
+            return new ResponseEntity("User was not found for " + e.param, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
+    public ResponseEntity resetPassword(HttpServletResponse response,
+                                        @RequestParam("user") int id,
+                                        @RequestParam("key") String key,
+                                        @RequestParam("password") String password,
+                                        @RequestParam("password_confirmation") String passwordConfirmation) throws IOException
+    {
+        if (!password.equals(passwordConfirmation))
+            return new ResponseEntity("Passwords must be the same", HttpStatus.BAD_REQUEST);
+
+        User user = UserService.getUser(id);
+
+        if (!UserService.isResetKeyValidForUser(user, key))
+            return new ResponseEntity("Invalid Reset Key", HttpStatus.BAD_REQUEST);
+
+        UserService.changePasswordForUser(user, password);
+
+        response.sendRedirect("/");
+        return null;
     }
 
     /**

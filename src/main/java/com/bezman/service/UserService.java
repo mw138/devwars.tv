@@ -4,6 +4,7 @@ import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.exception.NonDevWarsUserException;
+import com.bezman.exception.UserNotFoundException;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.ConnectedAccount;
 import com.bezman.model.TwitchPointStorage;
@@ -11,6 +12,7 @@ import com.bezman.model.User;
 import com.bezman.model.UserSession;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.ResultTransformer;
@@ -129,10 +131,7 @@ public class UserService
 
         Session session = DatabaseManager.getSession();
 
-        Query query = session.createQuery("from User where id = :id");
-        query.setInteger("id", id);
-
-        user = (User) DatabaseUtil.getFirstFromQuery(query);
+        user = (User) session.get(User.class, id);
 
         session.close();
 
@@ -266,13 +265,30 @@ public class UserService
         session.close();
     }
 
-    public static void beginResetPasswordForUser(User user) throws NonDevWarsUserException
+    public static boolean isResetKeyValidForUser(User user, String key)
     {
-        if (!user.isNative()) throw new NonDevWarsUserException();
+        return user.getResetKey().equals(key);
+    }
 
+    public static void beginResetPasswordForEmail(String email) throws NonDevWarsUserException, UserNotFoundException
+    {
         Session session = DatabaseManager.getSession();
-        session.beginTransaction();
 
+        User user = userForEmail(email);
+
+        if (user == null)
+        {
+            throw new UserNotFoundException("Email", email);
+        }
+
+        if (!user.isNative())
+        {
+            session.close();
+
+            throw new NonDevWarsUserException();
+        }
+
+        session.beginTransaction();
         user = (User) session.merge(user);
 
         String resetKey = Util.randomText(64);
