@@ -1,6 +1,9 @@
 package com.bezman.service;
 
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.Reference.util.Util;
+import com.bezman.exception.NonDevWarsUserException;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.ConnectedAccount;
 import com.bezman.model.TwitchPointStorage;
@@ -260,6 +263,38 @@ public class UserService
 
         session.getTransaction().commit();
         session.flush();
+        session.close();
+    }
+
+    public static void beginResetPasswordForUser(User user) throws NonDevWarsUserException
+    {
+        if (!user.isNative()) throw new NonDevWarsUserException();
+
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user = (User) session.merge(user);
+
+        String resetKey = Util.randomText(64);
+
+        user.setResetKey(resetKey);
+
+        Util.sendEmail(user.getUsername() + " : Password Reset", Reference.rootURL + "/v1/user/passwordreset?user=" + user.getId() + "&key=" + resetKey, user.getEmail());
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public static void changePasswordForUser(User user, String password)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.setPassword(Security.hash(password));
+
+        session.merge(user);
+
+        session.getTransaction().commit();
         session.close();
     }
 }

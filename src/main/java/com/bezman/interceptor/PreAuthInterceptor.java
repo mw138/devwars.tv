@@ -1,6 +1,7 @@
 package com.bezman.interceptor;
 
 import com.bezman.Reference.Reference;
+import com.bezman.Reference.Request;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.annotation.AllowCrossOrigin;
 import com.bezman.annotation.PreAuthorization;
@@ -37,7 +38,10 @@ public class PreAuthInterceptor implements HandlerInterceptor
             PreAuthorization preAuthorization = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
             User.Role requiredRole = preAuthorization == null ? User.Role.NONE : preAuthorization.minRole();
 
-            request.setAttribute("hasSecretKey", Reference.requestHasSecretKey(request));
+            boolean hasSecretKey = Reference.requestHasSecretKey(request);
+            request.setAttribute("hasSecretKey", hasSecretKey);
+
+            if (hasSecretKey) return true;
 
             Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
 

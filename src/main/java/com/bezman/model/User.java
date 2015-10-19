@@ -51,7 +51,8 @@ public class User extends BaseModel
     @JsonIgnore
     public UserSession session;
 
-    private UserReset passwordReset;
+    @JsonIgnore
+    public String resetKey;
 
     private Ranking ranking;
 

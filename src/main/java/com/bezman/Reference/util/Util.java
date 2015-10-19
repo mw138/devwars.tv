@@ -1,6 +1,7 @@
 package com.bezman.Reference.util;
 
 import com.bezman.Reference.EmailThread;
+import com.bezman.Reference.Reference;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -52,6 +53,11 @@ public class Util
         EmailThread emailThread = new EmailThread(username, password, subject, message, recipient, false);
 
         emailThread.start();
+    }
+
+    public static void sendEmail(String subject, String message, String recipient)
+    {
+        sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, message, recipient);
     }
 
     public static void sendEmailHTML(String username, String password, String subject, String message, String recipient)

@@ -30,6 +30,7 @@
         <property name="veteran" column="veteran" type="boolean"/>
         <property name="bettingBitsEarned" column="betting_bits_earned" type="integer"/>
         <property name="gamesWatched" column="games_watched" type="integer"/>
+        <property name="resetKey" type="string"/>
 
         <one-to-one name="session" class="com.bezman.model.UserSession" lazy="false"/>
         <one-to-one name="ranking" class="com.bezman.model.Ranking" lazy="false" cascade="all"/>
