@@ -4,7 +4,7 @@
 		position: relative;
 		text-align: center;
 		margin: 0 auto;
-		width: 860px;
+		width: 900px;
 		font-size: 25px;
 		color: $devbit-color;
 
@@ -17,9 +17,21 @@
 		p {
 			position: absolute;
 			bottom: -4px;
-			right: 140px;
+			right: 160px;
 			font-size: 20px;
 			color: $main-color;
+		}
+	}
+
+	.button-row {
+		text-align: center;
+
+		.button {
+			height: 40px;
+			line-height: 40px;
+			padding: 0;
+			width: 200px;
+			border-radius: 5px;
 		}
 	}
 
@@ -47,7 +59,7 @@
 
 		h2 {
 			padding: 0 0 15px;
-			text-align: left;
+			text-align: center;
 			font-weight: bold;
 			font-size: 20px;
 			color: #fff;
@@ -76,8 +88,18 @@
 			}
 		}
 
+		ul {
+			list-style-type: none;
+			text-align: center;
+			width: 100%;
+			margin: 5px 0;
+		}
+
 		li {
+			display: inline-block;
 			text-align: left;
+			margin: 0 5px;
+			color: #fff;
 		}
 
 		.tooltip {
