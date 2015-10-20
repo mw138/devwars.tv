@@ -1,5 +1,10 @@
 .tournament-page {
 
+	&.container {
+		width: auto;
+		max-width: 1170px;
+	}
+
 	.header {
 		position: relative;
 		text-align: center;
@@ -131,6 +136,46 @@
 				opacity: 1;
 				top: 150px;
 				transition: all 0.25s ease;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 900px) {
+
+	.tournament-page {
+
+		.header {
+			width: 320px;
+			font-size: 10px;
+
+			p {
+				position: static;
+			}
+		}
+
+		.header-trophy {
+			display: none;
+			font-size: 26px;
+
+			&:first-child {
+				display: inline-block;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+
+	.tournament-page {
+
+		.info-box {
+			float: none;
+			margin: 0 auto 40px;
+			width: 100%;
+
+			.tooltip {
+				display: none;
 			}
 		}
 	}
