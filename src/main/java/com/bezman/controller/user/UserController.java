@@ -844,14 +844,7 @@ public class UserController extends BaseController
 
         if (username != null && !user.getUsername().equalsIgnoreCase(username))
         {
-            if (user.getUsernameChanges() < 1)
-            {
-                return new ResponseEntity("Not enough username changes", HttpStatus.CONFLICT);
-            } else
-            {
-                user.setUsername(username);
-                user.setUsernameChanges(user.getUsernameChanges() - 1);
-            }
+            user.setUsername(username);
         }
 
         if (location != null)
