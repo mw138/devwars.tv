@@ -86,7 +86,7 @@ public class User extends BaseModel
     @HibernateDefault("5")
     private Integer referredUsers;
 
-    @HibernateDefault("0")
+    @HibernateDefault("1")
     private Integer avatarChanges;
 
     private Integer gamesPlayed = 0;
@@ -99,7 +99,7 @@ public class User extends BaseModel
 
     private String location, url, company;
 
-    @HibernateDefault("0")
+    @HibernateDefault("1")
     private Integer usernameChanges;
 
     @HibernateDefault("0")
