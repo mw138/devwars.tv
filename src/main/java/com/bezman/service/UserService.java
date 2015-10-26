@@ -63,6 +63,28 @@ public class UserService
         return user;
     }
 
+    public static boolean userHasProvider(User user, String provider)
+    {
+        return usernameForProvider(user, provider) != null;
+    }
+
+    public static String usernameForProvider(User user, String provider)
+    {
+        if (provider.equals(user.getProvider()))
+        {
+            return user.getUsername();
+        }
+
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
+
+        if (connectedAccount.isPresent())
+        {
+            return connectedAccount.get().getUsername();
+        }
+
+        return null;
+    }
+
     public static User userForUsernameDevWars(String username)
     {
         Session session = DatabaseManager.getSession();
