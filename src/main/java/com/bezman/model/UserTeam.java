@@ -29,6 +29,7 @@ public class UserTeam extends BaseModel
 
     private User owner;
 
+    @HibernateDefault("/assets/img/default-avatar.png")
     private String avatarURL;
 
     @AlphaNumeric(message = "must be alphanumeric with spaces")

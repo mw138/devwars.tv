@@ -75,7 +75,7 @@ public class TeamController extends BaseController
 
                 if (!tarArchiveEntry.isDirectory())
                 {
-                    fileStorage.uploadFile(destPath + "/" + fileName, tarArchiveInputStream);
+                    fileStorage.uploadFile(destPath + fileName, tarArchiveInputStream);
                 }
             }
 

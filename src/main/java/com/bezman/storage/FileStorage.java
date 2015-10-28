@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.ArrayList;
 
 @Component
 public class FileStorage
@@ -46,6 +47,12 @@ public class FileStorage
     {
         return (Files.FileMetadata) dropbox.dbxClientV2.files.getMetadata(path);
     }
+
+    public ArrayList<Files.Metadata> getDirMetaDataForPath(String path) throws DbxException
+    {
+        return dropbox.dbxClientV2.files.listFolder(path).entries;
+    }
+
     public String shareableUrlForPath(String path)
     {
         try
