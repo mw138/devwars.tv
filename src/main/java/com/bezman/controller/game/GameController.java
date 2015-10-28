@@ -3,7 +3,6 @@ package com.bezman.controller.game;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
-import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
@@ -34,7 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,18 +42,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.zip.ZipOutputStream;
 
 @Controller
 @RequestMapping(value = "/v1/game")
 public class GameController
 {
     @Autowired
-    @Qualifier("pastGamesLoadingCache")
     LoadingCache<String, HashMap> pastGamesCache;
 
     @Autowired
     FileStorage fileStorage;
+
+    @Autowired
+    GameService gameService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    PlayerService playerService;
 
     /**
      * Retrieved all games with criteria
@@ -68,7 +75,7 @@ public class GameController
     {
         count = count > 50 ? 50 : count;
 
-        return new ResponseEntity(GameService.allGames(count, offset), HttpStatus.OK);
+        return new ResponseEntity(gameService.allGames(count, offset), HttpStatus.OK);
     }
 
     /**
@@ -102,7 +109,7 @@ public class GameController
     @RequestMapping("/tournament/upcoming")
     public ResponseEntity upcomingTournaments()
     {
-        return new ResponseEntity(GameService.getUpcomingTournaments(), HttpStatus.OK);
+        return new ResponseEntity(gameService.getUpcomingTournaments(), HttpStatus.OK);
     }
 
 
@@ -113,7 +120,7 @@ public class GameController
     @RequestMapping("/tournament/nearest")
     public ResponseEntity nearestTournament()
     {
-        return new ResponseEntity(GameService.getMostUpcomingTournament(), HttpStatus.OK);
+        return new ResponseEntity(gameService.getMostUpcomingTournament(), HttpStatus.OK);
     }
 
     /**
@@ -168,7 +175,7 @@ public class GameController
     @RequestMapping("/create")
     public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
     {
-        Game game = GameService.defaultGame();
+        Game game = gameService.defaultGame();
 
         if (name.equals("Tournament"))
         {
@@ -194,7 +201,7 @@ public class GameController
     @RequestMapping(value = "/createlegacy", method = RequestMethod.POST)
     public ResponseEntity createLegacyGame(@JSONParam("game") LegacyGame legacyGame)
     {
-        return new ResponseEntity(GameService.createGameFromLegacyGame(legacyGame), HttpStatus.OK);
+        return new ResponseEntity(gameService.createGameFromLegacyGame(legacyGame), HttpStatus.OK);
     }
 
     /**
@@ -206,7 +213,7 @@ public class GameController
     @RequestMapping("/{id}")
     public ResponseEntity getGame(@PathVariable("id") int id)
     {
-        Game game = GameService.getGame(id);
+        Game game = gameService.getGame(id);
 
         if (game != null)
         {
@@ -244,7 +251,7 @@ public class GameController
     @RequestMapping(value = "/{id}/update", method = {RequestMethod.POST})
     public ResponseEntity editGame(@PathModel("id") Game game, @JSONParam("game") Game newGame) throws IOException, UnirestException
     {
-        GameService.updateGame(game, newGame);
+        gameService.updateGame(game, newGame);
 
         if (newGame.isActive())
         {
@@ -326,11 +333,11 @@ public class GameController
     {
         ResponseEntity responseEntity = null;
 
-        Game game = GameService.getGame(gameID);
+        Game game = gameService.getGame(gameID);
 
         if (game != null)
         {
-            GameService.downloadCurrentGame(game);
+            gameService.downloadCurrentGame(game);
 
             Team team = game.getTeamByID(winnerID);
 
@@ -358,7 +365,7 @@ public class GameController
             responseEntity = new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
         }
 
-        game = GameService.getGame(gameID);
+        game = gameService.getGame(gameID);
 
         for (Team team : game.getTeams().values())
         {
@@ -454,7 +461,7 @@ public class GameController
     {
         ResponseEntity responseEntity = null;
 
-        Game game = GameService.getGame(id);
+        Game game = gameService.getGame(id);
 
         if (game != null)
         {
@@ -475,7 +482,7 @@ public class GameController
     @RequestMapping(value = "/currentgame")
     public ResponseEntity currentGame()
     {
-        Game currentGame = GameService.currentGame();
+        Game currentGame = gameService.currentGame();
 
         if (currentGame != null)
         {
@@ -494,7 +501,7 @@ public class GameController
     @RequestMapping(value = "/latestgame")
     public ResponseEntity latestGame()
     {
-        Game currentGame = GameService.latestGame();
+        Game currentGame = gameService.latestGame();
 
         if (currentGame != null)
         {
@@ -513,7 +520,7 @@ public class GameController
     @RequestMapping("/nearestgame")
     public ResponseEntity nearestGame()
     {
-        Game nearestGame = GameService.nearestGame();
+        Game nearestGame = gameService.nearestGame();
 
         if (nearestGame != null)
         {
@@ -655,7 +662,7 @@ public class GameController
     @RequestMapping(value = "/{id}/signuptwitchuser", method = RequestMethod.POST)
     public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id, SessionImpl session)
     {
-        User theTwitchUser = UserService.userForTwitchUsername(username);
+        User theTwitchUser = userService.userForTwitchUsername(username);
 
         if (theTwitchUser != null)
         {
@@ -843,11 +850,11 @@ public class GameController
 
         if (player != null)
         {
-            Game game = GameService.getGame(id);
+            Game game = gameService.getGame(id);
 
             if (game != null)
             {
-                Player oldPlayer = PlayerService.getPlayer(playerID);
+                Player oldPlayer = playerService.getPlayer(playerID);
 
                 if (oldPlayer != null)
                 {
@@ -883,11 +890,11 @@ public class GameController
     @RequestMapping("/{id}/sitepull")
     public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException, DbxException
     {
-        Game game = GameService.getGame(id);
+        Game game = gameService.getGame(id);
 
         if (game != null)
         {
-            GameService.downloadCurrentGame(game);
+            gameService.downloadCurrentGame(game);
 
             return new ResponseEntity("Successfully downloaded and stored Cloud Nine Site", HttpStatus.OK);
 
@@ -909,7 +916,7 @@ public class GameController
     public String siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException
     {
 
-        Game game = GameService.getGame(id);
+        Game game = gameService.getGame(id);
 
         if (game != null)
         {

@@ -10,6 +10,7 @@ import com.bezman.oauth.*;
 import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,8 @@ import java.util.Enumeration;
 @RequestMapping("/v1/oauth")
 public class OAuthController
 {
+    @Autowired
+    UserService userService;
 
     @RequestMapping("/reddit")
     public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response)
@@ -70,7 +73,7 @@ public class OAuthController
 
             if (queryUser == null)
             {
-                UserService.addUser(user);
+                userService.addUser(user);
             }else
             {
                 user.setId(queryUser.getId());
@@ -128,7 +131,7 @@ public class OAuthController
 
             if (queryUser == null)
             {
-                UserService.addUser(user);
+                userService.addUser(user);
             }else
             {
                 user.setId(queryUser.getId());
@@ -194,7 +197,7 @@ public class OAuthController
 
             if (queryUser == null)
             {
-                UserService.addUser(user);
+                userService.addUser(user);
             }else
             {
                 user.setId(queryUser.getId());
@@ -323,7 +326,7 @@ public class OAuthController
 
             if (queryUser == null)
             {
-                UserService.addUser(user);
+                userService.addUser(user);
             }else
             {
                 user.setId(queryUser.getId());
@@ -379,7 +382,7 @@ public class OAuthController
 
             if (queryUser == null)
             {
-                UserService.addUser(user);
+                userService.addUser(user);
             }else
             {
                 user.setId(queryUser.getId());

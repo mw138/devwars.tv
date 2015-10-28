@@ -6,7 +6,6 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.init.FirebaseInit;
 import com.bezman.init.IInit;
 import com.bezman.init.TwitterInit;
-import com.bezman.model.UserTeam;
 import com.bezman.service.GameService;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
@@ -30,9 +29,6 @@ public class StartupServlet
     public void postConstruct()
     {
         Reference.loadDevWarsProperties();
-        UserService.fileStorage = fileStorage;
-        UserTeamService.fileStorage = fileStorage;
-        GameService.fileStorage = fileStorage;
 
         Class[] initializations = new  Class[]{
                 FirebaseInit.class,

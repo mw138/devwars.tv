@@ -19,15 +19,19 @@ import java.util.List;
 @Service
 public class UserTeamService
 {
-    public static FileStorage fileStorage;
+    @Autowired
+    public FileStorage fileStorage;
 
-    public static boolean isUserInvitedToTeam(UserTeam team, User user)
+    @Autowired
+    UserService userService;
+
+    public boolean isUserInvitedToTeam(UserTeam team, User user)
     {
         return team.getInvites().stream()
                 .anyMatch(current -> current.getId() == user.getId());
     }
 
-    public static void disbandTeam(UserTeam userTeam, Integer newOwner)
+    public void disbandTeam(UserTeam userTeam, Integer newOwner)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -51,7 +55,7 @@ public class UserTeamService
         session.close();
     }
 
-    public static boolean inviteUserToTeam(User user, UserTeam userTeam)
+    public boolean inviteUserToTeam(User user, UserTeam userTeam)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -76,7 +80,7 @@ public class UserTeamService
         return true;
     }
 
-    public static List<Game> getGamesForUserTeam(UserTeam userTeam, int page, int count)
+    public List<Game> getGamesForUserTeam(UserTeam userTeam, int page, int count)
     {
         Session session = DatabaseManager.getSession();
 
@@ -91,7 +95,7 @@ public class UserTeamService
         return games;
     }
 
-    public static List<Game> getGamesForUserTeam(UserTeam userTeam)
+    public List<Game> getGamesForUserTeam(UserTeam userTeam)
     {
         Session session = DatabaseManager.getSession();
 
@@ -104,7 +108,7 @@ public class UserTeamService
         return games;
     }
 
-    public static Long getNumberOfGamesPlayedForUserTeam(UserTeam userTeam)
+    public Long getNumberOfGamesPlayedForUserTeam(UserTeam userTeam)
     {
         Session session = DatabaseManager.getSession();
 
@@ -118,7 +122,7 @@ public class UserTeamService
         return gamesCount;
     }
 
-    public static Long getNumberOfGamesWonForUserTeam(UserTeam userTeam)
+    public Long getNumberOfGamesWonForUserTeam(UserTeam userTeam)
     {
         Session session = DatabaseManager.getSession();
 
@@ -132,7 +136,7 @@ public class UserTeamService
         return gamesCount;
     }
 
-    public static Long getNumberOfGamesLostForUserTeam(UserTeam userTeam)
+    public Long getNumberOfGamesLostForUserTeam(UserTeam userTeam)
     {
         Session session = DatabaseManager.getSession();
 
@@ -146,7 +150,7 @@ public class UserTeamService
         return gamesCount;
     }
 
-    public static Integer getPositionInLeaderBoards(UserTeam userTeam)
+    public Integer getPositionInLeaderBoards(UserTeam userTeam)
     {
         Long place = 0L;
 
@@ -162,7 +166,7 @@ public class UserTeamService
         return place.intValue();
     }
 
-    public static HashMap<Object, Object> getStatisticsForUserTeam(UserTeam userTeam)
+    public HashMap<Object, Object> getStatisticsForUserTeam(UserTeam userTeam)
     {
         HashMap hashMap = new HashMap();
 
@@ -174,7 +178,7 @@ public class UserTeamService
         return hashMap;
     }
 
-    public static List<UserTeamInvite> teamsInvitedTo(User user)
+    public List<UserTeamInvite> teamsInvitedTo(User user)
     {
         List<UserTeamInvite> returnList;
 
@@ -189,7 +193,7 @@ public class UserTeamService
         return returnList;
     }
 
-    public static void changeTeamPicture(UserTeam userTeam, InputStream inputStream) throws IOException, DbxException
+    public void changeTeamPicture(UserTeam userTeam, InputStream inputStream) throws IOException, DbxException
     {
         fileStorage.uploadFile(fileStorage.TEAM_PICTURE_PATH + "/" + userTeam.getId() + "/avatar", inputStream);
 
@@ -204,7 +208,7 @@ public class UserTeamService
         session.close();
     }
 
-    public static boolean isNameTaken(String name)
+    public boolean isNameTaken(String name)
     {
         if (name.isEmpty()) return true;
 
@@ -221,7 +225,7 @@ public class UserTeamService
         return userTeam != null;
     }
 
-    public static boolean isTagTaken(String name)
+    public boolean isTagTaken(String name)
     {
         if (name.isEmpty()) return true;
 
@@ -238,17 +242,17 @@ public class UserTeamService
         return userTeam != null;
     }
 
-    public static boolean doesUserOwnUserTeam(User user, UserTeam userTeam)
+    public boolean doesUserOwnUserTeam(User user, UserTeam userTeam)
     {
         return userTeam.getOwner().getId() == user.getId();
     }
 
-    public static boolean doesUserHaveAuthorization(User user, UserTeam userTeam)
+    public boolean doesUserHaveAuthorization(User user, UserTeam userTeam)
     {
-        return doesUserOwnUserTeam(user, userTeam) || UserService.isUserAtLeast(user, User.Role.ADMIN);
+        return doesUserOwnUserTeam(user, userTeam) || userService.isUserAtLeast(user, User.Role.ADMIN);
     }
 
-    public static boolean doesUserBelongToTeam(User user)
+    public boolean doesUserBelongToTeam(User user)
     {
         return user.getTeam() != null && user.getTeam().getOwner() != null;
     }

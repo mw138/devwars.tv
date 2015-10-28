@@ -13,6 +13,8 @@ import com.dropbox.core.v2.Files;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,11 +24,13 @@ import java.util.Optional;
 /**
  * Created by Terence on 1/21/2015.
  */
+@Service
 public class UserService
 {
-    public static FileStorage fileStorage;
+    @Autowired
+    public FileStorage fileStorage;
 
-    public static void addUser(User user)
+    public void addUser(User user)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -46,7 +50,7 @@ public class UserService
         session.close();
     }
 
-    public static User userForUsername(String username)
+    public User userForUsername(String username)
     {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where username = :username");
@@ -59,12 +63,12 @@ public class UserService
         return user;
     }
 
-    public static boolean userHasProvider(User user, String provider)
+    public boolean userHasProvider(User user, String provider)
     {
         return usernameForProvider(user, provider) != null;
     }
 
-    public static String usernameForProvider(User user, String provider)
+    public String usernameForProvider(User user, String provider)
     {
         if (provider.equals(user.getProvider()))
         {
@@ -81,7 +85,7 @@ public class UserService
         return null;
     }
 
-    public static User userForUsernameDevWars(String username)
+    public User userForUsernameDevWars(String username)
     {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where username = :username and provider =  null");
@@ -94,19 +98,19 @@ public class UserService
         return user;
     }
 
-    public static User userForUsernameOrNewVeteranUser(String username)
+    public User userForUsernameOrNewVeteranUser(String username)
     {
-        User user = UserService.userForUsername(username);
+        User user = this.userForUsername(username);
 
         if (user != null)
         {
             return user;
         } else {
-            return UserService.createVeteranUserForUsername(username);
+            return this.createVeteranUserForUsername(username);
         }
     }
 
-    public static User createVeteranUserForUsername(String username)
+    public User createVeteranUserForUsername(String username)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -125,7 +129,7 @@ public class UserService
         return user;
     }
 
-    public static User userForEmail(String email)
+    public User userForEmail(String email)
     {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where email = :email");
@@ -138,7 +142,7 @@ public class UserService
         return user;
     }
 
-    public static User getUser(int id)
+    public User getUser(int id)
     {
         User user = null;
 
@@ -154,7 +158,7 @@ public class UserService
         return user;
     }
 
-    public static User getLastUser()
+    public User getLastUser()
     {
         User returnUser = null;
 
@@ -169,7 +173,7 @@ public class UserService
         return returnUser;
     }
 
-    public static User userForTwitchUsername(String username)
+    public User userForTwitchUsername(String username)
     {
         Session session = DatabaseManager.getSession();
 
@@ -184,7 +188,7 @@ public class UserService
         return user;
     }
 
-    public static Integer userCount()
+    public Integer userCount()
     {
         Long count = null;
 
@@ -197,7 +201,7 @@ public class UserService
         return count.intValue();
     }
 
-    public static void addTwitchPointsToUser(User user)
+    public void addTwitchPointsToUser(User user)
     {
         Session session = DatabaseManager.getSession();
 
@@ -228,7 +232,7 @@ public class UserService
         session.close();
     }
 
-    public static List<User> searchUsers(String username)
+    public List<User> searchUsers(String username)
     {
         Session session = DatabaseManager.getSession();
 
@@ -242,14 +246,14 @@ public class UserService
         return users;
     }
 
-    public static boolean isUserAtLeast(User user, User.Role role)
+    public boolean isUserAtLeast(User user, User.Role role)
     {
         User.Role userRole = user.getRole();
 
         return (userRole.ordinal() >= role.ordinal());
     }
 
-    public static User userForToken(String token)
+    public User userForToken(String token)
     {
         Session session = DatabaseManager.getSession();
 
@@ -264,7 +268,7 @@ public class UserService
         return user;
     }
 
-    public static void logoutUser(User user)
+    public void logoutUser(User user)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -281,11 +285,11 @@ public class UserService
         session.close();
     }
 
-    public static String pathForProfilePictureForUser(User user)
+    public String pathForProfilePictureForUser(User user)
     {
         return fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH + "/" + user.getId() + "/avatar");
     }
-    public static void changeProfilePictureForUser(User user, InputStream inputStream) throws IOException, DbxException
+    public void changeProfilePictureForUser(User user, InputStream inputStream) throws IOException, DbxException
     {
         fileStorage.uploadFile("/profilepics/" + user.getId() + "/avatar", inputStream);
 

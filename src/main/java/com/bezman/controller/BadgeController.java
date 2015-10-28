@@ -4,6 +4,7 @@ import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.Badge;
 import com.bezman.service.UserService;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,8 @@ import java.util.List;
 @RequestMapping("/v1/badge")
 public class BadgeController
 {
+    @Autowired
+    UserService userService;
 
     /**
      * @param session
@@ -33,7 +36,7 @@ public class BadgeController
         HashMap<String, Object> map = new HashMap<>();
 
         map.put("badges", badges);
-        map.put("userCount", UserService.userCount());
+        map.put("userCount", userService.userCount());
 
         return new ResponseEntity(map, HttpStatus.OK);
     }

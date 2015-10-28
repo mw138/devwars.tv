@@ -11,13 +11,9 @@ import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
-import com.bezman.storage.FileStorage;
-import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
-import com.dropbox.core.v2.Files;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -39,7 +35,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -53,6 +49,14 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/v1/user")
 public class UserController extends BaseController
 {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    Security security;
+
+    @Autowired
+    UserTeamService userTeamService;
 
     /**
      * Gets the signed in user
@@ -145,8 +149,8 @@ public class UserController extends BaseController
 
         JSONArray conflictJSONArray = new JSONArray();
 
-        boolean emailTaken = UserService.userForEmail(email) != null;
-        boolean usernameTaken = UserService.userForUsername(username) != null;
+        boolean emailTaken = userService.userForEmail(email) != null;
+        boolean usernameTaken = userService.userForUsername(username) != null;
         boolean usernameValid = username.matches("^([A-Za-z0-9\\-_]+)$");
         boolean captchaValid = Reference.recaptchaValid(rcResponse, request.getRemoteAddr());
         boolean usernameLengthGood = username.length() <= 25 && username.length() >= 4;
@@ -202,7 +206,7 @@ public class UserController extends BaseController
             User user = new User();
             user.setUsername(username);
             user.setEmail(email);
-            user.setPassword(Security.hash(password));
+            user.setPassword(security.hash(password));
             user.setRole(User.Role.PENDING);
             user.setAvatarChanges(1);
 
@@ -227,7 +231,7 @@ public class UserController extends BaseController
 
             if (referral != null)
             {
-                User referrer = UserService.userForUsername(referral);
+                User referrer = userService.userForUsername(referral);
 
                 if (referrer != null)
                 {
@@ -264,7 +268,7 @@ public class UserController extends BaseController
     {
         ResponseEntity responseEntity = null;
 
-        User user = UserService.getUser(id);
+        User user = userService.getUser(id);
 
         if (user.getRanking() == null)
         {
@@ -304,7 +308,7 @@ public class UserController extends BaseController
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        User user = UserService.getUser(id);
+        User user = userService.getUser(id);
         if (user != null)
         {
             session.delete(user);
@@ -331,7 +335,7 @@ public class UserController extends BaseController
             return new ResponseEntity("Query cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity(UserService.searchUsers(username), HttpStatus.OK);
+        return new ResponseEntity(userService.searchUsers(username), HttpStatus.OK);
     }
 
     /**
@@ -407,7 +411,7 @@ public class UserController extends BaseController
     {
         ResponseEntity responseEntity = null;
 
-        User user = UserService.getUser(id);
+        User user = userService.getUser(id);
 
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -471,7 +475,7 @@ public class UserController extends BaseController
 
         session.close();
 
-        if (user != null && user.getPassword().equals(Security.hash(password)))
+        if (user != null && user.getPassword().equals(security.hash(password)))
         {
             if (user.getRole() != User.Role.PENDING)
             {
@@ -496,15 +500,13 @@ public class UserController extends BaseController
     /**
      * Logs out the current user
      *
-     * @param request
-     * @param response
      * @return
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/logout")
     public ResponseEntity logout(@AuthedUser User user)
     {
-        UserService.logoutUser(user);
+        userService.logoutUser(user);
 
         return new ResponseEntity("Logged out successfully", HttpStatus.OK);
     }
@@ -558,7 +560,7 @@ public class UserController extends BaseController
 //
 //            DatabaseUtil.saveOrUpdateObjects(false, userReset);
 //
-//            Util.sendEmail(Security.emailUsername, Security.emailPassword, "DevWars password reset", token, user.getEmail());
+//            Util.sendEmail(security.emailUsername, security.emailPassword, "DevWars password reset", token, user.getEmail());
 //        } else
 //        {
 //            return new ResponseEntity("Can't find user for given email", HttpStatus.BAD_REQUEST);
@@ -618,11 +620,11 @@ public class UserController extends BaseController
             return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
         }
 
-        if (user.getPassword().equals(Security.hash(currentPassword)))
+        if (user.getPassword().equals(security.hash(currentPassword)))
         {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update User set password = :password where id = :id");
-            query.setString("password", Security.hash(newPassword));
+            query.setString("password", security.hash(newPassword));
             query.setInteger("id", user.getId());
 
             query.executeUpdate();
@@ -653,7 +655,7 @@ public class UserController extends BaseController
     {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative() || user.getPassword().equals(Security.hash(currentPassword)))
+        if (!user.isNative() || user.getPassword().equals(security.hash(currentPassword)))
         {
             if (EmailValidator.getInstance().isValid(newEmail))
             {
@@ -689,7 +691,7 @@ public class UserController extends BaseController
     public ResponseEntity changeAvatar(@AuthedUser User user,
                                        @RequestParam("file") MultipartFile image) throws IOException, DbxException
     {
-        UserService.changeProfilePictureForUser(user, image.getInputStream());
+        userService.changeProfilePictureForUser(user, image.getInputStream());
 
         return new ResponseEntity("Successfully change profile picture", HttpStatus.OK);
     }
@@ -708,7 +710,7 @@ public class UserController extends BaseController
     @RequestMapping("/{username}/public")
     public ResponseEntity getPublicUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException
     {
-        User currentUser = UserService.userForUsername(username);
+        User currentUser = userService.userForUsername(username);
 
         if (currentUser != null)
         {
@@ -732,11 +734,11 @@ public class UserController extends BaseController
     @RequestMapping("/{username}/avatar")
     public ResponseEntity getUserAvatar(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException
     {
-        User currentUser = UserService.userForUsername(username);
+        User currentUser = userService.userForUsername(username);
 
         if (currentUser != null)
         {
-            return new ResponseEntity(UserService.pathForProfilePictureForUser(currentUser), HttpStatus.OK);
+            return new ResponseEntity(userService.pathForProfilePictureForUser(currentUser), HttpStatus.OK);
         } else
         {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
@@ -1140,7 +1142,7 @@ public class UserController extends BaseController
     @RequestMapping("/teaminvites")
     public ResponseEntity getMyTeamInvites(@AuthedUser User user)
     {
-        List<UserTeamInvite> invites = UserTeamService.teamsInvitedTo(user);
+        List<UserTeamInvite> invites = userTeamService.teamsInvitedTo(user);
 
         return new ResponseEntity(invites, HttpStatus.OK);
     }

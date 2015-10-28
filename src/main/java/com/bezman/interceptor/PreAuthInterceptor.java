@@ -11,6 +11,8 @@ import com.bezman.model.UserSession;
 import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,8 +25,12 @@ import java.sql.Ref;
 /**
  * Created by Terence on 3/22/2015.
  */
+@Component
 public class PreAuthInterceptor implements HandlerInterceptor
 {
+    @Autowired
+    UserService userService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception
     {
@@ -48,7 +54,7 @@ public class PreAuthInterceptor implements HandlerInterceptor
             {
                 String token = cookie.getValue();
 
-                User user = UserService.userForToken(token);
+                User user = userService.userForToken(token);
 
                 request.setAttribute("user", user);
 

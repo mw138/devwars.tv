@@ -20,6 +20,8 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,11 +34,19 @@ import java.util.*;
 /**
  * Created by Terence on 1/21/2015.
  */
+@Service
 public class GameService
 {
-    public static FileStorage fileStorage;
+    @Autowired
+    public FileStorage fileStorage;
 
-    public static List<Game> allGames(int count, int offset)
+    @Autowired
+    TeamService teamService;
+
+    @Autowired
+    UserService userService;
+
+    public List<Game> allGames(int count, int offset)
     {
         ArrayList<Game> returnList;
 
@@ -52,7 +62,7 @@ public class GameService
         return returnList;
     }
 
-    public static Game defaultGame()
+    public Game defaultGame()
     {
         Game game = new Game();
 
@@ -83,7 +93,7 @@ public class GameService
         return game;
     }
 
-    public static Game getGame(int id)
+    public Game getGame(int id)
     {
         Game game = null;
 
@@ -99,7 +109,7 @@ public class GameService
         return game;
     }
 
-    public static Game currentGame()
+    public Game currentGame()
     {
         Game game = null;
 
@@ -115,7 +125,7 @@ public class GameService
         return game;
     }
 
-    public static Game latestGame()
+    public Game latestGame()
     {
         Game game = null;
 
@@ -130,7 +140,7 @@ public class GameService
         return game;
     }
 
-    public static Game nearestGame()
+    public Game nearestGame()
     {
         Game game = null;
 
@@ -147,7 +157,7 @@ public class GameService
         return game;
     }
 
-    public static void downloadCurrentGame(Game game) throws UnirestException, IOException, DbxException
+    public void downloadCurrentGame(Game game) throws UnirestException, IOException, DbxException
     {
         String redPath = fileStorage.SITE_STORAGE_PATH + "/" + game.getId() + "/" + "red";
         String bluePath = fileStorage.SITE_STORAGE_PATH + "/" + game.getId() + "/" + "blue";
@@ -156,7 +166,7 @@ public class GameService
         downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
     }
 
-    public static Game updateGame(Game game, Game newGame)
+    public Game updateGame(Game game, Game newGame)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
@@ -171,7 +181,7 @@ public class GameService
         return newGame;
     }
 
-    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException, DbxException
+    public void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException, DbxException
     {
         Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
 
@@ -246,7 +256,7 @@ public class GameService
         downloadURLToFile(site + "/index.html", (path + "/" + "index.html"));
     }
 
-    public static void downloadURLToFile(String urlLink, String path) throws IOException, DbxException
+    public void downloadURLToFile(String urlLink, String path) throws IOException, DbxException
     {
         URL url = new URL(urlLink);
 
@@ -258,7 +268,7 @@ public class GameService
         urlConnection.getInputStream().close();
     }
 
-    public static HashMap pastGames(Integer queryCount, Integer queryOffset)
+    public HashMap pastGames(Integer queryCount, Integer queryOffset)
     {
         Session session = DatabaseManager.getSession();
         /**
@@ -294,7 +304,7 @@ public class GameService
         return pastGames;
     }
 
-    public static Game getMostUpcomingTournament()
+    public Game getMostUpcomingTournament()
     {
         Game game;
 
@@ -312,7 +322,7 @@ public class GameService
         return game;
     }
 
-    public static List<Game> getUpcomingTournaments()
+    public List<Game> getUpcomingTournaments()
     {
         List<Game> games = null;
 
@@ -329,12 +339,12 @@ public class GameService
         return games;
     }
 
-    public static Game createGameFromLegacyGame(LegacyGame legacyGame)
+    public Game createGameFromLegacyGame(LegacyGame legacyGame)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        Game game = GameService.defaultGame();
+        Game game = this.defaultGame();
 
         session.save(game);
 
@@ -355,14 +365,14 @@ public class GameService
         blueTeam.setGame(game);
 
         legacyGame.getRedTeam().forEach((lang, username) -> {
-            Player player = new Player(redTeam, UserService.userForUsernameOrNewVeteranUser(username), lang);
+            Player player = new Player(redTeam, userService.userForUsernameOrNewVeteranUser(username), lang);
             session.save(player);
 
             redTeam.getPlayers().add(player);
         });
 
         legacyGame.getBlueTeam().forEach((lang, username) -> {
-            Player player = new Player(blueTeam, UserService.userForUsernameOrNewVeteranUser(username), lang);
+            Player player = new Player(blueTeam, userService.userForUsernameOrNewVeteranUser(username), lang);
             session.save(player);
 
             blueTeam.getPlayers().add(player);
@@ -384,12 +394,12 @@ public class GameService
 
             if (legacyObjective.getRed())
             {
-                TeamService.addObjectiveToCompleted(redTeam, objective);
+                teamService.addObjectiveToCompleted(redTeam, objective);
             }
 
             if (legacyObjective.getBlue())
             {
-                TeamService.addObjectiveToCompleted(blueTeam, objective);
+                teamService.addObjectiveToCompleted(blueTeam, objective);
             }
         }
 
