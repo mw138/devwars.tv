@@ -6,6 +6,11 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.init.FirebaseInit;
 import com.bezman.init.IInit;
 import com.bezman.init.TwitterInit;
+import com.bezman.service.GameService;
+import com.bezman.service.UserService;
+import com.bezman.service.UserTeamService;
+import com.bezman.storage.FileStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,6 +22,8 @@ import java.sql.SQLException;
 @RequestMapping
 public class StartupServlet
 {
+    @Autowired
+    FileStorage fileStorage;
 
     @PostConstruct
     public void postConstruct()

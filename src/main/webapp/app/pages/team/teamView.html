@@ -82,14 +82,14 @@
 				<div class="team-header">
 
 					<a class="team-icon" ng-class="{'active': isOwner}" ng-click="clickAvatarImage()">
-						<img ng-src="/v1/teams/{{team.id}}/avatar"/>
+						<img ng-src="{{ team.avatarURL }}"/>
 					</a>
 
                     <input type="file" id="fileInput" style="display: none;" fileread="chosenImage">
 
 					<div class="team-info">
 						<div class="team-rank rank--no-name" rank="team.rank"></div>
-						<span class="team-name">{{ team.name }}</span>
+						<span class="team-name" style="font-size: {{ fitTeamName(team.name) }}">{{ team.name }}</span>
 						<span class="team-tag">[{{ team.tag }}]</span>
 
 						<div class="team-xp">

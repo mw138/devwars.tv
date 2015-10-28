@@ -21,6 +21,11 @@ angular.module("app.team", [])
                 .then(function (success) {
                     $scope.team = success.data;
                     $scope.isOwner = ($scope.team.owner.id === AuthService.user.id);
+                    $scope.fitTeamName = function (name) {
+                        if (name.length > 10) {
+                            return 14 * (name.length * .100) + 'px';
+                        }
+                    };
 
                     //get match history.
                     UserTeamService.http.getHistory(success.data.id, null, null)

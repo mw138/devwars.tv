@@ -35,6 +35,9 @@ public class BlogController
     @Autowired
     BlogPostValidator blogPostValidator;
 
+    @Autowired
+    BlogService blogService;
+
     /**
      * Gets blog posts
      * @param session
@@ -104,7 +107,7 @@ public class BlogController
     @RequestMapping("/{title}")
     public ResponseEntity getBlog(SessionImpl session, @PathVariable("title") String title)
     {
-        BlogPost blogPost = BlogService.getPostByShortTitle(title);
+        BlogPost blogPost = blogService.getPostByShortTitle(title);
 
         if (blogPost != null)
         {

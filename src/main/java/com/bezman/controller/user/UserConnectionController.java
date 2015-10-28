@@ -9,20 +9,22 @@ import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
-import com.bezman.model.User;
 import com.bezman.oauth.*;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import twitter4j.*;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -40,6 +42,8 @@ import java.util.Optional;
 @RequestMapping("/v1/connect")
 public class UserConnectionController
 {
+    @Autowired
+    UserService userService;
 
     @PreAuthorization(minRole = com.bezman.model.User.Role.USER)
     @RequestMapping("/testtwitch")
@@ -287,7 +291,7 @@ public class UserConnectionController
     public ResponseEntity twitchCallback(SessionImpl session, @AuthedUser User user, HttpServletResponse response, @RequestParam("code") String code) throws IOException
     {
         User twitchUser = TwitchProvider.userForCode2(code);
-        User veteranUser = UserService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
+        User veteranUser = userService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
         boolean alreadyConnected = user.getConnectedAccounts().stream()
                 .anyMatch(account -> account.getDisconnected() == false && "TWITCH".equals(account.getProvider()));
@@ -316,7 +320,7 @@ public class UserConnectionController
             session.save(newConnection);
         }
 
-        UserService.addTwitchPointsToUser(user);
+        userService.addTwitchPointsToUser(user);
 
         session.merge(user);
 

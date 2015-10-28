@@ -1,6 +1,7 @@
 package com.bezman.service;
 
 import com.bezman.Reference.Reference;
+import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -13,10 +14,11 @@ import java.security.MessageDigest;
 /**
  * Created by Terence on 12/22/2014.
  */
+@Service
 public class Security
 {
 
-    public static String hash(String item)
+    public String hash(String item)
     {
         try
         {
@@ -41,7 +43,7 @@ public class Security
         return null;
     }
 
-    public static String encrypt(String item)
+    public String encrypt(String item)
     {
         try
         {
@@ -67,7 +69,7 @@ public class Security
         return null;
     }
 
-    public static String decrypt(String item)
+    public String decrypt(String item)
     {
         try
         {

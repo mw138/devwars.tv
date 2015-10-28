@@ -87,8 +87,11 @@ public class User extends BaseModel
     @HibernateDefault("5")
     private Integer referredUsers;
 
-    @HibernateDefault("0")
+    @HibernateDefault("1")
     private Integer avatarChanges;
+
+    @HibernateDefault("/assets/img/default-avatar.png")
+    private String avatarURL;
 
     private Integer gamesPlayed = 0;
     private Integer gamesWon = 0;
@@ -100,7 +103,7 @@ public class User extends BaseModel
 
     private String location, url, company;
 
-    @HibernateDefault("0")
+    @HibernateDefault("1")
     private Integer usernameChanges;
 
     @HibernateDefault("0")

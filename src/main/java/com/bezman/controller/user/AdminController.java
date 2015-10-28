@@ -3,8 +3,16 @@ package com.bezman.controller.user;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.User;
+import com.bezman.model.UserTeam;
+import com.bezman.service.UserService;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.Files;
+import org.hibernate.Session;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -22,63 +31,75 @@ import java.util.zip.ZipOutputStream;
 @Controller
 public class AdminController
 {
+    @Autowired
+    FileStorage fileStorage;
 
     /**
      * Archives all photos
+     *
      * @param response
      * @return null (File)
      * @throws IOException
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/photoarchive")
-    public ResponseEntity archivePhotos(HttpServletResponse response) throws IOException
+    public String archivePhotos(HttpServletResponse response) throws IOException
     {
-        response.setHeader("Content-Disposition","attachment; filename=\"" + "archive.zip" + "\"");
-        response.setContentType("application/zip");
-
-        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
-
-        File zipDir = new File(Reference.PROFILE_PICTURE_PATH_NO_END);
-//                File zipDir = new File("C:\\Users\\Terence\\IdeaProjects\\DevWars Maven\\src\\main\\java");
-
-        Util.zipFolder("", zipDir, zipOutputStream);
-
-        zipOutputStream.finish();
-        zipOutputStream.close();
-
-        return null;
+        return "redirect:" + fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH);
     }
 
     @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping("/photoarchivelist")
-    public ResponseEntity getArchiveFolderList(HttpServletResponse response) throws IOException
+    @RequestMapping("/migratestorage")
+    public ResponseEntity migrateStorage() throws DbxException
     {
-        File zipDir = new File(Reference.PROFILE_PICTURE_PATH_NO_END);
+        ArrayList<Files.Metadata> userPicFolders = fileStorage.getDirMetaDataForPath(fileStorage.PROFILE_PICTURE_PATH);
+        ArrayList<Files.Metadata> teamPicFolders = fileStorage.getDirMetaDataForPath(fileStorage.TEAM_PICTURE_PATH);
 
-        JSONObject jsonObject = new JSONObject();
-
-        addFolderToJSONObject(zipDir, jsonObject);
-
-        return new ResponseEntity(jsonObject, HttpStatus.OK);
-    }
-
-    private void addFolderToJSONObject(File dir, JSONObject jsonObject)
-    {
-        for(File file : dir.listFiles())
-        {
-            if (file.isDirectory())
+        userPicFolders.stream().forEach(metadata -> {
+            try
             {
-                JSONObject newDir = new JSONObject();
+                Integer userID = Integer.parseInt(metadata.name);
 
-                addFolderToJSONObject(file, newDir);
+                Session session = DatabaseManager.getSession();
+                session.beginTransaction();
 
-                jsonObject.put(file.getName(), newDir);
-            } else
+                User user = (User) session.get(User.class, userID);
+
+                if (user != null)
+                {
+                    System.out.println(user.getUsername() + " was not null");
+
+                    user.setAvatarURL(fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH + "/" + metadata.name + "/avatar"));
+                }
+
+                session.getTransaction().commit();
+                session.close();
+            } catch (NumberFormatException n){}
+        });
+
+        teamPicFolders.stream().forEach(metadata -> {
+            try
             {
-                jsonObject.put(file.getName(), file.getName());
-            }
-        }
-    }
+                Integer teamID = Integer.parseInt(metadata.name);
 
+                Session session = DatabaseManager.getSession();
+                session.beginTransaction();
+
+                UserTeam userTeam = (UserTeam) session.get(UserTeam.class, teamID);
+
+                if (userTeam != null)
+                {
+                    System.out.println(userTeam.getId() + " was not null");
+
+                    userTeam.setAvatarURL(fileStorage.shareableUrlForPath(fileStorage.TEAM_PICTURE_PATH + "/" + metadata.name + "/avatar"));
+                }
+
+                session.getTransaction().commit();
+                session.close();
+            } catch (NumberFormatException n){}
+        });
+
+        return new ResponseEntity("OK", HttpStatus.OK);
+    }
 
 }

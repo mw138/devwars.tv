@@ -1,19 +1,14 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.Reference;
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.*;
-import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
-import org.apache.commons.io.IOUtils;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
+import com.dropbox.core.DbxException;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,11 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +37,9 @@ public class UserTeamController
     @Autowired
     Validator validator;
 
+    @Autowired
+    UserTeamService userTeamService;
+
     /**
      * Returns a team for a given ID
      *
@@ -62,24 +55,6 @@ public class UserTeamController
     }
 
     /**
-     * Get the avatar image for a team
-     * @param id ID of the team
-     * @param response (Resolved)
-     * @throws IOException
-     */
-    @RequestMapping("/{id}/avatar")
-    public void getTeamAvatar(@PathVariable("id") int id, HttpServletResponse response) throws IOException
-    {
-        File file = new File(Reference.TEAM_PICTURE_PATH + File.separator + id, "avatar.jpg");
-        File defaultFile = new File(Reference.TEAM_PICTURE_PATH, "default.jpg");
-
-        if(file.exists())
-            IOUtils.copy(new FileInputStream(file), response.getOutputStream());
-
-        IOUtils.copy(new FileInputStream(defaultFile), response.getOutputStream());
-    }
-
-    /**
      * Change a teams avatar
      * @param session (Resolved)
      * @param multipartFile (Image)
@@ -92,17 +67,17 @@ public class UserTeamController
     public ResponseEntity changeAvatar(SessionImpl session,
                                        @AuthedUser User user,
                                        @RequestParam("image") MultipartFile multipartFile,
-                                       @PathVariable("id") int id) throws IOException
+                                       @PathVariable("id") int id) throws IOException, DbxException
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You cannot do that", HttpStatus.FORBIDDEN);
 
-        UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
+        userTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity("Successfully changed picture", HttpStatus.OK);
     }
@@ -118,8 +93,8 @@ public class UserTeamController
     {
         HashMap info = new HashMap();
 
-        info.put("name", UserTeamService.isNameTaken(name));
-        info.put("tag", UserTeamService.isTagTaken(tag));
+        info.put("name", userTeamService.isNameTaken(name));
+        info.put("tag", userTeamService.isTagTaken(tag));
 
         return new ResponseEntity(info, HttpStatus.OK);
     }
@@ -138,13 +113,12 @@ public class UserTeamController
     public ResponseEntity createTeam(SessionImpl session,
                                      @AuthedUser User user,
                                      @RequestParam("name") String name,
-                                     @RequestParam("tag") String tag,
-                                     @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException
+                                     @RequestParam("tag") String tag) throws IOException
     {
         user = (User) session.merge(user);
 
 
-        if (UserTeamService.doesUserBelongToTeam(user))
+        if (userTeamService.doesUserBelongToTeam(user))
             return new ResponseEntity("You already belong to a team", HttpStatus.CONFLICT);
 
         if (user.getWarrior() == null)
@@ -163,9 +137,6 @@ public class UserTeamController
         session.save(userTeam);
         session.flush();
         session.refresh(userTeam);
-
-        if (multipartFile != null)
-            UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
     }
@@ -187,10 +158,10 @@ public class UserTeamController
         if (!teamName.equals(userTeam.getName()))
             return new ResponseEntity("Team name did not match", HttpStatus.BAD_REQUEST);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
-        UserTeamService.disbandTeam(userTeam, newOwner);
+        userTeamService.disbandTeam(userTeam, newOwner);
         user.setTeam(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
@@ -216,7 +187,7 @@ public class UserTeamController
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
-        if(!UserTeamService.doesUserHaveAuthorization(authedUser, userTeam))
+        if(!userTeamService.doesUserHaveAuthorization(authedUser, userTeam))
             return new ResponseEntity("You're not allowed to do that", HttpStatus.FORBIDDEN);
 
         userTeam.getMembers().removeIf(
@@ -269,7 +240,7 @@ public class UserTeamController
         if (userTeam == null)
             return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
         userTeam.setName(newName);
@@ -299,7 +270,7 @@ public class UserTeamController
         if (userTeam.getMembers().size() >= 3)
             return new ResponseEntity("This team has too many players", HttpStatus.CONFLICT);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
         if (invitedUser == null)
@@ -308,7 +279,7 @@ public class UserTeamController
         if (invitedUser.getWarrior() == null)
             return new ResponseEntity("You cannot invite non warriors", HttpStatus.CONFLICT);
 
-        if (UserTeamService.inviteUserToTeam(invitedUser, userTeam))
+        if (userTeamService.inviteUserToTeam(invitedUser, userTeam))
         {
             Activity activity = new Activity(invitedUser, user, "You were invited to the team : " + userTeam.getName(), 0, 0);
             Notification notification = new Notification(invitedUser, "You were invited to the team : " + userTeam.getName(), false);
@@ -395,7 +366,7 @@ public class UserTeamController
             page = page < 1 ? 1 : page;
             count = count < 1 || count > 8 ? 8 : count;
 
-            List<Game> games = UserTeamService.getGamesForUserTeam(userTeam, page, count);
+            List<Game> games = userTeamService.getGamesForUserTeam(userTeam, page, count);
 
             return new ResponseEntity(games, HttpStatus.OK);
         }
@@ -417,7 +388,7 @@ public class UserTeamController
 
         if (userTeam != null)
         {
-            return new ResponseEntity(UserTeamService.getStatisticsForUserTeam(userTeam), HttpStatus.OK);
+            return new ResponseEntity(userTeamService.getStatisticsForUserTeam(userTeam), HttpStatus.OK);
         }
 
         return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);

@@ -2,10 +2,11 @@
  * Created by Terence on 3/22/2015.
  */
 angular.module("app.AuthService", [])
-    .factory("AuthService", ["$http", "$q", function ($http, $q) {
+    .factory("AuthService", ["$http", "$q", "UserService", function ($http, $q, UserService) {
         var AuthService = {};
 
         AuthService.callbacks = [];
+        AuthService.profilePicture = null;
 
         AuthService.roles = [
             "PENDING",

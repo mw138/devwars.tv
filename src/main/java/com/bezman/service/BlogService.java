@@ -8,16 +8,18 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Terence on 4/11/2015.
  */
+@Service
 public class BlogService
 {
 
-    public static List<BlogPost> allPosts()
+    public List<BlogPost> allPosts()
     {
         List<BlogPost> allPosts = null;
 
@@ -31,7 +33,7 @@ public class BlogService
         return allPosts;
     }
 
-    public static List<BlogPost> getPosts(int limit, int offset)
+    public List<BlogPost> getPosts(int limit, int offset)
     {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from BlogPost order by timestamp desc");
@@ -46,7 +48,7 @@ public class BlogService
         return returnList;
     }
 
-    public static BlogPost getPost(int id)
+    public BlogPost getPost(int id)
     {
         BlogPost post = null;
 
@@ -59,7 +61,7 @@ public class BlogService
         return post;
     }
 
-    public static BlogPost getPostByTitle(String title)
+    public BlogPost getPostByTitle(String title)
     {
         Session session = DatabaseManager.getSession();
 
@@ -73,7 +75,7 @@ public class BlogService
         return blogPost;
     }
 
-    public static BlogPost getPostByShortTitle(String title) {
+    public BlogPost getPostByShortTitle(String title) {
         Session session = DatabaseManager.getSession();
 
         BlogPost blogPost = (BlogPost) session.createCriteria(BlogPost.class)

@@ -23,6 +23,7 @@
         <property name="providerID" type="string" not-null="false"/>
         <property name="referredUsers" column="referred_users" type="integer"/>
         <property name="avatarChanges" column="avatar_changes" type="integer"/>
+        <property name="avatarURL" column="avatar_url" type="string"/>
         <property name="location" type="string"/>
         <property name="url" type="string"/>
         <property name="company" type="string"/>

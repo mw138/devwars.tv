@@ -13,6 +13,7 @@ import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ import java.util.List;
 @RequestMapping("/v1/devbits")
 public class DevBitsController
 {
+
+    @Autowired
+    UserService userService;
 
     /**
      * Gets devbits of twitch user
@@ -199,7 +203,7 @@ public class DevBitsController
 
         for (String username : usernames)
         {
-            User user = UserService.userForTwitchUsername(username);
+            User user = userService.userForTwitchUsername(username);
 
             if (user != null)
             {
@@ -226,7 +230,7 @@ public class DevBitsController
     {
         for (String username : usernames)
         {
-            User user = UserService.userForTwitchUsername(username);
+            User user = userService.userForTwitchUsername(username);
 
             if (user != null)
             {
