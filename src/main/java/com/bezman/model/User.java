@@ -89,6 +89,9 @@ public class User extends BaseModel
     @HibernateDefault("1")
     private Integer avatarChanges;
 
+    @HibernateDefault("/assets/img/default-avatar.png")
+    private String avatarURL;
+
     private Integer gamesPlayed = 0;
     private Integer gamesWon = 0;
     private Integer gamesLost = 0;

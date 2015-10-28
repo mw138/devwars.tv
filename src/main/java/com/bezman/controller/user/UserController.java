@@ -11,6 +11,10 @@ import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxDownloader;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.Files;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
@@ -21,6 +25,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.json.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -676,53 +681,17 @@ public class UserController extends BaseController
     /**
      * Method to change the avatar picture for the signed in user
      *
-     * @param request
-     * @param response
      * @param image
      * @return
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeavatar")
-    public ResponseEntity changeAvatar(HttpServletRequest request, HttpServletResponse response,
-                                       @RequestParam("file") MultipartFile image)
+    public ResponseEntity changeAvatar(@AuthedUser User user,
+                                       @RequestParam("file") MultipartFile image) throws IOException, DbxException
     {
-        if (image.isEmpty())
-        {
-            return new ResponseEntity("No image was uploaded", HttpStatus.BAD_REQUEST);
-        } else
-        {
-            User currentUser = (User) request.getAttribute("user");
+        UserService.changeProfilePictureForUser(user, image.getInputStream());
 
-            if (currentUser.getAvatarChanges() > 0)
-            {
-                File file = new File(Reference.PROFILE_PICTURE_PATH + currentUser.getId() + File.separator + "avatar.jpeg");
-
-                try
-                {
-                    if (!file.exists())
-                    {
-                        file.getParentFile().mkdirs();
-                        file.createNewFile();
-                    }
-
-                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-                    bufferedOutputStream.write(image.getBytes());
-                    bufferedOutputStream.close();
-                } catch (IOException e)
-                {
-                    return new ResponseEntity(file.getAbsolutePath() + " : " + e.toString(), HttpStatus.BAD_REQUEST);
-                }
-
-                currentUser.setAvatarChanges(currentUser.getAvatarChanges() - 1);
-
-                DatabaseUtil.mergeObjects(false, currentUser);
-
-                return new ResponseEntity("Successfully uploaded image", HttpStatus.OK);
-            } else
-            {
-                return new ResponseEntity("You need to purchase more [Avatar Changes] from the BitShop", HttpStatus.CONFLICT);
-            }
-        }
+        return new ResponseEntity("Successfully change profile picture", HttpStatus.OK);
     }
 
     /**
@@ -767,22 +736,7 @@ public class UserController extends BaseController
 
         if (currentUser != null)
         {
-            File file = new File(Reference.PROFILE_PICTURE_PATH + File.separator + currentUser.getId() + File.separator + "avatar.jpeg");
-
-            System.out.println(file.getAbsolutePath());
-
-            if (file.exists())
-            {
-                FileInputStream inputStream = new FileInputStream(file);
-                IOUtils.copy(inputStream, response.getOutputStream());
-                inputStream.close();
-            } else
-            {
-                System.out.println("NA");
-                request.getRequestDispatcher("/assets/img/default-avatar.png").forward(request, response);
-            }
-
-            return null;
+            return new ResponseEntity(UserService.pathForProfilePictureForUser(currentUser), HttpStatus.OK);
         } else
         {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
@@ -800,25 +754,9 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/avatar")
-    public ResponseEntity getAvatar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+    public ResponseEntity getAvatar(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user) throws IOException, ServletException
     {
-        User currentUser = (User) request.getAttribute("user");
-
-        File file = new File(Reference.PROFILE_PICTURE_PATH + File.separator + currentUser.getId() + File.separator + "avatar.jpeg");
-
-        System.out.println(file.getAbsolutePath());
-
-        if (file.exists())
-        {
-            FileInputStream inputStream = new FileInputStream(file);
-            IOUtils.copy(inputStream, response.getOutputStream());
-            inputStream.close();
-        } else
-        {
-            request.getRequestDispatcher("/assets/img/default-avatar.png").forward(request, response);
-        }
-
-        return null;
+        return getUserAvatar(request, response, user.getUsername());
     }
 
     /**

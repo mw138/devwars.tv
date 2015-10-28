@@ -29,6 +29,7 @@ public class UserTeam extends BaseModel
 
     private User owner;
 
+    private String avatarURL;
 
     @AlphaNumeric(message = "must be alphanumeric with spaces")
     @Length(min = 0, max = 24)

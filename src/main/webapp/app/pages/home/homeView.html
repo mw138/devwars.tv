@@ -51,7 +51,7 @@
 			<div class="left">
 				<h3 class="title"><span>Latest News</span></h3>
 				<div class="blogpost__preview" ng-repeat="post in posts" layout="row">
-					<div flex="25" class="blogpost__image" flex style="background-image: url('/v1/image/thumbnail?url={{post.image_url}}')"></div>
+					<div flex="25" class="blogpost__image" flex style="background-image: url('{{post.image_url}}')"></div>
 					<div layout="column" flex>
 						<a class="blogpost__header" ng-click="readMore(post)"><h3>{{post.title}}</h3></a>
 						<h6>By {{post.user.username}} - {{post.timestamp | date : 'mediumDate' : 'UTC'}}</h6>

@@ -6,6 +6,8 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.request.model.LegacyGame;
 import com.bezman.request.model.LegacyObjective;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
@@ -32,6 +34,7 @@ import java.util.*;
  */
 public class GameService
 {
+    public static FileStorage fileStorage;
 
     public static List<Game> allGames(int count, int offset)
     {
@@ -144,16 +147,10 @@ public class GameService
         return game;
     }
 
-    public static void downloadCurrentGame(Game game) throws UnirestException, IOException
+    public static void downloadCurrentGame(Game game) throws UnirestException, IOException, DbxException
     {
-        String redPath = Reference.SITE_STORAGE_PATH + File.separator + game.getId() + File.separator + "red";
-        String bluePath = Reference.SITE_STORAGE_PATH + File.separator + game.getId() + File.separator + "blue";
-
-        File redDirectory = new File(redPath);
-        File blueDirectory = new File(bluePath);
-
-        redDirectory.mkdirs();
-        blueDirectory.mkdirs();
+        String redPath = fileStorage.SITE_STORAGE_PATH + "/" + game.getId() + "/" + "red";
+        String bluePath = fileStorage.SITE_STORAGE_PATH + "/" + game.getId() + "/" + "blue";
 
         downloadSiteAtDirectory("https://red-devwars-1.c9.io", redPath);
         downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
@@ -174,7 +171,7 @@ public class GameService
         return newGame;
     }
 
-    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException
+    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException, DbxException
     {
         Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
 
@@ -190,8 +187,11 @@ public class GameService
 
                     try
                     {
-                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
                     } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    } catch (DbxException e)
                     {
                         e.printStackTrace();
                     }
@@ -210,8 +210,11 @@ public class GameService
 
                     try
                     {
-                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
                     } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    } catch (DbxException e)
                     {
                         e.printStackTrace();
                     }
@@ -230,28 +233,28 @@ public class GameService
 
                     try
                     {
-                        downloadURLToFile(site + "/" + source, new File(path + File.separator + source));
+                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
                     } catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    } catch (DbxException e)
                     {
                         e.printStackTrace();
                     }
                 });
 
-        downloadURLToFile(site + "/index.html", new File(path + File.separator + "index.html"));
+        downloadURLToFile(site + "/index.html", (path + "/" + "index.html"));
     }
 
-    public static void downloadURLToFile(String urlLink, File file) throws IOException
+    public static void downloadURLToFile(String urlLink, String path) throws IOException, DbxException
     {
         URL url = new URL(urlLink);
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
 
-        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        fileStorage.uploadFile(path, urlConnection.getInputStream());
 
-        IOUtils.copy(urlConnection.getInputStream(), fileOutputStream);
-
-        fileOutputStream.close();
         urlConnection.getInputStream().close();
     }
 

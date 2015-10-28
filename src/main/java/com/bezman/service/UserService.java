@@ -6,15 +6,16 @@ import com.bezman.model.ConnectedAccount;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
 import com.bezman.model.UserSession;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxDownloader;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.Files;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
-import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,12 +24,7 @@ import java.util.Optional;
  */
 public class UserService
 {
-
-    public static void initializeRequest(HttpServletRequest request, HttpServletResponse response)
-    {
-
-
-    }
+    public static FileStorage fileStorage;
 
     public static void addUser(User user)
     {
@@ -282,6 +278,25 @@ public class UserService
 
         session.getTransaction().commit();
         session.flush();
+        session.close();
+    }
+
+    public static String pathForProfilePictureForUser(User user)
+    {
+        return fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH + "/" + user.getId() + "/avatar");
+    }
+    public static void changeProfilePictureForUser(User user, InputStream inputStream) throws IOException, DbxException
+    {
+        fileStorage.uploadFile("/profilepics/" + user.getId() + "/avatar", inputStream);
+
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.setAvatarURL(pathForProfilePictureForUser(user));
+
+        session.merge(user);
+
+        session.getTransaction().commit();
         session.close();
     }
 }

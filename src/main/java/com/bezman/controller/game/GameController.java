@@ -11,6 +11,8 @@ import com.bezman.request.model.LegacyGame;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
 import com.bezman.service.UserService;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxException;
 import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -32,10 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,6 +51,9 @@ public class GameController
     @Autowired
     @Qualifier("pastGamesLoadingCache")
     LoadingCache<String, HashMap> pastGamesCache;
+
+    @Autowired
+    FileStorage fileStorage;
 
     /**
      * Retrieved all games with criteria
@@ -221,10 +223,9 @@ public class GameController
     public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException
     {
         try{
-            File file = new File(Reference.SITE_STORAGE_PATH + File.separator + gameID + File.separator + team + File.separator + slug);
-            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStream inputStream = fileStorage.getFileDownloader(fileStorage.SITE_STORAGE_PATH + "/" + gameID + "/" + team + "/" + slug).body;
 
-            IOUtils.copy(fileInputStream, response.getOutputStream());
+            IOUtils.copy(inputStream, response.getOutputStream());
 
             return null;
         }catch (Exception e)
@@ -321,7 +322,7 @@ public class GameController
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("id") int gameID,
-                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException
+                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException, DbxException
     {
         ResponseEntity responseEntity = null;
 
@@ -880,7 +881,7 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/sitepull")
-    public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException
+    public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException, DbxException
     {
         Game game = GameService.getGame(id);
 
@@ -905,27 +906,17 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/sitearchive")
-    public void siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException
+    public String siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException
     {
 
         Game game = GameService.getGame(id);
 
         if (game != null)
         {
-            SimpleDateFormat gameFormat = new SimpleDateFormat("yyyy-mm-dd");
-
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + gameFormat.format(game.getTimestamp()) + "_" + game.getName() + ".zip" + "\"");
-            response.setContentType("application/zip");
-
-            ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
-
-            File zipDir = new File(Reference.SITE_STORAGE_PATH + File.separator + id);
-
-            Util.zipFolder("", zipDir, zipOutputStream);
-
-            zipOutputStream.finish();
-            zipOutputStream.close();
+            return "redirect:" + fileStorage.shareableUrlForPath(fileStorage.SITE_STORAGE_PATH + game.getId());
         }
+
+        return null;
     }
 
 }

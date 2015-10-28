@@ -4,7 +4,9 @@ import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.User;
+import com.bezman.storage.FileStorage;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import java.util.zip.ZipOutputStream;
 @Controller
 public class AdminController
 {
+    @Autowired
+    FileStorage fileStorage;
 
     /**
      * Archives all photos
@@ -31,35 +35,9 @@ public class AdminController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/photoarchive")
-    public ResponseEntity archivePhotos(HttpServletResponse response) throws IOException
+    public String archivePhotos(HttpServletResponse response) throws IOException
     {
-        response.setHeader("Content-Disposition","attachment; filename=\"" + "archive.zip" + "\"");
-        response.setContentType("application/zip");
-
-        ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream());
-
-        File zipDir = new File(Reference.PROFILE_PICTURE_PATH_NO_END);
-//                File zipDir = new File("C:\\Users\\Terence\\IdeaProjects\\DevWars Maven\\src\\main\\java");
-
-        Util.zipFolder("", zipDir, zipOutputStream);
-
-        zipOutputStream.finish();
-        zipOutputStream.close();
-
-        return null;
-    }
-
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping("/photoarchivelist")
-    public ResponseEntity getArchiveFolderList(HttpServletResponse response) throws IOException
-    {
-        File zipDir = new File(Reference.PROFILE_PICTURE_PATH_NO_END);
-
-        JSONObject jsonObject = new JSONObject();
-
-        addFolderToJSONObject(zipDir, jsonObject);
-
-        return new ResponseEntity(jsonObject, HttpStatus.OK);
+        return "redirect:" + fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH);
     }
 
     private void addFolderToJSONObject(File dir, JSONObject jsonObject)
