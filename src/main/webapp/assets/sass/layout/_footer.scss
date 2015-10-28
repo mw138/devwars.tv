@@ -26,20 +26,22 @@ footer {
 	}
 
 	.footer-advertise {
-		margin: 20px 0;
-		height: 150px;
+		margin: 20px 0 0 0;
+		height: 100px;
 
 		.advert {
-			height: 150px;
-			width: 48%;
-			padding: 55px;
+			height: 100%;
+			width: calc(50% - 10px);
+			padding: 0;
 			float: left;
 			text-align: center;
 			border: 1px solid $gray;
 			background: $dgray;
-
-			&:first-child {
-				float: right;
+			position: relative;
+			
+			&:last-child { 
+				float: right; 
+				margin-left: 20px;
 			}
 
 			span {
@@ -48,6 +50,15 @@ footer {
 
 			&:hover {
 				background: $gray;
+			}
+			
+			.advert__text {
+				width: 100%;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: 0;
+				right: 0;
 			}
 		}
 	}

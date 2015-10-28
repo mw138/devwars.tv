@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Terence on 6/28/2015.
- */
 @Controller
 @RequestMapping("/v1/badge")
 public class BadgeController

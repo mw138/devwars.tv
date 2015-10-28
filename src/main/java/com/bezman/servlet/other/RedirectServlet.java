@@ -39,7 +39,7 @@ public class RedirectServlet
     }
 
 
-    @RequestMapping(value = {"team", "blog/*", "settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
+    @RequestMapping(value = {"modDoc", "team", "blog/*", "settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
     public String about(HttpServletRequest request, HttpServletResponse response)
     {
         return "index";
@@ -71,5 +71,11 @@ public class RedirectServlet
     public String getGamePage(@PathVariable("gameID") int gameID, @PathVariable("seasonID") int seasonID)
     {
         return "redirect:/games?game=" + gameID + "&season=" + seasonID;
+    }
+
+    @RequestMapping({"/font/{slug:.+}", "/assets/fonts/{slug:.+}"})
+    public String getFontAwesome(@PathVariable("slug") String slug)
+    {
+        return "redirect:/bower_components/font-awesome/fonts/" + slug;
     }
 }

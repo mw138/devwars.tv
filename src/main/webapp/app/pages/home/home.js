@@ -44,7 +44,7 @@ home.controller("HomeController", function ($scope, InfoService, DialogService, 
     $scope.info = allInfo.data;
     $scope.bitsLeaderboard = bitsLeaderboard.data;
     $scope.xpLeaderboard = xpLeaderboard.data;
-    $scope.posts = blogPosts.data.slice(0, 3);
+    $scope.posts = blogPosts.data.slice(0, 5);
     $scope.upcomingTournament = upcomingTournament.data;
 
     $scope.DialogService = DialogService;

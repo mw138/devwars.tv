@@ -1,14 +1,12 @@
 <div class="sidebarView">
-	<div class="leaderboard">
-		<h3 class="title"><i class="fa fa-trophy"></i>Leaderboards</h3>
-		<a href="#" ng-repeat="user in xpLeaderboard">
-			<div class="leaderboard__lb-row">
-				<div class="lb-row__lb-col">{{$index + 1}}</div>
-				<div class="lb-row__lb-col">{{user.username}}</div>
-				<div class="lb-row__lb-col">{{user.ranking.xp}}</div>
+	<a class="sidebar-box merch" href="http://www.teespring.com/devwars" target="_blank">
+		<div class="overlay--scroll">
+			<div class="overlay__inner">
+				<h3>DevWars Merch!</h3>
 			</div>
-		</a>
-	</div> <!-- .leaderboard -->
+		</div>
+	</a>
+	
 	<a class="sidebar-box explain" href="/help">
 		<h3>FAQ</h3>
 		<span>Learn more about DevWars!</span>

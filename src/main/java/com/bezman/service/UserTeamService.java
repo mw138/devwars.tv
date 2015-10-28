@@ -3,10 +3,13 @@ package com.bezman.service;
 import com.bezman.Reference.Reference;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxException;
 import org.apache.commons.io.IOUtils;
 import org.fusesource.hawtbuf.DataByteArrayInputStream;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -16,6 +19,7 @@ import java.util.List;
 @Service
 public class UserTeamService
 {
+    public static FileStorage fileStorage;
 
     public static boolean isUserInvitedToTeam(UserTeam team, User user)
     {
@@ -185,22 +189,19 @@ public class UserTeamService
         return returnList;
     }
 
-    public static void changeTeamPicture(UserTeam userTeam, InputStream inputStream) throws IOException
+    public static void changeTeamPicture(UserTeam userTeam, InputStream inputStream) throws IOException, DbxException
     {
-        File file = new File(Reference.TEAM_PICTURE_PATH + File.separator + userTeam.getId(), "avatar.jpg");
+        fileStorage.uploadFile(fileStorage.TEAM_PICTURE_PATH + "/" + userTeam.getId() + "/avatar", inputStream);
 
-        if(!file.getParentFile().isDirectory())
-            file.getParentFile().mkdirs();
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
 
-        if(!file.exists())
-            file.createNewFile();
+        userTeam.setAvatarURL(fileStorage.shareableUrlForPath(fileStorage.TEAM_PICTURE_PATH + "/" + userTeam.getId() + "/avatar"));
 
-        OutputStream outputStream = new FileOutputStream(file);
+        session.merge(userTeam);
 
-        IOUtils.copy(inputStream, outputStream);
-
-        outputStream.flush();
-        outputStream.close();
+        session.getTransaction().commit();
+        session.close();
     }
 
     public static boolean isNameTaken(String name)

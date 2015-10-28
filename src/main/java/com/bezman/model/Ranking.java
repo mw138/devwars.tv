@@ -1,7 +1,12 @@
 package com.bezman.model;
 
+import com.bezman.Reference.Reference;
 import com.bezman.annotation.HibernateDefault;
+import com.bezman.annotation.PreFlush;
+import com.bezman.service.RankService;
+import com.bezman.service.UserService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mashape.unirest.http.Unirest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

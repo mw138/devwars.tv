@@ -5,15 +5,17 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.ConnectedAccount;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
+import com.bezman.model.UserSession;
+import com.bezman.storage.FileStorage;
+import com.dropbox.core.DbxDownloader;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.Files;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
-import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +24,7 @@ import java.util.Optional;
  */
 public class UserService
 {
-
-    public static void initializeRequest(HttpServletRequest request, HttpServletResponse response)
-    {
-
-
-    }
+    public static FileStorage fileStorage;
 
     public static void addUser(User user)
     {
@@ -60,6 +57,28 @@ public class UserService
         session.close();
 
         return user;
+    }
+
+    public static boolean userHasProvider(User user, String provider)
+    {
+        return usernameForProvider(user, provider) != null;
+    }
+
+    public static String usernameForProvider(User user, String provider)
+    {
+        if (provider.equals(user.getProvider()))
+        {
+            return user.getUsername();
+        }
+
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
+
+        if (connectedAccount.isPresent())
+        {
+            return connectedAccount.get().getUsername();
+        }
+
+        return null;
     }
 
     public static User userForUsernameDevWars(String username)
@@ -96,6 +115,7 @@ public class UserService
         user.setUsername(username);
         user.setVeteran(true);
         user.setProvider("TWITCH");
+        user.setRole(User.Role.USER);
 
         session.save(user);
 
@@ -153,7 +173,7 @@ public class UserService
     {
         Session session = DatabaseManager.getSession();
 
-        Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
+        Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(u.username) = :username and u.provider = 'TWITCH')");
         userQuery.setString("username", username.toLowerCase());
         userQuery.setMaxResults(1);
 
@@ -227,5 +247,56 @@ public class UserService
         User.Role userRole = user.getRole();
 
         return (userRole.ordinal() >= role.ordinal());
+    }
+
+    public static User userForToken(String token)
+    {
+        Session session = DatabaseManager.getSession();
+
+        User user = (User) session.createQuery("from User user where user.session.sessionID = :token")
+                .setString("token", token)
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.flush();
+        session.close();
+
+        return user;
+    }
+
+    public static void logoutUser(User user)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        UserSession userSession = (UserSession) session.createQuery("from UserSession session where session.id = :id")
+                .setInteger("id", user.getId())
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.delete(userSession);
+
+        session.getTransaction().commit();
+        session.flush();
+        session.close();
+    }
+
+    public static String pathForProfilePictureForUser(User user)
+    {
+        return fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH + "/" + user.getId() + "/avatar");
+    }
+    public static void changeProfilePictureForUser(User user, InputStream inputStream) throws IOException, DbxException
+    {
+        fileStorage.uploadFile("/profilepics/" + user.getId() + "/avatar", inputStream);
+
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.setAvatarURL(pathForProfilePictureForUser(user));
+
+        session.merge(user);
+
+        session.getTransaction().commit();
+        session.close();
     }
 }

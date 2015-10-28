@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.Ref;
 
 /**
  * Created by Terence on 3/22/2015.
@@ -33,11 +34,13 @@ public class PreAuthInterceptor implements HandlerInterceptor
         {
             HandlerMethod handlerMethod = (HandlerMethod) o;
 
-            boolean hasSecretKey  = Reference.requestHasSecretKey(request);
-            request.setAttribute("hasSecretKey" , hasSecretKey);
+            PreAuthorization preAuthorization = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
+            User.Role requiredRole = preAuthorization == null ? User.Role.NONE : preAuthorization.minRole();
 
-            PreAuthorization auth = handlerMethod.getMethod().getAnnotation(PreAuthorization.class);
-            User.Role requiredRole = auth == null ? User.Role.NONE : auth.minRole();
+            boolean hasSecretKey = Reference.requestHasSecretKey(request);
+            request.setAttribute("hasSecretKey", hasSecretKey);
+
+            if (hasSecretKey) return true;
 
             Cookie cookie = Reference.getCookieFromArray(request.getCookies(), "token");
 
@@ -45,56 +48,25 @@ public class PreAuthInterceptor implements HandlerInterceptor
             {
                 String token = cookie.getValue();
 
-                if (token != null)
+                User user = UserService.userForToken(token);
+
+                request.setAttribute("user", user);
+
+                if (user == null && requiredRole == User.Role.NONE)
                 {
-                    Session session = DatabaseManager.getSession();
-                    Query query = session.createQuery("from UserSession where sessionID = :session");
-                    query.setString("session", token);
-
-                    UserSession userSession = (UserSession) DatabaseUtil.getFirstFromQuery(query);
-
-                    if (userSession != null)
-                    {
-                        Query userQuery = session.createQuery("from User where id = :id");
-                        userQuery.setInteger("id", userSession.getId());
-
-                        User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
-
-                        if (requiredRole == User.Role.NONE)
-                        {
-                            request.setAttribute("user", user);
-                            return true;
-                        }
-
-                        if (user != null)
-                        {
-                            User.Role userRole = user.getRole();
-
-                            if (userRole.ordinal() >= requiredRole.ordinal())
-                            {
-                                request.setAttribute("user", user);
-                                return true;
-                            }
-                        }
-                    }
-
-                    session.close();
+                    return true;
                 }
-            }
 
-            if(hasSecretKey)
-            {
+                if (user != null && user.getRole().ordinal() >= requiredRole.ordinal())
+                {
+                    return true;
+                }
+            } else if(requiredRole == User.Role.NONE) {
                 return true;
             }
 
-            if (requiredRole == User.Role.NONE)
-            {
-                return true;
-            }
-
+            response.getWriter().println("You need to be at least : " + requiredRole.toString());
             response.setStatus(403);
-            response.getWriter().print("You need to be at least " + requiredRole.toString());
-
             return false;
         }catch (Exception e){}
 

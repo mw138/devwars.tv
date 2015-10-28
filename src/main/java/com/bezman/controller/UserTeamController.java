@@ -8,6 +8,7 @@ import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.*;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
+import com.dropbox.core.DbxException;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -62,24 +63,6 @@ public class UserTeamController
     }
 
     /**
-     * Get the avatar image for a team
-     * @param id ID of the team
-     * @param response (Resolved)
-     * @throws IOException
-     */
-    @RequestMapping("/{id}/avatar")
-    public void getTeamAvatar(@PathVariable("id") int id, HttpServletResponse response) throws IOException
-    {
-        File file = new File(Reference.TEAM_PICTURE_PATH + File.separator + id, "avatar.jpg");
-        File defaultFile = new File(Reference.TEAM_PICTURE_PATH, "default.jpg");
-
-        if(file.exists())
-            IOUtils.copy(new FileInputStream(file), response.getOutputStream());
-
-        IOUtils.copy(new FileInputStream(defaultFile), response.getOutputStream());
-    }
-
-    /**
      * Change a teams avatar
      * @param session (Resolved)
      * @param multipartFile (Image)
@@ -92,7 +75,7 @@ public class UserTeamController
     public ResponseEntity changeAvatar(SessionImpl session,
                                        @AuthedUser User user,
                                        @RequestParam("image") MultipartFile multipartFile,
-                                       @PathVariable("id") int id) throws IOException
+                                       @PathVariable("id") int id) throws IOException, DbxException
     {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
@@ -138,8 +121,7 @@ public class UserTeamController
     public ResponseEntity createTeam(SessionImpl session,
                                      @AuthedUser User user,
                                      @RequestParam("name") String name,
-                                     @RequestParam("tag") String tag,
-                                     @RequestParam(value = "image", required = false) MultipartFile multipartFile) throws IOException
+                                     @RequestParam("tag") String tag) throws IOException
     {
         user = (User) session.merge(user);
 
@@ -163,9 +145,6 @@ public class UserTeamController
         session.save(userTeam);
         session.flush();
         session.refresh(userTeam);
-
-        if (multipartFile != null)
-            UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
     }

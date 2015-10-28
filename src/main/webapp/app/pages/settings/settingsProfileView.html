@@ -4,7 +4,7 @@
 		<form ng-init="initProfile()">
 			
 			<label>
-				<img src="/v1/user/avatar" />
+				<img ng-src="{{ AuthService.user.avatarURL }}" />
 				<div class="avatar-upload">
 					<!--<span class="button" ng-click="editAvatarImage($event)">Upload Image</span>-->
 					<input type="file" fileread="selectedAvatarImage">

@@ -26,10 +26,10 @@
 
         <set name="players" table="players" lazy="false">
             <key column="team_id"/>
-            <one-to-many class="Player"/>
+        <one-to-many class="Player"/>
         </set>
 
-        <set name="completedObjectives" table="completed_objectives" lazy="false" cascade="all,delete,delete-orphan">
+        <set name="completedObjectives" table="completed_objectives" lazy="false" cascade="all,delete,delete-orphan,save-update">
             <key column="team"/>
             <one-to-many class="com.bezman.model.CompletedObjective"/>
         </set>

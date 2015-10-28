@@ -188,6 +188,7 @@ angular.module("app.games", [])
         $scope.setSelectedGame = function (game, $index) {
             $scope.selectedGame = game;
 
+
             if($index > -1 && (new Date().getTime() - $scope.lastTimeClicked) > 200) {
                 if($(".game" + $index).next().hasClass("slide")) {
                     $(".game" + $index).next().slideToggle();

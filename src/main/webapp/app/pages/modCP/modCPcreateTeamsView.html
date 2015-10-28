@@ -2,6 +2,19 @@
 	<h1>Create Teams</h1>
 	<div class="modcp-content">
 
+		<div class="players-selected">
+			<div class="leaderRow leaderRow--header blueplayers">
+				<span class="position">POSITION</span>
+				<span class="username">USERNAME</span>
+				<span class="cloud9">CLOUD9</span>
+			</div> <!-- .leaderRow.leaderRow--header -->
+			<div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players" ng-click="removePlayer(player, selectedGame.teams.blue)">
+				<span class="position">{{ player.language }}</span>
+				<span class="username">{{ player.user.username }}</span>
+				<span class="cloud9">{{ player.user.warrior.c9Name }}</span>
+			</div> <!-- .leaderRow -->
+		</div>
+       
         <div class="players-selected">
             <div class="leaderRow leaderRow--header redplayers">
                 <span class="position">POSITION</span>
@@ -9,19 +22,6 @@
                 <span class="cloud9">CLOUD9</span>
             </div> <!-- .leaderRow.leaderRow--header -->
             <div class="leaderRow" ng-repeat="player in selectedGame.teams.red.players" ng-click="removePlayer(player, selectedGame.teams.red)">
-                <span class="position">{{ player.language }}</span>
-                <span class="username">{{ player.user.username }}</span>
-                <span class="cloud9">{{ player.user.warrior.c9Name }}</span>
-            </div> <!-- .leaderRow -->
-        </div>
-
-        <div class="players-selected">
-            <div class="leaderRow leaderRow--header blueplayers">
-                <span class="position">POSITION</span>
-                <span class="username">USERNAME</span>
-                <span class="cloud9">CLOUD9</span>
-            </div> <!-- .leaderRow.leaderRow--header -->
-            <div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players" ng-click="removePlayer(player, selectedGame.teams.blue)">
                 <span class="position">{{ player.language }}</span>
                 <span class="username">{{ player.user.username }}</span>
                 <span class="cloud9">{{ player.user.warrior.c9Name }}</span>
