@@ -12,18 +12,15 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /**
  * Handler to resolve the user from the PreAuthorization class
  */
-public class UserResolver implements HandlerMethodArgumentResolver
-{
+public class UserResolver implements HandlerMethodArgumentResolver {
 
     @Override
-    public boolean supportsParameter(MethodParameter methodParameter)
-    {
+    public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.getParameterType().equals(User.class) && methodParameter.getParameterAnnotation(AuthedUser.class) != null;
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception
-    {
+    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         ServletWebRequest webRequest = (ServletWebRequest) nativeWebRequest;
 
         return webRequest.getRequest().getAttribute("user");

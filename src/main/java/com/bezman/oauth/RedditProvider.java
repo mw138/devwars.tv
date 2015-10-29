@@ -11,11 +11,9 @@ import org.json.simple.JSONValue;
 /**
  * Created by Terence on 3/24/2015.
  */
-public class RedditProvider implements IProvider
-{
+public class RedditProvider implements IProvider {
 
-    public static User userForCodeWithKeys(String code, String access, String secret, String redirect) throws UnirestException
-    {
+    public static User userForCodeWithKeys(String code, String access, String secret, String redirect) throws UnirestException {
         String accessTokenJSON = Unirest.post("https://www.reddit.com/api/v1/access_token")
                 .queryString("grant_type", "authorization_code")
                 .queryString("code", code)
@@ -40,8 +38,7 @@ public class RedditProvider implements IProvider
         System.out.println(meResponse);
         JSONObject meJSONObject = (JSONObject) JSONValue.parse(meResponse);
 
-        if (meJSONObject != null)
-        {
+        if (meJSONObject != null) {
             User user = new User();
             user.setEmail(null);
             user.setUsername((String) meJSONObject.get("name") + Util.randomNumbers(4));
@@ -55,13 +52,11 @@ public class RedditProvider implements IProvider
         return null;
     }
 
-    public static User userForCode(String code) throws UnirestException
-    {
+    public static User userForCode(String code) throws UnirestException {
         return userForCodeWithKeys(code, Reference.getEnvironmentProperty("redditAppID"), Reference.getEnvironmentProperty("redditSecret"), Reference.rootURL + "/v1/oauth/reddit_callback");
     }
 
-    public static User userForCode2(String code) throws UnirestException
-    {
+    public static User userForCode2(String code) throws UnirestException {
         return userForCodeWithKeys(code, Reference.getEnvironmentProperty("redditAppID2"), Reference.getEnvironmentProperty("redditSecret2"), Reference.rootURL + "/v1/connect/reddit_callback");
     }
 

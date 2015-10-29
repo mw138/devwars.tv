@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ConnectedAccount extends BaseModel
-{
+public class ConnectedAccount extends BaseModel {
 
     private int id;
 
@@ -22,8 +21,7 @@ public class ConnectedAccount extends BaseModel
     @HibernateDefault("0")
     private Boolean disconnected;
 
-    public ConnectedAccount(User user, String provider, String username)
-    {
+    public ConnectedAccount(User user, String provider, String username) {
         this.user = user;
         this.provider = provider;
         this.username = username;

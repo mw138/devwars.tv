@@ -23,14 +23,12 @@ import java.util.Arrays;
 /**
  * Class to secure fields based on the current user
  */
-public class UserPermissionSerializer extends JsonSerializer<Object> implements ContextualSerializer
-{
+public class UserPermissionSerializer extends JsonSerializer<Object> implements ContextualSerializer {
 
     String userFieldName;
 
     @Override
-    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException
-    {
+    public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
         ArrayList<Field> fields = new ArrayList<Field>(Arrays.asList(o.getClass().getDeclaredFields()));
 
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -42,39 +40,33 @@ public class UserPermissionSerializer extends JsonSerializer<Object> implements 
         User currentUser = (User) request.getAttribute("user");
 
         fields.forEach(field -> {
-            try
-            {
+            try {
                 JsonIgnore jsonIgnore = field.getAnnotation(JsonIgnore.class);
                 UserPermissionFilter userPermissionFilter = field.getAnnotation(UserPermissionFilter.class);
 
                 field.setAccessible(true);
 
-                if(userPermissionFilter == null)
-                {
-                    if(jsonIgnore == null && field.get(o) != null)
+                if (userPermissionFilter == null) {
+                    if (jsonIgnore == null && field.get(o) != null)
                         jsonGenerator.writeObjectField(field.getName(), field.get(o));
-                } else
-                {
+                } else {
                     String fieldName = userPermissionFilter.userField();
                     User user;
 
-                    if (!fieldName.isEmpty())
-                    {
+                    if (!fieldName.isEmpty()) {
                         Field userField = o.getClass().getDeclaredField(fieldName);
                         userField.setAccessible(true);
 
                         user = (User) userField.get(o);
                     } else user = (User) o;
 
-                    if (jsonIgnore == null && field.get(o) != null && currentUser != null && user != null)
-                    {
-                        if (hasSecretKey || currentUser.getId() == user.getId() || currentUser.getRole() == User.Role.ADMIN || userPermissionFilter == null)
-                        {
+                    if (jsonIgnore == null && field.get(o) != null && currentUser != null && user != null) {
+                        if (hasSecretKey || currentUser.getId() == user.getId() || currentUser.getRole() == User.Role.ADMIN || userPermissionFilter == null) {
                             jsonGenerator.writeObjectField(field.getName(), field.get(o));
                         }
                     }
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -83,8 +75,7 @@ public class UserPermissionSerializer extends JsonSerializer<Object> implements 
     }
 
     @Override
-    public JsonSerializer<?> createContextual(SerializerProvider serializerProvider, BeanProperty beanProperty) throws JsonMappingException
-    {
+    public JsonSerializer<?> createContextual(SerializerProvider serializerProvider, BeanProperty beanProperty) throws JsonMappingException {
         return this;
     }
 }

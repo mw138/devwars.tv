@@ -3,8 +3,7 @@ package com.bezman.Reference;
 /**
  * Created by Terence on 1/24/2015.
  */
-public class HttpMessages
-{
+public class HttpMessages {
 
     public static final String
             FORBIDDEN = "You do not have permission to access this page",

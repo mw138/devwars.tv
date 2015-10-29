@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GameSignup extends BaseModel
-{
+public class GameSignup extends BaseModel {
 
     private int id;
 

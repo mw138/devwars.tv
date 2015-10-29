@@ -12,17 +12,14 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-public class PathModelResolver implements HandlerMethodArgumentResolver
-{
+public class PathModelResolver implements HandlerMethodArgumentResolver {
     @Override
-    public boolean supportsParameter(MethodParameter parameter)
-    {
+    public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterAnnotation(PathModel.class) != null;
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception
-    {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         PathModel pathModel = parameter.getParameterAnnotation(PathModel.class);
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 

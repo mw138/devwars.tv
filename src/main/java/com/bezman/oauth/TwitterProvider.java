@@ -6,11 +6,9 @@ import com.bezman.model.User;
 /**
  * Created by Terence on 3/24/2015.
  */
-public class TwitterProvider
-{
+public class TwitterProvider {
 
-    public static com.bezman.model.User userForTwitterUser(twitter4j.User twitterUser)
-    {
+    public static com.bezman.model.User userForTwitterUser(twitter4j.User twitterUser) {
         User user = new User();
         user.setEmail(null);
         user.setUsername(twitterUser.getScreenName() + Util.randomNumbers(4));

@@ -24,18 +24,17 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/v1/info")
-public class InfoController extends BaseController
-{
+public class InfoController extends BaseController {
 
     /**
      * Returns Stat info (User count, game count, blog post count, DevBits earned)
+     *
      * @param request
      * @param response
      * @return
      */
     @RequestMapping("/")
-    public ResponseEntity allInfo(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity allInfo(HttpServletRequest request, HttpServletResponse response) {
         org.springframework.web.context.ContextLoaderListener loaderListener;
 
         JSONObject jsonObject = new JSONObject();
@@ -61,13 +60,13 @@ public class InfoController extends BaseController
 
     /**
      * Leaderboard for devbits (Just sorts users by devbit amount)
+     *
      * @param request
      * @param response
      * @return
      */
     @RequestMapping("/bitsleaderboard")
-    public ResponseEntity bitsLeaderboard(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity bitsLeaderboard(HttpServletRequest request, HttpServletResponse response) {
         List<User> users = null;
 
         Session session = DatabaseManager.getSession();
@@ -83,13 +82,13 @@ public class InfoController extends BaseController
 
     /**
      * Leaderboard for XP (Just sorts users by xp amount)
+     *
      * @param request
      * @param response
      * @return
      */
     @RequestMapping("/xpleaderboard")
-    public ResponseEntity xpLeaderboard(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity xpLeaderboard(HttpServletRequest request, HttpServletResponse response) {
         List<User> users = null;
 
         Session session = DatabaseManager.getSession();
@@ -105,15 +104,15 @@ public class InfoController extends BaseController
 
     /**
      * Sorts based on weird formula Synswag wanted
+     *
      * @param request
      * @param response
-     * @param page Pagination if you want
+     * @param page     Pagination if you want
      * @return
      */
     @RequestMapping("/leaderboard")
     public ResponseEntity leaderboard(HttpServletRequest request, HttpServletResponse response,
-                                      @RequestParam(value = "page", required = false, defaultValue = "0") int page)
-    {
+                                      @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
         List<Object[]> results = new ArrayList<>();
 
         int maxResults = 10;

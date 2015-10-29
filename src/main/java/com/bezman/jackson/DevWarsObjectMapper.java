@@ -10,11 +10,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 /**
  * Bean for the Jackson Object Mapper
  */
-public class DevWarsObjectMapper extends ObjectMapper
-{
+public class DevWarsObjectMapper extends ObjectMapper {
 
-    public DevWarsObjectMapper()
-    {
+    public DevWarsObjectMapper() {
         super();
 
         setSerializationInclusion(JsonInclude.Include.NON_NULL);

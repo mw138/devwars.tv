@@ -11,17 +11,14 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /**
  * Created by Terence on 6/29/2015.
  */
-public class SessionResolver implements HandlerMethodArgumentResolver
-{
+public class SessionResolver implements HandlerMethodArgumentResolver {
     @Override
-    public boolean supportsParameter(MethodParameter methodParameter)
-    {
+    public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.getParameterType().equals(SessionImpl.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception
-    {
+    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         return ((ServletWebRequest) nativeWebRequest).getRequest().getAttribute("session");
     }
 }

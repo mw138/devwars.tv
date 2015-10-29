@@ -13,11 +13,9 @@ import org.json.simple.JSONValue;
 /**
  * Created by Terence on 3/24/2015.
  */
-public class GoogleProvider implements IProvider
-{
+public class GoogleProvider implements IProvider {
 
-    public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException
-    {
+    public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException {
         com.mashape.unirest.http.HttpResponse<String> accessTokenResponse = Unirest.post("https://www.googleapis.com/oauth2/v3/token")
                 .queryString("code", code)
                 .queryString("client_id", Reference.getEnvironmentProperty("googleClientID"))
@@ -37,14 +35,12 @@ public class GoogleProvider implements IProvider
                 .queryString("access_token", accessToken)
                 .asString();
 
-        if (meResponse.getBody() != null)
-        {
+        if (meResponse.getBody() != null) {
             JSONObject userObject = (JSONObject) JSONValue.parse(meResponse.getBody());
 
             System.out.println(userObject.toJSONString());
 
-            if (userObject != null)
-            {
+            if (userObject != null) {
                 User user = new User();
                 String email = (String) ((JSONObject) ((JSONArray) userObject.get("emails")).get(0)).get("value");
                 String username = (String) userObject.get("displayName") + Util.randomNumbers(4);
@@ -64,13 +60,11 @@ public class GoogleProvider implements IProvider
         return null;
     }
 
-    public static User userForCode(String code) throws UnirestException
-    {
+    public static User userForCode(String code) throws UnirestException {
         return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/google_callback");
     }
 
-    public static User userForCode2(String code) throws UnirestException
-    {
+    public static User userForCode2(String code) throws UnirestException {
         return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/google_callback");
     }
 

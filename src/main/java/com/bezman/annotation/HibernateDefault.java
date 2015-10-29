@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HibernateDefault
-{
+public @interface HibernateDefault {
     String value() default "";
 }

@@ -9,11 +9,9 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RankService
-{
+public class RankService {
 
-    public Rank rankForRanking(Ranking ranking)
-    {
+    public Rank rankForRanking(Ranking ranking) {
         Session session = DatabaseManager.getSession();
 
         Rank rank = (Rank) session.createCriteria(Rank.class)

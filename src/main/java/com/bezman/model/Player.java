@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Player extends BaseModel
-{
+public class Player extends BaseModel {
 
     private int id;
 
@@ -27,8 +26,7 @@ public class Player extends BaseModel
     @HibernateDefault("0")
     private Integer xpChanged;
 
-    public Player(Team team, User user, String language)
-    {
+    public Player(Team team, User user, String language) {
         this.team = team;
         this.user = user;
         this.language = language;

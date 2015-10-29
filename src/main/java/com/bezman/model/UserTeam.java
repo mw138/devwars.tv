@@ -3,7 +3,6 @@ package com.bezman.model;
 import com.bezman.annotation.HibernateDefault;
 import com.bezman.hibernate.validation.annotation.AlphaNumeric;
 import com.bezman.init.DatabaseManager;
-import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,16 +13,13 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.PostLoad;
-import javax.validation.constraints.Pattern;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserTeam extends BaseModel
-{
+public class UserTeam extends BaseModel {
 
     private int id;
 
@@ -55,8 +51,7 @@ public class UserTeam extends BaseModel
 
     private Long gamesWon, gamesLost;
 
-    public UserTeam(String name, String tag, User owner)
-    {
+    public UserTeam(String name, String tag, User owner) {
         this.name = name;
         this.tag = tag;
         this.owner = owner;
@@ -68,8 +63,7 @@ public class UserTeam extends BaseModel
     }
 
     @PostLoad
-    public void setRanks()
-    {
+    public void setRanks() {
         Session session = DatabaseManager.getSession();
 
         this.rank = (Rank) session.createCriteria(Rank.class)
@@ -83,8 +77,7 @@ public class UserTeam extends BaseModel
         session.close();
     }
 
-    public void addXP(int xp)
-    {
+    public void addXP(int xp) {
         this.setXp(this.getXp() + xp);
     }
 }

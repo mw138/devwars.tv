@@ -10,8 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserTeamInvite
-{
+public class UserTeamInvite {
 
     private int id;
 
@@ -22,8 +21,7 @@ public class UserTeamInvite
     @HibernateDefault
     private Date createdAt;
 
-    public UserTeamInvite(User user, UserTeam team)
-    {
+    public UserTeamInvite(User user, UserTeam team) {
         this.user = user;
         this.team = team;
     }

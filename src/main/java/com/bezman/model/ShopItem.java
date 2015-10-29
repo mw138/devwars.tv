@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ShopItem extends BaseModel
-{
+public class ShopItem extends BaseModel {
     private int id;
 
     private String name, description;

@@ -20,21 +20,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequestMapping("/v1/shop")
-public class ShopController
-{
+public class ShopController {
 
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/purchase/custom_avatar")
-    public ResponseEntity purchaseCustomAvatar(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity purchaseCustomAvatar(HttpServletRequest request, HttpServletResponse response) {
         ShopItem shopItem = getShopItemByName("Custom Avatar");
 
         User user = (User) request.getAttribute("user");
 
-        if (shopItem != null)
-        {
-            if(user.canBuyItem(shopItem))
-            {
+        if (shopItem != null) {
+            if (user.canBuyItem(shopItem)) {
                 user.purchaseItem(shopItem);
 
                 user.setAvatarChanges(user.getAvatarChanges() + 1);
@@ -42,23 +38,20 @@ public class ShopController
                 DatabaseUtil.mergeObjects(false, user);
 
                 return new ResponseEntity("Purchased " + shopItem.getName(), HttpStatus.OK);
-            } else
-            {
+            } else {
                 return new ResponseEntity("Not enough to buy item", HttpStatus.CONFLICT);
             }
-        } else
-        {
+        } else {
             return new ResponseEntity("Item not found", HttpStatus.NOT_FOUND);
         }
     }
 
-    private ShopItem getShopItemByName(String name)
-    {
+    private ShopItem getShopItemByName(String name) {
         ShopItem returnItem = null;
 
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from ShopItem where name = :name");
-        query.setString("name",  name);
+        query.setString("name", name);
 
         returnItem = (ShopItem) DatabaseUtil.getFirstFromQuery(query);
 

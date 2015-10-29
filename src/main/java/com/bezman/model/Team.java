@@ -11,8 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Team extends BaseModel
-{
+public class Team extends BaseModel {
     private String name;
 
     private int id;
@@ -37,8 +36,7 @@ public class Team extends BaseModel
     @HibernateDefault("0")
     private Integer designVotes, funcVotes, codeVotes;
 
-    public boolean didCompleteAllObjectives()
-    {
+    public boolean didCompleteAllObjectives() {
         Set<Objective> gameObjectives = this.getGame().getObjectives();
         Set<CompletedObjective> completedObjectives = this.getCompletedObjectives();
 

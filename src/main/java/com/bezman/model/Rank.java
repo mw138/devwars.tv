@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Rank extends BaseModel
-{
+public class Rank extends BaseModel {
     private int id;
 
     private int level, rankLevel;

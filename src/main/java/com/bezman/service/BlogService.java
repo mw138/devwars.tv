@@ -6,8 +6,6 @@ import com.bezman.model.BlogPost;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.SessionImpl;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +14,9 @@ import java.util.List;
  * Created by Terence on 4/11/2015.
  */
 @Service
-public class BlogService
-{
+public class BlogService {
 
-    public List<BlogPost> allPosts()
-    {
+    public List<BlogPost> allPosts() {
         List<BlogPost> allPosts = null;
 
         Session session = DatabaseManager.getSession();
@@ -33,8 +29,7 @@ public class BlogService
         return allPosts;
     }
 
-    public List<BlogPost> getPosts(int limit, int offset)
-    {
+    public List<BlogPost> getPosts(int limit, int offset) {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from BlogPost order by timestamp desc");
 
@@ -48,8 +43,7 @@ public class BlogService
         return returnList;
     }
 
-    public BlogPost getPost(int id)
-    {
+    public BlogPost getPost(int id) {
         BlogPost post = null;
 
         Session session = DatabaseManager.getSession();
@@ -61,8 +55,7 @@ public class BlogService
         return post;
     }
 
-    public BlogPost getPostByTitle(String title)
-    {
+    public BlogPost getPostByTitle(String title) {
         Session session = DatabaseManager.getSession();
 
         BlogPost blogPost = (BlogPost) session.createCriteria(BlogPost.class)

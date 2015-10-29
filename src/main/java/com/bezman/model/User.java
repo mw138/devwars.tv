@@ -8,7 +8,9 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -24,11 +26,9 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User extends BaseModel
-{
+public class User extends BaseModel {
 
-    public enum Role
-    {
+    public enum Role {
         NONE, PENDING, USER, BLOGGER, ADMIN
     }
 
@@ -118,20 +118,17 @@ public class User extends BaseModel
     private Integer gamesWatched;
 
     @JsonIgnore
-    public boolean isNative()
-    {
+    public boolean isNative() {
         return this.getProvider() == null || this.getProvider().isEmpty();
     }
 
-    public UserTeam getMyTeam()
-    {
+    public UserTeam getMyTeam() {
         UserTeam userTeam = this.getTeam();
 
         return userTeam.getOwner() == null ? null : userTeam;
     }
 
-   public String newSession()
-    {
+    public String newSession() {
         Session hibernateSession = DatabaseManager.getSession();
         hibernateSession.beginTransaction();
 
@@ -155,8 +152,7 @@ public class User extends BaseModel
     }
 
     @PostLoad
-    public void performCalculatedProperties()
-    {
+    public void performCalculatedProperties() {
         Session session = DatabaseManager.getSession();
 
         Query gamesQuery = session.createQuery("select count(*) from Player p where p.user.id = :id");
@@ -174,11 +170,9 @@ public class User extends BaseModel
 
         this.gamesLost = ((Long) DatabaseUtil.getFirstFromQuery(gamesLostQuery)).intValue();
 
-       if(this.getOwnedTeams() != null)
-        {
+        if (this.getOwnedTeams() != null) {
             Optional<UserTeam> ownedTeamOptional = this.getOwnedTeams().stream().findFirst();
-            if (ownedTeamOptional.isPresent())
-            {
+            if (ownedTeamOptional.isPresent()) {
                 this.setOwnedTeam(ownedTeamOptional.get());
             }
         }
@@ -186,13 +180,11 @@ public class User extends BaseModel
         session.close();
     }
 
-    public boolean canBuyItem(ShopItem item)
-    {
+    public boolean canBuyItem(ShopItem item) {
         return this.getRanking().getPoints() >= item.getPrice() && this.rank.getLevel() >= item.getRequiredLevel();
     }
 
-    public void purchaseItem(ShopItem item)
-    {
+    public void purchaseItem(ShopItem item) {
         this.getRanking().setPoints(this.getRanking().getPoints() - item.getPrice());
 
         Activity activity = new Activity(this, this, "Purchased : " + item.getName(), -1 * item.getPrice(), 0);
@@ -200,37 +192,30 @@ public class User extends BaseModel
         DatabaseUtil.updateObjects(false, this.getRanking());
     }
 
-    public List<Badge> tryAllBadges()
-    {
+    public List<Badge> tryAllBadges() {
         List<Badge> badgesToAward = new ArrayList<>();
 
-        if (this.getEmailConfirmation() == null)
-        {
+        if (this.getEmailConfirmation() == null) {
             badgesToAward.add(Badge.badgeForName("Authentic"));
         }
 
-        if (this.getConnectedAccounts().size() > 0)
-        {
+        if (this.getConnectedAccounts().size() > 0) {
             badgesToAward.add(Badge.badgeForName("Making Links"));
         }
 
-        if (this.getConnectedAccounts().size() >= 5)
-        {
+        if (this.getConnectedAccounts().size() >= 5) {
             badgesToAward.add(Badge.badgeForName("Full Coverage"));
         }
 
-        if (this.getRanking().getPoints() >= 5000)
-        {
+        if (this.getRanking().getPoints() >= 5000) {
             badgesToAward.add(Badge.badgeForName("Feed The Pig"));
         }
 
-        if (this.getRanking().getPoints() >= 25000)
-        {
+        if (this.getRanking().getPoints() >= 25000) {
             badgesToAward.add(Badge.badgeForName("Penny-Pincher"));
         }
 
-        if(this.getBettingBitsEarned() > 10000)
-        {
+        if (this.getBettingBitsEarned() > 10000) {
             badgesToAward.add(Badge.badgeForName("High Roller"));
         }
 
@@ -243,68 +228,55 @@ public class User extends BaseModel
 
         session.close();
 
-        if (user != null)
-        {
+        if (user != null) {
             badgesToAward.add(Badge.badgeForName("Ace High"));
         }
 
-        if(this.gamesWon > 0)
-        {
+        if (this.gamesWon > 0) {
             badgesToAward.add(Badge.badgeForName("Beginner's Luck"));
         }
 
-        if(this.gamesWon >= 5)
-        {
+        if (this.gamesWon >= 5) {
             badgesToAward.add(Badge.badgeForName("Victorious"));
         }
 
-        if (this.gamesWon >= 10)
-        {
+        if (this.gamesWon >= 10) {
             badgesToAward.add(Badge.badgeForName("Hotshot"));
         }
 
-        if (this.gamesWon >= 25)
-        {
+        if (this.gamesWon >= 25) {
             badgesToAward.add(Badge.badgeForName("Steamroller"));
         }
 
-        if (this.gamesWon > 0)
-        {
+        if (this.gamesWon > 0) {
             badgesToAward.add(Badge.badgeForName("First Timer"));
         }
 
-        if (this.gamesWon >= 5)
-        {
+        if (this.gamesWon >= 5) {
             badgesToAward.add(Badge.badgeForName("Hobbyist"));
         }
 
-        if (this.gamesWon >= 25)
-        {
+        if (this.gamesWon >= 25) {
             badgesToAward.add(Badge.badgeForName("Biggest Fan"));
         }
 
-        if (this.gamesWon >= 50)
-        {
+        if (this.gamesWon >= 50) {
             badgesToAward.add(Badge.badgeForName("Obsessed"));
         }
 
-        if(this.gamesWatched >= 1)
-        {
+        if (this.gamesWatched >= 1) {
             badgesToAward.add(Badge.badgeForName("First Timer"));
         }
 
-        if(this.gamesWatched >= 5)
-        {
+        if (this.gamesWatched >= 5) {
             badgesToAward.add(Badge.badgeForName("Hobbyist"));
         }
 
-        if(this.gamesWatched >= 25)
-        {
+        if (this.gamesWatched >= 25) {
             badgesToAward.add(Badge.badgeForName("Biggest Fan"));
         }
 
-        if(this.gamesWatched >= 50)
-        {
+        if (this.gamesWatched >= 50) {
             badgesToAward.add(Badge.badgeForName("Obsessed"));
         }
 
@@ -315,10 +287,8 @@ public class User extends BaseModel
 
         List<Player> playersWon = playersWonQuery.list();
 
-        for(int i = 0; i < playersWon.size(); i++)
-        {
-            if (i < playersWon.size() - 2)
-            {
+        for (int i = 0; i < playersWon.size(); i++) {
+            if (i < playersWon.size() - 2) {
                 Player firstPlayer = playersWon.get(i);
                 Player secondPlayer = playersWon.get(i + 1);
                 Player thirdPlayer = playersWon.get(i + 2);
@@ -328,8 +298,7 @@ public class User extends BaseModel
                 System.out.println(secondPlayer.getTeam().getGame().getId());
                 System.out.println(thirdPlayer.getTeam().getGame().getId());
 
-                if (firstPlayer.getTeam().isWin() && secondPlayer.getTeam().isWin() && thirdPlayer.getTeam().isWin())
-                {
+                if (firstPlayer.getTeam().isWin() && secondPlayer.getTeam().isWin() && thirdPlayer.getTeam().isWin()) {
                     badgesToAward.add(Badge.badgeForName("Hot Streak"));
                 }
             }
@@ -337,16 +306,14 @@ public class User extends BaseModel
 
         session.close();
 
-        if (this.getWarrior() != null && this.getWarrior().getDob() != null)
-        {
+        if (this.getWarrior() != null && this.getWarrior().getDob() != null) {
             Calendar dob = Calendar.getInstance();
             dob.setTime(this.getWarrior().getDob());
 
             Calendar today = Calendar.getInstance();
             today.setTime(new Date());
 
-            if (dob.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
-            {
+            if (dob.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                 badgesToAward.add(Badge.badgeForName("Cake Day"));
             }
         }
@@ -360,13 +327,10 @@ public class User extends BaseModel
 
         int streak = 0;
 
-        for(Player player : pastPlayers)
-        {
-            if (player.getTeam().isWin())
-            {
+        for (Player player : pastPlayers) {
+            if (player.getTeam().isWin()) {
                 streak++;
-            } else
-            {
+            } else {
                 break;
             }
         }
@@ -378,15 +342,12 @@ public class User extends BaseModel
         return badgesToAward;
     }
 
-    public boolean awardBadgeForName(String name)
-    {
+    public boolean awardBadgeForName(String name) {
         return this.awardBadge(Badge.badgeForName(name));
     }
 
-    public boolean awardBadge(Badge badge)
-    {
-        if(!this.hasBadge(badge))
-        {
+    public boolean awardBadge(Badge badge) {
+        if (!this.hasBadge(badge)) {
             this.getRanking().addPoints(badge.getBitsAwarded());
             this.getRanking().addXP(badge.getXpAwarded());
 
@@ -398,10 +359,8 @@ public class User extends BaseModel
         return false;
     }
 
-    public boolean hasBadge(Badge badge)
-    {
-        for (Badge currentBadge : this.getBadges())
-        {
+    public boolean hasBadge(Badge badge) {
+        for (Badge currentBadge : this.getBadges()) {
             if (currentBadge.getId() == badge.getId()) return true;
         }
 
@@ -409,12 +368,10 @@ public class User extends BaseModel
     }
 
     @PostLoad
-    public void postLoad()
-    {
+    public void postLoad() {
         Session session = DatabaseManager.getSession();
 
-        if(this.getRanking() != null)
-        {
+        if (this.getRanking() != null) {
             this.rank = (Rank) session.createCriteria(Rank.class)
                     .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
                     .addOrder(Order.desc("xpRequired"))

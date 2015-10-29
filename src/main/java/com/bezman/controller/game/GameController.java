@@ -22,7 +22,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,8 +44,7 @@ import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping(value = "/v1/game")
-public class GameController
-{
+public class GameController {
     @Autowired
     LoadingCache<String, HashMap> pastGamesCache;
 
@@ -65,14 +63,13 @@ public class GameController
     /**
      * Retrieved all games with criteria
      *
-     * @param count    Number of games wanted
-     * @param offset   How many games to skip in DB
+     * @param count  Number of games wanted
+     * @param offset How many games to skip in DB
      * @return All games
      */
     @RequestMapping(value = "/")
     public ResponseEntity allGames(@RequestParam(value = "count", defaultValue = "5", required = false) int count,
-                                   @RequestParam(value = "offset", defaultValue = "0", required = false) int offset)
-    {
+                                   @RequestParam(value = "offset", defaultValue = "0", required = false) int offset) {
         count = count > 50 ? 50 : count;
 
         return new ResponseEntity(gameService.allGames(count, offset), HttpStatus.OK);
@@ -86,47 +83,44 @@ public class GameController
     @UnitOfWork
     @AllowCrossOrigin(from = "*")
     @RequestMapping("/upcoming")
-    public ResponseEntity upcomingGames(SessionImpl session)
-    {
+    public ResponseEntity upcomingGames(SessionImpl session) {
         Query query = session.createQuery("from Game where timestamp > :time and done = false order by timestamp asc");
         query.setTimestamp("time", new Date());
 
         List<Game> upcomingGames = query.list();
 
-        if (upcomingGames.size() > 0)
-        {
+        if (upcomingGames.size() > 0) {
             return new ResponseEntity(upcomingGames, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
     /**
      * Get the most upcoming tournament games
+     *
      * @return List of games that are apart of a tournament
      */
     @RequestMapping("/tournament/upcoming")
-    public ResponseEntity upcomingTournaments()
-    {
+    public ResponseEntity upcomingTournaments() {
         return new ResponseEntity(gameService.getUpcomingTournaments(), HttpStatus.OK);
     }
 
 
     /**
      * Get the nearest tournament game
+     *
      * @return The nearest Tournament game
      */
     @RequestMapping("/tournament/nearest")
-    public ResponseEntity nearestTournament()
-    {
+    public ResponseEntity nearestTournament() {
         return new ResponseEntity(gameService.getMostUpcomingTournament(), HttpStatus.OK);
     }
 
     /**
      * Retrieves games that have been done in the past
      *
-     * @param queryCount Number of results (Max 16)
+     * @param queryCount  Number of results (Max 16)
      * @param queryOffset Result Offset
      * @return Response
      */
@@ -135,8 +129,7 @@ public class GameController
     public ResponseEntity pastGames(
             @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
             @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
-    ) throws ExecutionException
-    {
+    ) throws ExecutionException {
         HashMap games = pastGamesCache.get(queryCount + ":" + queryOffset);
 
         return new ResponseEntity(games, HttpStatus.OK);
@@ -152,8 +145,7 @@ public class GameController
     public ResponseEntity getGameList(
             @RequestParam("firstGame") int id,
             @RequestParam(value = "count", required = false, defaultValue = "10") int count,
-            SessionImpl session)
-    {
+            SessionImpl session) {
         List<Game> pastGames = session.createCriteria(Game.class)
                 .add(Restrictions.le("id", id))
                 .setMaxResults(count)
@@ -173,22 +165,18 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
-    public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name)
-    {
+    public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name) {
         Game game = gameService.defaultGame();
 
-        if (name.equals("Tournament"))
-        {
+        if (name.equals("Tournament")) {
             game.setTournament(true);
         }
 
-        if (timestamp != 0)
-        {
+        if (timestamp != 0) {
             game.setTimestamp(new Timestamp(timestamp));
         }
 
-        if (name != null)
-        {
+        if (name != null) {
             game.setName(name);
         }
 
@@ -199,8 +187,7 @@ public class GameController
 
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/createlegacy", method = RequestMethod.POST)
-    public ResponseEntity createLegacyGame(@JSONParam("game") LegacyGame legacyGame)
-    {
+    public ResponseEntity createLegacyGame(@JSONParam("game") LegacyGame legacyGame) {
         return new ResponseEntity(gameService.createGameFromLegacyGame(legacyGame), HttpStatus.OK);
     }
 
@@ -211,15 +198,12 @@ public class GameController
      * @return The Game
      */
     @RequestMapping("/{id}")
-    public ResponseEntity getGame(@PathVariable("id") int id)
-    {
+    public ResponseEntity getGame(@PathVariable("id") int id) {
         Game game = gameService.getGame(id);
 
-        if (game != null)
-        {
+        if (game != null) {
             return new ResponseEntity(game, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("Could not find game for given ID", HttpStatus.NOT_FOUND);
         }
 
@@ -227,16 +211,14 @@ public class GameController
 
     @AllowCrossOrigin(from = "*")
     @RequestMapping("/{id}/{team}/preview/{slug:.+}")
-    public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException
-    {
-        try{
+    public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException {
+        try {
             InputStream inputStream = fileStorage.getFileDownloader(fileStorage.SITE_STORAGE_PATH + "/" + gameID + "/" + team + "/" + slug).body;
 
             IOUtils.copy(inputStream, response.getOutputStream());
 
             return null;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return new ResponseEntity("File not uploaded yet", HttpStatus.NOT_FOUND);
         }
     }
@@ -249,12 +231,10 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method = {RequestMethod.POST})
-    public ResponseEntity editGame(@PathModel("id") Game game, @JSONParam("game") Game newGame) throws IOException, UnirestException
-    {
+    public ResponseEntity editGame(@PathModel("id") Game game, @JSONParam("game") Game newGame) throws IOException, UnirestException {
         gameService.updateGame(game, newGame);
 
-        if (newGame.isActive())
-        {
+        if (newGame.isActive()) {
             Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
                     .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
                     .body(Reference.objectMapper.writeValueAsString(newGame))
@@ -274,20 +254,17 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/activate")
-    public ResponseEntity activateGame(SessionImpl session, @PathVariable("id") int id)
-    {
+    public ResponseEntity activateGame(SessionImpl session, @PathVariable("id") int id) {
         Game game = (Game) session.get(Game.class, id);
 
-        if (game != null)
-        {
+        if (game != null) {
             Query query = session.createQuery("update Game set active = false where active = true");
             query.executeUpdate();
 
             game.setActive(true);
 
             return new ResponseEntity(game, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
@@ -301,17 +278,14 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/deactivate")
-    public ResponseEntity deactivateGame(SessionImpl session, @PathVariable("id") int id)
-    {
+    public ResponseEntity deactivateGame(SessionImpl session, @PathVariable("id") int id) {
         Game game = (Game) session.get(Game.class, id);
 
-        if (game != null)
-        {
+        if (game != null) {
             game.setActive(false);
 
             return new ResponseEntity(game, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
@@ -329,25 +303,21 @@ public class GameController
     @RequestMapping("/{id}/endgame")
     public ResponseEntity endGame(HttpServletRequest request, HttpServletResponse response,
                                   @PathVariable("id") int gameID,
-                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException, DbxException
-    {
+                                  @RequestParam("winner") int winnerID) throws IOException, UnirestException, DbxException {
         ResponseEntity responseEntity = null;
 
         Game game = gameService.getGame(gameID);
 
-        if (game != null)
-        {
+        if (game != null) {
             gameService.downloadCurrentGame(game);
 
             Team team = game.getTeamByID(winnerID);
 
-            if (team != null)
-            {
+            if (team != null) {
                 game.setDone(true);
                 game.setActive(false);
 
-                for (Team otherTeam : game.getTeams().values())
-                {
+                for (Team otherTeam : game.getTeams().values()) {
                     otherTeam.setWin(false);
                 }
 
@@ -356,19 +326,16 @@ public class GameController
                 DatabaseUtil.saveOrUpdateObjects(true, game, team);
 
                 responseEntity = new ResponseEntity("Successfully ended game", HttpStatus.OK);
-            } else
-            {
+            } else {
                 responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
             }
-        } else
-        {
+        } else {
             responseEntity = new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
         }
 
         game = gameService.getGame(gameID);
 
-        for (Team team : game.getTeams().values())
-        {
+        for (Team team : game.getTeams().values()) {
             //Participation
             team.getPlayers().stream().forEach(p ->
             {
@@ -380,8 +347,7 @@ public class GameController
             });
 
             //Completed All Objectives
-            if (team.didCompleteAllObjectives())
-            {
+            if (team.didCompleteAllObjectives()) {
                 team.getPlayers().stream().forEach(p ->
                 {
                     p.setXpChanged(p.getXpChanged() + 150);
@@ -391,8 +357,7 @@ public class GameController
             }
 
             //Team won
-            if (team.isWin())
-            {
+            if (team.isWin()) {
                 team.getPlayers().stream().forEach(p ->
                 {
                     p.setXpChanged(p.getXpChanged() + 250);
@@ -406,8 +371,7 @@ public class GameController
             Session session = DatabaseManager.getSession();
             session.beginTransaction();
 
-            for (Player player : team.getPlayers())
-            {
+            for (Player player : team.getPlayers()) {
                 session.saveOrUpdate(player);
                 session.saveOrUpdate(player.getUser().getRanking());
             }
@@ -424,8 +388,7 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/resetwinner")
-    public ResponseEntity resetGameWinner(@PathVariable("id") int id, SessionImpl session)
-    {
+    public ResponseEntity resetGameWinner(@PathVariable("id") int id, SessionImpl session) {
         Game game = (Game) session.get(Game.class, id);
 
         game.getTeams().values().stream()
@@ -457,14 +420,12 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/delete")
-    public ResponseEntity deleteGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
-    {
+    public ResponseEntity deleteGame(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id) {
         ResponseEntity responseEntity = null;
 
         Game game = gameService.getGame(id);
 
-        if (game != null)
-        {
+        if (game != null) {
             game.deleteFullGame();
             responseEntity = new ResponseEntity("Game " + id + " was deleted", HttpStatus.OK);
         } else responseEntity = new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
@@ -480,15 +441,12 @@ public class GameController
      */
     @AllowCrossOrigin(from = "*")
     @RequestMapping(value = "/currentgame")
-    public ResponseEntity currentGame()
-    {
+    public ResponseEntity currentGame() {
         Game currentGame = gameService.currentGame();
 
-        if (currentGame != null)
-        {
+        if (currentGame != null) {
             return new ResponseEntity(currentGame, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(HttpMessages.NO_CURRENT_GAME, HttpStatus.NOT_FOUND);
         }
     }
@@ -499,15 +457,12 @@ public class GameController
      * @return The most recent game
      */
     @RequestMapping(value = "/latestgame")
-    public ResponseEntity latestGame()
-    {
+    public ResponseEntity latestGame() {
         Game currentGame = gameService.latestGame();
 
-        if (currentGame != null)
-        {
+        if (currentGame != null) {
             return new ResponseEntity(currentGame.toString(), HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(HttpMessages.NO_GAMES, HttpStatus.NOT_FOUND);
         }
     }
@@ -518,15 +473,12 @@ public class GameController
      * @return The next game (Nearest Game)
      */
     @RequestMapping("/nearestgame")
-    public ResponseEntity nearestGame()
-    {
+    public ResponseEntity nearestGame() {
         Game nearestGame = gameService.nearestGame();
 
-        if (nearestGame != null)
-        {
+        if (nearestGame != null) {
             return new ResponseEntity(nearestGame, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
         }
     }
@@ -540,8 +492,7 @@ public class GameController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/pendingplayers")
-    public ResponseEntity pendingPlayers(SessionImpl session, @PathVariable("id") int id)
-    {
+    public ResponseEntity pendingPlayers(SessionImpl session, @PathVariable("id") int id) {
         Query query = session.createQuery("select user from GameSignup g where g.game.id = :id");
         query.setParameter("id", id);
 
@@ -553,8 +504,7 @@ public class GameController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/pendingteams")
-    public ResponseEntity pendingTeams(SessionImpl session, @PathVariable("id") int id)
-    {
+    public ResponseEntity pendingTeams(SessionImpl session, @PathVariable("id") int id) {
         Game game = (Game) session.get(Game.class, id);
 
         return new ResponseEntity(game.getTeamGameSignups(), HttpStatus.OK);
@@ -571,8 +521,7 @@ public class GameController
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/forfeituser", method = RequestMethod.POST)
     public ResponseEntity forfeitUser(SessionImpl session,
-                                      @JSONParam("player") Player player)
-    {
+                                      @JSONParam("player") Player player) {
         player = (Player) session.get(Player.class, player.getId());
 
         Ranking ranking = player.getUser().getRanking();
@@ -593,17 +542,14 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/signup")
-    public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id)
-    {
+    public ResponseEntity signUpForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id) {
         Game game = (Game) session.get(Game.class, id);
 
-        if (game != null)
-        {
+        if (game != null) {
             boolean hasSignedUp = game.getSignups().stream()
                     .anyMatch(signup -> signup.getUser().getId() == user.getId());
 
-            if (!hasSignedUp)
-            {
+            if (!hasSignedUp) {
 
                 GameSignup gameSignup = new GameSignup(user, game);
 
@@ -613,8 +559,7 @@ public class GameController
                 session.save(activity);
 
                 return new ResponseEntity("Signed up user", HttpStatus.OK);
-            } else
-            {
+            } else {
                 return new ResponseEntity("You have already signed up for that game", HttpStatus.CONFLICT);
             }
         }
@@ -625,8 +570,7 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.POST)
-    public ResponseEntity signUpTeamForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @JSONParam("users") User[] users)
-    {
+    public ResponseEntity signUpTeamForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @JSONParam("users") User[] users) {
         Game game = (Game) session.get(Game.class, id);
 
         UserTeam ownedTeam = user.getOwnedTeam();
@@ -660,28 +604,23 @@ public class GameController
     @PreAuthorization(minRole = User.Role.ADMIN)
     @Transactional
     @RequestMapping(value = "/{id}/signuptwitchuser", method = RequestMethod.POST)
-    public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id, SessionImpl session)
-    {
+    public ResponseEntity signUpTwitchUser(@RequestParam("username") String username, @PathVariable("id") int id, SessionImpl session) {
         User theTwitchUser = userService.userForTwitchUsername(username);
 
-        if (theTwitchUser != null)
-        {
+        if (theTwitchUser != null) {
             User twitchUser = (User) session.merge(theTwitchUser);
 
             Game game = (Game) session.get(Game.class, id);
 
-            if (game == null)
-            {
+            if (game == null) {
                 return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
             }
 
             boolean isUserApplied = game.getSignups().stream()
                     .anyMatch(signup -> signup.getUser().getId() == twitchUser.getId());
 
-            if (!isUserApplied)
-            {
-                if (twitchUser.getWarrior() == null)
-                {
+            if (!isUserApplied) {
+                if (twitchUser.getWarrior() == null) {
                     return new ResponseEntity("You are not a warrior, click http://devwars.tv/warrior-signup to sign up.", HttpStatus.CONFLICT);
                 }
 
@@ -699,16 +638,14 @@ public class GameController
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/{id}/resign")
-    public ResponseEntity resignFromGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id)
-    {
+    public ResponseEntity resignFromGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id) {
         Game game = (Game) session.get(Game.class, id);
 
         Optional<GameSignup> foundSignup = game.getSignups().stream()
                 .filter(a -> a.getUser().getId() == user.getId())
                 .findFirst();
 
-        if (foundSignup.isPresent())
-        {
+        if (foundSignup.isPresent()) {
             session.delete(foundSignup.get());
 
             return new ResponseEntity("Successfully resigned", HttpStatus.OK);
@@ -733,8 +670,7 @@ public class GameController
                                    @PathVariable("teamID") int teamID,
                                    @RequestParam(value = "func", required = false, defaultValue = "0") int func,
                                    @RequestParam(value = "design", required = false, defaultValue = "0") int design,
-                                   @RequestParam(value = "code", required = false, defaultValue = "0") int code)
-    {
+                                   @RequestParam(value = "code", required = false, defaultValue = "0") int code) {
         ResponseEntity responseEntity = null;
 
         Session session = DatabaseManager.getSession();
@@ -743,8 +679,7 @@ public class GameController
 
         Team team = (Team) DatabaseUtil.getFirstFromQuery(query);
 
-        if (team != null)
-        {
+        if (team != null) {
             session.beginTransaction();
 
             team.setDesignVotes(team.getDesignVotes() + design);
@@ -755,8 +690,7 @@ public class GameController
             session.getTransaction().commit();
 
             responseEntity = new ResponseEntity(team, HttpStatus.OK);
-        } else
-        {
+        } else {
             responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
         }
 
@@ -781,8 +715,7 @@ public class GameController
                                           @PathVariable("id") int id,
                                           @PathVariable("teamID") int teamID,
                                           @RequestParam(value = "points", required = false, defaultValue = "0") int points,
-                                          @RequestParam(value = "xp", required = false, defaultValue = "0") int xp)
-    {
+                                          @RequestParam(value = "xp", required = false, defaultValue = "0") int xp) {
         ResponseEntity responseEntity = null;
 
         Session session = DatabaseManager.getSession();
@@ -793,12 +726,9 @@ public class GameController
 
         Team team = (Team) DatabaseUtil.getFirstFromQuery(query);
 
-        if (team != null)
-        {
-            for (Player player : team.getPlayers())
-            {
-                if (player.getUser().getRanking() == null)
-                {
+        if (team != null) {
+            for (Player player : team.getPlayers()) {
+                if (player.getUser().getRanking() == null) {
                     Ranking ranking = new Ranking();
                     ranking.setId(player.getUser().getId());
 
@@ -820,8 +750,7 @@ public class GameController
             session.refresh(team);
 
             responseEntity = new ResponseEntity(team.getGame(), HttpStatus.OK);
-        } else
-        {
+        } else {
             responseEntity = new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
         }
 
@@ -841,23 +770,19 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/team/{teamID}/player/{playerID}/edit")
-    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json) throws IOException
-    {
+    public ResponseEntity editPlayer(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @PathVariable("teamID") int teamID, @PathVariable("playerID") int playerID, @RequestParam("json") String json) throws IOException {
         Team team = new Team();
         team.setId(teamID);
         Player player = Reference.objectMapper.readValue(json, Player.class);
         player.setTeam(team);
 
-        if (player != null)
-        {
+        if (player != null) {
             Game game = gameService.getGame(id);
 
-            if (game != null)
-            {
+            if (game != null) {
                 Player oldPlayer = playerService.getPlayer(playerID);
 
-                if (oldPlayer != null)
-                {
+                if (oldPlayer != null) {
                     Session session = DatabaseManager.getSession();
                     session.beginTransaction();
 
@@ -888,18 +813,15 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}/sitepull")
-    public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException, DbxException
-    {
+    public ResponseEntity pullCloudNineSites(@PathVariable("id") int id) throws UnirestException, IOException, DbxException {
         Game game = gameService.getGame(id);
 
-        if (game != null)
-        {
+        if (game != null) {
             gameService.downloadCurrentGame(game);
 
             return new ResponseEntity("Successfully downloaded and stored Cloud Nine Site", HttpStatus.OK);
 
-        } else
-        {
+        } else {
             return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
         }
     }
@@ -913,13 +835,11 @@ public class GameController
      */
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/sitearchive")
-    public String siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException
-    {
+    public String siteArchive(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
 
         Game game = gameService.getGame(id);
 
-        if (game != null)
-        {
+        if (game != null) {
             return "redirect:" + fileStorage.shareableUrlForPath(fileStorage.SITE_STORAGE_PATH + game.getId());
         }
 

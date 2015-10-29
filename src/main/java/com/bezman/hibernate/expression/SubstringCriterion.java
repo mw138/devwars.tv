@@ -1,7 +1,6 @@
 package com.bezman.hibernate.expression;
 
 import org.hibernate.criterion.SQLCriterion;
-import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.hibernate.type.Type;
 

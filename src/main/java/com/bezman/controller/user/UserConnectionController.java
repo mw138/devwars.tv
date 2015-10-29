@@ -40,23 +40,20 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping("/v1/connect")
-public class UserConnectionController
-{
+public class UserConnectionController {
     @Autowired
     UserService userService;
 
     @PreAuthorization(minRole = com.bezman.model.User.Role.USER)
     @RequestMapping("/testtwitch")
     @Transactional
-    public ResponseEntity testConnectTwitchUser(SessionImpl session, @RequestParam("username") String username, @AuthedUser User currentUser)
-    {
+    public ResponseEntity testConnectTwitchUser(SessionImpl session, @RequestParam("username") String username, @AuthedUser User currentUser) {
         TwitchPointStorage twitchPointStorage = (TwitchPointStorage) session.createQuery("from TwitchPointStorage s where s.username = :username")
                 .setString("username", username)
                 .setMaxResults(1)
                 .uniqueResult();
 
-        if (twitchPointStorage != null)
-        {
+        if (twitchPointStorage != null) {
             currentUser.getRanking().addXP(twitchPointStorage.getXp());
             currentUser.getRanking().addPoints(twitchPointStorage.getPoints());
 
@@ -69,8 +66,7 @@ public class UserConnectionController
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
     @RequestMapping("/{provider}/disconnect")
     public ResponseEntity disconnectAccount(HttpServletRequest request, HttpServletResponse response,
-                                            @PathVariable("provider") String provider)
-    {
+                                            @PathVariable("provider") String provider) {
         com.bezman.model.User user = (com.bezman.model.User) request.getAttribute("user");
 
         Session session = DatabaseManager.getSession();
@@ -86,8 +82,7 @@ public class UserConnectionController
     }
 
     @RequestMapping("/reddit")
-    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response) {
         return new ResponseEntity("We removed Reddit", HttpStatus.OK);
 
 //        try
@@ -104,22 +99,19 @@ public class UserConnectionController
 
     @RequestMapping("/reddit_callback")
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException
-    {
+    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException {
         com.bezman.model.User user = RedditProvider.userForCode2(code);
         com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
 
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "REDDIT", currentUser);
 
-        if (user != null && !connectedAccountExists)
-        {
+        if (user != null && !connectedAccountExists) {
             Activity activity = new Activity(currentUser, currentUser, "Connected your Reddit account", DevBits.ACCOUNT_CONNECTION, 0);
 
             currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
             DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
             DatabaseUtil.saveObjects(false, connectedAccountForUser(user, currentUser, "REDDIT"), activity);
-        } else
-        {
+        } else {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
             query.setString("provider", "REDDIT");
@@ -138,19 +130,16 @@ public class UserConnectionController
     }
 
     @RequestMapping("/google")
-    public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://accounts.google.com/o/oauth2/auth?scope=" +
                     "profile email openid&" +
                     "state=generate_a_unique_state_value&" +
-                    "redirect_uri=" + Reference.rootURL + "/v1/connect/google_callback&"+
+                    "redirect_uri=" + Reference.rootURL + "/v1/connect/google_callback&" +
                     "response_type=code&" +
                     "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
                     "access_type=offline");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -159,22 +148,19 @@ public class UserConnectionController
 
     @RequestMapping("/google_callback")
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity googleCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException
-    {
+    public ResponseEntity googleCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException {
         com.bezman.model.User user = GoogleProvider.userForCode2(code);
         com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
 
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "GOOGLE", currentUser);
 
-        if (user != null && !connectedAccountExists)
-        {
+        if (user != null && !connectedAccountExists) {
             Activity activity = new Activity(currentUser, currentUser, "Connected your Google account", DevBits.ACCOUNT_CONNECTION, 0);
 
             currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
             DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
             DatabaseUtil.saveObjects(false, connectedAccountForUser(user, currentUser, "GOOGLE"), activity);
-        } else
-        {
+        } else {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
             query.setString("provider", "GOOGLE");
@@ -193,13 +179,11 @@ public class UserConnectionController
     }
 
     @RequestMapping("/twitter")
-    public ResponseEntity twitterAuth(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="email", required = false) String email)
-    {
+    public ResponseEntity twitterAuth(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "email", required = false) String email) {
         boolean allowed = isRequestAllowed(request);
 
 
-        if (allowed)
-        {
+        if (allowed) {
             ConfigurationBuilder builder = new ConfigurationBuilder();
             builder.setOAuthConsumerKey(Reference.getEnvironmentProperty("twitterConsumerKey"));
             builder.setOAuthConsumerSecret(Reference.getEnvironmentProperty("twitterConsumerSecret"));
@@ -207,8 +191,7 @@ public class UserConnectionController
             TwitterFactory factory = new TwitterFactory(configuration);
             Twitter twitter = factory.getInstance();
 
-            try
-            {
+            try {
                 RequestToken token = twitter.getOAuthRequestToken(Reference.rootURL + "/v1/connect/twitter_callback");
                 request.getSession().setAttribute("requestToken", token);
                 request.getSession().setAttribute("twitter", twitter);
@@ -216,19 +199,17 @@ public class UserConnectionController
                 response.sendRedirect(token.getAuthenticationURL());
 
                 return null;
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else System.out.println("Not allowed");
+        } else System.out.println("Not allowed");
 
         return new ResponseEntity("Not a valid host", HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping("/twitter_callback")
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) throws TwitterException, IOException
-    {
+    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) throws TwitterException, IOException {
         Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
         twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
 
@@ -241,15 +222,13 @@ public class UserConnectionController
 
         twitter.setOAuthAccessToken(null);
 
-        if (user != null && !connectedAccountExists)
-        {
+        if (user != null && !connectedAccountExists) {
             Activity activity = new Activity(currentUser, currentUser, "Connected your Twitter account", DevBits.ACCOUNT_CONNECTION, 0);
 
             currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
             DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
             DatabaseUtil.saveObjects(false, connectedAccountForUser(user, currentUser, "TWITTER"), activity);
-        } else
-        {
+        } else {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
             query.setString("provider", "TWITTER");
@@ -268,17 +247,14 @@ public class UserConnectionController
     }
 
     @RequestMapping("/twitch")
-    public ResponseEntity twitchAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public ResponseEntity twitchAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://api.twitch.tv/kraken/oauth2/authorize" +
                     "?response_type=code" +
                     "&client_id=" + Reference.getEnvironmentProperty("twitchClientID2") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/connect/twitch_callback" +
                     "&scope=user_read");
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -288,16 +264,14 @@ public class UserConnectionController
     @Transactional
     @RequestMapping("/twitch_callback")
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity twitchCallback(SessionImpl session, @AuthedUser User user, HttpServletResponse response, @RequestParam("code") String code) throws IOException
-    {
+    public ResponseEntity twitchCallback(SessionImpl session, @AuthedUser User user, HttpServletResponse response, @RequestParam("code") String code) throws IOException {
         User twitchUser = TwitchProvider.userForCode2(code);
         User veteranUser = userService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
         boolean alreadyConnected = user.getConnectedAccounts().stream()
                 .anyMatch(account -> account.getDisconnected() == false && "TWITCH".equals(account.getProvider()));
 
-        if(alreadyConnected)
-        {
+        if (alreadyConnected) {
             return new ResponseEntity("Already Connected", HttpStatus.CONFLICT);
         }
 
@@ -306,14 +280,12 @@ public class UserConnectionController
                         "TWITCH".equals(account.getProvider()) && account.getDisconnected() == true)
                 .findFirst();
 
-        if (connectedAccount.isPresent())
-        {
+        if (connectedAccount.isPresent()) {
             connectedAccount.get().setUsername(twitchUser.getUsername().substring(0, twitchUser.getUsername().length() - 4));
             connectedAccount.get().setDisconnected(false);
 
             session.merge(connectedAccount.get());
-        } else
-        {
+        } else {
             ConnectedAccount newConnection = new ConnectedAccount(user, "TWITCH", twitchUser.getUsername().substring(0, twitchUser.getUsername().length() - 4));
             user.getConnectedAccounts().add(newConnection);
 
@@ -324,8 +296,7 @@ public class UserConnectionController
 
         session.merge(user);
 
-        if (veteranUser != null && veteranUser.getVeteran())
-        {
+        if (veteranUser != null && veteranUser.getVeteran()) {
             response.sendRedirect("/settings/connections?veteran=true");
             return null;
         }
@@ -335,17 +306,14 @@ public class UserConnectionController
     }
 
     @RequestMapping("/facebook")
-    public static ResponseEntity facebookAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public static ResponseEntity facebookAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://www.facebook.com/dialog/oauth?" +
                     "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/connect/facebook_callback" +
                     "&response_type=code" +
                     "&scope=email");
-        }catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -354,22 +322,19 @@ public class UserConnectionController
 
     @RequestMapping("/facebook_callback")
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity facebookCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException
-    {
+    public ResponseEntity facebookCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException {
         com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
 
         com.bezman.model.User user = FacebookProvider.userForCode2(code);
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "FACEBOOK", currentUser);
 
-        if (user != null && !connectedAccountExists)
-        {
+        if (user != null && !connectedAccountExists) {
             Activity activity = new Activity(currentUser, currentUser, "Connected your Facebook account", DevBits.ACCOUNT_CONNECTION, 0);
 
             currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
             DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
             DatabaseUtil.saveObjects(false, connectedAccountForUser(user, currentUser, "FACEBOOK"), activity);
-        } else
-        {
+        } else {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
             query.setString("provider", "FACEBOOK");
@@ -388,17 +353,14 @@ public class UserConnectionController
     }
 
     @RequestMapping("/github")
-    public ResponseEntity githubAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public ResponseEntity githubAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://github.com/login/oauth/authorize?" +
                     "client_id=" + Reference.getEnvironmentProperty("githubClientID2") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/connect/github_callback" +
                     "&scope=user,user:email" +
                     "&state=" + Util.randomText(32));
-        }catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -407,22 +369,19 @@ public class UserConnectionController
 
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
     @RequestMapping("/github_callback")
-    public ResponseEntity githubCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws IOException
-    {
+    public ResponseEntity githubCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws IOException {
         com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
 
         com.bezman.model.User user = GithubProvider.userForCode2(code);
         boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "GITHUB", currentUser);
 
-        if (user != null && !connectedAccountExists)
-        {
+        if (user != null && !connectedAccountExists) {
             Activity activity = new Activity(currentUser, currentUser, "Connected your GitHub account", DevBits.ACCOUNT_CONNECTION, 0);
 
             currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
             DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
             DatabaseUtil.saveObjects(false, connectedAccountForUser(user, currentUser, "GITHUB"), activity);
-        } else
-        {
+        } else {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
             query.setString("provider", "GITHUB");
@@ -440,25 +399,18 @@ public class UserConnectionController
         return null;
     }
 
-    public static boolean isRequestAllowed(HttpServletRequest request)
-    {
+    public static boolean isRequestAllowed(HttpServletRequest request) {
         Enumeration names = request.getHeaderNames();
-        while (names.hasMoreElements())
-        {
+        while (names.hasMoreElements()) {
             String name = (String) names.nextElement();
             Enumeration values = request.getHeaders(name); // support multiple values
-            if (values != null)
-            {
-                while (values.hasMoreElements())
-                {
+            if (values != null) {
+                while (values.hasMoreElements()) {
                     String value = (String) values.nextElement();
 
-                    if (name.equals("host"))
-                    {
-                        for (String host : Reference.allowedHosts)
-                        {
-                            if (host.equals(value))
-                            {
+                    if (name.equals("host")) {
+                        for (String host : Reference.allowedHosts) {
+                            if (host.equals(value)) {
                                 return true;
                             }
                         }
@@ -470,8 +422,7 @@ public class UserConnectionController
         return false;
     }
 
-    private ConnectedAccount connectedAccountForUser(com.bezman.model.User user, com.bezman.model.User signedInUser, String provider)
-    {
+    private ConnectedAccount connectedAccountForUser(com.bezman.model.User user, com.bezman.model.User signedInUser, String provider) {
         ConnectedAccount connectedAccount = new ConnectedAccount();
         connectedAccount.setUser(signedInUser);
         connectedAccount.setProvider(provider);

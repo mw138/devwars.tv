@@ -10,8 +10,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AllowCrossOrigin
-{
+public @interface AllowCrossOrigin {
 
     String from();
 

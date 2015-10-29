@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Variable extends BaseModel
-{
+public class Variable extends BaseModel {
     private int id;
 
     private String key, value;

@@ -3,16 +3,13 @@ package com.bezman.model;
 import com.bezman.annotation.HibernateDefault;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class BlogPost extends BaseModel
-{
+public class BlogPost extends BaseModel {
 
     private int id;
 

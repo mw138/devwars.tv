@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
  * Created by Terence on 4/2/2015.
  */
 @Service
-public class PlayerService
-{
+public class PlayerService {
 
     public Player getPlayer(int id) {
         Player player = null;

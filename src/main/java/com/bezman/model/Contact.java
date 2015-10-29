@@ -10,8 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Contact extends BaseModel
-{
+public class Contact extends BaseModel {
 
     private int id;
 
@@ -20,8 +19,7 @@ public class Contact extends BaseModel
     @HibernateDefault
     private Date timestamp;
 
-    public Contact(String name, String email, String type, String text)
-    {
+    public Contact(String name, String email, String type, String text) {
         this.setName(name);
         this.setEmail(email);
         this.setType(type);

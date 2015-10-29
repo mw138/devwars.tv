@@ -8,13 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 
 @Service
-public class TeamService
-{
+public class TeamService {
 
-    public void addObjectiveToCompleted(Team team, Objective objective)
-    {
-        if (team.getCompletedObjectives() == null)
-        {
+    public void addObjectiveToCompleted(Team team, Objective objective) {
+        if (team.getCompletedObjectives() == null) {
             team.setCompletedObjectives(new HashSet<>());
         }
 

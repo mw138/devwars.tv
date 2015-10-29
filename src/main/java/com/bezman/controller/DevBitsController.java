@@ -32,22 +32,21 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/v1/devbits")
-public class DevBitsController
-{
+public class DevBitsController {
 
     @Autowired
     UserService userService;
 
     /**
      * Gets devbits of twitch user
+     *
      * @param request
      * @param response
      * @param twitchUsername Twitch user's Twitch Username
      * @return
      */
     @RequestMapping("/{twitchUsername}")
-    public ResponseEntity getTwitchUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("twitchUsername") String twitchUsername)
-    {
+    public ResponseEntity getTwitchUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("twitchUsername") String twitchUsername) {
         ResponseEntity responseEntity = null;
 
         Session session = DatabaseManager.getSession();
@@ -57,25 +56,21 @@ public class DevBitsController
 
         User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
-        if (user != null)
-        {
+        if (user != null) {
             responseEntity = new ResponseEntity(user.getRanking().getPoints(), HttpStatus.OK);
-        } else
-        {
+        } else {
             Query twitchPointsQuery = session.createQuery("from TwitchPointStorage where username = :username");
             twitchPointsQuery.setString("username", twitchUsername);
 
             TwitchPointStorage twitchPointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(twitchPointsQuery);
-            if (twitchPointStorage != null)
-            {
+            if (twitchPointStorage != null) {
                 responseEntity = new ResponseEntity(twitchPointStorage.getPoints(), HttpStatus.OK);
             }
         }
 
         session.close();
 
-        if (responseEntity == null)
-        {
+        if (responseEntity == null) {
             responseEntity = new ResponseEntity("0", HttpStatus.NOT_FOUND);
         }
 
@@ -84,17 +79,17 @@ public class DevBitsController
 
     /**
      * Awards a twitch user with bits or xp
+     *
      * @param request
      * @param usernames Comma separated list of twitch users
-     * @param points How many points to add to user (Can be negative)
-     * @param xp How much xp to add to user (Can be negative)
+     * @param points    How many points to add to user (Can be negative)
+     * @param xp        How much xp to add to user (Can be negative)
      * @return
      */
     @RequestMapping(value = "/{twitchUsernames}/{amount}", method = {RequestMethod.PUT})
     public ResponseEntity addToTwitchUser(HttpServletRequest request, @PathVariable("twitchUsernames") String usernames,
                                           @PathVariable(value = "amount") int points,
-                                          @RequestParam(value = "xp", required = false, defaultValue = "0") int xp)
-    {
+                                          @RequestParam(value = "xp", required = false, defaultValue = "0") int xp) {
         Session session = DatabaseManager.getSession();
 
         ResponseEntity responseEntity = null;
@@ -103,20 +98,17 @@ public class DevBitsController
 
         String[] usernamesArray = usernames.split(",");
 
-        for(String username : usernamesArray)
-        {
+        for (String username : usernamesArray) {
             Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
             userQuery.setString("username", username.toLowerCase());
 
             User user = (User) DatabaseUtil.getFirstFromQuery(userQuery);
 
 
-            if (user != null)
-            {
+            if (user != null) {
                 System.out.println("Found user");
 
-                if (user.getRanking() == null)
-                {
+                if (user.getRanking() == null) {
                     Ranking ranking = new Ranking();
                     ranking.setId(user.getId());
                 }
@@ -128,8 +120,7 @@ public class DevBitsController
                 DatabaseUtil.saveOrUpdateObjects(false, ranking);
 
                 responseEntity = new ResponseEntity(ranking, HttpStatus.OK);
-            } else
-            {
+            } else {
                 System.out.println("Not found");
 
                 Query twitchQuery = session.createQuery("from TwitchPointStorage s where s.username = :username");
@@ -137,12 +128,10 @@ public class DevBitsController
 
                 TwitchPointStorage pointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(twitchQuery);
 
-                if (pointStorage != null)
-                {
+                if (pointStorage != null) {
                     pointStorage.setPoints(pointStorage.getPoints() + points);
                     pointStorage.setXp(pointStorage.getXp() + xp);
-                } else
-                {
+                } else {
                     pointStorage = new TwitchPointStorage();
                     pointStorage.setUsername(username);
                     pointStorage.setPoints(points);
@@ -163,6 +152,7 @@ public class DevBitsController
 
     /**
      * Updates users earned bets so we can see how much they've won from betting
+     *
      * @param session
      * @param earnedBets The amount of Devbits earned
      * @return
@@ -170,17 +160,14 @@ public class DevBitsController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/earnedbets", method = RequestMethod.POST)
-    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("bets") EarnedBet[] earnedBets)
-    {
-        for (EarnedBet earnedBet : earnedBets)
-        {
+    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("bets") EarnedBet[] earnedBets) {
+        for (EarnedBet earnedBet : earnedBets) {
             Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(a.username) = :username and a.provider = 'TWITCH')");
             userQuery.setString("username", earnedBet.getTwitchUsername().toLowerCase());
 
             User user = (User) userQuery.uniqueResult();
 
-            if (user != null)
-            {
+            if (user != null) {
                 user.setBettingBitsEarned(user.getBettingBitsEarned() + earnedBet.getPointsEarned());
             }
         }
@@ -190,6 +177,7 @@ public class DevBitsController
 
     /**
      * Adds a watched game to a user
+     *
      * @param session
      * @param usernames JSON Array of twitch usernames
      * @return
@@ -197,16 +185,13 @@ public class DevBitsController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/watched", method = RequestMethod.POST)
-    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("usernames") String[] usernames)
-    {
+    public ResponseEntity earnBetsForUsers(SessionImpl session, @JSONParam("usernames") String[] usernames) {
         List<User> updatedUsers = new ArrayList<>();
 
-        for (String username : usernames)
-        {
+        for (String username : usernames) {
             User user = userService.userForTwitchUsername(username);
 
-            if (user != null)
-            {
+            if (user != null) {
                 user = (User) session.merge(user);
 
                 user.setGamesWatched(user.getGamesWatched() + 1);
@@ -219,6 +204,7 @@ public class DevBitsController
 
     /**
      * Gives user badge for going all in
+     *
      * @param session
      * @param usernames JSON Array of twitch usernames to award
      * @return
@@ -226,14 +212,11 @@ public class DevBitsController
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/allin", method = RequestMethod.POST)
-    public ResponseEntity allIn(SessionImpl session, @JSONParam("usernames") String[] usernames)
-    {
-        for (String username : usernames)
-        {
+    public ResponseEntity allIn(SessionImpl session, @JSONParam("usernames") String[] usernames) {
+        for (String username : usernames) {
             User user = userService.userForTwitchUsername(username);
 
-            if (user != null)
-            {
+            if (user != null) {
                 user.awardBadgeForName("I'm All In");
             }
         }

@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EmailConfirmation extends BaseModel
-{
+public class EmailConfirmation extends BaseModel {
     private int id;
 
     private String uid;

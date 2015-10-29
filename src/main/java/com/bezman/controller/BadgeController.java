@@ -16,8 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/v1/badge")
-public class BadgeController
-{
+public class BadgeController {
     @Autowired
     UserService userService;
 
@@ -27,11 +26,10 @@ public class BadgeController
      */
     @RequestMapping("/all")
     @UnitOfWork
-    public ResponseEntity getAll(SessionImpl session)
-    {
+    public ResponseEntity getAll(SessionImpl session) {
         System.out.println(session);
         List<Badge> badges = session.createCriteria(Badge.class)
-                                        .list();
+                .list();
 
         HashMap<String, Object> map = new HashMap<>();
 
@@ -42,14 +40,13 @@ public class BadgeController
     }
 
     /**
-     * @param id of badge requested
+     * @param id      of badge requested
      * @param session
      * @return The badge
      */
     @RequestMapping("/{id}")
     @UnitOfWork
-    public ResponseEntity getBadge(@PathVariable("id") int id, SessionImpl session)
-    {
+    public ResponseEntity getBadge(@PathVariable("id") int id, SessionImpl session) {
         return new ResponseEntity(session.get(Badge.class, id), HttpStatus.OK);
     }
 

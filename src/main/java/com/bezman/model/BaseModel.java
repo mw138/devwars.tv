@@ -10,10 +10,8 @@ import java.util.List;
 /**
  * Created by Terence on 1/24/2015.
  */
-public class BaseModel
-{
-    public static BaseModel byID(Class hibernateClass, int id)
-    {
+public class BaseModel {
+    public static BaseModel byID(Class hibernateClass, int id) {
         BaseModel obj = null;
 
         Session session = DatabaseManager.getSession();
@@ -29,8 +27,7 @@ public class BaseModel
     }
 
 
-    public static List<BaseModel> all(Class hibernateClass)
-    {
+    public static List<BaseModel> all(Class hibernateClass) {
         List all = null;
 
         Session session = DatabaseManager.getSession();
@@ -43,8 +40,7 @@ public class BaseModel
         return all;
     }
 
-    public static int count(Class hibernateClass)
-    {
+    public static int count(Class hibernateClass) {
         int count = 0;
 
         Session session = DatabaseManager.getSession();
@@ -57,8 +53,7 @@ public class BaseModel
         return count;
     }
 
-    public static double sumField(Class hibernateClass, String field)
-    {
+    public static double sumField(Class hibernateClass, String field) {
         double count = 0;
 
         Session session = DatabaseManager.getSession();
@@ -71,28 +66,25 @@ public class BaseModel
         return count;
     }
 
-    public static boolean rowExists(Class hibernateClass, String queryString, Object... params)
-    {
+    public static boolean rowExists(Class hibernateClass, String queryString, Object... params) {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from " + hibernateClass.getSimpleName() + " where " + queryString);
 
         System.out.println(query.getQueryString());
 
-        for(int i = 0; i < params.length; i++)
-        {
+        for (int i = 0; i < params.length; i++) {
             System.out.println(i + " : " + params[i]);
             query.setParameter(i, params[i]);
         }
 
-        boolean hasRow =  DatabaseUtil.getFirstFromQuery(query) != null;
+        boolean hasRow = DatabaseUtil.getFirstFromQuery(query) != null;
 
         session.close();
 
         return hasRow;
     }
 
-    public void delete()
-    {
+    public void delete() {
         DatabaseUtil.deleteObjects(this);
     }
 }

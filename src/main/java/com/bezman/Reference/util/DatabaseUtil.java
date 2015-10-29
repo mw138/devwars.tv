@@ -9,32 +9,26 @@ import java.util.List;
 /**
  * Created by Terence on 1/24/2015.
  */
-public class DatabaseUtil
-{
+public class DatabaseUtil {
 
-    public static Object getFirstFromQuery(Query query)
-    {
+    public static Object getFirstFromQuery(Query query) {
         List results = query.list();
 
         return results.size() > 0 ? results.get(0) : null;
     }
 
-    public static void saveObjects(boolean refresh, Object... objects)
-    {
+    public static void saveObjects(boolean refresh, Object... objects) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(Object object : objects)
-        {
+        for (Object object : objects) {
             session.save(object);
         }
 
         session.getTransaction().commit();
 
-        if (refresh)
-        {
-            for(Object object : objects)
-            {
+        if (refresh) {
+            for (Object object : objects) {
                 session.refresh(object);
             }
         }
@@ -42,13 +36,11 @@ public class DatabaseUtil
         session.close();
     }
 
-    public static void deleteObjects(Object... objects)
-    {
+    public static void deleteObjects(Object... objects) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(Object object : objects)
-        {
+        for (Object object : objects) {
             session.delete(object);
         }
 
@@ -56,22 +48,18 @@ public class DatabaseUtil
         session.close();
     }
 
-    public static void saveOrUpdateObjects(boolean refresh, Object... objects)
-    {
+    public static void saveOrUpdateObjects(boolean refresh, Object... objects) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(Object object : objects)
-        {
+        for (Object object : objects) {
             session.saveOrUpdate(object);
         }
 
         session.getTransaction().commit();
 
-        if (refresh)
-        {
-            for(Object object : objects)
-            {
+        if (refresh) {
+            for (Object object : objects) {
                 session.refresh(object);
             }
         }
@@ -79,22 +67,18 @@ public class DatabaseUtil
         session.close();
     }
 
-    public static void updateObjects(boolean refresh, Object... objects)
-    {
+    public static void updateObjects(boolean refresh, Object... objects) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(Object object : objects)
-        {
+        for (Object object : objects) {
             session.update(object);
         }
 
         session.getTransaction().commit();
 
-        if (refresh)
-        {
-            for(Object object : objects)
-            {
+        if (refresh) {
+            for (Object object : objects) {
                 session.refresh(object);
             }
         }
@@ -102,22 +86,18 @@ public class DatabaseUtil
         session.close();
     }
 
-    public static void mergeObjects(boolean refresh, Object... objects)
-    {
+    public static void mergeObjects(boolean refresh, Object... objects) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(Object object : objects)
-        {
+        for (Object object : objects) {
             session.merge(object);
         }
 
         session.getTransaction().commit();
 
-        if (refresh)
-        {
-            for(Object object : objects)
-            {
+        if (refresh) {
+            for (Object object : objects) {
                 session.refresh(object);
             }
         }
@@ -125,12 +105,10 @@ public class DatabaseUtil
         session.close();
     }
 
-    public static void refreshObjects(Object... objects)
-    {
+    public static void refreshObjects(Object... objects) {
         Session session = DatabaseManager.getSession();
 
-        for(Object object : objects)
-        {
+        for (Object object : objects) {
             session.refresh(object);
         }
 
