@@ -23,6 +23,8 @@ public class AlphaNumericValidator implements ConstraintValidator<AlphaNumeric, 
             return value.matches("^[a-zA-Z0-9_]*$");
         }
 
-        return value.matches("^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$");
+        System.out.println(value);
+
+        return value.matches("^[\\w ]+$");
     }
 }

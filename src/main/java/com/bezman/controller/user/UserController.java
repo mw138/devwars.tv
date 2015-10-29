@@ -602,8 +602,7 @@ public class UserController extends BaseController
     }
 
     @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
-    public ResponseEntity resetPassword(HttpServletResponse response,
-                                        @RequestParam("user") int id,
+    public ResponseEntity resetPassword(@RequestParam("user") int id,
                                         @RequestParam("key") String key,
                                         @RequestParam("password") String password,
                                         @RequestParam("password_confirmation") String passwordConfirmation) throws IOException
@@ -611,15 +610,18 @@ public class UserController extends BaseController
         if (!password.equals(passwordConfirmation))
             return new ResponseEntity("Passwords must be the same", HttpStatus.BAD_REQUEST);
 
+        if (password.length() < 6)
+            return new ResponseEntity("Password must be at least six chars", HttpStatus.BAD_REQUEST);
+
         User user = userService.getUser(id);
 
         if (!userService.isResetKeyValidForUser(user, key))
             return new ResponseEntity("Invalid Reset Key", HttpStatus.BAD_REQUEST);
 
         userService.changePasswordForUser(user, password);
+        userService.removeResetKeyFromUser(user);
 
-        response.sendRedirect("/");
-        return null;
+        return new ResponseEntity("Success", HttpStatus.OK);
     }
 
     /**

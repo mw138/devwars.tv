@@ -1,28 +1,5 @@
 <div class="passResetView">
   
-  
-  <!-- ONLY ONE OF THESE DISPLAYS "forgotPass" and "resetPass" SHOW AT A TIME! ADD style="display: none;" -->
-    <div class="forgotPass">
-        <div class="banner">
-           <h1>Forgot Password</h1>
-        </div>
-        <div class="inner">
-            <h2>Find your DevWars account</h2>
-            <span>
-                To reset your password, enter the email address you use to sign in to DevWars.
-            </span>
-            <label>Email Address:</label>
-            <input type="text" />
-            
-            <!-- CAPTCHA GOES HERE v -->
-            <div on-create="setWidgetId(widgetId)" on-success="setResponse(response)" vc-recaptcha
-                 key="'6LeoIgQTAAAAAMYim_-jaDVnt_0JWPH4szTzEiio'"></div>
-            <!-- CAPTCHA GOES HERE ^ -->     
-                 
-            <button class="button">Submit</button>
-        </div>
-    </div> <!-- .forgotPass -->
-    
     <!-- ONLY ONE OF THESE DISPLAYS "forgotPass" and "resetPass" SHOW AT A TIME! ADD style="display: none;" -->
     <div class="resetPass">
         <div class="banner">
@@ -34,15 +11,13 @@
                 To complete the password reset process, please confirm the email address shown below, and then enter the new password.
             </span>
             
-            <label class="email-display">Email Address: <strong>dynamic@email.com</strong></label>
-            
             <label>New Password:</label>
-            <input type="password" />
+            <input type="password" ng-model="password"/>
             
             <label>Confirm Password:</label>
-            <input type="password" />         
+            <input type="password" ng-model="passwordConfirmation" />
 
-            <button class="button">Reset Password</button>
+            <button ng-class="{'button--disabled': !password || !passwordConfirmation}" ng-disabled="!password || !passwordConfirmation" class="button" ng-click="resetPassword()">Reset Password</button>
 
         </div>
     </div> <!-- .resetPass -->

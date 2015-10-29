@@ -2,7 +2,7 @@
  * Created by Terence on 3/22/2015.
  */
 angular.module("app")
-    .controller("LoginDialogController", ["$scope", "AuthService", "$mdDialog", function ($scope, AuthService, $mdDialog) {
+    .controller("LoginDialogController", function ($scope, AuthService, $mdDialog, DialogService, UserService, ToastService) {
 
         $scope.$mdDialog = $mdDialog;
 
@@ -26,4 +26,15 @@ angular.module("app")
             console.log(provider);
             window.location = "/v1/oauth/" + provider;
         }
-    }]);
+
+        $scope.forgotPassword = function ($event) {
+            $mdDialog.cancel();
+
+            DialogService.getInputWithMessage("Forgot Password", "Please enter your email", $event, function (response) {
+                UserService.http.initResetPassword(response)
+                    .then(function (success) {
+                        ToastService.showDevwarsToast("fa-check-circle", "Success", "Check your email");
+                    }, angular.noop);
+            })
+        }
+    });

@@ -49,7 +49,6 @@ public class UserService
         try
         {
             session.save(user);
-            session.flush();
         } catch (Exception e)
         {
             System.out.println("Could not save user : " + e.getMessage());
@@ -271,7 +270,6 @@ public class UserService
                 .setMaxResults(1)
                 .uniqueResult();
 
-        session.flush();
         session.close();
 
         return user;
@@ -290,13 +288,24 @@ public class UserService
         session.delete(userSession);
 
         session.getTransaction().commit();
-        session.flush();
         session.close();
     }
 
     public boolean isResetKeyValidForUser(User user, String key)
     {
         return user.getResetKey().equals(key);
+    }
+
+    public void removeResetKeyFromUser(User user)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.setResetKey(null);
+        session.merge(user);
+
+        session.getTransaction().commit();
+        session.close();
     }
 
     public void beginResetPasswordForEmail(String email) throws NonDevWarsUserException, UserNotFoundException
@@ -324,7 +333,7 @@ public class UserService
 
         user.setResetKey(resetKey);
 
-        Util.sendEmail(user.getUsername() + " : Password Reset", Reference.rootURL + "/v1/user/passwordreset?user=" + user.getId() + "&key=" + resetKey, user.getEmail());
+        Util.sendEmail(user.getUsername() + " : Password Reset", Reference.rootURL + "/passwordreset?user=" + user.getId() + "&key=" + resetKey, user.getEmail());
 
         session.getTransaction().commit();
         session.close();
