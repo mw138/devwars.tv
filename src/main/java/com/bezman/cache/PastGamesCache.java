@@ -24,8 +24,6 @@ public class PastGamesCache extends CacheLoader<String, HashMap>
     @Override
     public HashMap load(String s) throws Exception
     {
-        System.out.println(gameService);
-
         Integer queryCount = Integer.valueOf(s.split(":")[0]);
         Integer queryOffset = Integer.valueOf(s.split(":")[1]);
 
