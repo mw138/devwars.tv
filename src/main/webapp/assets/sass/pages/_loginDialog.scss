@@ -47,8 +47,8 @@
 
 
 .dialog-container .action-buttons {
-
-
+    @extend %clear;
+    
   .button, span {
     padding: 10px 25px;
     float: right;
@@ -67,6 +67,11 @@
   max-width: 500px;
   padding: 40px;
 
+    a {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 
   .title--line {
     width: 70%;
@@ -117,5 +122,16 @@
 		color: $github-color;
 	}
 }
+    
+    .account-info {
+        width: 100%;
+        border-top: 1px solid $gray;
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        a {
+            color: $main-color;
+        }
+    }
 
 }

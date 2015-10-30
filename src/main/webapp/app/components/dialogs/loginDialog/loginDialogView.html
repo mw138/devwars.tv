@@ -23,8 +23,14 @@
 
             <div class="action-buttons">
                 <button ng-click="login(credentials)" type="button" class="button">Log In</button>
-                <a href="#" ng-click="$mdDialog.cancel({register: true})">Need an account?</a>
+                <a href="#">Forgot password?</a>
             </div>
         </form>
+        
+        <div class="account-info">
+            Don't have an account? <a href="#" ng-click="$mdDialog.cancel({register: true})">Sign up <i class="fa fa-angle-double-right"></i></a>    
+        </div>
+        
+        
     </div>
 </md-dialog>
