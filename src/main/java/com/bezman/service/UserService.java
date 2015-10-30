@@ -1,18 +1,22 @@
 package com.bezman.service;
 
+import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.Reference.util.Util;
+import com.bezman.exception.NonDevWarsUserException;
+import com.bezman.exception.UserNotFoundException;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.ConnectedAccount;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.model.User;
 import com.bezman.model.UserSession;
 import com.bezman.storage.FileStorage;
-import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
-import com.dropbox.core.v2.Files;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,21 +26,21 @@ import java.util.Optional;
 /**
  * Created by Terence on 1/21/2015.
  */
-public class UserService
-{
-    public static FileStorage fileStorage;
+@Service
+public class UserService {
+    @Autowired
+    public FileStorage fileStorage;
 
-    public static void addUser(User user)
-    {
+    @Autowired
+    Security security;
+
+    public void addUser(User user) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        try
-        {
+        try {
             session.save(user);
-            session.flush();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Could not save user : " + e.getMessage());
         }
 
@@ -46,8 +50,7 @@ public class UserService
         session.close();
     }
 
-    public static User userForUsername(String username)
-    {
+    public User userForUsername(String username) {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where username = :username");
         query.setString("username", username);
@@ -59,30 +62,25 @@ public class UserService
         return user;
     }
 
-    public static boolean userHasProvider(User user, String provider)
-    {
+    public boolean userHasProvider(User user, String provider) {
         return usernameForProvider(user, provider) != null;
     }
 
-    public static String usernameForProvider(User user, String provider)
-    {
-        if (provider.equals(user.getProvider()))
-        {
+    public String usernameForProvider(User user, String provider) {
+        if (provider.equals(user.getProvider())) {
             return user.getUsername();
         }
 
         Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
 
-        if (connectedAccount.isPresent())
-        {
+        if (connectedAccount.isPresent()) {
             return connectedAccount.get().getUsername();
         }
 
         return null;
     }
 
-    public static User userForUsernameDevWars(String username)
-    {
+    public User userForUsernameDevWars(String username) {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where username = :username and provider =  null");
         query.setString("username", username);
@@ -94,20 +92,17 @@ public class UserService
         return user;
     }
 
-    public static User userForUsernameOrNewVeteranUser(String username)
-    {
-        User user = UserService.userForUsername(username);
+    public User userForUsernameOrNewVeteranUser(String username) {
+        User user = this.userForUsername(username);
 
-        if (user != null)
-        {
+        if (user != null) {
             return user;
         } else {
-            return UserService.createVeteranUserForUsername(username);
+            return this.createVeteranUserForUsername(username);
         }
     }
 
-    public static User createVeteranUserForUsername(String username)
-    {
+    public User createVeteranUserForUsername(String username) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
@@ -125,8 +120,7 @@ public class UserService
         return user;
     }
 
-    public static User userForEmail(String email)
-    {
+    public User userForEmail(String email) {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where email = :email");
         query.setString("email", email);
@@ -138,24 +132,19 @@ public class UserService
         return user;
     }
 
-    public static User getUser(int id)
-    {
+    public User getUser(int id) {
         User user = null;
 
         Session session = DatabaseManager.getSession();
 
-        Query query = session.createQuery("from User where id = :id");
-        query.setInteger("id", id);
-
-        user = (User) DatabaseUtil.getFirstFromQuery(query);
+        user = (User) session.get(User.class, id);
 
         session.close();
 
         return user;
     }
 
-    public static User getLastUser()
-    {
+    public User getLastUser() {
         User returnUser = null;
 
         Session session = DatabaseManager.getSession();
@@ -169,8 +158,7 @@ public class UserService
         return returnUser;
     }
 
-    public static User userForTwitchUsername(String username)
-    {
+    public User userForTwitchUsername(String username) {
         Session session = DatabaseManager.getSession();
 
         Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(u.username) = :username and u.provider = 'TWITCH')");
@@ -184,8 +172,7 @@ public class UserService
         return user;
     }
 
-    public static Integer userCount()
-    {
+    public Integer userCount() {
         Long count = null;
 
         Session session = DatabaseManager.getSession();
@@ -197,8 +184,7 @@ public class UserService
         return count.intValue();
     }
 
-    public static void addTwitchPointsToUser(User user)
-    {
+    public void addTwitchPointsToUser(User user) {
         Session session = DatabaseManager.getSession();
 
         Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
@@ -217,8 +203,7 @@ public class UserService
                 .setMaxResults(1)
                 .uniqueResult();
 
-        if (twitchPointStorage != null)
-        {
+        if (twitchPointStorage != null) {
             user.getRanking().addPoints(twitchPointStorage.getPoints());
             user.getRanking().addXP(twitchPointStorage.getXp());
 
@@ -228,8 +213,7 @@ public class UserService
         session.close();
     }
 
-    public static List<User> searchUsers(String username)
-    {
+    public List<User> searchUsers(String username) {
         Session session = DatabaseManager.getSession();
 
         List<User> users = session.createQuery("select user.id as id, user.username as username from User user where lower(username) LIKE :username")
@@ -242,15 +226,13 @@ public class UserService
         return users;
     }
 
-    public static boolean isUserAtLeast(User user, User.Role role)
-    {
+    public boolean isUserAtLeast(User user, User.Role role) {
         User.Role userRole = user.getRole();
 
         return (userRole.ordinal() >= role.ordinal());
     }
 
-    public static User userForToken(String token)
-    {
+    public User userForToken(String token) {
         Session session = DatabaseManager.getSession();
 
         User user = (User) session.createQuery("from User user where user.session.sessionID = :token")
@@ -258,14 +240,12 @@ public class UserService
                 .setMaxResults(1)
                 .uniqueResult();
 
-        session.flush();
         session.close();
 
         return user;
     }
 
-    public static void logoutUser(User user)
-    {
+    public void logoutUser(User user) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
@@ -277,24 +257,74 @@ public class UserService
         session.delete(userSession);
 
         session.getTransaction().commit();
-        session.flush();
         session.close();
     }
 
-    public static String pathForProfilePictureForUser(User user)
-    {
+    public boolean isResetKeyValidForUser(User user, String key) {
+        return user.getResetKey().equals(key);
+    }
+
+    public void removeResetKeyFromUser(User user) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.setResetKey(null);
+        session.merge(user);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void beginResetPasswordForEmail(String email) throws NonDevWarsUserException, UserNotFoundException {
+        Session session = DatabaseManager.getSession();
+
+        User user = this.userForEmail(email);
+
+        if (user == null) {
+            throw new UserNotFoundException("Email", email);
+        }
+
+        if (!user.isNative()) {
+            session.close();
+
+            throw new NonDevWarsUserException();
+        }
+
+        session.beginTransaction();
+        user = (User) session.merge(user);
+
+        String resetKey = Util.randomText(64);
+
+        user.setResetKey(resetKey);
+
+        Util.sendEmail(user.getUsername() + " : Password Reset", Reference.rootURL + "/passwordreset?user=" + user.getId() + "&key=" + resetKey, user.getEmail());
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void changePasswordForUser(User user, String password) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.setPassword(security.hash(password));
+        session.merge(user);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public String pathForProfilePictureForUser(User user) {
         return fileStorage.shareableUrlForPath(fileStorage.PROFILE_PICTURE_PATH + "/" + user.getId() + "/avatar");
     }
-    public static void changeProfilePictureForUser(User user, InputStream inputStream) throws IOException, DbxException
-    {
+
+    public void changeProfilePictureForUser(User user, InputStream inputStream) throws IOException, DbxException {
         fileStorage.uploadFile("/profilepics/" + user.getId() + "/avatar", inputStream);
 
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
         user.setAvatarURL(pathForProfilePictureForUser(user));
-
-        session.merge(user);
 
         session.getTransaction().commit();
         session.close();

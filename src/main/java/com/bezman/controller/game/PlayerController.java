@@ -28,14 +28,14 @@ public class PlayerController {
 
     /**
      * Removes a player from a team without penalizing
+     *
      * @param playerID ID of player to remove
      * @return The player which was removed
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{playerID}/remove")
-    public ResponseEntity removePlayer(SessionImpl session, @PathVariable("playerID") int playerID)
-    {
+    public ResponseEntity removePlayer(SessionImpl session, @PathVariable("playerID") int playerID) {
         Player player = (Player) session.get(Player.class, playerID);
 
         if (player != null) {
@@ -49,9 +49,10 @@ public class PlayerController {
 
     /**
      * Adds a player to a team
-     * @param teamID ID of team to add to
+     *
+     * @param teamID   ID of team to add to
      * @param language The language that the user will be playing
-     * @param newUser The user that will be playing
+     * @param newUser  The user that will be playing
      * @return The newly added player
      */
     @Transactional
@@ -61,12 +62,10 @@ public class PlayerController {
                                     @RequestParam("language") String language,
                                     @JSONParam("user") User newUser,
                                     @AuthedUser User user,
-                                    SessionImpl session)
-    {
+                                    SessionImpl session) {
         Team team = (Team) session.get(Team.class, teamID);
 
-        if (team != null)
-        {
+        if (team != null) {
             Player newPlayer = new Player(team, newUser, language);
 
             session.save(newPlayer);
@@ -76,8 +75,7 @@ public class PlayerController {
 
             session.save(activity);
 
-            if (newPlayer.getUser().getEmail() != null)
-            {
+            if (newPlayer.getUser().getEmail() != null) {
                 String subject = "Accepted to play a game of DevWars";
                 String activityMessage = "Dear " + newPlayer.getUser().getUsername() + ", you've been accepted to play a game of DevWars on " + new Date(team.getGame().getTimestamp().getTime()).toString();
 

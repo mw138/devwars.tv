@@ -19,35 +19,29 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/")
-public class RedirectServlet
-{
+public class RedirectServlet {
 
     @PreAuthorization(minRole = User.Role.NONE)
     @RequestMapping("/")
-    public String index(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
+    public String index(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = (User) request.getAttribute("user");
 
-        if (user != null)
-        {
+        if (user != null) {
             response.sendRedirect("/dashboard");
             return null;
-        } else
-        {
+        } else {
             return "index";
         }
     }
 
 
-    @RequestMapping(value = {"modDoc", "team", "blog/*", "settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
-    public String about(HttpServletRequest request, HttpServletResponse response)
-    {
+    @RequestMapping(value = {"addgame", "passwordreset", "modDoc", "team", "blog/*", "settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategame", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
+    public String about(HttpServletRequest request, HttpServletResponse response) {
         return "index";
     }
 
     @RequestMapping("/unauth")
-    public ResponseEntity unauth(HttpServletRequest request, HttpServletResponse response, @RequestParam("requiredRole") String required)
-    {
+    public ResponseEntity unauth(HttpServletRequest request, HttpServletResponse response, @RequestParam("requiredRole") String required) {
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put("required", required);
@@ -56,26 +50,22 @@ public class RedirectServlet
     }
 
     @RequestMapping("/challenge")
-    public String challenge()
-    {
+    public String challenge() {
         return "/challenge/index";
     }
 
     @RequestMapping("/codeview")
-    public String codeView()
-    {
+    public String codeView() {
         return "/codeview/index";
     }
 
     @RequestMapping("/s{seasonID}/{gameID}")
-    public String getGamePage(@PathVariable("gameID") int gameID, @PathVariable("seasonID") int seasonID)
-    {
+    public String getGamePage(@PathVariable("gameID") int gameID, @PathVariable("seasonID") int seasonID) {
         return "redirect:/games?game=" + gameID + "&season=" + seasonID;
     }
 
     @RequestMapping({"/font/{slug:.+}", "/assets/fonts/{slug:.+}"})
-    public String getFontAwesome(@PathVariable("slug") String slug)
-    {
+    public String getFontAwesome(@PathVariable("slug") String slug) {
         return "redirect:/bower_components/font-awesome/fonts/" + slug;
     }
 }

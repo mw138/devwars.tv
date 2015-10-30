@@ -6,18 +6,16 @@ import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.*;
 import com.bezman.controller.BaseController;
+import com.bezman.exception.NonDevWarsUserException;
+import com.bezman.exception.UserNotFoundException;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
-import com.bezman.storage.FileStorage;
-import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
-import com.dropbox.core.v2.Files;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -39,7 +37,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -51,8 +49,15 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping(value = "/v1/user")
-public class UserController extends BaseController
-{
+public class UserController extends BaseController {
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    Security security;
+
+    @Autowired
+    UserTeamService userTeamService;
 
     /**
      * Gets the signed in user
@@ -64,12 +69,10 @@ public class UserController extends BaseController
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/")
-    public ResponseEntity user(SessionImpl session, @AuthedUser User user)
-    {
+    public ResponseEntity user(SessionImpl session, @AuthedUser User user) {
         User currentUser = (User) session.merge(user);
 
-        if (currentUser.getRanking() == null)
-        {
+        if (currentUser.getRanking() == null) {
             Ranking ranking = new Ranking();
             ranking.setId(currentUser.getId());
 
@@ -100,8 +103,7 @@ public class UserController extends BaseController
      */
     @RequestMapping("/activity")
     @PreAuthorization(minRole = User.Role.PENDING)
-    public ResponseEntity getActivities(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity getActivities(HttpServletRequest request, HttpServletResponse response) {
         User currentUser = (User) request.getAttribute("user");
 
         Session session = DatabaseManager.getSession();
@@ -136,8 +138,7 @@ public class UserController extends BaseController
                                      @RequestParam("email") String email,
                                      @RequestParam("password") String password,
                                      @RequestParam("captchaResponse") String rcResponse,
-                                     @RequestParam(value = "referral", required = false) String referral)
-    {
+                                     @RequestParam(value = "referral", required = false) String referral) {
         ResponseEntity responseEntity = null;
         String uid = Util.randomText(32);
 
@@ -145,8 +146,8 @@ public class UserController extends BaseController
 
         JSONArray conflictJSONArray = new JSONArray();
 
-        boolean emailTaken = UserService.userForEmail(email) != null;
-        boolean usernameTaken = UserService.userForUsername(username) != null;
+        boolean emailTaken = userService.userForEmail(email) != null;
+        boolean usernameTaken = userService.userForUsername(username) != null;
         boolean usernameValid = username.matches("^([A-Za-z0-9\\-_]+)$");
         boolean captchaValid = Reference.recaptchaValid(rcResponse, request.getRemoteAddr());
         boolean usernameLengthGood = username.length() <= 25 && username.length() >= 4;
@@ -154,55 +155,46 @@ public class UserController extends BaseController
 
         boolean emailValid = false;
 
-        if (emailTaken)
-        {
+        if (emailTaken) {
             conflictJSONArray.put("Email already taken");
         }
 
-        if (usernameTaken)
-        {
+        if (usernameTaken) {
             conflictJSONArray.put("Username already taken");
         }
 
-        if (!emailTaken)
-        {
+        if (!emailTaken) {
             emailValid = EmailValidator.getInstance().isValid(email);
 
-            if (!emailValid)
-            {
+            if (!emailValid) {
                 conflictJSONArray.put("Invalid Email");
             }
         }
 
-        if (!captchaValid)
-        {
+        if (!captchaValid) {
             conflictJSONArray.put("Invalid Captcha Response");
         }
 
-        if (!usernameLengthGood)
-        {
+        if (!usernameLengthGood) {
             conflictJSONArray.put("Username must be at least 4 characters and at most 25 characters");
         }
 
-        if (!passwordLengthGood)
-        {
+        if (!passwordLengthGood) {
             conflictJSONArray.put("Password must be at least 6 characters");
         }
 
-        if (!usernameValid)
-        {
+        if (!usernameValid) {
             conflictJSONArray.put("Username can contain characters, numbers and underscores");
         }
 
-        if (!emailTaken && !usernameTaken && emailValid && captchaValid && usernameLengthGood && passwordLengthGood && usernameValid)
-        {
+        if (!emailTaken && !usernameTaken && emailValid && captchaValid && usernameLengthGood && passwordLengthGood && usernameValid) {
             Session session = DatabaseManager.getSession();
             session.beginTransaction();
 
             User user = new User();
             user.setUsername(username);
             user.setEmail(email);
-            user.setPassword(Security.hash(password));
+            user.setPassword(security.hash(password));
             user.setRole(User.Role.PENDING);
             user.setAvatarChanges(1);
 
@@ -225,12 +217,10 @@ public class UserController extends BaseController
 
             session.close();
 
-            if (referral != null)
-            {
-                User referrer = UserService.userForUsername(referral);
+            if (referral != null) {
+                User referrer = userService.userForUsername(referral);
 
-                if (referrer != null)
-                {
+                if (referrer != null) {
                     referrer.setReferredUsers(referrer.getReferredUsers() + 1);
 
                     Activity activity = new Activity(referrer, user, "You referred " + username, 0, 0);
@@ -242,8 +232,7 @@ public class UserController extends BaseController
 
             Activity activity = new Activity(user, user, "Created a DevWars account", 0, 0);
             DatabaseUtil.saveObjects(false, activity);
-        } else
-        {
+        } else {
             responseEntity = new ResponseEntity(conflictJSONArray.toString(), HttpStatus.CONFLICT);
         }
 
@@ -260,14 +249,12 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}")
-    public ResponseEntity getUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
-    {
+    public ResponseEntity getUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id) {
         ResponseEntity responseEntity = null;
 
-        User user = UserService.getUser(id);
+        User user = userService.getUser(id);
 
-        if (user.getRanking() == null)
-        {
+        if (user.getRanking() == null) {
             Ranking ranking = new Ranking();
             ranking.setId(user.getId());
             user.setRanking(ranking);
@@ -275,11 +262,9 @@ public class UserController extends BaseController
             DatabaseUtil.saveObjects(true, ranking);
         }
 
-        if (user != null)
-        {
+        if (user != null) {
             responseEntity = new ResponseEntity(user, HttpStatus.OK);
-        } else
-        {
+        } else {
             responseEntity = new ResponseEntity(HttpMessages.NO_USER_FOUND, HttpStatus.NOT_FOUND);
         }
 
@@ -297,21 +282,18 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/delete")
-    public ResponseEntity deleteUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id)
-    {
+    public ResponseEntity deleteUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id) {
         ResponseEntity responseEntity = null;
 
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        User user = UserService.getUser(id);
-        if (user != null)
-        {
+        User user = userService.getUser(id);
+        if (user != null) {
             session.delete(user);
             session.getTransaction().commit();
             responseEntity = new ResponseEntity(user.toString(), HttpStatus.OK);
-        } else
-        {
+        } else {
             session.getTransaction().rollback();
             responseEntity = new ResponseEntity(HttpMessages.NO_USER_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -324,14 +306,12 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.USER)
     @UnitOfWork
     @RequestMapping("/search")
-    public ResponseEntity searchUsers(SessionImpl session, @RequestParam("username") String username)
-    {
-        if (username.isEmpty())
-        {
+    public ResponseEntity searchUsers(SessionImpl session, @RequestParam("username") String username) {
+        if (username.isEmpty()) {
             return new ResponseEntity("Query cannot be empty", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity(UserService.searchUsers(username), HttpStatus.OK);
+        return new ResponseEntity(userService.searchUsers(username), HttpStatus.OK);
     }
 
     /**
@@ -345,9 +325,8 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.NONE)
     @RequestMapping("/validate")
-    public ResponseEntity validateUser(HttpServletRequest request, HttpServletResponse response, @RequestParam("uid") String uid) throws IOException
-    {
-        ResponseEntity responseEntity = null;
+    public ResponseEntity validateUser(HttpServletRequest request, HttpServletResponse response, @RequestParam("uid") String uid) throws IOException {
+        ResponseEntity responseEntity;
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
@@ -356,14 +335,12 @@ public class UserController extends BaseController
 
         EmailConfirmation confirmation = (EmailConfirmation) DatabaseUtil.getFirstFromQuery(query);
 
-        if (request.getAttribute("user") != null)
-        {
+        if (request.getAttribute("user") != null) {
             response.sendRedirect("/");
             return null;
         }
 
-        if (confirmation != null)
-        {
+        if (confirmation != null) {
             int user_id = confirmation.getId();
 
             Query userQuery = session.createQuery("from User where id = :id");
@@ -403,19 +380,16 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/addpoints")
-    public ResponseEntity addPoints(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "points", required = false, defaultValue = "0") double points, @RequestParam(value = "xp", required = false, defaultValue = "0") double xp)
-    {
+    public ResponseEntity addPoints(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") int id, @RequestParam(value = "points", required = false, defaultValue = "0") double points, @RequestParam(value = "xp", required = false, defaultValue = "0") double xp) {
         ResponseEntity responseEntity = null;
 
-        User user = UserService.getUser(id);
+        User user = userService.getUser(id);
 
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        if (user != null)
-        {
-            if (user.getRanking() == null)
-            {
+        if (user != null) {
+            if (user.getRanking() == null) {
                 Ranking ranking = new Ranking();
                 ranking.setId(user.getId());
                 user.setRanking(ranking);
@@ -433,8 +407,7 @@ public class UserController extends BaseController
 
             Player player = (Player) DatabaseUtil.getFirstFromQuery(query);
 
-            if (player != null)
-            {
+            if (player != null) {
                 player.setPointsChanged((int) (player.getPointsChanged() + points));
                 session.saveOrUpdate(player);
             }
@@ -459,8 +432,7 @@ public class UserController extends BaseController
      * @throws URISyntaxException
      */
     @RequestMapping(value = "/login")
-    public Object login(HttpServletRequest request, HttpServletResponse response, @RequestParam("username") String username, @RequestParam("password") String password) throws URISyntaxException
-    {
+    public Object login(HttpServletRequest request, HttpServletResponse response, @RequestParam("username") String username, @RequestParam("password") String password) throws URISyntaxException {
         Object responseObject = null;
 
         Session session = DatabaseManager.getSession();
@@ -471,22 +443,18 @@ public class UserController extends BaseController
 
         session.close();
 
-        if (user != null && user.getPassword().equals(Security.hash(password)))
-        {
-            if (user.getRole() != User.Role.PENDING)
-            {
+        if (user != null && user.getPassword().equals(security.hash(password))) {
+            if (user.getRole() != User.Role.PENDING) {
                 String newToken = user.newSession();
                 Cookie cookie = new Cookie("token", newToken);
                 cookie.setPath("/");
 
                 response.addCookie(cookie);
                 responseObject = new ResponseEntity(user, HttpStatus.OK);
-            } else
-            {
+            } else {
                 responseObject = new ResponseEntity("You must validate your email before signing in", HttpStatus.CONFLICT);
             }
-        } else
-        {
+        } else {
             responseObject = new ResponseEntity(HttpMessages.INCORRECT_USERNAME_OR_PASSWORD, HttpStatus.UNAUTHORIZED);
         }
 
@@ -496,15 +464,12 @@ public class UserController extends BaseController
     /**
      * Logs out the current user
      *
-     * @param request
-     * @param response
      * @return
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/logout")
-    public ResponseEntity logout(@AuthedUser User user)
-    {
-        UserService.logoutUser(user);
+    public ResponseEntity logout(@AuthedUser User user) {
+        userService.logoutUser(user);
 
         return new ResponseEntity("Logged out successfully", HttpStatus.OK);
     }
@@ -518,8 +483,7 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/appliedgames")
-    public ResponseEntity appliedGames(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity appliedGames(HttpServletRequest request, HttpServletResponse response) {
         List<Game> games = null;
 
         Session session = DatabaseManager.getSession();
@@ -534,68 +498,6 @@ public class UserController extends BaseController
         return new ResponseEntity(games, HttpStatus.OK);
     }
 
-//    @RequestMapping("/initreset")
-//    public ResponseEntity initReset(HttpServletRequest request, HttpServletResponse response,
-//                                    @RequestParam("email") String email)
-//    {
-//
-//        Session session = DatabaseManager.getSession();
-//
-//        Query query = session.createQuery("from User where email = :email and provider = null");
-//        query.setString("email", email);
-//
-//        User user = (User) DatabaseUtil.getFirstFromQuery(query);
-//
-//        session.close();
-//
-//        if (user != null)
-//        {
-//            String token = Util.randomText(64);
-//
-//            UserReset userReset = new UserReset();
-//            userReset.setUid(token);
-//            userReset.setId(user.getId());
-//
-//            DatabaseUtil.saveOrUpdateObjects(false, userReset);
-//
-//            Util.sendEmail(Security.emailUsername, Security.emailPassword, "DevWars password reset", token, user.getEmail());
-//        } else
-//        {
-//            return new ResponseEntity("Can't find user for given email", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        return null;
-//    }
-//
-//    @RequestMapping("/resetpassword")
-//    public ResponseEntity resetPassword(HttpServletRequest request, HttpServletResponse response,
-//                                        @RequestParam("newpassword") String password,
-//                                        @RequestParam("uid") String uid)
-//    {
-//
-//        Session session = DatabaseManager.getSession();
-//
-//        Query query = session.createQuery("from User u where u.passwordReset.uid = :uid");
-//        query.setString("uid", uid);
-//
-//        User user = (User) DatabaseUtil.getFirstFromQuery(query);
-//
-//        session.close();
-//
-//        if (user != null)
-//        {
-//            user.setEncryptedPassword(password);
-//
-//            DatabaseUtil.saveOrUpdateObjects(false, user);
-//            DatabaseUtil.deleteObjects(user.getPasswordReset());
-//
-//            return new ResponseEntity("Successfully changed password", HttpStatus.OK);
-//        } else
-//        {
-//            return new ResponseEntity("User not found", HttpStatus.NOT_FOUND);
-//        }
-//    }
-
     /**
      * Method to change password for the signed in user
      *
@@ -609,20 +511,17 @@ public class UserController extends BaseController
     @RequestMapping("/changepassword")
     public ResponseEntity changePassword(HttpServletRequest request, HttpServletResponse response,
                                          @RequestParam("currentPassword") String currentPassword,
-                                         @RequestParam("newPassword") String newPassword)
-    {
+                                         @RequestParam("newPassword") String newPassword) {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative())
-        {
+        if (!user.isNative()) {
             return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
         }
 
-        if (user.getPassword().equals(Security.hash(currentPassword)))
-        {
+        if (user.getPassword().equals(security.hash(currentPassword))) {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("update User set password = :password where id = :id");
-            query.setString("password", Security.hash(newPassword));
+            query.setString("password", security.hash(newPassword));
             query.setInteger("id", user.getId());
 
             query.executeUpdate();
@@ -630,10 +529,51 @@ public class UserController extends BaseController
             session.close();
 
             return new ResponseEntity("Success", HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("Incorrect Password", HttpStatus.FORBIDDEN);
         }
+    }
+
+    /**
+     * Starts the reset password process
+     *
+     * @param response (Resolved)
+     * @param email    Email of the user for the password to be reset
+     * @return Appropriate response
+     */
+    @RequestMapping(value = "/initreset", method = RequestMethod.GET)
+    public ResponseEntity initResetPassword(HttpServletResponse response, @RequestParam("email") String email) {
+        try {
+            userService.beginResetPasswordForEmail(email);
+
+            return new ResponseEntity("An email has been sent to your email with a link to reset your password", HttpStatus.OK);
+        } catch (NonDevWarsUserException e) {
+            return new ResponseEntity("You must be a native DevWars User", HttpStatus.CONFLICT);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity("User was not found for " + e.param, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/resetpassword", method = RequestMethod.POST)
+    public ResponseEntity resetPassword(@RequestParam("user") int id,
+                                        @RequestParam("key") String key,
+                                        @RequestParam("password") String password,
+                                        @RequestParam("password_confirmation") String passwordConfirmation) throws IOException {
+        if (!password.equals(passwordConfirmation))
+            return new ResponseEntity("Passwords must be the same", HttpStatus.BAD_REQUEST);
+
+        if (password.length() < 6)
+            return new ResponseEntity("Password must be at least six chars", HttpStatus.BAD_REQUEST);
+
+        User user = userService.getUser(id);
+
+        if (!userService.isResetKeyValidForUser(user, key))
+            return new ResponseEntity("Invalid Reset Key", HttpStatus.BAD_REQUEST);
+
+        userService.changePasswordForUser(user, password);
+        userService.removeResetKeyFromUser(user);
+
+        return new ResponseEntity("Success", HttpStatus.OK);
     }
 
     /**
@@ -649,14 +589,11 @@ public class UserController extends BaseController
     @RequestMapping("/changeemail")
     public ResponseEntity changeEmail(HttpServletRequest request, HttpServletResponse response,
                                       @RequestParam("currentPassword") String currentPassword,
-                                      @RequestParam("newEmail") String newEmail)
-    {
+                                      @RequestParam("newEmail") String newEmail) {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative() || user.getPassword().equals(Security.hash(currentPassword)))
-        {
-            if (EmailValidator.getInstance().isValid(newEmail))
-            {
+        if (!user.isNative() || user.getPassword().equals(security.hash(currentPassword))) {
+            if (EmailValidator.getInstance().isValid(newEmail)) {
                 Session session = DatabaseManager.getSession();
                 Query query = session.createQuery("update User set email = :email where id = :id");
                 query.setString("email", newEmail);
@@ -667,12 +604,10 @@ public class UserController extends BaseController
                 session.close();
 
                 return new ResponseEntity("Success", HttpStatus.OK);
-            } else
-            {
+            } else {
                 return new ResponseEntity("Invalid Email", HttpStatus.BAD_REQUEST);
             }
-        } else
-        {
+        } else {
             return new ResponseEntity("Incorrect Password", HttpStatus.FORBIDDEN);
         }
     }
@@ -687,9 +622,8 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeavatar")
     public ResponseEntity changeAvatar(@AuthedUser User user,
-                                       @RequestParam("file") MultipartFile image) throws IOException, DbxException
-    {
-        UserService.changeProfilePictureForUser(user, image.getInputStream());
+                                       @RequestParam("file") MultipartFile image) throws IOException, DbxException {
+        userService.changeProfilePictureForUser(user, image.getInputStream());
 
         return new ResponseEntity("Successfully change profile picture", HttpStatus.OK);
     }
@@ -706,15 +640,12 @@ public class UserController extends BaseController
      * @throws ServletException
      */
     @RequestMapping("/{username}/public")
-    public ResponseEntity getPublicUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException
-    {
-        User currentUser = UserService.userForUsername(username);
+    public ResponseEntity getPublicUser(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException {
+        User currentUser = userService.userForUsername(username);
 
-        if (currentUser != null)
-        {
+        if (currentUser != null) {
             return new ResponseEntity(currentUser, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
     }
@@ -730,15 +661,12 @@ public class UserController extends BaseController
      * @throws ServletException
      */
     @RequestMapping("/{username}/avatar")
-    public ResponseEntity getUserAvatar(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException
-    {
-        User currentUser = UserService.userForUsername(username);
+    public ResponseEntity getUserAvatar(HttpServletRequest request, HttpServletResponse response, @PathVariable("username") String username) throws IOException, ServletException {
+        User currentUser = userService.userForUsername(username);
 
-        if (currentUser != null)
-        {
-            return new ResponseEntity(UserService.pathForProfilePictureForUser(currentUser), HttpStatus.OK);
-        } else
-        {
+        if (currentUser != null) {
+            return new ResponseEntity(userService.pathForProfilePictureForUser(currentUser), HttpStatus.OK);
+        } else {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
     }
@@ -754,8 +682,7 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/avatar")
-    public ResponseEntity getAvatar(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user) throws IOException, ServletException
-    {
+    public ResponseEntity getAvatar(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user) throws IOException, ServletException {
         return getUserAvatar(request, response, user.getUsername());
     }
 
@@ -776,27 +703,22 @@ public class UserController extends BaseController
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "url", required = false) String url,
                                      @RequestParam(value = "company", required = false) String company,
-                                     @RequestParam(value = "location", required = false) String location)
-    {
+                                     @RequestParam(value = "location", required = false) String location) {
         User user = (User) request.getAttribute("user");
 
-        if (username != null && !user.getUsername().equalsIgnoreCase(username))
-        {
+        if (username != null && !user.getUsername().equalsIgnoreCase(username)) {
             user.setUsername(username);
         }
 
-        if (location != null)
-        {
+        if (location != null) {
             user.setLocation(location);
         }
 
-        if (url != null)
-        {
+        if (url != null) {
             user.setUrl(url);
         }
 
-        if (company != null)
-        {
+        if (company != null) {
             user.setCompany(company);
         }
 
@@ -814,19 +736,16 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/claimtwitch")
-    public ResponseEntity claimTwitch(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity claimTwitch(HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getAttribute("user");
 
         ConnectedAccount connectedAccount = null;
 
-        for (ConnectedAccount account : user.getConnectedAccounts())
-        {
+        for (ConnectedAccount account : user.getConnectedAccounts()) {
             if (account.getProvider().equals("TWITCH")) connectedAccount = account;
         }
 
-        if (connectedAccount != null)
-        {
+        if (connectedAccount != null) {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("from User where username = :username and veteran = true");
             query.setString("username", connectedAccount.getUsername());
@@ -837,8 +756,7 @@ public class UserController extends BaseController
             session.close();
 
             //Veteran to new
-            if (veteranUser != null)
-            {
+            if (veteranUser != null) {
                 session = DatabaseManager.getSession();
                 Query allPlayersQuery = session.createQuery("from Player p where p.user.id = :id");
                 allPlayersQuery.setInteger("id", veteranUser.getId());
@@ -847,16 +765,14 @@ public class UserController extends BaseController
 
                 session.beginTransaction();
 
-                for (Player player : players)
-                {
+                for (Player player : players) {
                     player.setUser(user);
                     session.update(player);
                 }
 
                 session.getTransaction().commit();
 
-                if (veteranUser.getRanking() != null && user.getRanking() != null)
-                {
+                if (veteranUser.getRanking() != null && user.getRanking() != null) {
                     Query updatePoints = session.createQuery("update Ranking set points = :points, xp = :xp where id = :id");
                     updatePoints.setDouble("points", user.getRanking().getPoints() + veteranUser.getRanking().getPoints());
                     updatePoints.setDouble("xp", user.getRanking().getXp() + veteranUser.getRanking().getXp());
@@ -883,12 +799,10 @@ public class UserController extends BaseController
                 session.close();
 
                 return new ResponseEntity("Successfully transferred accounts", HttpStatus.OK);
-            } else
-            {
+            } else {
                 return new ResponseEntity("Veteran not found", HttpStatus.NOT_FOUND);
             }
-        } else
-        {
+        } else {
             return new ResponseEntity("Twitch account not found", HttpStatus.NOT_FOUND);
         }
     }
@@ -902,19 +816,16 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/releasetwitch")
-    public ResponseEntity releaseUsername(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity releaseUsername(HttpServletRequest request, HttpServletResponse response) {
         User user = (User) request.getAttribute("user");
 
         ConnectedAccount connectedAccount = null;
 
-        for (ConnectedAccount account : user.getConnectedAccounts())
-        {
+        for (ConnectedAccount account : user.getConnectedAccounts()) {
             if (account.getProvider().equals("TWITCH")) connectedAccount = account;
         }
 
-        if (connectedAccount != null)
-        {
+        if (connectedAccount != null) {
             Session session = DatabaseManager.getSession();
             Query query = session.createQuery("from User where username = :username and veteran = true");
             query.setString("username", connectedAccount.getUsername());
@@ -925,8 +836,7 @@ public class UserController extends BaseController
             session.close();
 
             //Veteran to new
-            if (veteranUser != null)
-            {
+            if (veteranUser != null) {
                 session = DatabaseManager.getSession();
                 Query allPlayersQuery = session.createQuery("from Player p where p.user.id = :id");
                 allPlayersQuery.setInteger("id", veteranUser.getId());
@@ -935,8 +845,7 @@ public class UserController extends BaseController
 
                 session.beginTransaction();
 
-                for (Player player : players)
-                {
+                for (Player player : players) {
                     player.setUser(user);
                     session.update(player);
                 }
@@ -947,8 +856,7 @@ public class UserController extends BaseController
 
                 System.out.println("updated username : " + user.getUsername());
 
-                if (veteranUser.getRanking() != null && user.getRanking() != null)
-                {
+                if (veteranUser.getRanking() != null && user.getRanking() != null) {
                     Query updatePoints = session.createQuery("update Ranking set points = :points, xp = :xp where id = :id");
                     updatePoints.setDouble("points", user.getRanking().getPoints() + veteranUser.getRanking().getPoints());
                     updatePoints.setDouble("xp", user.getRanking().getXp() + veteranUser.getRanking().getXp());
@@ -969,12 +877,10 @@ public class UserController extends BaseController
                 session.close();
 
                 return new ResponseEntity("Successfully transferred accounts", HttpStatus.OK);
-            } else
-            {
+            } else {
                 return new ResponseEntity("Veteran not found", HttpStatus.NOT_FOUND);
             }
-        } else
-        {
+        } else {
             return new ResponseEntity("Twitch account not found", HttpStatus.NOT_FOUND);
         }
     }
@@ -993,8 +899,7 @@ public class UserController extends BaseController
     @RequestMapping("/testemail")
     public ResponseEntity testEmail(HttpServletRequest request, HttpServletResponse response,
                                     @RequestParam("email") String email,
-                                    @RequestParam("uid") String uid) throws UnirestException, MessagingException
-    {
+                                    @RequestParam("uid") String uid) throws UnirestException, MessagingException {
         String html = Unirest.get(Reference.rootURL + "/assets/email/verification.html")
                 .asString()
                 .getBody();
@@ -1010,11 +915,9 @@ public class UserController extends BaseController
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", 587);
 
-        javax.mail.Session session = javax.mail.Session.getInstance(properties, new Authenticator()
-        {
+        javax.mail.Session session = javax.mail.Session.getInstance(properties, new Authenticator() {
             @Override
-            protected PasswordAuthentication getPasswordAuthentication()
-            {
+            protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"));
             }
         });
@@ -1041,8 +944,7 @@ public class UserController extends BaseController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/notifications")
-    public ResponseEntity getUnreadNotifications(@AuthedUser User user, SessionImpl session)
-    {
+    public ResponseEntity getUnreadNotifications(@AuthedUser User user, SessionImpl session) {
         List results = session.createCriteria(Notification.class)
                 .add(Restrictions.eq("user.id", user.getId()))
                 .add(Restrictions.eq("hasRead", false))
@@ -1054,14 +956,12 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.PENDING)
     @Transactional
     @RequestMapping(value = "/notifications/read", method = RequestMethod.POST)
-    public ResponseEntity markNotificationsAsRead(@JSONParam("notifications") Notification[] notificationList, @AuthedUser User user, SessionImpl session)
-    {
+    public ResponseEntity markNotificationsAsRead(@JSONParam("notifications") Notification[] notificationList, @AuthedUser User user, SessionImpl session) {
         List notificationIDs = Arrays.asList(notificationList).stream()
                 .map(a -> a.getId())
                 .collect(Collectors.toList());
 
-        if (notificationList.length > 0)
-        {
+        if (notificationList.length > 0) {
             List<Notification> notifications = session.createCriteria(Notification.class)
                     .add(Restrictions.eq("user.id", user.getId()))
                     .add(Restrictions.in("id", notificationIDs))
@@ -1085,8 +985,7 @@ public class UserController extends BaseController
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/badges")
-    public ResponseEntity getBadges(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user)
-    {
+    public ResponseEntity getBadges(HttpServletRequest request, HttpServletResponse response, @AuthedUser User user) {
         return new ResponseEntity(user.getBadges(), HttpStatus.OK);
     }
 
@@ -1099,12 +998,10 @@ public class UserController extends BaseController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/ownedteam")
-    public ResponseEntity getOwnedTeam(SessionImpl session, @AuthedUser User user)
-    {
+    public ResponseEntity getOwnedTeam(SessionImpl session, @AuthedUser User user) {
         UserTeam userTeam = user.getOwnedTeam();
 
-        if (userTeam != null)
-        {
+        if (userTeam != null) {
             userTeam = (UserTeam) session.merge(userTeam);
 
             return new ResponseEntity(userTeam, HttpStatus.OK);
@@ -1122,12 +1019,10 @@ public class UserController extends BaseController
     @UnitOfWork
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/myteam")
-    public ResponseEntity getMyTeam(SessionImpl session, @AuthedUser User user)
-    {
+    public ResponseEntity getMyTeam(SessionImpl session, @AuthedUser User user) {
         UserTeam userTeam = user.getTeam();
 
-        if (userTeam != null && userTeam.getOwner() != null)
-        {
+        if (userTeam != null && userTeam.getOwner() != null) {
             userTeam = (UserTeam) session.merge(userTeam);
 
             return new ResponseEntity(userTeam, HttpStatus.OK);
@@ -1138,9 +1033,8 @@ public class UserController extends BaseController
 
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping("/teaminvites")
-    public ResponseEntity getMyTeamInvites(@AuthedUser User user)
-    {
-        List<UserTeamInvite> invites = UserTeamService.teamsInvitedTo(user);
+    public ResponseEntity getMyTeamInvites(@AuthedUser User user) {
+        List<UserTeamInvite> invites = userTeamService.teamsInvitedTo(user);
 
         return new ResponseEntity(invites, HttpStatus.OK);
     }
@@ -1148,8 +1042,7 @@ public class UserController extends BaseController
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/permission")
     @ResponseBody
-    public String hello()
-    {
+    public String hello() {
         return "Hello";
     }
 }

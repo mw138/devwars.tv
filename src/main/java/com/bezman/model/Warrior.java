@@ -1,8 +1,5 @@
 package com.bezman.model;
 
-import com.bezman.annotation.HibernateDefault;
-import com.bezman.annotation.PreFlush;
-import com.bezman.annotation.PreFlushHibernateDefault;
 import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.PreUpdate;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.Date;
@@ -21,8 +17,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @JsonSerialize(using = UserPermissionSerializer.class)
-public class Warrior extends BaseModel
-{
+public class Warrior extends BaseModel {
 
     private int id;
 
@@ -61,8 +56,7 @@ public class Warrior extends BaseModel
 
     private Date updatedAt;
 
-    public Warrior(String firstName, String favFood, String favTool, String about, String c9Name, String company, String location, Integer htmlRate, Integer cssRate, Integer jsRate, Date dob, int id)
-    {
+    public Warrior(String firstName, String favFood, String favTool, String about, String c9Name, String company, String location, Integer htmlRate, Integer cssRate, Integer jsRate, Date dob, int id) {
         this.firstName = firstName;
         this.favFood = favFood;
         this.favTool = favTool;

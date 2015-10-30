@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class Access extends BaseModel
-{
+public class Access extends BaseModel {
     private int id;
 
     private User user;

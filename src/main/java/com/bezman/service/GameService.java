@@ -1,28 +1,29 @@
 package com.bezman.service;
 
-import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.*;
+import com.bezman.model.Game;
+import com.bezman.model.Objective;
+import com.bezman.model.Player;
+import com.bezman.model.Team;
 import com.bezman.request.model.LegacyGame;
 import com.bezman.request.model.LegacyObjective;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.apache.commons.io.IOUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.IntegerType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,12 +33,18 @@ import java.util.*;
 /**
  * Created by Terence on 1/21/2015.
  */
-public class GameService
-{
-    public static FileStorage fileStorage;
+@Service
+public class GameService {
+    @Autowired
+    public FileStorage fileStorage;
 
-    public static List<Game> allGames(int count, int offset)
-    {
+    @Autowired
+    TeamService teamService;
+
+    @Autowired
+    UserService userService;
+
+    public List<Game> allGames(int count, int offset) {
         ArrayList<Game> returnList;
 
         Session session = DatabaseManager.getSession();
@@ -52,8 +59,7 @@ public class GameService
         return returnList;
     }
 
-    public static Game defaultGame()
-    {
+    public Game defaultGame() {
         Game game = new Game();
 
         game.setName("Default Name");
@@ -83,8 +89,7 @@ public class GameService
         return game;
     }
 
-    public static Game getGame(int id)
-    {
+    public Game getGame(int id) {
         Game game = null;
 
         Session session = DatabaseManager.getSession();
@@ -99,8 +104,7 @@ public class GameService
         return game;
     }
 
-    public static Game currentGame()
-    {
+    public Game currentGame() {
         Game game = null;
 
         Session session = DatabaseManager.getSession();
@@ -115,8 +119,7 @@ public class GameService
         return game;
     }
 
-    public static Game latestGame()
-    {
+    public Game latestGame() {
         Game game = null;
 
         Session session = DatabaseManager.getSession();
@@ -130,8 +133,7 @@ public class GameService
         return game;
     }
 
-    public static Game nearestGame()
-    {
+    public Game nearestGame() {
         Game game = null;
 
         Session session = DatabaseManager.getSession();
@@ -147,8 +149,7 @@ public class GameService
         return game;
     }
 
-    public static void downloadCurrentGame(Game game) throws UnirestException, IOException, DbxException
-    {
+    public void downloadCurrentGame(Game game) throws UnirestException, IOException, DbxException {
         String redPath = fileStorage.SITE_STORAGE_PATH + "/" + game.getId() + "/" + "red";
         String bluePath = fileStorage.SITE_STORAGE_PATH + "/" + game.getId() + "/" + "blue";
 
@@ -156,8 +157,7 @@ public class GameService
         downloadSiteAtDirectory("https://blue-devwars-2.c9.io", bluePath);
     }
 
-    public static Game updateGame(Game game, Game newGame)
-    {
+    public Game updateGame(Game game, Game newGame) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
@@ -171,8 +171,7 @@ public class GameService
         return newGame;
     }
 
-    public static void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException, DbxException
-    {
+    public void downloadSiteAtDirectory(String site, String path) throws IOException, UnirestException, DbxException {
         Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
 
         document.getElementsByTag("script")
@@ -185,14 +184,11 @@ public class GameService
 
                     if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
-                    try
-                    {
+                    try {
                         downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                    } catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (DbxException e)
-                    {
+                    } catch (DbxException e) {
                         e.printStackTrace();
                     }
                 });
@@ -208,14 +204,11 @@ public class GameService
 
                     source = source.replace("/", File.separator);
 
-                    try
-                    {
+                    try {
                         downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                    } catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (DbxException e)
-                    {
+                    } catch (DbxException e) {
                         e.printStackTrace();
                     }
                 });
@@ -231,14 +224,11 @@ public class GameService
 
                     source = source.replace("/", File.separator);
 
-                    try
-                    {
+                    try {
                         downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                    } catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (DbxException e)
-                    {
+                    } catch (DbxException e) {
                         e.printStackTrace();
                     }
                 });
@@ -246,8 +236,7 @@ public class GameService
         downloadURLToFile(site + "/index.html", (path + "/" + "index.html"));
     }
 
-    public static void downloadURLToFile(String urlLink, String path) throws IOException, DbxException
-    {
+    public void downloadURLToFile(String urlLink, String path) throws IOException, DbxException {
         URL url = new URL(urlLink);
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -258,8 +247,7 @@ public class GameService
         urlConnection.getInputStream().close();
     }
 
-    public static HashMap pastGames(Integer queryCount, Integer queryOffset)
-    {
+    public HashMap pastGames(Integer queryCount, Integer queryOffset) {
         Session session = DatabaseManager.getSession();
         /**
          * Make sure count isn't too high
@@ -271,7 +259,7 @@ public class GameService
          */
         Criteria criteria = session.createCriteria(Game.class)
                 .setProjection(Projections.projectionList()
-                        .add(Projections.groupProperty("season"))
+                                .add(Projections.groupProperty("season"))
                 );
 
         HashMap pastGames = new HashMap<>();
@@ -294,8 +282,7 @@ public class GameService
         return pastGames;
     }
 
-    public static Game getMostUpcomingTournament()
-    {
+    public Game getMostUpcomingTournament() {
         Game game;
 
         Session session = DatabaseManager.getSession();
@@ -312,8 +299,7 @@ public class GameService
         return game;
     }
 
-    public static List<Game> getUpcomingTournaments()
-    {
+    public List<Game> getUpcomingTournaments() {
         List<Game> games = null;
 
         Session session = DatabaseManager.getSession();
@@ -329,12 +315,11 @@ public class GameService
         return games;
     }
 
-    public static Game createGameFromLegacyGame(LegacyGame legacyGame)
-    {
+    public Game createGameFromLegacyGame(LegacyGame legacyGame) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        Game game = GameService.defaultGame();
+        Game game = this.defaultGame();
 
         session.save(game);
 
@@ -355,14 +340,14 @@ public class GameService
         blueTeam.setGame(game);
 
         legacyGame.getRedTeam().forEach((lang, username) -> {
-            Player player = new Player(redTeam, UserService.userForUsernameOrNewVeteranUser(username), lang);
+            Player player = new Player(redTeam, userService.userForUsernameOrNewVeteranUser(username), lang);
             session.save(player);
 
             redTeam.getPlayers().add(player);
         });
 
         legacyGame.getBlueTeam().forEach((lang, username) -> {
-            Player player = new Player(blueTeam, UserService.userForUsernameOrNewVeteranUser(username), lang);
+            Player player = new Player(blueTeam, userService.userForUsernameOrNewVeteranUser(username), lang);
             session.save(player);
 
             blueTeam.getPlayers().add(player);
@@ -374,22 +359,19 @@ public class GameService
         redTeam.setFuncVotes(legacyGame.getFuncVotesRed());
         blueTeam.setFuncVotes(legacyGame.getFuncVotesBlue());
 
-        for (int i = 0; i < legacyGame.getObjectives().size(); i++)
-        {
+        for (int i = 0; i < legacyGame.getObjectives().size(); i++) {
             LegacyObjective legacyObjective = legacyGame.getObjectives().get(i);
 
             Objective objective = new Objective(legacyObjective.getName(), game, i);
 
             session.save(objective);
 
-            if (legacyObjective.getRed())
-            {
-                TeamService.addObjectiveToCompleted(redTeam, objective);
+            if (legacyObjective.getRed()) {
+                teamService.addObjectiveToCompleted(redTeam, objective);
             }
 
-            if (legacyObjective.getBlue())
-            {
-                TeamService.addObjectiveToCompleted(blueTeam, objective);
+            if (legacyObjective.getBlue()) {
+                teamService.addObjectiveToCompleted(blueTeam, objective);
             }
         }
 

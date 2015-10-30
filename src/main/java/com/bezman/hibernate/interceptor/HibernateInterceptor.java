@@ -4,21 +4,17 @@ import com.bezman.Reference.util.Util;
 import com.bezman.annotation.HibernateDefault;
 import com.bezman.annotation.PreFlush;
 import com.bezman.annotation.PreFlushHibernateDefault;
-import com.bezman.model.Objective;
 import org.hibernate.EmptyInterceptor;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
 /**
  * Created by Terence on 7/1/2015.
  */
-public class HibernateInterceptor extends EmptyInterceptor
-{
+public class HibernateInterceptor extends EmptyInterceptor {
 
     @Override
     public void preFlush(Iterator entities) {
@@ -30,8 +26,7 @@ public class HibernateInterceptor extends EmptyInterceptor
         });
     }
 
-    public static void setPreFlushers(Object object)
-    {
+    public static void setPreFlushers(Object object) {
         Arrays.stream(object.getClass().getDeclaredFields())
                 .forEach(field ->
                 {
@@ -39,21 +34,17 @@ public class HibernateInterceptor extends EmptyInterceptor
 
                     field.setAccessible(true);
 
-                    try
-                    {
-                        if (hibernateDefault != null && field.get(object) == null)
-                        {
+                    try {
+                        if (hibernateDefault != null && field.get(object) == null) {
                             field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
                         }
-                    } catch (IllegalAccessException e)
-                    {
+                    } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 });
     }
 
-    public static void loadEntityDefaults(Object object)
-    {
+    public static void loadEntityDefaults(Object object) {
         Arrays.stream(object.getClass().getDeclaredFields())
                 .forEach(field ->
                 {
@@ -61,41 +52,31 @@ public class HibernateInterceptor extends EmptyInterceptor
 
                     field.setAccessible(true);
 
-                    try
-                    {
-                        if (hibernateDefault != null && field.get(object) == null)
-                        {
+                    try {
+                        if (hibernateDefault != null && field.get(object) == null) {
                             field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
                         }
-                    } catch (IllegalAccessException e)
-                    {
+                    } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 });
     }
 
-    public static void postLoadAny(Object object)
-    {
+    public static void postLoadAny(Object object) {
         HibernateInterceptor.loadEntityDefaults(object);
     }
 
     @SuppressWarnings("NullArgumentToVariableArgMethod")
-    public static void invokeMethodWithAnnotation(Object obj, Class annotation)
-    {
+    public static void invokeMethodWithAnnotation(Object obj, Class annotation) {
         Method[] methods = obj.getClass().getMethods();
 
-        for (Method method : methods)
-        {
-            if (method.getAnnotation(annotation) != null && method.getParameterCount() == 0)
-            {
-                try
-                {
+        for (Method method : methods) {
+            if (method.getAnnotation(annotation) != null && method.getParameterCount() == 0) {
+                try {
                     method.invoke(obj, null);
-                } catch (IllegalAccessException e)
-                {
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                } catch (InvocationTargetException e)
-                {
+                } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }

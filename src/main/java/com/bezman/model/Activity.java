@@ -2,7 +2,6 @@ package com.bezman.model;
 
 import com.bezman.annotation.HibernateDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Activity extends BaseModel
-{
+public class Activity extends BaseModel {
 
     private int id;
 
@@ -31,8 +29,7 @@ public class Activity extends BaseModel
     @HibernateDefault("0")
     private Integer pointsChanged, xpChanged;
 
-    public Activity(User affectedUser, User user, String description, Timestamp timestamp, Integer pointsChanged, Integer xpChanged)
-    {
+    public Activity(User affectedUser, User user, String description, Timestamp timestamp, Integer pointsChanged, Integer xpChanged) {
         this.affectedUser = affectedUser;
         this.user = user;
         this.description = description;
@@ -41,8 +38,7 @@ public class Activity extends BaseModel
         this.xpChanged = xpChanged;
     }
 
-    public Activity(User affectedUser, User user, String description, Integer pointsChanged, Integer xpChanged)
-    {
+    public Activity(User affectedUser, User user, String description, Integer pointsChanged, Integer xpChanged) {
         this.affectedUser = affectedUser;
         this.user = user;
         this.description = description;

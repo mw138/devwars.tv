@@ -1,10 +1,12 @@
 package com.bezman.service;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Created by Terence on 2/24/2015.
  */
-public class MailingListService
-{
+@Service
+public class MailingListService {
 
 
 }

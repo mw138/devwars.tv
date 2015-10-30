@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SecretKey extends BaseModel
-{
+public class SecretKey extends BaseModel {
     private int id;
 
     private String uid;

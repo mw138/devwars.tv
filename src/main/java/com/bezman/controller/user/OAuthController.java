@@ -10,6 +10,7 @@ import com.bezman.oauth.*;
 import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,12 +32,12 @@ import java.util.Enumeration;
  */
 @Controller
 @RequestMapping("/v1/oauth")
-public class OAuthController
-{
+public class OAuthController {
+    @Autowired
+    UserService userService;
 
     @RequestMapping("/reddit")
-    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response)
-    {
+    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response) {
         return new ResponseEntity("We removed Reddit", HttpStatus.OK);
 
 //        try
@@ -52,10 +53,8 @@ public class OAuthController
     }
 
     @RequestMapping("/reddit_callback")
-    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code)
-    {
-        try
-        {
+    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
+        try {
             com.bezman.model.User user = RedditProvider.userForCode(code);
 
             Session session = DatabaseManager.getSession();
@@ -68,11 +67,9 @@ public class OAuthController
 
             session.close();
 
-            if (queryUser == null)
-            {
-                UserService.addUser(user);
-            }else
-            {
+            if (queryUser == null) {
+                userService.addUser(user);
+            } else {
                 user.setId(queryUser.getId());
             }
 
@@ -81,8 +78,7 @@ public class OAuthController
 
             response.addCookie(cookie);
             response.sendRedirect(Reference.rootURL + "/");
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -90,19 +86,16 @@ public class OAuthController
     }
 
     @RequestMapping("/google")
-    public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://accounts.google.com/o/oauth2/auth?scope=" +
                     "profile email openid&" +
                     "state=generate_a_unique_state_value&" +
-                    "redirect_uri=" + Reference.rootURL + "/v1/oauth/google_callback&"+
+                    "redirect_uri=" + Reference.rootURL + "/v1/oauth/google_callback&" +
                     "response_type=code&" +
                     "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
                     "access_type=offline");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -110,10 +103,8 @@ public class OAuthController
     }
 
     @RequestMapping("/google_callback")
-    public ResponseEntity googleCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code)
-    {
-        try
-        {
+    public ResponseEntity googleCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
+        try {
             com.bezman.model.User user = GoogleProvider.userForCode(code);
 
             Session session = DatabaseManager.getSession();
@@ -126,11 +117,9 @@ public class OAuthController
 
             session.close();
 
-            if (queryUser == null)
-            {
-                UserService.addUser(user);
-            }else
-            {
+            if (queryUser == null) {
+                userService.addUser(user);
+            } else {
                 user.setId(queryUser.getId());
             }
 
@@ -139,8 +128,7 @@ public class OAuthController
 
             response.addCookie(cookie);
             response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -148,12 +136,10 @@ public class OAuthController
     }
 
     @RequestMapping("/twitter")
-    public ResponseEntity twitterAuth(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="email", required = false) String email)
-    {
+    public ResponseEntity twitterAuth(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "email", required = false) String email) {
         Twitter twitter = TwitterFactory.getSingleton();
 
-        try
-        {
+        try {
             RequestToken token = twitter.getOAuthRequestToken(Reference.rootURL + "/v1/oauth/twitter_callback");
             request.getSession().setAttribute("requestToken", token);
             request.getSession().setAttribute("twitter", twitter);
@@ -161,8 +147,7 @@ public class OAuthController
             response.sendRedirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + token.getToken());
 
             return null;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -170,12 +155,10 @@ public class OAuthController
     }
 
     @RequestMapping("/twitter_callback")
-    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier)
-    {
+    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) {
         Twitter twitter = TwitterFactory.getSingleton();
 
-        try
-        {
+        try {
             twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
 
             User twitterUser = twitter.showUser(twitter.getId());
@@ -192,11 +175,9 @@ public class OAuthController
 
             session.close();
 
-            if (queryUser == null)
-            {
-                UserService.addUser(user);
-            }else
-            {
+            if (queryUser == null) {
+                userService.addUser(user);
+            } else {
                 user.setId(queryUser.getId());
             }
 
@@ -206,26 +187,22 @@ public class OAuthController
             response.addCookie(cookie);
             response.sendRedirect(Reference.rootURL + "/");
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return  null;
+        return null;
     }
 
     @RequestMapping("/twitch")
-    public ResponseEntity twitchAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public ResponseEntity twitchAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://api.twitch.tv/kraken/oauth2/authorize" +
                     "?response_type=code" +
                     "&client_id=" + Reference.getEnvironmentProperty("twitchClientID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/oauth/twitch_callback" +
                     "&scope=user_read");
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -233,10 +210,8 @@ public class OAuthController
     }
 
     @RequestMapping("/twitch_callback")
-    public ResponseEntity twitchCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code)
-    {
-        try
-        {
+    public ResponseEntity twitchCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
+        try {
             com.bezman.model.User user = TwitchProvider.userForCode(code);
 
             Session session = DatabaseManager.getSession();
@@ -247,8 +222,7 @@ public class OAuthController
 
             com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
 
-            if (queryUser == null)
-            {
+            if (queryUser == null) {
                 Query pointsQuery = session.createQuery("from TwitchPointStorage s where lower(s.username) = :username");
                 pointsQuery.setString("username", (user.getUsername().substring(0, user.getUsername().length() - 4)).toLowerCase());
 
@@ -258,8 +232,7 @@ public class OAuthController
 
                 DatabaseUtil.saveObjects(true, user);
 
-                if (twitchPointStorage != null)
-                {
+                if (twitchPointStorage != null) {
                     Ranking ranking = new Ranking();
                     ranking.setXp((double) twitchPointStorage.getXp());
                     ranking.setPoints((double) twitchPointStorage.getPoints());
@@ -268,8 +241,7 @@ public class OAuthController
                     DatabaseUtil.saveOrUpdateObjects(false, ranking);
                     DatabaseUtil.deleteObjects(twitchPointStorage);
                 }
-            }else
-            {
+            } else {
                 user.setId(queryUser.getId());
             }
 
@@ -278,8 +250,7 @@ public class OAuthController
 
             response.addCookie(cookie);
             response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -287,17 +258,14 @@ public class OAuthController
     }
 
     @RequestMapping("/facebook")
-    public static ResponseEntity facebookAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public static ResponseEntity facebookAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://www.facebook.com/dialog/oauth?" +
                     "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/oauth/facebook_callback" +
                     "&response_type=code" +
                     "&scope=email");
-        }catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -305,10 +273,8 @@ public class OAuthController
     }
 
     @RequestMapping("/facebook_callback")
-    public ResponseEntity facebookCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code)
-    {
-        try
-        {
+    public ResponseEntity facebookCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
+        try {
             com.bezman.model.User user = FacebookProvider.userForCode(code);
 
             Session session = DatabaseManager.getSession();
@@ -321,11 +287,9 @@ public class OAuthController
 
             session.close();
 
-            if (queryUser == null)
-            {
-                UserService.addUser(user);
-            }else
-            {
+            if (queryUser == null) {
+                userService.addUser(user);
+            } else {
                 user.setId(queryUser.getId());
             }
 
@@ -334,8 +298,7 @@ public class OAuthController
 
             response.addCookie(cookie);
             response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -343,17 +306,14 @@ public class OAuthController
     }
 
     @RequestMapping("/github")
-    public ResponseEntity githubAuth(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public ResponseEntity githubAuth(HttpServletRequest request, HttpServletResponse response) {
+        try {
             response.sendRedirect("https://github.com/login/oauth/authorize?" +
                     "client_id=" + Reference.getEnvironmentProperty("githubClientID") +
                     "&redirect_uri=" + Reference.rootURL + "/v1/oauth/github_callback" +
                     "&scope=user,user:email" +
                     "&state=" + Util.randomText(32));
-        }catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -361,10 +321,8 @@ public class OAuthController
     }
 
     @RequestMapping("/github_callback")
-    public ResponseEntity githubCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code)
-    {
-        try
-        {
+    public ResponseEntity githubCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
+        try {
             com.bezman.model.User user = GithubProvider.userForCode(code);
 
             Session session = DatabaseManager.getSession();
@@ -377,11 +335,9 @@ public class OAuthController
 
             session.close();
 
-            if (queryUser == null)
-            {
-                UserService.addUser(user);
-            }else
-            {
+            if (queryUser == null) {
+                userService.addUser(user);
+            } else {
                 user.setId(queryUser.getId());
             }
 
@@ -390,33 +346,25 @@ public class OAuthController
 
             response.addCookie(cookie);
             response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static boolean isRequestAllowed(HttpServletRequest request)
-    {
+    public static boolean isRequestAllowed(HttpServletRequest request) {
         Enumeration names = request.getHeaderNames();
-        while (names.hasMoreElements())
-        {
+        while (names.hasMoreElements()) {
             String name = (String) names.nextElement();
             Enumeration values = request.getHeaders(name); // support multiple values
-            if (values != null)
-            {
-                while (values.hasMoreElements())
-                {
+            if (values != null) {
+                while (values.hasMoreElements()) {
                     String value = (String) values.nextElement();
 
-                    if (name.equals("host"))
-                    {
-                        for (String host : Reference.allowedHosts)
-                        {
-                            if (host.equals(value))
-                            {
+                    if (name.equals("host")) {
+                        for (String host : Reference.allowedHosts) {
+                            if (host.equals(value)) {
                                 return true;
                             }
                         }

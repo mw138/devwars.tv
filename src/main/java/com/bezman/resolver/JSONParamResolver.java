@@ -14,17 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Resolver to turn a JSON object into a java object
  */
-public class JSONParamResolver implements HandlerMethodArgumentResolver
-{
+public class JSONParamResolver implements HandlerMethodArgumentResolver {
     @Override
-    public boolean supportsParameter(MethodParameter methodParameter)
-    {
+    public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.getParameterAnnotation(JSONParam.class) != null;
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception
-    {
+    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         HttpServletRequest request = ((ServletWebRequest) nativeWebRequest).getRequest();
 
         JSONParam param = methodParameter.getParameterAnnotation(JSONParam.class);

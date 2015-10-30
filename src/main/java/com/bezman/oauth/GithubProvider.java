@@ -10,13 +10,10 @@ import org.json.simple.JSONValue;
 /**
  * Created by Terence on 5/16/2015.
  */
-public class GithubProvider implements IProvider
-{
+public class GithubProvider implements IProvider {
 
-    public static User userForCodeWithRedirect(String code, String redirect, String client, String secret)
-    {
-        try
-        {
+    public static User userForCodeWithRedirect(String code, String redirect, String client, String secret) {
+        try {
             String accessTokenResponse = Unirest.post("https://github.com/login/oauth/access_token")
                     .queryString("code", code)
                     .queryString("client_id", client)
@@ -44,18 +41,18 @@ public class GithubProvider implements IProvider
             user.setProvider("GITHUB");
 
             return user;
-        }catch (Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
 
-    public static User userForCode(String code)
-    {
+    public static User userForCode(String code) {
         return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/github_callback", Reference.getEnvironmentProperty("githubClientID"), Reference.getEnvironmentProperty("githubSecret"));
     }
 
-    public static User userForCode2(String code)
-    {
+    public static User userForCode2(String code) {
         return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/github_callback", Reference.getEnvironmentProperty("githubClientID2"), Reference.getEnvironmentProperty("githubSecret2"));
     }
 

@@ -12,8 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TeamGameSignup extends BaseModel
-{
+public class TeamGameSignup extends BaseModel {
     private int id;
 
     private UserTeam userTeam;
@@ -23,8 +22,7 @@ public class TeamGameSignup extends BaseModel
 
     private Set<User> users;
 
-    public TeamGameSignup(Game game, UserTeam userTeam, User[] users)
-    {
+    public TeamGameSignup(Game game, UserTeam userTeam, User[] users) {
         this.setGame(game);
         this.setUserTeam(userTeam);
         this.setUsers(new HashSet<>(Arrays.asList(users)));

@@ -3,13 +3,11 @@ package com.bezman.model;
 import com.bezman.annotation.HibernateDefault;
 import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.type.IntegerType;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -19,8 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Game extends BaseModel
-{
+public class Game extends BaseModel {
 
     private int id;
 
@@ -49,25 +46,20 @@ public class Game extends BaseModel
     @HibernateDefault("0")
     private Boolean tournament;
 
-    public Team getTeamByID(int id)
-    {
-        for (Team team : this.getTeams().values())
-        {
+    public Team getTeamByID(int id) {
+        for (Team team : this.getTeams().values()) {
             if (team.getId() == id) return team;
         }
 
         return null;
     }
 
-    public void deleteFullGame()
-    {
+    public void deleteFullGame() {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(Team team : this.getTeams().values())
-        {
-            for(Player player : team.getPlayers())
-            {
+        for (Team team : this.getTeams().values()) {
+            for (Player player : team.getPlayers()) {
                 session.delete(player);
             }
 

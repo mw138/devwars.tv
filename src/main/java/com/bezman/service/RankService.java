@@ -6,12 +6,12 @@ import com.bezman.model.Ranking;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Service;
 
-public class RankService
-{
+@Service
+public class RankService {
 
-    public static Rank rankForRanking(Ranking ranking)
-    {
+    public Rank rankForRanking(Ranking ranking) {
         Session session = DatabaseManager.getSession();
 
         Rank rank = (Rank) session.createCriteria(Rank.class)

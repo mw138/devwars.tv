@@ -71,6 +71,7 @@ var app = angular.module('app', [
     'app.modDoc',
 	'app.modDoc',
     'app.tournament',
+    'app.passReset',
 
     //dependencies
     'ngCookies',

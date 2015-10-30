@@ -6,9 +6,6 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.init.FirebaseInit;
 import com.bezman.init.IInit;
 import com.bezman.init.TwitterInit;
-import com.bezman.service.GameService;
-import com.bezman.service.UserService;
-import com.bezman.service.UserTeamService;
 import com.bezman.storage.FileStorage;
 import com.corundumstudio.socketio.SocketIOServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +18,7 @@ import java.sql.SQLException;
 
 @Controller
 @RequestMapping
-public class StartupServlet
-{
+public class StartupServlet {
     @Autowired
     FileStorage fileStorage;
 
@@ -32,34 +28,27 @@ public class StartupServlet
     private static boolean hasSocketStarted = false;
 
     @PostConstruct
-    public void postConstruct()
-    {
+    public void postConstruct() {
         Reference.loadDevWarsProperties();
-        UserService.fileStorage = fileStorage;
-        UserTeamService.fileStorage = fileStorage;
-        GameService.fileStorage = fileStorage;
 
-        if (!hasSocketStarted)
-        {
+        if (!hasSocketStarted) {
             hasSocketStarted = true;
             socketIOServer.start();
         }
 
-        Class[] initializations = new  Class[]{
+        Class[] initializations = new Class[]{
                 FirebaseInit.class,
                 DatabaseManager.class,
                 TwitterInit.class
         };
 
         //Run all init classes
-        for(Class theClass : initializations)
-        {
+        for (Class theClass : initializations) {
             try {
                 IInit iInit = (IInit) theClass.newInstance();
 
                 iInit.init();
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -68,16 +57,12 @@ public class StartupServlet
     }
 
     @PreDestroy
-    public void preDestroy()
-    {
+    public void preDestroy() {
         socketIOServer.stop();
-
-        try
-        {
+        try {
             Reference.connection.close();
             DatabaseManager.sessionFactory.close();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

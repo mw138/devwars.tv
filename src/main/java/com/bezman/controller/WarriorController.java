@@ -1,6 +1,5 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.Reference;
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PreAuthorization;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,13 +29,13 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/v1/warrior")
-public class WarriorController
-{
+public class WarriorController {
     @Autowired
     Validator validator;
 
     /**
      * Cloud Nine registration
+     *
      * @param request
      * @param response
      * @param firstName
@@ -74,18 +72,15 @@ public class WarriorController
                                    @RequestParam("location") String location,
                                    @RequestParam(value = "company", required = false) String company,
                                    @RequestParam("about") String about,
-                                   SessionImpl session)
-    {
+                                   SessionImpl session) {
         User user = (User) request.getAttribute("user");
         user = (User) session.merge(user);
 
-        if (user.getEmail() == null)
-        {
+        if (user.getEmail() == null) {
             user.setEmail(email);
         }
 
-        if (month < 1)
-        {
+        if (month < 1) {
             return new ResponseEntity("Invalid DOB", HttpStatus.CONFLICT);
         }
 
@@ -94,7 +89,7 @@ public class WarriorController
 
         Warrior warrior = new Warrior(firstName, favFood, favTool, about, c9Name, company, location, htmlRate, cssRate, jsRate, calendar.getTime(), user.getId());
 
-        if(user.getWarrior() != null) return new ResponseEntity("You are already a warrior", HttpStatus.CONFLICT);
+        if (user.getWarrior() != null) return new ResponseEntity("You are already a warrior", HttpStatus.CONFLICT);
 
         session.save(warrior);
 
@@ -111,26 +106,22 @@ public class WarriorController
         Errors errors = new BeanPropertyBindingResult(warrior, warrior.getClass().getName());
         validator.validate(warrior, errors);
 
-        if(errors.hasErrors())
-        {
+        if (errors.hasErrors()) {
             return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
 
-        if(user.getWarrior() == null) return new ResponseEntity("You are not a warrior", HttpStatus.CONFLICT);
+        if (user.getWarrior() == null) return new ResponseEntity("You are not a warrior", HttpStatus.CONFLICT);
 
         user = (User) session.merge(user);
 
         Warrior oldWarrior = user.getWarrior();
 
-        if(!oldWarrior.getHtmlRate().equals(warrior.getHtmlRate()) ||
+        if (!oldWarrior.getHtmlRate().equals(warrior.getHtmlRate()) ||
                 !oldWarrior.getCssRate().equals(warrior.getCssRate()) ||
-                !oldWarrior.getJsRate().equals(warrior.getJsRate()))
-        {
-            if (oldWarrior.getUpdatedAt() == null)
-            {
+                !oldWarrior.getJsRate().equals(warrior.getJsRate())) {
+            if (oldWarrior.getUpdatedAt() == null) {
                 warrior.setUpdatedAt(new Date());
-            } else
-            {
+            } else {
                 long now = new Date().getTime();
                 long then = oldWarrior.getUpdatedAt().getTime();
 

@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserReset extends BaseModel
-{
+public class UserReset extends BaseModel {
     private int id;
 
     @JsonIgnore

@@ -11,27 +11,23 @@ import org.json.simple.JSONValue;
 /**
  * Created by Terence on 3/27/2015.
  */
-public class FacebookProvider implements IProvider
-{
-    public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException
-    {
+public class FacebookProvider implements IProvider {
+    public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException {
         String accessTokenJSON = Unirest.get("https://graph.facebook.com/v2.3/oauth/access_token")
-            .queryString("code", code)
-            .queryString("client_id", Reference.getEnvironmentProperty("facebookAppID"))
-            .queryString("client_secret", Reference.getEnvironmentProperty("facebookSecret"))
-            .queryString("redirect_uri", redirect)
-            .asString()
-            .getBody();
+                .queryString("code", code)
+                .queryString("client_id", Reference.getEnvironmentProperty("facebookAppID"))
+                .queryString("client_secret", Reference.getEnvironmentProperty("facebookSecret"))
+                .queryString("redirect_uri", redirect)
+                .asString()
+                .getBody();
 
         System.out.println(accessTokenJSON);
         JSONObject accessTokenJSONObject = (JSONObject) JSONValue.parse(accessTokenJSON);
 
-        if (accessTokenJSONObject != null)
-        {
+        if (accessTokenJSONObject != null) {
             String accessToken = (String) accessTokenJSONObject.get("access_token");
 
-            if (accessToken != null)
-            {
+            if (accessToken != null) {
                 String meResponse = Unirest.get("https://graph.facebook.com/v2.3/me")
                         .queryString("fields", "name, email, id")
                         .queryString("access_token", accessToken)
@@ -42,8 +38,7 @@ public class FacebookProvider implements IProvider
 
                 JSONObject meJSONObject = (JSONObject) JSONValue.parse(meResponse);
 
-                if (meJSONObject != null)
-                {
+                if (meJSONObject != null) {
                     User user = new User();
 
                     user.setUsername((String) meJSONObject.get("name") + Util.randomNumbers(4));
@@ -60,13 +55,11 @@ public class FacebookProvider implements IProvider
         return null;
     }
 
-    public static User userForCode(String code) throws UnirestException
-    {
+    public static User userForCode(String code) throws UnirestException {
         return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/facebook_callback");
     }
 
-    public static User userForCode2(String code) throws UnirestException
-    {
+    public static User userForCode2(String code) throws UnirestException {
         return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/facebook_callback");
     }
 }

@@ -15,38 +15,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.*;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.naming.Binding;
 
 /**
  * Created by Terence on 4/11/2015.
  */
 @Controller
 @RequestMapping("/v1/blog")
-public class BlogController
-{
+public class BlogController {
 
     @Autowired
     BlogPostValidator blogPostValidator;
 
+    @Autowired
+    BlogService blogService;
+
     /**
      * Gets blog posts
+     *
      * @param session
-     * @param year (Optional) Year of blog posts wanted
-     * @param month (Optional) Month of blog posts wanted
-     * @param day (Optional) Day of blog posts wanted
+     * @param year    (Optional) Year of blog posts wanted
+     * @param month   (Optional) Month of blog posts wanted
+     * @param day     (Optional) Day of blog posts wanted
      * @return Blog posts which match criteria
      */
     @UnitOfWork
     @RequestMapping("/all")
-    public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day)
-    {
+    public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day) {
         Criteria criteria = session.createCriteria(BlogPost.class)
                 .setMaxResults(10)
                 .addOrder(Order.desc("timestamp"));
@@ -68,6 +67,7 @@ public class BlogController
 
     /**
      * Created new blog post
+     *
      * @param blogPost JSON of the new post
      * @param user
      * @param session
@@ -78,13 +78,11 @@ public class BlogController
     @RequestMapping("/create")
     public ResponseEntity createBlog(@JSONParam("post") BlogPost blogPost,
                                      @AuthedUser User user,
-                                     SessionImpl session)
-    {
+                                     SessionImpl session) {
         Errors errors = new BeanPropertyBindingResult(blogPost, "blogPost");
         blogPostValidator.validate(blogPost, errors);
 
-        if (errors.hasErrors())
-        {
+        if (errors.hasErrors()) {
             return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
 
@@ -97,28 +95,26 @@ public class BlogController
 
     /**
      * @param session
-     * @param title Title of the blog post
+     * @param title   Title of the blog post
      * @return The requested blog post
      */
     @UnitOfWork
     @RequestMapping("/{title}")
-    public ResponseEntity getBlog(SessionImpl session, @PathVariable("title") String title)
-    {
-        BlogPost blogPost = BlogService.getPostByShortTitle(title);
+    public ResponseEntity getBlog(SessionImpl session, @PathVariable("title") String title) {
+        BlogPost blogPost = blogService.getPostByShortTitle(title);
 
-        if (blogPost != null)
-        {
+        if (blogPost != null) {
             return new ResponseEntity(blogPost, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
         }
     }
 
     /**
      * Updates a blog posts with given information
+     *
      * @param session
-     * @param id The ID of the blog post to update
+     * @param id       The ID of the blog post to update
      * @param blogPost JSON of post to update with
      * @return The new blog post
      */
@@ -127,43 +123,38 @@ public class BlogController
     @RequestMapping("/{id}/update")
     public ResponseEntity updateBlog(SessionImpl session,
                                      @PathVariable("id") int id,
-                                     @JSONParam("post") BlogPost blogPost)
-    {
+                                     @JSONParam("post") BlogPost blogPost) {
         BlogPost oldPost = (BlogPost) session.get(BlogPost.class, id);
 
-        if (oldPost != null)
-        {
+        if (oldPost != null) {
             blogPost.setId(id);
 
             session.merge(blogPost);
 
             return new ResponseEntity(blogPost, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
         }
     }
 
     /**
      * Deletes the blog post
+     *
      * @param session
-     * @param id The ID of the blog post to delete
+     * @param id      The ID of the blog post to delete
      * @return The deleted blog post
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
     @RequestMapping("/{id}/delete")
-    public ResponseEntity deleteBlog(SessionImpl session, @PathVariable("id") int id)
-    {
+    public ResponseEntity deleteBlog(SessionImpl session, @PathVariable("id") int id) {
         BlogPost blogPost = (BlogPost) session.get(BlogPost.class, id);
 
-        if (blogPost != null)
-        {
+        if (blogPost != null) {
             session.delete(blogPost);
 
             return new ResponseEntity(blogPost, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("No post found", HttpStatus.NOT_FOUND);
         }
     }

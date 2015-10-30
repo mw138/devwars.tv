@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LegacyObjective
-{
+public class LegacyObjective {
     private String name;
 
     private Boolean blue, red;

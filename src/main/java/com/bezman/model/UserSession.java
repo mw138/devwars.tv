@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserSession extends BaseModel
-{
+public class UserSession extends BaseModel {
     private int id;
 
     private String sessionID;

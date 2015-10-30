@@ -12,8 +12,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface PreAuthorization
-{
+public @interface PreAuthorization {
 
     public User.Role minRole();
 

@@ -3,7 +3,6 @@ package com.bezman.model;
 import com.bezman.annotation.HibernateDefault;
 import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Badge extends BaseModel
-{
+public class Badge extends BaseModel {
 
     private int id;
 
@@ -28,16 +26,14 @@ public class Badge extends BaseModel
     @JsonIgnore
     private Set<User> users;
 
-    public Badge(String name, int bitsAwarded, int xpAwarded, String description)
-    {
+    public Badge(String name, int bitsAwarded, int xpAwarded, String description) {
         this.name = name;
         this.bitsAwarded = bitsAwarded;
         this.xpAwarded = xpAwarded;
         this.description = description;
     }
 
-    public static Badge badgeForName(String name)
-    {
+    public static Badge badgeForName(String name) {
         Session session = DatabaseManager.getSession();
 
         Badge badge = (Badge) session.createCriteria(Badge.class)

@@ -20,11 +20,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Controller
 @RequestMapping("/v1/objective")
-public class ObjectiveItemController extends BaseController
-{
+public class ObjectiveItemController extends BaseController {
 
     /**
      * Creates a new objective item
+     *
      * @param request
      * @param response
      * @param objective Objective text
@@ -33,8 +33,7 @@ public class ObjectiveItemController extends BaseController
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
     public ResponseEntity createObjective(HttpServletRequest request, HttpServletResponse response,
-                                          @RequestParam("objective") String objective)
-    {
+                                          @RequestParam("objective") String objective) {
         ObjectiveItem objectiveItem = new ObjectiveItem(objective);
 
         DatabaseUtil.saveObjects(true, objectiveItem);
@@ -44,46 +43,42 @@ public class ObjectiveItemController extends BaseController
 
     /**
      * Gets objective item by id
+     *
      * @param request
      * @param response
-     * @param id ID of objective item
+     * @param id       ID of objective item
      * @return
      */
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/{id}")
     public ResponseEntity getObjective(HttpServletRequest request, HttpServletResponse response,
-                                       @PathVariable("id") int id)
-    {
+                                       @PathVariable("id") int id) {
         ObjectiveItem objectiveItem = (ObjectiveItem) BaseModel.byID(ObjectiveItem.class, id);
 
-        if (objectiveItem != null)
-        {
+        if (objectiveItem != null) {
             return new ResponseEntity(objectiveItem, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("Objective Not found", HttpStatus.NOT_FOUND);
         }
     }
 
     /**
      * Deletes objective item
+     *
      * @param request
      * @param response
-     * @param id ID of objective item to delete
+     * @param id       ID of objective item to delete
      * @return
      */
     @RequestMapping("/{id}/delete")
     public ResponseEntity deleteObjective(HttpServletRequest request, HttpServletResponse response,
-                                          @PathVariable("id") int id)
-    {
+                                          @PathVariable("id") int id) {
         BaseModel objectiveItem = BaseModel.byID(ObjectiveItem.class, id);
 
-        if (objectiveItem != null)
-        {
+        if (objectiveItem != null) {
             DatabaseUtil.deleteObjects(objectiveItem);
             return new ResponseEntity(objectiveItem, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("Objective Not found", HttpStatus.NOT_FOUND);
         }
     }

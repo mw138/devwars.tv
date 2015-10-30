@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Settings extends BaseModel
-{
+public class Settings extends BaseModel {
     private int id;
 
     @JsonIgnore

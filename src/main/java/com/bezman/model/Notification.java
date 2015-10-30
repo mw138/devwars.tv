@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Notification extends BaseModel
-{
+public class Notification extends BaseModel {
 
     private int id;
 
@@ -20,8 +19,7 @@ public class Notification extends BaseModel
 
     private boolean hasRead;
 
-    public Notification(User user, String notificationText, boolean hasRead)
-    {
+    public Notification(User user, String notificationText, boolean hasRead) {
         this.user = user;
         this.notificationText = notificationText;
         this.hasRead = hasRead;

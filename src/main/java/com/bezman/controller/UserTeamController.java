@@ -1,20 +1,14 @@
 package com.bezman.controller;
 
-import com.bezman.Reference.Reference;
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.*;
-import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
 import com.dropbox.core.DbxException;
-import org.apache.commons.io.IOUtils;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,11 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +31,13 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping("/v1/teams")
-public class UserTeamController
-{
+public class UserTeamController {
 
     @Autowired
     Validator validator;
+
+    @Autowired
+    UserTeamService userTeamService;
 
     /**
      * Returns a team for a given ID
@@ -57,16 +48,16 @@ public class UserTeamController
      */
     @UnitOfWork
     @RequestMapping("/{id}")
-    public ResponseEntity getTeam(@PathVariable("id") int id, SessionImpl session)
-    {
+    public ResponseEntity getTeam(@PathVariable("id") int id, SessionImpl session) {
         return new ResponseEntity(session.get(UserTeam.class, id), HttpStatus.OK);
     }
 
     /**
      * Change a teams avatar
-     * @param session (Resolved)
+     *
+     * @param session       (Resolved)
      * @param multipartFile (Image)
-     * @param id ID of team to change picture
+     * @param id            ID of team to change picture
      * @return Response
      * @throws IOException
      */
@@ -75,34 +66,33 @@ public class UserTeamController
     public ResponseEntity changeAvatar(SessionImpl session,
                                        @AuthedUser User user,
                                        @RequestParam("image") MultipartFile multipartFile,
-                                       @PathVariable("id") int id) throws IOException, DbxException
-    {
+                                       @PathVariable("id") int id) throws IOException, DbxException {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You cannot do that", HttpStatus.FORBIDDEN);
 
-        UserTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
+        userTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity("Successfully changed picture", HttpStatus.OK);
     }
 
     /**
      * Validates if names or tags are taken
+     *
      * @param name The name to check
-     * @param tag The tag to check
+     * @param tag  The tag to check
      * @return JSON with true if the name is taken
      */
     @RequestMapping("/check")
-    public ResponseEntity checkTeamInformation(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "tag", required = false, defaultValue = "") String tag)
-    {
+    public ResponseEntity checkTeamInformation(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "tag", required = false, defaultValue = "") String tag) {
         HashMap info = new HashMap();
 
-        info.put("name", UserTeamService.isNameTaken(name));
-        info.put("tag", UserTeamService.isTagTaken(tag));
+        info.put("name", userTeamService.isNameTaken(name));
+        info.put("tag", userTeamService.isTagTaken(tag));
 
         return new ResponseEntity(info, HttpStatus.OK);
     }
@@ -121,12 +111,11 @@ public class UserTeamController
     public ResponseEntity createTeam(SessionImpl session,
                                      @AuthedUser User user,
                                      @RequestParam("name") String name,
-                                     @RequestParam("tag") String tag) throws IOException
-    {
+                                     @RequestParam("tag") String tag) throws IOException {
         user = (User) session.merge(user);
 
 
-        if (UserTeamService.doesUserBelongToTeam(user))
+        if (userTeamService.doesUserBelongToTeam(user))
             return new ResponseEntity("You already belong to a team", HttpStatus.CONFLICT);
 
         if (user.getWarrior() == null)
@@ -137,8 +126,7 @@ public class UserTeamController
         Errors errors = new BeanPropertyBindingResult(userTeam, "userTeam");
         validator.validate(userTeam, errors);
 
-        if (errors.hasErrors())
-        {
+        if (errors.hasErrors()) {
             return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
         }
 
@@ -151,25 +139,25 @@ public class UserTeamController
 
     /**
      * Deletes a team
-     * @param session (Resolved)
-     * @param id ID of the team to delete
+     *
+     * @param session  (Resolved)
+     * @param id       ID of the team to delete
      * @param teamName Team name confirmation
      * @return Message
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName, @RequestParam(value = "newOwner", required = false) Integer newOwner)
-    {
+    public ResponseEntity deleteTeam(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("name") String teamName, @RequestParam(value = "newOwner", required = false) Integer newOwner) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (!teamName.equals(userTeam.getName()))
             return new ResponseEntity("Team name did not match", HttpStatus.BAD_REQUEST);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do this", HttpStatus.FORBIDDEN);
 
-        UserTeamService.disbandTeam(userTeam, newOwner);
+        userTeamService.disbandTeam(userTeam, newOwner);
         user.setTeam(null);
 
         return new ResponseEntity(userTeam, HttpStatus.OK);
@@ -177,9 +165,10 @@ public class UserTeamController
 
     /**
      * Kick a player from a team
+     *
      * @param session (Resolved)
-     * @param id ID Of the team to kick from
-     * @param userID User to kick
+     * @param id      ID Of the team to kick from
+     * @param userID  User to kick
      * @return Response
      */
     @Transactional
@@ -188,14 +177,13 @@ public class UserTeamController
     public ResponseEntity kickUser(SessionImpl session,
                                    @AuthedUser User authedUser,
                                    @PathVariable("id") int id,
-                                   @PathVariable("user") int userID)
-    {
+                                   @PathVariable("user") int userID) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (userTeam == null)
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
-        if(!UserTeamService.doesUserHaveAuthorization(authedUser, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(authedUser, userTeam))
             return new ResponseEntity("You're not allowed to do that", HttpStatus.FORBIDDEN);
 
         userTeam.getMembers().removeIf(
@@ -206,9 +194,10 @@ public class UserTeamController
 
     /**
      * Leave the team (Remove yourself from the member list)
+     *
      * @param session (Resolved)
-     * @param user (Resolved)
-     * @param id The ID of the team to leave
+     * @param user    (Resolved)
+     * @param id      The ID of the team to leave
      * @return Response
      */
     @Transactional
@@ -216,8 +205,7 @@ public class UserTeamController
     @RequestMapping("/{id}/leave")
     public ResponseEntity leaveTeam(SessionImpl session,
                                     @AuthedUser User user,
-                                    @PathVariable("id") int id)
-    {
+                                    @PathVariable("id") int id) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (userTeam == null)
@@ -231,24 +219,24 @@ public class UserTeamController
 
     /**
      * Change the name of a team
+     *
      * @param session (Resolved)
-     * @param user (Resolved)
-     * @param id The ID of the team
+     * @param user    (Resolved)
+     * @param id      The ID of the team
      * @param newName The new name of the team
      * @return Message
      */
     @PreAuthorization(minRole = User.Role.USER)
     @Transactional
     @RequestMapping("/{id}/changename")
-    public ResponseEntity editTeamName(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("newName") String newName)
-    {
+    public ResponseEntity editTeamName(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("newName") String newName) {
 
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         if (userTeam == null)
             return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
         userTeam.setName(newName);
@@ -258,17 +246,17 @@ public class UserTeamController
 
     /**
      * Invites a player to a roster
-     * @param session (Resolved)
-     * @param teamID ID of the team to invite player to
-     * @param user (Resolved)
+     *
+     * @param session    (Resolved)
+     * @param teamID     ID of the team to invite player to
+     * @param user       (Resolved)
      * @param inviteUser The ID of the user to invite
      * @return Message
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/{id}/invite")
-    public ResponseEntity invitePlayer(SessionImpl session, @PathVariable("id") int teamID, @AuthedUser User user, @RequestParam("user") int inviteUser)
-    {
+    public ResponseEntity invitePlayer(SessionImpl session, @PathVariable("id") int teamID, @AuthedUser User user, @RequestParam("user") int inviteUser) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, teamID);
         User invitedUser = (User) session.get(User.class, inviteUser);
 
@@ -278,7 +266,7 @@ public class UserTeamController
         if (userTeam.getMembers().size() >= 3)
             return new ResponseEntity("This team has too many players", HttpStatus.CONFLICT);
 
-        if (!UserTeamService.doesUserHaveAuthorization(user, userTeam))
+        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
             return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
 
         if (invitedUser == null)
@@ -287,8 +275,7 @@ public class UserTeamController
         if (invitedUser.getWarrior() == null)
             return new ResponseEntity("You cannot invite non warriors", HttpStatus.CONFLICT);
 
-        if (UserTeamService.inviteUserToTeam(invitedUser, userTeam))
-        {
+        if (userTeamService.inviteUserToTeam(invitedUser, userTeam)) {
             Activity activity = new Activity(invitedUser, user, "You were invited to the team : " + userTeam.getName(), 0, 0);
             Notification notification = new Notification(invitedUser, "You were invited to the team : " + userTeam.getName(), false);
 
@@ -296,29 +283,27 @@ public class UserTeamController
             session.save(notification);
 
             return new ResponseEntity("Successfully Invited User", HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("User already has an invite", HttpStatus.BAD_REQUEST);
         }
     }
 
     /**
      * Accept an invite to a team
-     * @param teamID ID of the team to accept invite from
-     * @param session (Resolved)
+     *
+     * @param teamID     ID of the team to accept invite from
+     * @param session    (Resolved)
      * @param authedUser (Resolved)
      * @return Message
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/{id}/invite/accept")
-    public ResponseEntity acceptInvite(@PathVariable("id") int teamID, SessionImpl session, @AuthedUser User authedUser)
-    {
+    public ResponseEntity acceptInvite(@PathVariable("id") int teamID, SessionImpl session, @AuthedUser User authedUser) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, teamID);
         User user = (User) session.merge(authedUser);
 
-        if (userTeam == null)
-        {
+        if (userTeam == null) {
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
         }
 
@@ -326,8 +311,7 @@ public class UserTeamController
                 .filter(invite -> invite.getUser().getId() == user.getId())
                 .findFirst();
 
-        if (removed.isPresent())
-        {
+        if (removed.isPresent()) {
             session.delete(removed.get());
 
             userTeam.getMembers().stream()
@@ -346,18 +330,18 @@ public class UserTeamController
             session.save(activity);
 
             return new ResponseEntity(userTeam, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("You were not invited to that team", HttpStatus.BAD_REQUEST);
         }
     }
 
     /**
      * Gets the game history of a team
+     *
      * @param session (Resolved)
-     * @param id ID of the team
-     * @param page Page offset
-     * @param count Number of results
+     * @param id      ID of the team
+     * @param page    Page offset
+     * @param count   Number of results
      * @return history
      */
     @UnitOfWork
@@ -365,16 +349,14 @@ public class UserTeamController
     public ResponseEntity getHistory(SessionImpl session,
                                      @PathVariable("id") int id,
                                      @RequestParam(value = "page", defaultValue = "1", required = false) int page,
-                                     @RequestParam(value = "count", defaultValue = "8", required = false) int count)
-    {
+                                     @RequestParam(value = "count", defaultValue = "8", required = false) int count) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
-        if (userTeam != null)
-        {
+        if (userTeam != null) {
             page = page < 1 ? 1 : page;
             count = count < 1 || count > 8 ? 8 : count;
 
-            List<Game> games = UserTeamService.getGamesForUserTeam(userTeam, page, count);
+            List<Game> games = userTeamService.getGamesForUserTeam(userTeam, page, count);
 
             return new ResponseEntity(games, HttpStatus.OK);
         }
@@ -384,19 +366,18 @@ public class UserTeamController
 
     /**
      * Statistics of a team
+     *
      * @param session (Resolved)
-     * @param id ID of the team
+     * @param id      ID of the team
      * @return Statistics
      */
     @UnitOfWork
     @RequestMapping("/{id}/statistics")
-    public ResponseEntity getStatistics(SessionImpl session, @PathVariable("id") int id)
-    {
+    public ResponseEntity getStatistics(SessionImpl session, @PathVariable("id") int id) {
         UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
 
-        if (userTeam != null)
-        {
-            return new ResponseEntity(UserTeamService.getStatisticsForUserTeam(userTeam), HttpStatus.OK);
+        if (userTeam != null) {
+            return new ResponseEntity(userTeamService.getStatisticsForUserTeam(userTeam), HttpStatus.OK);
         }
 
         return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);

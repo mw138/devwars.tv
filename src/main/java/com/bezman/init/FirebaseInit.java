@@ -14,16 +14,14 @@ public class FirebaseInit implements IInit {
     public void init() {
         Reference.firebase = new Firebase("https://devwars-tv.firebaseio.com");
 
-        Reference.firebase.authWithCustomToken(Reference.getEnvironmentProperty("firebaseToken") , new Firebase.AuthResultHandler() {
+        Reference.firebase.authWithCustomToken(Reference.getEnvironmentProperty("firebaseToken"), new Firebase.AuthResultHandler() {
             @Override
-            public void onAuthenticated(AuthData authData)
-            {
+            public void onAuthenticated(AuthData authData) {
 
             }
 
             @Override
-            public void onAuthenticationError(FirebaseError firebaseError)
-            {
+            public void onAuthenticationError(FirebaseError firebaseError) {
 
             }
         });

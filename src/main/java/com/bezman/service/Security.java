@@ -1,6 +1,7 @@
 package com.bezman.service;
 
 import com.bezman.Reference.Reference;
+import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -13,13 +14,11 @@ import java.security.MessageDigest;
 /**
  * Created by Terence on 12/22/2014.
  */
-public class Security
-{
+@Service
+public class Security {
 
-    public static String hash(String item)
-    {
-        try
-        {
+    public String hash(String item) {
+        try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 
             messageDigest.update(item.getBytes());
@@ -27,24 +26,20 @@ public class Security
             byte[] bytes = messageDigest.digest();
 
             StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++)
-            {
+            for (int i = 0; i < bytes.length; i++) {
                 stringBuilder.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
 
             return stringBuilder.toString();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static String encrypt(String item)
-    {
-        try
-        {
+    public String encrypt(String item) {
+        try {
             String encryptionKey = Reference.getEnvironmentProperty("encryptionKey");
 
             DESKeySpec keySpec = new DESKeySpec(encryptionKey.getBytes());
@@ -59,18 +54,15 @@ public class Security
             cipher.init(Cipher.ENCRYPT_MODE, key);
 
             return base64Encoder.encode(cipher.doFinal(clearBytes));
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static String decrypt(String item)
-    {
-        try
-        {
+    public String decrypt(String item) {
+        try {
             String encryptionKey = Reference.getEnvironmentProperty("encryptionKey");
 
             DESKeySpec keySpec = new DESKeySpec(encryptionKey.getBytes());
@@ -86,8 +78,7 @@ public class Security
             cipher.init(Cipher.DECRYPT_MODE, key);
 
             return new String(cipher.doFinal(encryptedBytes), "UTF8");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

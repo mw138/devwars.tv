@@ -12,8 +12,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = AlphaNumericValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface AlphaNumeric
-{
+public @interface AlphaNumeric {
 
     String message() default "{com.bezman.constraints.alphanumeric}";
 

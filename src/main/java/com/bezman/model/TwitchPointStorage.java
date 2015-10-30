@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TwitchPointStorage extends BaseModel
-{
+public class TwitchPointStorage extends BaseModel {
     private int id;
 
     private Integer points, xp;

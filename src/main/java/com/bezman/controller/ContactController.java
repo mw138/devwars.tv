@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/v1/contact")
-public class ContactController
-{
+public class ContactController {
 
     /**
      * Feedback for users : Puts new contact row in DB and sends email
+     *
      * @param session
-     * @param name Name of the user
-     * @param email Email of the user
-     * @param text Text we should see
-     * @param type Type of feedback
+     * @param name    Name of the user
+     * @param email   Email of the user
+     * @param text    Text we should see
+     * @param type    Type of feedback
      * @return
      */
     @Transactional
@@ -34,22 +34,19 @@ public class ContactController
                                  @RequestParam("name") String name,
                                  @RequestParam("email") String email,
                                  @RequestParam("text") String text,
-                                 @RequestParam("type") String type)
-    {
-        if(text.length() <= 1000 && type.length() < 255)
-        {
+                                 @RequestParam("type") String type) {
+        if (text.length() <= 1000 && type.length() < 255) {
             Contact contact = new Contact(name, email, type, text);
 
             String subject = "New " + type + " Inquiry from " + name;
-            String message = "Name: " +  name + "\nEmail: " + email + "\nText: " + text + "\nType: " + type;
+            String message = "Name: " + name + "\nEmail: " + email + "\nText: " + text + "\nType: " + type;
 
             Util.sendEmail(Reference.getEnvironmentProperty("emailUsername"), Reference.getEnvironmentProperty("emailPassword"), subject, message, "support@devwars.tv");
 
             session.save(contact);
 
             return new ResponseEntity(contact, HttpStatus.OK);
-        } else
-        {
+        } else {
             return new ResponseEntity("Enquiry is too long", HttpStatus.BAD_REQUEST);
         }
     }
