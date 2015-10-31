@@ -259,7 +259,7 @@ public class GameService {
          */
         Criteria criteria = session.createCriteria(Game.class)
                 .setProjection(Projections.projectionList()
-                                .add(Projections.groupProperty("season"))
+                        .add(Projections.groupProperty("season"))
                 );
 
         HashMap pastGames = new HashMap<>();

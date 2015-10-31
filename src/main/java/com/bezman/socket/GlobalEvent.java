@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GlobalEvent
-{
+public class GlobalEvent {
     private String event;
 
     private String data;

@@ -26,8 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 @Component
-public class SocketIO
-{
+public class SocketIO {
     @Autowired
     ApplicationContext applicationContext;
 
@@ -38,8 +37,7 @@ public class SocketIO
     private static Class[] nonSerializable = {String.class, Integer.class, Double.class, Float.class, Boolean.class, Byte.class, Short.class, Long.class};
 
     @Bean
-    public SocketIOServer socketIOServer()
-    {
+    public SocketIOServer socketIOServer() {
         Configuration configuration = new Configuration();
 //        configuration.setOrigin("http://local.bezcode.com:9090");
         configuration.setHostname("192.168.1.11");
@@ -64,13 +62,10 @@ public class SocketIO
 
         socketIOServer.addConnectListener(socketIOClient -> {
             connectionListeners.values().forEach(method -> {
-                if (method.getParameterCount() == 1)
-                {
-                    try
-                    {
+                if (method.getParameterCount() == 1) {
+                    try {
                         method.invoke(applicationContext.getBean(method.getDeclaringClass()), socketIOClient);
-                    } catch (IllegalAccessException | InvocationTargetException e)
-                    {
+                    } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
@@ -81,21 +76,17 @@ public class SocketIO
             System.out.println(globalEvent.getEvent());
             eventListeners.
                     forEach((onEvent, method) -> {
-                        try
-                        {
-                            if (globalEvent.getEvent().equals(onEvent.value()))
-                            {
+                        try {
+                            if (globalEvent.getEvent().equals(onEvent.value())) {
                                 Object instance = applicationContext.getBean(method.getDeclaringClass());
                                 Class type = method.getParameterTypes()[1];
 
                                 Object castedValue = null;
 
-                                if (Arrays.asList(nonSerializable).stream().anyMatch(type::equals))
-                                {
+                                if (Arrays.asList(nonSerializable).stream().anyMatch(type::equals)) {
                                     castedValue = Util.toObject(type, globalEvent.getData());
-                                } else
-                                {
-                                    castedValue  = Reference.objectMapper.readValue(globalEvent.getData(), method.getParameterTypes()[1]);
+                                } else {
+                                    castedValue = Reference.objectMapper.readValue(globalEvent.getData(), method.getParameterTypes()[1]);
                                 }
 
                                 method.invoke(instance, socketIOClient, castedValue, ackRequest);
