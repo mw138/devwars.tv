@@ -161,7 +161,7 @@ public class UserService {
     public User userForTwitchUsername(String username) {
         Session session = DatabaseManager.getSession();
 
-        Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as a where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(u.username) = :username and u.provider = 'TWITCH')");
+        Query userQuery = session.createQuery("select u from User u left join u.connectedAccounts as connectedAccount where (lower(substring(u.username, 1, length(u.username)-4)) = :username and u.provider = 'TWITCH') or (lower(connectedAccount.username) = :username and connectedAccount.provider = 'TWITCH')");
         userQuery.setString("username", username.toLowerCase());
         userQuery.setMaxResults(1);
 
