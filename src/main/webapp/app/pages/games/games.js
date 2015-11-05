@@ -9,7 +9,8 @@ angular.module("app.games", [])
                     controller: "GameController"
                 });
         }])
-    .controller("GameController", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location, UserService, TournamentService) {
+    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", "$location", "UserService", "TournamentService", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location, UserService, TournamentService) {
+
         $scope.games = [];
         $scope.AuthService = AuthService;
 
@@ -296,4 +297,4 @@ angular.module("app.games", [])
             }, angular.noop);
 
         $scope.lastTimeClicked = new Date().getTime();
-    });
+    }]);
