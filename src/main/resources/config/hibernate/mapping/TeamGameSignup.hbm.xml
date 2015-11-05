@@ -9,11 +9,11 @@
             <generator class="increment"/>
         </id>
 
-        <many-to-one name="game" class="com.bezman.model.Game"/>
+        <many-to-one name="tournament" class="com.bezman.model.Tournament"/>
 
-        <many-to-one name="userTeam" class="com.bezman.model.UserTeam"/>
+        <many-to-one name="userTeam" class="com.bezman.model.UserTeam" lazy="false"/>
 
-        <set name="users" table="team_signups_users">
+        <set name="users" table="team_signups_users" lazy="false">
             <key></key>
             <many-to-many class="com.bezman.model.User" column="user"></many-to-many>
         </set>

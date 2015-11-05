@@ -4,6 +4,51 @@ angular.module('app.OAuthService', [])
 OAuthService.http = {};
 
 /*
+Query Parameter {code} : java.lang.String
+*/
+OAuthService.twitchCallback = function(code, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/oauth/twitch_callback',
+params: {code : code}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+OAuthService.http.twitchCallback = function(code, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/oauth/twitch_callback',
+params: {code : code}
+})};/*
+*/
+OAuthService.facebookAuth = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/oauth/facebook',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+OAuthService.http.facebookAuth = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/oauth/facebook',
+params: {}
+})};/*
 Query Parameter {oauth_verifier} : java.lang.String
 Query Parameter {oauth_token} : java.lang.String
 */
@@ -30,10 +75,10 @@ params: {oauth_verifier : oauth_verifier,oauth_token : oauth_token}
 })};/*
 Query Parameter {code} : java.lang.String
 */
-OAuthService.twitchCallback = function(code, successCallback, errorCallback){
+OAuthService.facebookCallback = function(code, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/oauth/twitch_callback',
+url: '/v1/oauth/facebook_callback',
 params: {code : code}
 })
 .then(function(success){
@@ -45,33 +90,10 @@ errorCallback(error)
 
 };
 
-OAuthService.http.twitchCallback = function(code, successCallback, errorCallback){
+OAuthService.http.facebookCallback = function(code, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/oauth/twitch_callback',
-params: {code : code}
-})};/*
-Query Parameter {code} : java.lang.String
-*/
-OAuthService.googleCallback = function(code, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/oauth/google_callback',
-params: {code : code}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-OAuthService.http.googleCallback = function(code, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/oauth/google_callback',
+url: '/v1/oauth/facebook_callback',
 params: {code : code}
 })};/*
 */
@@ -97,10 +119,10 @@ url: '/v1/oauth/twitch',
 params: {}
 })};/*
 */
-OAuthService.facebookAuth = function(successCallback, errorCallback){
+OAuthService.redditAuth = function(successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/oauth/facebook',
+url: '/v1/oauth/reddit',
 params: {}
 })
 .then(function(success){
@@ -112,19 +134,18 @@ errorCallback(error)
 
 };
 
-OAuthService.http.facebookAuth = function(successCallback, errorCallback){
+OAuthService.http.redditAuth = function(successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/oauth/facebook',
+url: '/v1/oauth/reddit',
 params: {}
 })};/*
-Query Parameter {code} : java.lang.String
 */
-OAuthService.facebookCallback = function(code, successCallback, errorCallback){
+OAuthService.githubAuth = function(successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/oauth/facebook_callback',
-params: {code : code}
+url: '/v1/oauth/github',
+params: {}
 })
 .then(function(success){
 successCallback(success)
@@ -135,11 +156,34 @@ errorCallback(error)
 
 };
 
-OAuthService.http.facebookCallback = function(code, successCallback, errorCallback){
+OAuthService.http.githubAuth = function(successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/oauth/facebook_callback',
-params: {code : code}
+url: '/v1/oauth/github',
+params: {}
+})};/*
+Query Parameter {email} : java.lang.String
+*/
+OAuthService.twitterAuth = function(email, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/oauth/twitter',
+params: {email : email}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+OAuthService.http.twitterAuth = function(email, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/oauth/twitter',
+params: {email : email}
 })};/*
 Query Parameter {code} : java.lang.String
 */
@@ -164,12 +208,13 @@ method: 'GET',
 url: '/v1/oauth/github_callback',
 params: {code : code}
 })};/*
+Query Parameter {code} : java.lang.String
 */
-OAuthService.githubAuth = function(successCallback, errorCallback){
+OAuthService.googleCallback = function(code, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/oauth/github',
-params: {}
+url: '/v1/oauth/google_callback',
+params: {code : code}
 })
 .then(function(success){
 successCallback(success)
@@ -180,33 +225,11 @@ errorCallback(error)
 
 };
 
-OAuthService.http.githubAuth = function(successCallback, errorCallback){
+OAuthService.http.googleCallback = function(code, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/oauth/github',
-params: {}
-})};/*
-*/
-OAuthService.redditAuth = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/oauth/reddit',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-OAuthService.http.redditAuth = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/oauth/reddit',
-params: {}
+url: '/v1/oauth/google_callback',
+params: {code : code}
 })};/*
 Query Parameter {code} : java.lang.String
 */
@@ -252,28 +275,5 @@ return $http({
 method: 'GET',
 url: '/v1/oauth/google',
 params: {}
-})};/*
-Query Parameter {email} : java.lang.String
-*/
-OAuthService.twitterAuth = function(email, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/oauth/twitter',
-params: {email : email}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-OAuthService.http.twitterAuth = function(email, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/oauth/twitter',
-params: {email : email}
 })};return OAuthService;
 }]);

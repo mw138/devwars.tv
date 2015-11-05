@@ -109,12 +109,14 @@ angular.module('app.modCP', [
             ;
         }])
 
-    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", "PlayerService", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService){
+    .controller("ModCPController", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService, TournamentService){
 
         $scope.pickedDate = new Date();
         $scope.pickedTime = new Date();
 
         $scope.availableGames = null;
+
+        $scope.upcomingTournaments = [];
 
         $scope.dateWatch = function () {
             $scope.gameDate = new Date($scope.pickedDate.getTime());
@@ -150,7 +152,7 @@ angular.module('app.modCP', [
 
             $scope.dateWatch();
 
-            GameService.createGame($scope.name, $scope.gameDate.getTime(), function (success) {
+            GameService.createGame($scope.name, $scope.gameDate.getTime(), $scope.selectedTournament.id, function (success) {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Created Game");
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not create game");
@@ -342,8 +344,15 @@ angular.module('app.modCP', [
             return new Blob([new Uint8Array(array)], {type: mimeString});
         };
 
+        TournamentService.http.upcomingTournaments()
+            .then(function (success) {
+                $scope.upcomingTournaments = success.data;
+
+                console.log(success.data);
+            }, angular.noop)
+
         $scope.updateGames();
-    }]);
+    });
 
 
 

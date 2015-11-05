@@ -4,14 +4,13 @@ angular.module('app.ObjectiveItemService', [])
 ObjectiveItemService.http = {};
 
 /*
-Required Role : ADMIN
-Query Parameter {objective} : java.lang.String
+Path Variable {id} : int
 */
-ObjectiveItemService.createObjective = function(objective, successCallback, errorCallback){
+ObjectiveItemService.deleteObjective = function(id, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/objective/create',
-params: {objective : objective}
+url: '/v1/objective/' + id + '/delete',
+params: {}
 })
 .then(function(success){
 successCallback(success)
@@ -22,11 +21,11 @@ errorCallback(error)
 
 };
 
-ObjectiveItemService.http.createObjective = function(objective, successCallback, errorCallback){
+ObjectiveItemService.http.deleteObjective = function(id, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/objective/create',
-params: {objective : objective}
+url: '/v1/objective/' + id + '/delete',
+params: {}
 })};/*
 Required Role : ADMIN
 Path Variable {id} : int
@@ -52,13 +51,14 @@ method: 'GET',
 url: '/v1/objective/' + id + '',
 params: {}
 })};/*
-Path Variable {id} : int
+Required Role : ADMIN
+Query Parameter {objective} : java.lang.String
 */
-ObjectiveItemService.deleteObjective = function(id, successCallback, errorCallback){
+ObjectiveItemService.createObjective = function(objective, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/objective/' + id + '/delete',
-params: {}
+url: '/v1/objective/create',
+params: {objective : objective}
 })
 .then(function(success){
 successCallback(success)
@@ -69,10 +69,10 @@ errorCallback(error)
 
 };
 
-ObjectiveItemService.http.deleteObjective = function(id, successCallback, errorCallback){
+ObjectiveItemService.http.createObjective = function(objective, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/objective/' + id + '/delete',
-params: {}
+url: '/v1/objective/create',
+params: {objective : objective}
 })};return ObjectiveItemService;
 }]);

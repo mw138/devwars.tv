@@ -17,9 +17,12 @@
         <property name="done" type="boolean" column="done"></property>
         <property name="status" type="string" column="status"></property>
         <property name="season" type="integer"></property>
-        <property name="tournament" type="boolean"></property>
 
         <property name="youtubeURL" type="string"></property>
+
+        <property name="hasTournament" type="boolean" formula="tournament IS NOT NULL"/>
+
+        <many-to-one name="tournament" class="Tournament"></many-to-one>
 
         <map name="teams" lazy="false" cascade="all">
             <key column="game_id"></key>
@@ -37,10 +40,7 @@
             <one-to-many class="com.bezman.model.Objective"></one-to-many>
         </set>
 
-        <set name="teamGameSignups" table="team_signups">
-            <key column="game"></key>
-            <one-to-many class="TeamGameSignup"></one-to-many>
-        </set>
+
     </class>
 
 </hibernate-mapping>

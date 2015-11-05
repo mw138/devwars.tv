@@ -1,11 +1,14 @@
 package com.bezman.Reference.util;
 
+import com.bezman.annotation.AngularServiceOmitted;
 import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PathModel;
 import com.bezman.annotation.PreAuthorization;
+import com.bezman.controller.TournamentController;
 import com.bezman.controller.UserTeamController;
 import com.bezman.controller.game.GameController;
 import com.bezman.controller.user.UserController;
+import com.bezman.service.TournamentService;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +21,7 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AngularServiceBuilder {
@@ -32,6 +33,7 @@ public class AngularServiceBuilder {
         controllers.add(UserController.class);
         controllers.add(GameController.class);
         controllers.add(UserTeamController.class);
+        controllers.add(TournamentController.class);
 
         for (Class controller : controllers) {
             RequestMapping controllerRequestMapping = (RequestMapping) controller.getAnnotation(RequestMapping.class);
@@ -45,7 +47,11 @@ public class AngularServiceBuilder {
                 printWriter.println("angular.module('" + moduleNamePrefix + "." + serviceName + "', [])");
                 printWriter.println("   .factory('" + serviceName + "', ['$http', function($http){\n var " + serviceName + " = {};\n" + serviceName + ".http = {};\n");
 
-                for (Method method : controller.getMethods()) {
+                List<Method> methods = Arrays.asList(controller.getMethods());
+
+                methods = methods.stream().filter(method -> method.getAnnotation(AngularServiceOmitted.class) == null).collect(Collectors.toList());
+
+                for (Method method : methods) {
                     try {
                         HashMap<String, RequestParam> queryParams = new HashMap<>();
                         HashMap<String, PathVariable> pathParams = new HashMap<>();

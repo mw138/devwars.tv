@@ -13,6 +13,7 @@ var app = angular.module('app', [
     'app.UserService',
     'app.WarriorService',
     'app.ContactService',
+    'app.TournamentService',
     'app.games',
     'app.gameSignupConfirm',
     'app.editPlayerDialog',
