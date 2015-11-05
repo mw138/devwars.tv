@@ -7,7 +7,7 @@ angular.module('app.ngSignupTournament', [])
                 game: '=ngSignupTournament'
             },
 
-            controller: function ($scope, $element, $mdDialog, GameService, ToastService, UserService) {
+            controller: function ($scope, $element, $mdDialog, GameService, ToastService, UserService, TournamentService) {
                 UserService.http.getMyTeam()
                     .then(function (success) {
                         $scope.myTeam = success.data;
@@ -25,7 +25,7 @@ angular.module('app.ngSignupTournament', [])
                             }
                         })
                         .then(function (users) {
-                            GameService.http.signUpTeamForGame($scope.game.id, JSON.stringify(users))
+                            TournamentService.http.signupTeamForTournamentFromGame($scope.game.id, JSON.stringify(users))
                                 .then(function (success) {
                                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Applied " + $scope.myTeam.name + " for game");
                                 }, function (error) {
