@@ -3,6 +3,10 @@ body, html {
 	background-color: $background-color !important;
 	border-bottom: none !important;
 	color: white;
+    line-height: $line-height !important;
+    
+    // Needed to override Angular
+    p { line-height: $line-height; }
 }
 
 body {
@@ -142,12 +146,14 @@ textarea {
     background-color: darken($purple-color, 25%);
     text-align: center;
     margin-bottom: 40px;
+    line-height: 1.5;
     
     h1 {
         display: block;
         padding-bottom: 20px;
-        font-weight: 200;
-        font-size: 2em;
+        font-family: $roboto;
+        font-weight: 100;
+        font-size: 32px;
     }
 }
 
