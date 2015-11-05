@@ -1,6 +1,5 @@
 var app = angular.module('app', [
 // modules
-    'app.coming',
     'app.AuthService',
     'app.header',
     'app.home',
@@ -62,6 +61,7 @@ var app = angular.module('app', [
     'app.blogDirective',
     'app.scroll-bottom',
     'app.no-scroll-other',
+    //'app.ngCopyToClipboard',
     'app.stackedInput',
     'app.ngSignupTournament',
     'app.team',
@@ -78,7 +78,7 @@ var app = angular.module('app', [
     'ngMaterial',
     'vcRecaptcha',
     'textAngular',
-    'ngImgCrop'
+    'ngImgCrop',
 ]);
 
 app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function ($urlRouterProvider, $httpProvider, $locationProvider) {

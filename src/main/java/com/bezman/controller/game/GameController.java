@@ -7,10 +7,7 @@ import com.bezman.annotation.*;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.request.model.LegacyGame;
-import com.bezman.service.GameService;
-import com.bezman.service.PlayerService;
-import com.bezman.service.TournamentService;
-import com.bezman.service.UserService;
+import com.bezman.service.*;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import com.google.common.cache.LoadingCache;
@@ -57,6 +54,9 @@ public class GameController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserTeamService userTeamService;
 
     @Autowired
     PlayerService playerService;
@@ -563,6 +563,23 @@ public class GameController {
         }
 
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
+    }
+
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.GET)
+    public ResponseEntity signupTeamForGame(@RequestParam("team") int teamID,
+                                            @PathVariable("id") int id) {
+
+        UserTeam userTeam = userTeamService.byID(teamID);
+
+        Game game = gameService.getGame(id);
+
+        if (game == null || userTeam == null)
+            return new ResponseEntity("Game or Team not found", HttpStatus.BAD_REQUEST);
+
+        gameService.applyTeamToGame(userTeam, game);
+
+        return new ResponseEntity("Successfully applied team to game", HttpStatus.OK);
     }
 
     /**

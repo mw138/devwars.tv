@@ -25,6 +25,18 @@ public class UserTeamService {
     @Autowired
     UserService userService;
 
+    public UserTeam byID(int id) {
+        UserTeam userTeam;
+
+        Session session = DatabaseManager.getSession();
+
+        userTeam = (UserTeam) session.get(UserTeam.class, id);
+
+        session.close();
+
+        return userTeam;
+    }
+
     public boolean isUserInvitedToTeam(UserTeam team, User user) {
         return team.getInvites().stream()
                 .anyMatch(current -> current.getId() == user.getId());
