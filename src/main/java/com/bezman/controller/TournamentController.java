@@ -84,5 +84,10 @@ public class TournamentController {
         return new ResponseEntity("Successfully signed up team", HttpStatus.OK);
     }
 
+    @RequestMapping("/bygame")
+    public ResponseEntity getTournamentFromGame(@RequestParam("game") int gameID) {
+        Game game = gameService.getGame(gameID);
 
+        return new ResponseEntity(tournamentService.tournamentFromGame(game), HttpStatus.OK);
+    }
 }

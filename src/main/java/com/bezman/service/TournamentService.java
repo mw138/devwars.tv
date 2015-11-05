@@ -1,10 +1,7 @@
 package com.bezman.service;
 
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.TeamGameSignup;
-import com.bezman.model.Tournament;
-import com.bezman.model.User;
-import com.bezman.model.UserTeam;
+import com.bezman.model.*;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +57,19 @@ public class TournamentService {
         session.close();
     }
 
+
+    public Tournament tournamentFromGame(Game game)
+    {
+        Tournament tournament;
+
+        Session session = DatabaseManager.getSession();
+
+        game = (Game) session.merge(game);
+
+        tournament = this.byID(game.getTournament().getId());
+
+        session.close();
+
+        return tournament;
+    }
 }

@@ -96,5 +96,28 @@ return $http({
 method: 'POST',
 url: '/v1/tournament/' + id + '/signupteam',
 data: {users : users}
+})};/*
+Query Parameter {game} : int
+*/
+TournamentService.getTournamentFromGame = function(game, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/tournament/bygame',
+params: {game : game}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+TournamentService.http.getTournamentFromGame = function(game, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/tournament/bygame',
+params: {game : game}
 })};return TournamentService;
 }]);
