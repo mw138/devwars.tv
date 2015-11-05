@@ -18,3 +18,8 @@ html {
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
+
+// HIDES UI-LOADER'S "LOADING"
+.ui-loader {
+    display: none !important;
+}
