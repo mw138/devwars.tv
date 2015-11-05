@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+   <class name="com.bezman.model.Tournament">
+       <id name="id">
+           <generator class="increment"/>
+       </id>
+
+       <property name="start" type="date"/>
+       <property name="end" type="date"/>
+
+       <set name="games" lazy="false">
+           <key column="tournament"></key>
+           <one-to-many class="com.bezman.model.Game"></one-to-many>
+       </set>
+
+       <set name="teamSignups" table="team_signups" lazy="false">
+            <key column="tournament"></key>
+            <one-to-many class="com.bezman.model.TeamGameSignup"></one-to-many>
+        </set>
+   </class>
+</hibernate-mapping>

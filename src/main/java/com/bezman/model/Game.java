@@ -37,14 +37,14 @@ public class Game extends BaseModel {
     @JsonIgnore
     private Set<GameSignup> signups;
 
-    @JsonIgnore
-    private Set<TeamGameSignup> teamGameSignups;
-
     @HibernateDefault("2")
     private Integer season;
 
-    @HibernateDefault("0")
-    private Boolean tournament;
+    @JsonIgnore
+    private Tournament tournament;
+
+    @HibernateDefault("false")
+    private Boolean hasTournament;
 
     public Team getTeamByID(int id) {
         for (Team team : this.getTeams().values()) {

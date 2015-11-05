@@ -2,16 +2,14 @@ package com.bezman.service;
 
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.Game;
-import com.bezman.model.Objective;
-import com.bezman.model.Player;
-import com.bezman.model.Team;
+import com.bezman.model.*;
 import com.bezman.request.model.LegacyGame;
 import com.bezman.request.model.LegacyObjective;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mysql.jdbc.ReflectiveStatementInterceptorAdapter;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -59,13 +57,17 @@ public class GameService {
         return returnList;
     }
 
-    public Game defaultGame() {
+    public Game defaultGame(Tournament tournament) {
         Game game = new Game();
 
         game.setName("Default Name");
         game.setActive(false);
         game.setTimestamp(new Timestamp(new Date().getTime()));
         game.setSeason(2);
+
+        if (tournament != null) {
+            game.setTournament(tournament);
+        }
 
         Team blueTeam = new Team();
         blueTeam.setGame(game);
@@ -288,7 +290,7 @@ public class GameService {
         Session session = DatabaseManager.getSession();
 
         game = (Game) session.createCriteria(Game.class)
-                .add(Restrictions.eq("tournament", true))
+                .add(Restrictions.isNotNull("tournament"))
                 .add(Restrictions.ge("timestamp", new Date()))
                 .addOrder(Order.desc("timestamp"))
                 .setMaxResults(1)
@@ -305,7 +307,7 @@ public class GameService {
         Session session = DatabaseManager.getSession();
 
         games = session.createCriteria(Game.class)
-                .add(Restrictions.eq("tournament", true))
+                .add(Restrictions.isNotNull("tournament"))
                 .add(Restrictions.ge("timestamp", new Date()))
                 .addOrder(Order.desc("timestamp"))
                 .list();
@@ -319,7 +321,7 @@ public class GameService {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        Game game = this.defaultGame();
+        Game game = this.defaultGame(null);
 
         session.save(game);
 

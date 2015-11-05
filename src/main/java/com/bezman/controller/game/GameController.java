@@ -9,6 +9,7 @@ import com.bezman.model.*;
 import com.bezman.request.model.LegacyGame;
 import com.bezman.service.GameService;
 import com.bezman.service.PlayerService;
+import com.bezman.service.TournamentService;
 import com.bezman.service.UserService;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
@@ -59,6 +60,9 @@ public class GameController {
 
     @Autowired
     PlayerService playerService;
+
+    @Autowired
+    TournamentService tournamentService;
 
     /**
      * Retrieved all games with criteria
@@ -165,12 +169,14 @@ public class GameController {
     @Transactional
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping("/create")
-    public ResponseEntity createGame(SessionImpl session, @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp, @RequestParam(required = false, value = "name") String name) {
-        Game game = gameService.defaultGame();
+    public ResponseEntity createGame(SessionImpl session,
+                                     @RequestParam(value = "time", required = false, defaultValue = "0") long timestamp,
+                                     @RequestParam(required = false, value = "name") String name,
+                                     @RequestParam(required = false, value = "tournament") Integer tournamentID) {
 
-        if (name.equals("Tournament")) {
-            game.setTournament(true);
-        }
+        Tournament tournament = tournamentService.byID(tournamentID);
+
+        Game game = gameService.defaultGame(tournament);
 
         if (timestamp != 0) {
             game.setTimestamp(new Timestamp(timestamp));
@@ -210,6 +216,7 @@ public class GameController {
     }
 
     @AllowCrossOrigin(from = "*")
+    @AngularServiceOmitted
     @RequestMapping("/{id}/{team}/preview/{slug:.+}")
     public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException {
         try {
@@ -501,15 +508,6 @@ public class GameController {
         return new ResponseEntity(users, HttpStatus.OK);
     }
 
-    @UnitOfWork
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping("/{id}/pendingteams")
-    public ResponseEntity pendingTeams(SessionImpl session, @PathVariable("id") int id) {
-        Game game = (Game) session.get(Game.class, id);
-
-        return new ResponseEntity(game.getTeamGameSignups(), HttpStatus.OK);
-    }
-
     /**
      * Removes a user from the game and penlizes them with some value
      *
@@ -565,33 +563,6 @@ public class GameController {
         }
 
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
-    }
-
-    @Transactional
-    @PreAuthorization(minRole = User.Role.USER)
-    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.POST)
-    public ResponseEntity signUpTeamForGame(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @JSONParam("users") User[] users) {
-        Game game = (Game) session.get(Game.class, id);
-
-        UserTeam ownedTeam = user.getOwnedTeam();
-
-        if (ownedTeam == null)
-            return new ResponseEntity("You don't own a team", HttpStatus.NOT_FOUND);
-
-        if (users.length < 3)
-            return new ResponseEntity("You must choose at least three players", HttpStatus.BAD_REQUEST);
-
-        boolean alreadySignedUp = game.getTeamGameSignups().stream()
-                .anyMatch(signup -> signup.getUserTeam().getId() == ownedTeam.getId());
-
-        if (alreadySignedUp)
-            return new ResponseEntity("Your team has already signed up for this game", HttpStatus.CONFLICT);
-
-        TeamGameSignup teamGameSignup = new TeamGameSignup(game, ownedTeam, users);
-
-        session.save(teamGameSignup);
-
-        return new ResponseEntity(teamGameSignup, HttpStatus.OK);
     }
 
     /**

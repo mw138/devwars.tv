@@ -9,7 +9,8 @@ angular.module("app.games", [])
                     controller: "GameController"
                 });
         }])
-    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", "$location", "UserService", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location, UserService) {
+    .controller("GameController", ["$scope", "GameService", "AuthService", "$mdDialog", "$mdToast", "$filter", "ToastService", "DialogService", "$location", "UserService", "TournamentService", function ($scope, GameService, AuthService, $mdDialog, $mdToast, $filter, ToastService, DialogService, $location, UserService, TournamentService) {
+
         $scope.games = [];
         $scope.AuthService = AuthService;
 
@@ -133,7 +134,7 @@ angular.module("app.games", [])
         };
 
         $scope.signupForGame = function (game, $event) {
-            if(game.tournament) {
+            if(game.hasTournament) {
                 $scope.applyMyTeamForGame(game, $event);
                 return;
             };
@@ -166,7 +167,7 @@ angular.module("app.games", [])
                     }
                 })
                 .then(function (users) {
-                    GameService.http.signUpTeamForGame(game.id, JSON.stringify(users))
+                    TournamentService.http.signupTeamForTournamentFromGame(game.id, JSON.stringify(users))
                         .then(function (success) {
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Applied " + $scope.myTeam.name + " for game");
                         }, function (error) {

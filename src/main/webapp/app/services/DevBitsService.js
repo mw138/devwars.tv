@@ -4,13 +4,13 @@ angular.module('app.DevBitsService', [])
 DevBitsService.http = {};
 
 /*
-Required Role : ADMIN
+Path Variable {twitchUsername} : java.lang.String
 */
-DevBitsService.allIn = function(usernames, successCallback, errorCallback){
+DevBitsService.getTwitchUser = function(twitchUsername, successCallback, errorCallback){
 $http({
-method: 'POST',
-url: '/v1/devbits/allin',
-data: {usernames : usernames}
+method: 'GET',
+url: '/v1/devbits/' + twitchUsername + '',
+params: {}
 })
 .then(function(success){
 successCallback(success)
@@ -21,11 +21,11 @@ errorCallback(error)
 
 };
 
-DevBitsService.http.allIn = function(usernames, successCallback, errorCallback){
+DevBitsService.http.getTwitchUser = function(twitchUsername, successCallback, errorCallback){
 return $http({
-method: 'POST',
-url: '/v1/devbits/allin',
-data: {usernames : usernames}
+method: 'GET',
+url: '/v1/devbits/' + twitchUsername + '',
+params: {}
 })};/*
 Required Role : ADMIN
 */
@@ -73,13 +73,13 @@ method: 'POST',
 url: '/v1/devbits/watched',
 data: {usernames : usernames}
 })};/*
-Path Variable {twitchUsername} : java.lang.String
+Required Role : ADMIN
 */
-DevBitsService.getTwitchUser = function(twitchUsername, successCallback, errorCallback){
+DevBitsService.allIn = function(usernames, successCallback, errorCallback){
 $http({
-method: 'GET',
-url: '/v1/devbits/' + twitchUsername + '',
-params: {}
+method: 'POST',
+url: '/v1/devbits/allin',
+data: {usernames : usernames}
 })
 .then(function(success){
 successCallback(success)
@@ -90,11 +90,11 @@ errorCallback(error)
 
 };
 
-DevBitsService.http.getTwitchUser = function(twitchUsername, successCallback, errorCallback){
+DevBitsService.http.allIn = function(usernames, successCallback, errorCallback){
 return $http({
-method: 'GET',
-url: '/v1/devbits/' + twitchUsername + '',
-params: {}
+method: 'POST',
+url: '/v1/devbits/allin',
+data: {usernames : usernames}
 })};/*
 Path Variable {amount} : int
 Path Variable {twitchUsernames} : java.lang.String

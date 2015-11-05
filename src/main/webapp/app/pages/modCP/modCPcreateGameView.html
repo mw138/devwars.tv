@@ -3,9 +3,15 @@
 	<div class="modcp-content">
         <select ng-model="name">
             <option value='' disabled selected>Select Mode</option>
-            <option value="Tournament">Tournament</option>
             <option value="Classic">Classic</option>
             <option value="Zen Garden">Zen Garden</option>
+        </select>
+
+        <label>Tournament : Optional</label>
+        <select ng-model="selectedTournament" ng-options="tournament as tournament.start for tournament in upcomingTournaments">
+            <option></option>
+        </select>
+
         </select>
 
         <div class="modcp-datecontrol">
