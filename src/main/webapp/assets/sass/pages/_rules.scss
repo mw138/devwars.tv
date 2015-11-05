@@ -1,0 +1,68 @@
+.rulesView {
+	margin-top: 60px;
+	text-align: center;
+
+	h1 {
+		text-transform: uppercase;
+	}
+
+	.description {
+		padding: 20px 150px 0;
+
+		a {
+			color: $main-color;
+
+			&:hover {
+				color: $accent-color;
+			}
+		}
+	}
+
+	.rules-box {
+		margin: 40px 0 0;
+		width: 48%;
+		float: left;
+		border: 1px solid $dgray;
+
+		&+ .rules-box {
+			float: right;
+		}
+
+		.rules-header {
+			display: block;
+			font-size: 18px;
+			line-height: 50px;
+			background: $dgray;
+		}
+
+		ul {
+			padding: 20px 20px 10px 30px;
+		}
+
+		li {
+			margin: 0 0 15px;
+			text-align: left;
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+
+	.rulesView {
+
+		.description {
+			padding: 20px 0;
+		}
+
+		.rules-box {
+			float: none;
+			margin: 10px auto;
+			width: 90%;
+
+			&+ .rules-box {
+				float: none;
+			}
+		}
+	}
+}
+
