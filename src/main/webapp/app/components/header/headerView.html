@@ -15,8 +15,8 @@
                     <span ng-if="!currentGameMessage">{{nearestGameMessage}}</span>
                 </div>
                 <div class="right-info" ng-cloak>
-                    <a class="button button--clear pointer" ng-click="DialogService.login($event)" ng-hide="AuthService.user">Sign In</a>
-                    <a class="button pointer" ng-click="DialogService.signup($event)" ng-hide="AuthService.user">Register</a>
+                    <a class="button button--clear button--flat pointer" ng-click="DialogService.login($event)" ng-hide="AuthService.user">Sign In</a>
+                    <a class="button button--flat pointer" ng-click="DialogService.signup($event)" ng-hide="AuthService.user">Register</a>
                     <div class="totalDevbits" ng-show="AuthService.user">
                         <img src="/assets/img/devbit-s.png"/>
                         <p>{{ AuthService.user.ranking.points }}</p>
