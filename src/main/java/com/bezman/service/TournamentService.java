@@ -66,6 +66,8 @@ public class TournamentService {
 
         game = (Game) session.merge(game);
 
+        if (!game.getHasTournament()) return null;
+
         tournament = this.byID(game.getTournament().getId());
 
         session.close();

@@ -88,6 +88,10 @@ public class TournamentController {
     public ResponseEntity getTournamentFromGame(@RequestParam("game") int gameID) {
         Game game = gameService.getGame(gameID);
 
-        return new ResponseEntity(tournamentService.tournamentFromGame(game), HttpStatus.OK);
+        Tournament tournament = tournamentService.tournamentFromGame(game);
+
+        if (tournament != null) {
+            return new ResponseEntity(tournament, HttpStatus.OK);
+        } else return new ResponseEntity("Tournament not found for game", HttpStatus.NOT_FOUND);
     }
 }

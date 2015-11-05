@@ -519,14 +519,7 @@ public class UserController extends BaseController {
         }
 
         if (user.getPassword().equals(security.hash(currentPassword))) {
-            Session session = DatabaseManager.getSession();
-            Query query = session.createQuery("update User set password = :password where id = :id");
-            query.setString("password", security.hash(newPassword));
-            query.setInteger("id", user.getId());
-
-            query.executeUpdate();
-
-            session.close();
+            userService.changePasswordForUser(user, newPassword);
 
             return new ResponseEntity("Success", HttpStatus.OK);
         } else {

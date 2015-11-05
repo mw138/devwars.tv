@@ -1,5 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Oswald|Roboto:300,300italic,400,400italic,700|Montserrat|Open+Sans:400,700);
-
 h1,
 h2,
 h3,
@@ -7,7 +5,7 @@ h4,
 h5 {
 	font-family: $roboto;
 	font-weight: 400;
-	margin: 0 ;
+	margin: 0;
 	padding: 0;
 	-webkit-margin-before: 0 !important;
 	-webkit-margin-after: 0 !important;
@@ -21,13 +19,23 @@ span,
 label {
 	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
-	margin: 0 ;
+	margin: 0;
 	padding: 0;
 }
 
 a {
-	color: white;
+	color: inherit;
 	text-decoration: none;
+    
+    &.link {
+        color: $main-color;
+    }
+    
+    &.underline { text-decoration: underline; }
+    &.underline--hover {
+        text-decoration: none;
+        &:hover { text-decoration: underline; }
+    }
 }
 
 i.fa { font-family: 'FontAwesome', sans-serif; }

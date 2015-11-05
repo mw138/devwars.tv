@@ -1,4 +1,7 @@
 // REFER TO http://sass-guidelin.es/#the-7-1-pattern
+// 0. Fonts
+@import url(https://fonts.googleapis.com/css?family=Oswald|Roboto:100,100italic,400,400italic,700|Montserrat|Open+Sans:400,700);
+
 // 1. vendors/
 @import "vendors/bootstrap";
 @import "vendors/jquery-ui";
