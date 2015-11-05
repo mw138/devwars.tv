@@ -3,19 +3,25 @@
   height: auto;
 	padding: 7px 14px;
   border: 0;
-  background-color: $main-color;
-  transition: background-color 0.2s ease-out;
+  background-color: darken($main-color, 5%);
+    border-bottom: 5px solid darken($main-color, 25%);
+  transition: all 0.2s ease-out;
   color: white;
 	cursor: pointer;
 	display: inline-block;
 
   &:hover {
     background-color: $accent-color;
+      border-color: darken($accent-color, 25%);
   }
 
   .fa {
     padding-right: 7px;
   }
+}
+
+.button.button--flat {
+    border-bottom: 0;
 }
 
 .button.button--warn {
