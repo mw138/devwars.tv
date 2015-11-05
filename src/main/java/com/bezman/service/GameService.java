@@ -9,6 +9,7 @@ import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mysql.jdbc.ReflectiveStatementInterceptorAdapter;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -289,7 +290,7 @@ public class GameService {
         Session session = DatabaseManager.getSession();
 
         game = (Game) session.createCriteria(Game.class)
-                .add(Restrictions.eq("tournament", true))
+                .add(Restrictions.isNotNull("tournament"))
                 .add(Restrictions.ge("timestamp", new Date()))
                 .addOrder(Order.desc("timestamp"))
                 .setMaxResults(1)
@@ -306,7 +307,7 @@ public class GameService {
         Session session = DatabaseManager.getSession();
 
         games = session.createCriteria(Game.class)
-                .add(Restrictions.eq("tournament", true))
+                .add(Restrictions.isNotNull("tournament"))
                 .add(Restrictions.ge("timestamp", new Date()))
                 .addOrder(Order.desc("timestamp"))
                 .list();
