@@ -22,8 +22,13 @@
 		}
 		
 		li {
-			padding-left: 20px;
-			border-left: 3px solid $background-color;
+            border-left: 3px solid $background-color;
+            a {
+                width: 100%;
+                display: block;
+                padding-left: 20px; 
+            }
+            
 			&.active, &:hover { 
 				border-left: 3px solid $accent-color; 
 				color: $accent-color;
@@ -31,14 +36,27 @@
 		}
 		
 		li:not(.sitemap__title) {
-			padding-left: 40px;
-			font-size: 14px;
+            &:hover {
+                border-left: 1px solid;
+                padding-left: 2px;
+            }
+            a {
+			    padding-left: 40px;
+    			font-size: 14px;
+            }
 		}
 		
 		.sitemap__title {
 			margin-top: 10px;
 			
 			&:first-of-type { margin-top: 0; }
+            & + .sitemap__subitems {
+                display: none;
+            }
+            
+            &.active + .sitemap__subitems {
+                display: block;
+            }
 		}
 
 		a:hover { color: $accent-color; }

@@ -382,4 +382,33 @@ public class GameService {
 
         return game;
     }
+
+    public void applyUserToGame(User user, Game game) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        game = (Game) session.merge(game);
+
+        game.getSignups().add(new GameSignup(user, game));
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void applyTeamToGame(UserTeam userTeam, Game game)
+    {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        final Game mergedGame = (Game) session.merge(game);
+
+        userTeam.getMembers().stream().forEach(member -> {
+            GameSignup gameSignup = new GameSignup(member, mergedGame);
+            session.save(gameSignup);
+            mergedGame.getSignups().add(gameSignup);
+        });
+
+        session.getTransaction().commit();
+        session.close();
+    }
 }

@@ -201,6 +201,25 @@ header {
 
     .left-info {
       text-align: left;
+        font-size: 0;
+        
+        span, .button {
+            vertical-align: middle;
+        }
+        
+        span { font-size: 12px; }
+        .button {
+            &:last-of-type {
+                margin-right: 10px;
+            }
+            
+            &.modDoc {
+                background-color: transparent;
+                &:hover {
+                    background-color: $accent-color;
+                }
+            }
+        }
     }
 
     .right-info {

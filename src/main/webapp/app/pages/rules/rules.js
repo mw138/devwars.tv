@@ -13,12 +13,13 @@ angular.module("app.rules", [])
 
         }])
     .controller("RulesController", ["$scope", function ($scope) {
-        
-    }]);
 
-app.controller('RulesController', function($scope, $location, $anchorScroll) {
-   $scope.scrollTo = function(id) {
-      $location.hash(id);
-      $anchorScroll();
-   }
-});
+        $scope.underscore = "http://underscorejs.org/underscore-min.js";
+        $scope.lodash = "https://raw.githubusercontent.com/lodash/lodash/3.10.1/lodash.js";
+        $scope.jquery = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js";
+
+        $scope.scrollTo = function(id) {
+            $location.hash(id);
+            $anchorScroll();
+        }
+    }]);
