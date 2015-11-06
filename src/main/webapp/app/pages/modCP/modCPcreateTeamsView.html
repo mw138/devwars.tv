@@ -70,7 +70,7 @@
                 <span class="js">-</span>
             </div> <!-- .leaderRow.leaderRow--header -->
 
-            <div class="leaderRow" ng-repeat="team in appliedTournamentTeams | orderBy: 'userTeam.id'" ng-click="(applyTeamToGame(team.userTeam.id))">
+            <div class="leaderRow" ng-repeat="team in appliedTournamentTeams | orderBy: 'userTeam.id'" ng-click="(applyTeamToGame(team.userTeam))">
                 <span class="username">{{ team.userTeam.name }}</span>
                 <span class="cloud9">{{ team.userTeam.owner.username }}</span>
                 <span class="games">[{{ team.userTeam.tag }}]</span>

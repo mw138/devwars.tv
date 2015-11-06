@@ -361,9 +361,33 @@ angular.module('app.modCP', [
                 console.log('upcoming t: ',success.data);
             }, angular.noop);
 
-        $scope.applyTeamToGame = function () {
+        $scope.applyTeamToGame = function (team) {
+            console.log("ApplyTeamToGame: ", $scope.selectedGame.id, team.id);
 
+            $mdDialog.show({
+                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                controller: "ConfirmDialogController",
+
+                locals: {
+                    title: "Apply Team to Game",
+                    message: "This will add all players from '" + team.name +
+                    "' and apply them to " + $scope.selectedGame.name + " game on " + $filter('date')($scope.selectedGame.timestamp, 'mediumDate'),
+                    yes: "Yes",
+                    no: "No"
+                }
+            })
+                .then(function () {
+                    GameService.http.signupTeamForGame($scope.selectedGame.id, team.id)
+                        .then(function (success) {
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Added Players");
+                            $scope.updateSelectedGame();
+                        }, function (error) {
+                            ToastService.showDevwarsToast("fa-exclamation-circle", "Error", error.data);
+                        })
+                }, angular.noop)
         };
+
+
 
         $scope.updateGames();
     });
