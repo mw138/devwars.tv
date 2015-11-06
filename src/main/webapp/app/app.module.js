@@ -61,7 +61,7 @@ var app = angular.module('app', [
     'app.blogDirective',
     'app.scroll-bottom',
     'app.no-scroll-other',
-    //'app.ngCopyToClipboard',
+    'app.ngCopyToClipboard',
     'app.stackedInput',
     'app.ngSignupTournament',
     'app.team',
@@ -85,7 +85,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
-    if(true) {
+    if(false) {
         $httpProvider.interceptors.push(function () {
 
             var Interceptor = {};
