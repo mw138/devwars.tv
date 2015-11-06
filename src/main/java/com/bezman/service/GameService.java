@@ -411,4 +411,24 @@ public class GameService {
         session.getTransaction().commit();
         session.close();
     }
+
+    public HashMap<String, HashMap<String, String>> getTeamPicsForGame(Game game) {
+
+        String defaultUrl = "/assets/img/default-avatar.png";
+
+        UserTeam redTeam = teamService.userTeamForTeam(game.getTeams().get("red"));
+        UserTeam blueTeam = teamService.userTeamForTeam(game.getTeams().get("blue"));
+
+        HashMap<String, String> redTeamMap = new HashMap<>();
+        HashMap<String, String> blueTeamMap = new HashMap<>();
+
+        redTeamMap.put("link", redTeam == null ? defaultUrl : redTeam.getAvatarURL());
+        blueTeamMap.put("link", blueTeam == null ? defaultUrl : blueTeam.getAvatarURL());
+
+        HashMap<String, HashMap<String, String>> returnMap = new HashMap<>();
+        returnMap.put("blue", blueTeamMap);
+        returnMap.put("red", redTeamMap);
+
+        return returnMap;
+    }
 }

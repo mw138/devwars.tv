@@ -834,4 +834,15 @@ public class GameController {
         return null;
     }
 
+
+    @RequestMapping("/{id}/teaminfo")
+    public ResponseEntity teamInfoForGame(@PathVariable("id") int gameID) {
+        Game game = gameService.getGame(gameID);
+
+        if (game == null) {
+            return new ResponseEntity("Game not found", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(gameService.getTeamPicsForGame(game), HttpStatus.OK);
+    }
 }
