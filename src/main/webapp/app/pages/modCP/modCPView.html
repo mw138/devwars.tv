@@ -17,6 +17,12 @@
         <option value='' disabled selected>Select Game</option>
     </select>
 
+    <br/>
+
+    <select ng-model="selectedTournament" ng-options="tournamentLabel(tournament) for tournament in upcomingTournaments">
+        <option value='' disabled selected>Select Tournament</option>
+    </select>
+
     <div ui-view="modCPInner"></div>
     <!-- .modCPInner -->
 

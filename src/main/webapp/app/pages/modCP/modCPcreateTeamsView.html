@@ -53,4 +53,34 @@
         <button class="button" ng-click="saveGame(selectedGame)">Save and Push to Firebase</button>
 
 	</div> <!-- .modcp-content -->
+
+
+    <div class="modcp-content" ng-show="appliedTournamentTeams">
+        <h1>Tournament Teams</h1>
+        <h2></h2>
+
+        <div class="players-applied">
+            <div class="leaderRow leaderRow--header">
+                <span class="username">NAME</span>
+                <span class="cloud9">OWNER</span>
+                <span class="games">TAG</span>
+                <span class="ratio">ID</span>
+                <span class="html">-</span>
+                <span class="css">-</span>
+                <span class="js">-</span>
+            </div> <!-- .leaderRow.leaderRow--header -->
+
+            <div class="leaderRow" ng-repeat="team in appliedTournamentTeams | orderBy: 'userTeam.id'" ng-click="(applyTeamToGame(team.userTeam.id))">
+                <span class="username">{{ team.userTeam.name }}</span>
+                <span class="cloud9">{{ team.userTeam.owner.username }}</span>
+                <span class="games">[{{ team.userTeam.tag }}]</span>
+                <span class="ratio">{{ team.userTeam.id }}</span>
+                <span class="html">-</span>
+                <span class="css">-</span>
+                <span class="js">-</span>
+            </div> <!-- .leaderRow -->
+        </div> <!-- .leaderboards -->
+
+
+    </div> <!-- .modcp-content -->
 </div> <!-- modCPView.right -->
