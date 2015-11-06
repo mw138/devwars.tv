@@ -7,7 +7,7 @@
             </div>
             <div class="inner">
                 <div class="left-info">
-                    <button ui-sref="modCP.createTeamsView" class="button button--flat" ng-if="AuthService.isAdmin()">Moderate Game</button>
+                    <button ui-sref="modCP.createTeamsView" class="button button--flat" ng-if="AuthService.isAdmin()">Mod Panel</button>
                     <button ui-sref="modDoc" class="button button--flat modDoc" ng-if="AuthService.isAdmin()">View Docs</button>
                    
                     <button ng-click="DialogService.applyForNearestGame($event)" class="button button--flat" ng-if="!AuthService.isAdmin()">Apply for Game</button>
