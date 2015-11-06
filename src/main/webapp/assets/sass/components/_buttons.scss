@@ -20,20 +20,24 @@
   }
 }
 
-.button.button--flat {
-    border-bottom: 0;
+.button--flat {
+    border-bottom: 0 !important;
+    transform: translateY(0) !important;
 }
 
 .button.button--warn {
   background-color: color($red, dark);
+    border-color: darken((color($red, dark)), 25%);
 
   &:hover {
-    background-color: $lgray;
+      background-color: darken((color($red, dark)), 10%);
+      border-color: darken((color($red, dark)), 30%);
   }
 }
 
 .button.button--clear {
   background-color: transparent;
+    border-bottom: 0;
 
   &:hover {
     background-color: $accent-color;
@@ -43,6 +47,8 @@
 
 .button.button--disabled {
   background-color: grey;
+border-bottom: 0;
+    transform: translateY(5px);
 
   &:hover {
     background-color: grey;
