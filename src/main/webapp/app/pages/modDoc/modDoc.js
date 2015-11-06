@@ -40,7 +40,6 @@ angular.module('app.modDoc', [
 
                     $(this).parents().addClass('active');
                     $('.active').next('.sitemap__subitems').slideDown();
-
                 }
             });
 
