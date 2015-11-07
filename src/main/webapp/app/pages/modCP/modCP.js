@@ -109,7 +109,7 @@ angular.module('app.modCP', [
             ;
         }])
 
-    .controller("ModCPController", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService, TournamentService){
+    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", "PlayerService", "TournamentService", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService, TournamentService){
 
         $scope.pickedDate = new Date();
         $scope.pickedTime = new Date();
@@ -390,7 +390,7 @@ angular.module('app.modCP', [
 
 
         $scope.updateGames();
-    });
+    }]);
 
 
 
