@@ -4,7 +4,7 @@
 		<div class="profile-basic">
 			<h2>{{user.username}}</h2>
 			<span class="user-title">{{user.company}}</span>
-			<img class="profile-image" ng-src="/v1/user/{{user.username}}/avatar"/>
+			<img class="profile-image" ng-src="{{ user.avatarURL }}"/>
 			
 			<div class="rank-showcase">
 				<div class="rank--no-name" rank="user.rank"></div>
