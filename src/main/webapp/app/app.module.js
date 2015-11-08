@@ -85,7 +85,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
-    if(true) {
+    if(false) {
         $httpProvider.interceptors.push(function () {
 
             var Interceptor = {};
