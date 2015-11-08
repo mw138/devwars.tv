@@ -38,6 +38,8 @@ var reload = false;
 
 if(queryParams.game) {
     updateAllDynamic();
+
+    $.getJSON(devwarsRoot + '/v1/game/' + queryParams.game, setPlayerNames);
 } else updateAll();
 
 setInterval(function () {
@@ -109,7 +111,7 @@ var codeview = [".blue-view__html", ".blue-view__css", ".blue-view__js", ".red-v
 var blueview = [".blue-view__html", ".blue-view__css", ".blue-view__js"];
 var redview = [".red-view__html", ".red-view__css", ".red-view__js"];
 
-var makeInactive = function() {   
+var makeInactive = function() {
     for (var i = 0; i < 6; i++) {
         $(codeview[i]).removeClass("team-active");
         $(codeview[i]).removeClass("single-active-blue");
@@ -117,7 +119,7 @@ var makeInactive = function() {
     }
 };
 
-var defaultView = function() {   
+var defaultView = function() {
     for (var i = 0; i < 6; i++) {
         $(codeview[i]).removeClass("single-active-blue");
         $(codeview[i]).removeClass("single-active-red");
@@ -125,7 +127,7 @@ var defaultView = function() {
     }
 };
 
-var teamViewRed = function() {   
+var teamViewRed = function() {
     for (var i = 0; i < 6; i++) {
         $(codeview[i]).removeClass("single-active-blue");
         $(codeview[i]).removeClass("single-active-red");
@@ -138,10 +140,10 @@ var teamViewRed = function() {
     for (var k = 0; k < 3; k++) {
         $(redview[k]).removeClass("inactive");
         $(redview[k]).addClass("team-active");
-    }    
+    }
 };
 
-var teamViewBlue = function() {   
+var teamViewBlue = function() {
     for (var i = 0; i < 6; i++) {
         $(codeview[i]).removeClass("single-active-blue");
         $(codeview[i]).removeClass("single-active-red");
@@ -154,7 +156,7 @@ var teamViewBlue = function() {
     for (var k = 0; k < 3; k++) {
         $(blueview[k]).removeClass("inactive");
         $(blueview[k]).addClass("team-active");
-    }    
+    }
 };
 
 
@@ -195,14 +197,11 @@ $(".button").click(function() {
 
 
 // Fetch Player Names
+function setPlayerNames(json) {
 
-var DevWarsAPI = "http://devwars.tv/v1/game/currentgame";
-
-$.getJSON(DevWarsAPI, function (json) {
-      
     var teamBlue = json.teams.blue.players;
     var teamRed = json.teams.red.players;
-            
+
     var i;
     for (i = 0; i < teamBlue.length; ++i) {
         if (teamBlue[i].language == "HTML") {
@@ -230,4 +229,10 @@ $.getJSON(DevWarsAPI, function (json) {
             $("#red-team__js").append(teamRed[j].user.username);
         }
     }
-});
+};
+
+if (!queryParams.game) {
+    var DevWarsAPI = "http://devwars.tv/v1/game/currentgame";
+
+    $.getJSON(DevWarsAPI, setPlayerNames);
+}
