@@ -131,6 +131,16 @@
         font-size: 62%;
         margin-left: 20px;
       }
+        
+        .nofiles-error {
+            color: color($red);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 7px;
+            top: 16px;
+            font-size: 22px;
+        }
     }
 
     .game--disabled {
@@ -475,6 +485,10 @@
           background: $white;
           color: $black;
         }
+          .nofile {
+              opacity: 0;
+              pointer-events: none;
+          }
       }
     }
 
