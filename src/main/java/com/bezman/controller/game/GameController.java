@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -217,9 +218,11 @@ public class GameController {
 
     @AllowCrossOrigin(from = "*")
     @AngularServiceOmitted
-    @RequestMapping("/{id}/{team}/preview/{slug:.+}")
-    public ResponseEntity previewTeamForGame(HttpServletResponse response, @PathVariable("id") int gameID, @PathVariable("team") String team, @PathVariable("slug") String slug) throws IOException {
+    @RequestMapping("/{id}/{team}/preview/**")
+    public ResponseEntity previewTeamForGame(HttpServletResponse response, HttpServletRequest request, @PathVariable("id") int gameID, @PathVariable("team") String team) throws IOException {
         try {
+            String mapping = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+            String slug = mapping.split("preview/")[1];
             InputStream inputStream = fileStorage.getFileDownloader(fileStorage.SITE_STORAGE_PATH + "/" + gameID + "/" + team + "/" + slug).body;
 
             IOUtils.copy(inputStream, response.getOutputStream());
