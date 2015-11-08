@@ -325,6 +325,7 @@ public class UserService {
         session.beginTransaction();
 
         user.setAvatarURL(pathForProfilePictureForUser(user));
+        session.merge(user);
 
         session.getTransaction().commit();
         session.close();
