@@ -838,6 +838,7 @@ public class GameController {
     }
 
 
+    @AllowCrossOrigin(from = "*")
     @RequestMapping("/{id}/teaminfo")
     public ResponseEntity teamInfoForGame(@PathVariable("id") int gameID) {
         Game game = gameService.getGame(gameID);
