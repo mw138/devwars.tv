@@ -1,7 +1,7 @@
 <div ng-controller="HeaderController">
     <header class="header--desktop">
         <div id="navtop" class="info-bar">
-            <div class="notification-banner" ng-hide="!!$cookies.seenMessage">
+            <div class="notification-banner" ng-hide="!!$cookies.seenSlack">
                 <div class="inner">
                     <img src="/assets/img/slack-logo.png" />
                     <span>
@@ -10,7 +10,7 @@
                         <a href="http://slack.devwars.tv/">Join us now!</a>
                     </span>
                 </div>
-                <i class="fa fa-times notification-close" ng-click="$cookies.seenMessage = true"></i>
+                <i class="fa fa-times notification-close" ng-click="$cookies.seenSlack = true"></i>
             </div>
             
             <div class="inner">
