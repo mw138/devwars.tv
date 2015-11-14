@@ -8,21 +8,41 @@ header {
 	.fa-caret-down { font-size: 12px; padding-left: 5px; }
   .notification-banner {
     height: 40px;
-    background-color: $main-color;
+    // background-color: $purple-color;
+    background-image: url('/assets/img/slack-bg.jpg');
     color: $font-color;
     font-size: 20px;
     position: relative;
-    border-bottom: 2px solid darken($main-color, 20%);
+    //border-bottom: 5px solid darken($purple-color, 20%);
+      
+      .inner {
+          text-align: center;
+      }
+      
+      img, span {
+          vertical-align: middle;
+      }
+      img {
+          height: 25px;
+          display: inline-block;
+          margin-right: 10px;
+      }
+      
     span {
-        display: block;
+        display: inline-block;
         line-height: 40px;
-        text-align: center;
         font-weight: 200;
+        
+        span {
+            font-size: 2.0rem;
+            padding: 0 5px;
+        }
+        
         a {
-            color: $gray;
+            color: #EAA822;
             font-weight: bold;
             &:hover {
-                color: $black;
+                color: $accent-color;
             }
         }
     }
@@ -33,7 +53,7 @@ header {
         line-height: 40px;
         cursor: pointer;
         &:hover {
-            color: $foreground-color;
+            color: $accent-color;
         }
     }
    }

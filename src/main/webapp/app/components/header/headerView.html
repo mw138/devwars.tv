@@ -2,9 +2,17 @@
     <header class="header--desktop">
         <div id="navtop" class="info-bar">
             <div class="notification-banner" ng-hide="!!$cookies.seenMessage">
-                <span>Keep track of all upcoming DevWars games - <a href="https://chrome.google.com/webstore/detail/devwars-event-reminder/akfpgjacfklomgdbfiahgfhndnbggbld">download our extension now!</a></span>
+                <div class="inner">
+                    <img src="/assets/img/slack-logo.png" />
+                    <span>
+                        Come chill with us in our Slack Channel
+                        <span>-</span>
+                        <a href="http://slack.devwars.tv/">Join us now!</a>
+                    </span>
+                </div>
                 <i class="fa fa-times notification-close" ng-click="$cookies.seenMessage = true"></i>
             </div>
+            
             <div class="inner">
                 <div class="left-info">
                     <button ui-sref="modCP.createTeamsView" class="button button--flat" ng-if="AuthService.isAdmin()">Mod Panel</button>
