@@ -425,6 +425,14 @@ public class GameService {
         redTeamMap.put("link", redTeam == null ? defaultUrl : redTeam.getAvatarURL());
         blueTeamMap.put("link", blueTeam == null ? defaultUrl : blueTeam.getAvatarURL());
 
+        if (blueTeam != null) {
+            blueTeamMap.put("name", blueTeam.getName());
+        }
+
+        if (redTeam != null) {
+            redTeamMap.put("name", redTeam.getName());
+        }
+
         HashMap<String, HashMap<String, String>> returnMap = new HashMap<>();
         returnMap.put("blue", blueTeamMap);
         returnMap.put("red", redTeamMap);

@@ -17,16 +17,18 @@ public class AllowCrossOriginInterceptor implements HandlerInterceptor {
 
             AllowCrossOrigin crossOrigin = handlerMethod.getMethodAnnotation(AllowCrossOrigin.class);
 
-            //Make sure it's not a double header
-            if (!Reference.isProduction()) {
-                response.addHeader("Access-Control-Allow-Origin", "http://localhost:81");
-                response.addHeader("Access-Control-Allow-Credentials", "true");
-            }
-
-            if (Reference.isProduction() && crossOrigin != null) {
+            if (crossOrigin != null) {
                 response.addHeader("Access-Control-Allow-Origin", crossOrigin.from());
             }
 
+            //Make sure it's not a double header
+            if (!Reference.isProduction()) {
+                response.addHeader("Access-Control-Allow-Credentials", "true");
+            }
+
+            if (!Reference.isProduction() && crossOrigin == null) {
+                response.addHeader("Access-Control-Allow-Origin", "http://localhost:81");
+            }
         } catch (ClassCastException ignored) {
         }
 
