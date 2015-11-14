@@ -427,10 +427,12 @@ public class GameService {
 
         if (blueTeam != null) {
             blueTeamMap.put("name", blueTeam.getName());
+            blueTeamMap.put("tag", blueTeam.getTag());
         }
 
         if (redTeam != null) {
             redTeamMap.put("name", redTeam.getName());
+            redTeamMap.put("tag", redTeam.getTag());
         }
 
         HashMap<String, HashMap<String, String>> returnMap = new HashMap<>();
