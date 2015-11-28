@@ -269,7 +269,7 @@ public class UserConnectionController {
         User veteranUser = userService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
         boolean alreadyConnected = user.getConnectedAccounts().stream()
-                .anyMatch(account -> account.getDisconnected() == false && "TWITCH".equals(account.getProvider()));
+                .anyMatch(account -> !account.getDisconnected() && "TWITCH".equals(account.getProvider()));
 
         if (alreadyConnected) {
             return new ResponseEntity("Already Connected", HttpStatus.CONFLICT);
@@ -277,7 +277,7 @@ public class UserConnectionController {
 
         Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
                 .filter(account ->
-                        "TWITCH".equals(account.getProvider()) && account.getDisconnected() == true)
+                        "TWITCH".equals(account.getProvider()) && account.getDisconnected())
                 .findFirst();
 
         if (connectedAccount.isPresent()) {

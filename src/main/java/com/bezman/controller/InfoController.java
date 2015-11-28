@@ -19,9 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Terence on 4/12/2015.
- */
 @Controller
 @RequestMapping("/v1/info")
 public class InfoController extends BaseController {
@@ -29,12 +26,10 @@ public class InfoController extends BaseController {
     /**
      * Returns Stat info (User count, game count, blog post count, DevBits earned)
      *
-     * @param request
-     * @param response
      * @return
      */
     @RequestMapping("/")
-    public ResponseEntity allInfo(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity allInfo() {
         org.springframework.web.context.ContextLoaderListener loaderListener;
 
         JSONObject jsonObject = new JSONObject();

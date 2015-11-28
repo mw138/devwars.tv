@@ -157,7 +157,12 @@ angular.module('app.modCP', [
 
             $scope.dateWatch();
 
-            GameService.createGame($scope.name, $scope.gameDate.getTime(), $scope.selectedTournament.id, function (success) {
+            var tournamentId = null;
+            if($scope.selectedTournament) {
+                tournamentId = $scope.selectedTournament.id;
+            }
+
+            GameService.createGame($scope.name, $scope.gameDate.getTime(), tournamentId, function (success) {
                 ToastService.showDevwarsToast("fa-check-circle", "Success", "Created Game");
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not create game");
