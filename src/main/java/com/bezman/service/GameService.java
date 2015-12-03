@@ -180,18 +180,19 @@ public class GameService {
                 .forEach(tag -> {
                     String source = tag.attr("src");
 
-                    if (source.charAt(0) == '/') source = source.substring(1);
+                    if (!source.isEmpty()) {
 
-                    source = source.replace("/", File.separator);
+                        if (source.charAt(0) == '/') source = source.substring(1);
 
-                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+                        source = source.replace("/", File.separator);
 
-                    try {
-                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (DbxException e) {
-                        e.printStackTrace();
+                        if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+
+                        try {
+                            downloadURLToFile(site + "/" + source, (path + File.separator + source));
+                        } catch (IOException | DbxException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -199,19 +200,20 @@ public class GameService {
                 .forEach(tag -> {
                     String source = tag.attr("href");
 
-                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+                    if (!source.isEmpty()) {
+
+                        if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
 
-                    if (source.charAt(0) == '/') source = source.substring(1);
+                        if (source.charAt(0) == '/') source = source.substring(1);
 
-                    source = source.replace("/", File.separator);
+                        source = source.replace("/", File.separator);
 
-                    try {
-                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (DbxException e) {
-                        e.printStackTrace();
+                        try {
+                            downloadURLToFile(site + "/" + source, (path + File.separator + source));
+                        } catch (IOException | DbxException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -219,19 +221,21 @@ public class GameService {
                 .forEach(tag -> {
                     String source = tag.attr("src");
 
-                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+                    if(!source.isEmpty()) {
+                        if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
 
-                    if (source.charAt(0) == '/') source = source.substring(1);
+                        if (source.charAt(0) == '/') source = source.substring(1);
 
-                    source = source.replace("/", File.separator);
+                        source = source.replace("/", File.separator);
 
-                    try {
-                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (DbxException e) {
-                        e.printStackTrace();
+                        try {
+                            downloadURLToFile(site + "/" + source, (path + File.separator + source));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (DbxException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -261,7 +265,7 @@ public class GameService {
          */
         Criteria criteria = session.createCriteria(Game.class)
                 .setProjection(Projections.projectionList()
-                                .add(Projections.groupProperty("season"))
+                        .add(Projections.groupProperty("season"))
                 );
 
         HashMap pastGames = new HashMap<>();
