@@ -231,9 +231,7 @@ public class GameService {
 
                         try {
                             downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (DbxException e) {
+                        } catch (IOException | DbxException e) {
                             e.printStackTrace();
                         }
                     }
