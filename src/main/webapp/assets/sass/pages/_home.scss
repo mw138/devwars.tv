@@ -5,10 +5,12 @@
 	}
 	
 	.featured {
-		min-height: 400px;
 		position: relative;
 		overflow: hidden;
-		background-color: #0A0A0A;
+        background-color: #0A0A0A;
+        background-image: url('/assets/img/code-bg.png');
+        background-size: cover;
+        background-repeat: no-repeat;
 
 		.inner { 
 		  position: relative;
@@ -23,77 +25,59 @@
 			width: 100%;
 			height: 100%;
 			z-index: 1;
-			background: url("../../../assets/img/overlay.png") rgba(0, 0, 0, 0.2);
+			background: url("../../../assets/img/overlay.png") rgba(0, 0, 0, 0.9);
 		}
 	}
 
-	.herocode1-container {
-		@include animation(herocode-1-pulse, 10s, linear, infinite);
+/* 	.herocode1-container {
+	    @include animation(herocode-1-pulse, 10s, linear, infinite);
 	}
 	
 	.herocode2-container {
-		@include animation(herocode-2-pulse, 10s, linear, infinite);
+	    @include animation(herocode-2-pulse, 10s, linear, infinite);
 	}
 	
 	.herocode {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		
-		&.herocode--1 {
-			width: $herocode1-width * 2;
-			height: $herocode1-height + ($herocode-space * $herocode-dec);
-			background: url("../../../assets/img/herocode-1.png") repeat;
-			background-size: $herocode-bgsize;
-			position: absolute;
-			@include animation(herocode-1, 120s, linear, infinite);
-		}
-		
-		&.herocode--2 { 
-			width: $herocode2-width * 2;
-			height: $herocode2-height + ($herocode-space * $herocode-dec);
-			background: url("../../../assets/img/herocode-2.png") repeat;
-			top: $herocode-space * ($herocode-dec * 2); 
-			background-size: $herocode-bgsize;
-			position: absolute;
-			@include animation(herocode-2, 240s, linear, infinite);
-		}
-	}
-	
-	.logo--tournament {
-		width: 70%;
-		height: auto;
-		margin: 0 auto;
-		display: block;
-	}
-	
-	.surfacepro {
-		width: 55%;
-		height: auto;
-		position: absolute;
-		left: 0;
-		margin-top: 40px;
-	}
+	    width: 100%;
+	    height: 100%;
+	    position: absolute;
+	    top: 0;
+	    
+	    &.herocode--1 {
+	        width: $herocode1-width * 2;
+	        height: $herocode1-height + ($herocode-space * $herocode-dec);
+	        background: url("../../../assets/img/herocode-1.png") repeat;
+	        background-size: $herocode-bgsize;
+	        position: absolute;
+	        @include animation(herocode-1, 120s, linear, infinite);
+	    }
+	    
+	    &.herocode--2 { 
+	        width: $herocode2-width * 2;
+	        height: $herocode2-height + ($herocode-space * $herocode-dec);
+	        background: url("../../../assets/img/herocode-2.png") repeat;
+	        top: $herocode-space * ($herocode-dec * 2); 
+	        background-size: $herocode-bgsize;
+	        position: absolute;
+	        @include animation(herocode-2, 240s, linear, infinite);
+	    }
+	} */
 	
 	.featuredText {
-		position: absolute;
-		width: 50%;
-		padding: 25px 0 0 40px;
+		width: 100%;
+		padding-top: 40px + 20px;
+        padding-bottom: 120px + 20px;
 		height: auto;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		font-size: 50px;
 		text-align: center;
 		h1 { 
 			font-weight: 200;
-			font-size: 41px;
-			display: inline-block;
+			font-size: 36px;
+            display: block;
+            padding-top: 10px;
 			
 			span {
 				color: $accent-color;
-				font-size: inherit;
+                font-size: 20px;
 			}
 		}
 
@@ -103,15 +87,31 @@
 			letter-spacing: 1px;
 		}
 		
-		.signup {
-			width: 50%;
+        .featured__btns {
+            display: block;
+            font-size: 0;
+        }
+        
+		.c2a {
+			width: auto;
 			margin: 0 auto;
 			font-size: 16px;
 			text-align: center;
-			padding: 15px 0;
-			display: block;
+			display: inline-block;
 			font-weight: bold;
+            padding: 15px 30px;
 			margin-top: 20px;
+            
+            &.c2a--secondary {
+                background-color: $gray;
+                border-color: $dgray;
+                margin-left: 20px;
+                
+                &:hover {
+                    background-color: $accent-color;
+                    border-color: darken($accent-color, 25%);
+                }
+            }
 		}
 	}
 	
