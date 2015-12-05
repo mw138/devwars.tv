@@ -175,7 +175,7 @@ public class GameController {
                                      @RequestParam(required = false, value = "name") String name,
                                      @RequestParam(required = false, value = "tournament") Integer tournamentID) {
 
-        Tournament tournament = tournamentService.byID(tournamentID);
+        Tournament tournament = tournamentID == null ?  null : tournamentService.byID(tournamentID);
 
         Game game = gameService.defaultGame(tournament);
 
