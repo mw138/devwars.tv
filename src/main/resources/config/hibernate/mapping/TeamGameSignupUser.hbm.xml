@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.bezman.model.TeamGameSignupUser" table="team_signups_users">
+        <id name="id">
+            <generator class="increment"/>
+        </id>
+
+        <many-to-one name="teamGameSignup" column="teamGameSignup" class="com.bezman.model.TeamGameSignup"/>
+
+        <many-to-one name="user" column="user_id" class="com.bezman.model.User"/>
+
+        <property name="language" type="string"/>
+    </class>
+
+</hibernate-mapping>

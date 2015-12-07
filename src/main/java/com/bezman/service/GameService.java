@@ -9,7 +9,6 @@ import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mysql.jdbc.ReflectiveStatementInterceptorAdapter;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -397,6 +396,14 @@ public class GameService {
         session.close();
     }
 
+    public Team getOpenTeamForGame(Game game) {
+        for(Team team : game.getTeams().values()) {
+            if (team.getPlayers().size() == 0) return team;
+        }
+
+        return null;
+    }
+
     public void applyTeamToGame(UserTeam userTeam, Game game)
     {
         Session session = DatabaseManager.getSession();
@@ -409,6 +416,24 @@ public class GameService {
             session.save(gameSignup);
             mergedGame.getSignups().add(gameSignup);
         });
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void addTeamGameSignupToGame(TeamGameSignup teamGameSignup, Game game) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        Team team = this.getOpenTeamForGame(game);
+
+        if (team != null) {
+            team.setUserTeam(teamGameSignup.getUserTeam());
+        }
+
+
+
+        session.merge(team);
 
         session.getTransaction().commit();
         session.close();

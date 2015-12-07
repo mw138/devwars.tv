@@ -167,6 +167,7 @@ angular.module("app.games", [])
                     }
                 })
                 .then(function (users) {
+                    console.log(users);
                     TournamentService.http.signupTeamForTournamentFromGame(game.id, JSON.stringify(users))
                         .then(function (success) {
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Applied " + $scope.myTeam.name + " for game");

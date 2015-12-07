@@ -13,9 +13,9 @@
 
         <many-to-one name="userTeam" class="com.bezman.model.UserTeam" lazy="false"/>
 
-        <set name="users" table="team_signups_users" lazy="false">
-            <key></key>
-            <many-to-many class="com.bezman.model.User" column="user"></many-to-many>
+        <set name="teamGameSignupUsers" table="team_signups_users">
+            <key column="teamGameSignup"/>
+            <one-to-many class="com.bezman.model.TeamGameSignupUser"/>
         </set>
     </class>
 </hibernate-mapping>

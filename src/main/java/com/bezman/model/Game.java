@@ -26,7 +26,7 @@ public class Game extends BaseModel {
 
     private String name, theme, status;
 
-    private boolean active = false, done = false;
+    private boolean active = false, done = false, teamGame;
 
     private String youtubeURL;
 

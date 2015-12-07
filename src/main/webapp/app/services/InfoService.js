@@ -27,6 +27,28 @@ url: '/v1/info/bitsleaderboard',
 params: {}
 })};/*
 */
+InfoService.allInfo = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/info/',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+InfoService.http.allInfo = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/info/',
+params: {}
+})};/*
+*/
 InfoService.xpLeaderboard = function(successCallback, errorCallback){
 $http({
 method: 'GET',
@@ -70,27 +92,5 @@ return $http({
 method: 'GET',
 url: '/v1/info/leaderboard',
 params: {page : page}
-})};/*
-*/
-InfoService.allInfo = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/info/',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-InfoService.http.allInfo = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/info/',
-params: {}
 })};return InfoService;
 }]);

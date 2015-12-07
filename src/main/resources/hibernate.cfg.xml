@@ -69,6 +69,7 @@
         <mapping resource="config/hibernate/mapping/TeamGameSignup.hbm.xml"/>
         <mapping resource="config/hibernate/mapping/UserTeamInvite.hbm.xml"/>
         <mapping resource="config/hibernate/mapping/Tournament.hbm.xml"/>
+        <mapping resource="config/hibernate/mapping/TeamGameSignupUser.hbm.xml"/>
 
 
         <mapping resource="config/hibernate/mapping/Access.hbm.xml"/>

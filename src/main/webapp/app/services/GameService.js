@@ -4,57 +4,13 @@ angular.module('app.GameService', [])
 GameService.http = {};
 
 /*
-*/
-GameService.upcomingTournaments = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/tournament/upcoming',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.upcomingTournaments = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/tournament/upcoming',
-params: {}
-})};/*
-*/
-GameService.nearestTournament = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/tournament/nearest',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.nearestTournament = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/tournament/nearest',
-params: {}
-})};/*
 Required Role : ADMIN
 Path Variable {id} : int
 */
-GameService.pullCloudNineSites = function(id, successCallback, errorCallback){
+GameService.deleteGame = function(id, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/game/' + id + '/sitepull',
+url: '/v1/game/' + id + '/delete',
 params: {}
 })
 .then(function(success){
@@ -66,20 +22,20 @@ errorCallback(error)
 
 };
 
-GameService.http.pullCloudNineSites = function(id, successCallback, errorCallback){
+GameService.http.deleteGame = function(id, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/game/' + id + '/sitepull',
+url: '/v1/game/' + id + '/delete',
 params: {}
 })};/*
-Query Parameter {offset} : int
+Query Parameter {firstGame} : int
 Query Parameter {count} : int
 */
-GameService.pastGames = function(offset, count, successCallback, errorCallback){
+GameService.getGameList = function(firstGame, count, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/game/pastgames',
-params: {offset : offset,count : count}
+url: '/v1/game/pastgamelist',
+params: {firstGame : firstGame,count : count}
 })
 .then(function(success){
 successCallback(success)
@@ -90,58 +46,11 @@ errorCallback(error)
 
 };
 
-GameService.http.pastGames = function(offset, count, successCallback, errorCallback){
+GameService.http.getGameList = function(firstGame, count, successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/game/pastgames',
-params: {offset : offset,count : count}
-})};/*
-Required Role : ADMIN
-Path Variable {id} : int
-Query Parameter {winner} : int
-*/
-GameService.endGame = function(id, winner, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/' + id + '/endgame',
-params: {winner : winner}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.endGame = function(id, winner, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/' + id + '/endgame',
-params: {winner : winner}
-})};/*
-*/
-GameService.latestGame = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/latestgame',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.latestGame = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/latestgame',
-params: {}
+url: '/v1/game/pastgamelist',
+params: {firstGame : firstGame,count : count}
 })};/*
 Required Role : ADMIN
 Path Variable {id} : int
@@ -165,6 +74,72 @@ GameService.http.deactivateGame = function(id, successCallback, errorCallback){
 return $http({
 method: 'GET',
 url: '/v1/game/' + id + '/deactivate',
+params: {}
+})};/*
+*/
+GameService.latestGame = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/latestgame',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.latestGame = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/latestgame',
+params: {}
+})};/*
+*/
+GameService.nearestGame = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/nearestgame',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.nearestGame = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/nearestgame',
+params: {}
+})};/*
+*/
+GameService.currentGame = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/currentgame',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.currentGame = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/currentgame',
 params: {}
 })};/*
 Required Role : ADMIN
@@ -192,168 +167,6 @@ url: '/v1/game/' + id + '/pendingplayers',
 params: {}
 })};/*
 Required Role : ADMIN
-*/
-GameService.forfeitUser = function(player, successCallback, errorCallback){
-$http({
-method: 'POST',
-url: '/v1/game/forfeituser',
-data: {player : player}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.forfeitUser = function(player, successCallback, errorCallback){
-return $http({
-method: 'POST',
-url: '/v1/game/forfeituser',
-data: {player : player}
-})};/*
-*/
-GameService.upcomingGames = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/upcoming',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.upcomingGames = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/upcoming',
-params: {}
-})};/*
-Query Parameter {offset} : int
-Query Parameter {count} : int
-*/
-GameService.allGames = function(offset, count, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/',
-params: {offset : offset,count : count}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.allGames = function(offset, count, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/',
-params: {offset : offset,count : count}
-})};/*
-*/
-GameService.nearestGame = function(successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/nearestgame',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.nearestGame = function(successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/nearestgame',
-params: {}
-})};/*
-Required Role : USER
-Path Variable {id} : int
-*/
-GameService.signUpForGame = function(id, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/' + id + '/signup',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.signUpForGame = function(id, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/' + id + '/signup',
-params: {}
-})};/*
-Required Role : ADMIN
-*/
-GameService.editGame = function(id, game, successCallback, errorCallback){
-$http({
-method: 'POST',
-url: '/v1/game/' + id + '/update',
-data: {game : game}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.editGame = function(id, game, successCallback, errorCallback){
-return $http({
-method: 'POST',
-url: '/v1/game/' + id + '/update',
-data: {game : game}
-})};/*
-Query Parameter {firstGame} : int
-Query Parameter {count} : int
-*/
-GameService.getGameList = function(firstGame, count, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/pastgamelist',
-params: {firstGame : firstGame,count : count}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.getGameList = function(firstGame, count, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/pastgamelist',
-params: {firstGame : firstGame,count : count}
-})};/*
-Required Role : ADMIN
 Query Parameter {name} : java.lang.String
 Query Parameter {time} : long
 Query Parameter {tournament} : java.lang.Integer
@@ -379,11 +192,58 @@ method: 'GET',
 url: '/v1/game/create',
 params: {name : name,time : time,tournament : tournament}
 })};/*
+Query Parameter {offset} : int
+Query Parameter {count} : int
 */
-GameService.currentGame = function(successCallback, errorCallback){
+GameService.allGames = function(offset, count, successCallback, errorCallback){
 $http({
 method: 'GET',
-url: '/v1/game/currentgame',
+url: '/v1/game/',
+params: {offset : offset,count : count}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.allGames = function(offset, count, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/',
+params: {offset : offset,count : count}
+})};/*
+Required Role : ADMIN
+*/
+GameService.createLegacyGame = function(game, successCallback, errorCallback){
+$http({
+method: 'POST',
+url: '/v1/game/createlegacy',
+data: {game : game}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.createLegacyGame = function(game, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/game/createlegacy',
+data: {game : game}
+})};/*
+*/
+GameService.upcomingGames = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/upcoming',
 params: {}
 })
 .then(function(success){
@@ -395,10 +255,10 @@ errorCallback(error)
 
 };
 
-GameService.http.currentGame = function(successCallback, errorCallback){
+GameService.http.upcomingGames = function(successCallback, errorCallback){
 return $http({
 method: 'GET',
-url: '/v1/game/currentgame',
+url: '/v1/game/upcoming',
 params: {}
 })};/*
 Path Variable {id} : int
@@ -425,6 +285,29 @@ url: '/v1/game/' + id + '',
 params: {}
 })};/*
 Required Role : ADMIN
+*/
+GameService.editGame = function(id, game, successCallback, errorCallback){
+$http({
+method: 'POST',
+url: '/v1/game/' + id + '/update',
+data: {game : game}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.editGame = function(id, game, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/game/' + id + '/update',
+data: {game : game}
+})};/*
+Required Role : ADMIN
 Path Variable {id} : int
 */
 GameService.activateGame = function(id, successCallback, errorCallback){
@@ -449,12 +332,14 @@ url: '/v1/game/' + id + '/activate',
 params: {}
 })};/*
 Required Role : ADMIN
+Path Variable {id} : int
+Query Parameter {winner} : int
 */
-GameService.createLegacyGame = function(game, successCallback, errorCallback){
+GameService.endGame = function(id, winner, successCallback, errorCallback){
 $http({
-method: 'POST',
-url: '/v1/game/createlegacy',
-data: {game : game}
+method: 'GET',
+url: '/v1/game/' + id + '/endgame',
+params: {winner : winner}
 })
 .then(function(success){
 successCallback(success)
@@ -465,11 +350,11 @@ errorCallback(error)
 
 };
 
-GameService.http.createLegacyGame = function(game, successCallback, errorCallback){
+GameService.http.endGame = function(id, winner, successCallback, errorCallback){
 return $http({
-method: 'POST',
-url: '/v1/game/createlegacy',
-data: {game : game}
+method: 'GET',
+url: '/v1/game/' + id + '/endgame',
+params: {winner : winner}
 })};/*
 Required Role : ADMIN
 Path Variable {id} : int
@@ -494,57 +379,6 @@ return $http({
 method: 'GET',
 url: '/v1/game/' + id + '/resetwinner',
 params: {}
-})};/*
-Required Role : ADMIN
-Path Variable {id} : int
-*/
-GameService.deleteGame = function(id, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/' + id + '/delete',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.deleteGame = function(id, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/' + id + '/delete',
-params: {}
-})};/*
-Required Role : ADMIN
-Path Variable {teamID} : int
-Path Variable {id} : int
-Path Variable {playerID} : int
-Query Parameter {json} : java.lang.String
-*/
-GameService.editPlayer = function(teamID, id, playerID, json, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/' + id + '/team/' + teamID + '/player/' + playerID + '/edit',
-params: {json : json}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.editPlayer = function(teamID, id, playerID, json, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/' + id + '/team/' + teamID + '/player/' + playerID + '/edit',
-params: {json : json}
 })};/*
 Required Role : ADMIN
 Path Variable {teamID} : int
@@ -574,33 +408,6 @@ method: 'GET',
 url: '/v1/game/' + id + '/team/' + teamID + '/addvotes',
 params: {code : code,func : func,design : design}
 })};/*
-Required Role : ADMIN
-Path Variable {teamID} : int
-Path Variable {id} : int
-Query Parameter {xp} : int
-Query Parameter {points} : int
-*/
-GameService.addPointsToTeam = function(teamID, id, xp, points, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/game/' + id + '/team/' + teamID + '/addpoints',
-params: {xp : xp,points : points}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-GameService.http.addPointsToTeam = function(teamID, id, xp, points, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/game/' + id + '/team/' + teamID + '/addpoints',
-params: {xp : xp,points : points}
-})};/*
 Required Role : BLOGGER
 Path Variable {id} : int
 */
@@ -624,6 +431,58 @@ return $http({
 method: 'GET',
 url: '/v1/game/' + id + '/sitearchive',
 params: {}
+})};/*
+Required Role : ADMIN
+Path Variable {id} : int
+Query Parameter {team} : int
+*/
+GameService.applyTeamForGame = function(id, team, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/' + id + '/applyteam',
+params: {team : team}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.applyTeamForGame = function(id, team, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/' + id + '/applyteam',
+params: {team : team}
+})};/*
+Required Role : ADMIN
+Path Variable {teamID} : int
+Path Variable {id} : int
+Path Variable {playerID} : int
+Query Parameter {json} : java.lang.String
+*/
+GameService.editPlayer = function(teamID, id, playerID, json, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/' + id + '/team/' + teamID + '/player/' + playerID + '/edit',
+params: {json : json}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.editPlayer = function(teamID, id, playerID, json, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/' + id + '/team/' + teamID + '/player/' + playerID + '/edit',
+params: {json : json}
 })};/*
 Required Role : USER
 Path Variable {id} : int
@@ -675,14 +534,159 @@ url: '/v1/game/' + id + '/signuptwitchuser',
 data: {username : username}
 })};/*
 Required Role : ADMIN
+*/
+GameService.forfeitUser = function(player, successCallback, errorCallback){
+$http({
+method: 'POST',
+url: '/v1/game/forfeituser',
+data: {player : player}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.forfeitUser = function(player, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/game/forfeituser',
+data: {player : player}
+})};/*
+Required Role : ADMIN
+Path Variable {teamID} : int
+Path Variable {id} : int
+Query Parameter {xp} : int
+Query Parameter {points} : int
+*/
+GameService.addPointsToTeam = function(teamID, id, xp, points, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/' + id + '/team/' + teamID + '/addpoints',
+params: {xp : xp,points : points}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.addPointsToTeam = function(teamID, id, xp, points, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/' + id + '/team/' + teamID + '/addpoints',
+params: {xp : xp,points : points}
+})};/*
+Path Variable {id} : int
+*/
+GameService.teamInfoForGame = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/' + id + '/teaminfo',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.teamInfoForGame = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/' + id + '/teaminfo',
+params: {}
+})};/*
+Required Role : USER
+Path Variable {id} : int
+*/
+GameService.signUpForGame = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/' + id + '/signup',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.signUpForGame = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/' + id + '/signup',
+params: {}
+})};/*
+Query Parameter {offset} : int
+Query Parameter {count} : int
+*/
+GameService.pastGames = function(offset, count, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/pastgames',
+params: {offset : offset,count : count}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.pastGames = function(offset, count, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/pastgames',
+params: {offset : offset,count : count}
+})};/*
+Required Role : ADMIN
+Path Variable {id} : int
+*/
+GameService.pullCloudNineSites = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/' + id + '/sitepull',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.pullCloudNineSites = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/' + id + '/sitepull',
+params: {}
+})};/*
+Required Role : ADMIN
 Path Variable {id} : int
 Query Parameter {team} : int
 */
 GameService.signupTeamForGame = function(id, team, successCallback, errorCallback){
 $http({
-method: 'GET',
+method: 'POST',
 url: '/v1/game/' + id + '/signupteam',
-params: {team : team}
+data: {team : team}
 })
 .then(function(success){
 successCallback(success)
@@ -695,8 +699,52 @@ errorCallback(error)
 
 GameService.http.signupTeamForGame = function(id, team, successCallback, errorCallback){
 return $http({
-method: 'GET',
+method: 'POST',
 url: '/v1/game/' + id + '/signupteam',
-params: {team : team}
+data: {team : team}
+})};/*
+*/
+GameService.nearestTournament = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/tournament/nearest',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.nearestTournament = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/tournament/nearest',
+params: {}
+})};/*
+*/
+GameService.upcomingTournaments = function(successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/game/tournament/upcoming',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+GameService.http.upcomingTournaments = function(successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/game/tournament/upcoming',
+params: {}
 })};return GameService;
 }]);

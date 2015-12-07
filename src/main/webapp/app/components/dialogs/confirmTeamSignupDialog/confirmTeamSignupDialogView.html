@@ -16,7 +16,7 @@
     <div class="player-selector">
     	<h3>Select your players</h3>
 
-        <span ng-repeat="user in team.members" ng-click="clickPlayer(user)" ng-class="{'selected': isSelected(user)}" ng-bind="user.username"></span>
+        <span ng-repeat="user in team.members" ng-init="user.clickCount = 0;" ng-click="clickPlayer(user)" ng-class="getClassForUser(user)" ng-bind="user.username"></span>
 
     </div>
 
@@ -29,7 +29,7 @@
     </div>
 
     <div class="dialog-container__actions">
-        <button class="button" ng-class="{'button--disabled' : selectedPlayers.length < 3}" ng-click="confirmSignUp()">Confirm</button>
+        <button class="button" ng-class="{'button--disabled' : !enoughPlayers()}" ng-click="confirmSignUp()">Confirm</button>
         <button class="button button--warn" ng-click="$mdDialog.cancel()">Cancel</button>
     </div>
 </md-dialog>

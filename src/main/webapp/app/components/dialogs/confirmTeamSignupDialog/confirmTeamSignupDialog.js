@@ -7,25 +7,55 @@ angular.module('app.confirmTeamSignupDialog', [])
 
         $scope.selectedPlayers = [];
 
-        $scope.isSelected = function (user) {
-            return $scope.selectedPlayers.indexOf(user) > -1;
-        };
+        $scope.langArray = ['', 'html', 'css', 'js'];
 
-        $scope.removePlayer = function (user) {
-            $scope.selectedPlayers.splice($scope.selectedPlayers.indexOf(user), 1);
+        $scope.getClassForUser = function (user) {
+            var count = user.clickCount;
+
+            return $scope.langArray[count % 4];
         };
 
         $scope.clickPlayer = function (user) {
-            if($scope.isSelected(user)) {
-                $scope.removePlayer(user);
-            } else {
-                console.log($scope.selectedPlayers.length);
-                if($scope.selectedPlayers.length < 3)
-                    $scope.selectedPlayers.push(user);
-            }
+            user.clickCount++;
+        };
+
+        $scope.enoughPlayers = function () {
+            var count = 0;
+
+            team.members.forEach(function (user) {
+                var language = $scope.langArray[user.clickCount % 4];
+
+                if(language) count++;
+
+                var dupeLang = team.members.some(function (secondUser) {
+                    var secondLanguage = $scope.langArray[secondUser.clickCount % 4];
+
+                    return !!(secondLanguage == language && secondUser.id !== user.id);
+                });
+
+                if(dupeLang) count = 4;
+            });
+
+            return count == 3;
         };
 
         $scope.confirmSignUp = function () {
-            $mdDialog.hide($scope.selectedPlayers);
+            var signupUsers = [];
+
+            team.members.forEach(function (user) {
+                var language = $scope.langArray[user.clickCount % 4];
+
+                if(language) {
+                    signupUsers.push({
+                        user: {
+                            id: user.id
+                        },
+
+                        language: language
+                    });
+                }
+            });
+
+            $mdDialog.hide(signupUsers);
         }
     }]);

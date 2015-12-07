@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,12 +43,17 @@ public class TournamentService {
     }
 
 
-    public void signupTeamForTournament(UserTeam userTeam, Tournament tournament, User[] users)
+    public void signupTeamForTournament(UserTeam userTeam, Tournament tournament, TeamGameSignupUser[] users)
     {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        TeamGameSignup teamGameSignup = new TeamGameSignup(tournament, userTeam, users);
+        TeamGameSignup teamGameSignup = new TeamGameSignup(tournament, userTeam);
+
+        for(TeamGameSignupUser user : users) {
+            teamGameSignup.getTeamGameSignupUsers().add(user);
+            session.save(user);
+        }
 
         session.save(teamGameSignup);
 

@@ -18,6 +18,18 @@ public class TeamService {
         team.getCompletedObjectives().add(new CompletedObjective(objective, team));
     }
 
+    public void addUserToTeam(Team team, String language, User... users) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        for(User user : users) {
+            session.save(new Player(team, user, language));
+        }
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
     public UserTeam userTeamForTeam(Team team)
     {
         if (team.getPlayers().size() < 1) return null;

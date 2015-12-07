@@ -10,6 +10,7 @@ import com.bezman.request.model.LegacyGame;
 import com.bezman.service.*;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
+import com.dropbox.core.v1.DbxEntry;
 import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -31,8 +32,10 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -569,9 +572,9 @@ public class GameController {
     }
 
     @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.GET)
-    public ResponseEntity signupTeamForGame(@RequestParam("team") int teamID,
-                                            @PathVariable("id") int id) {
+    @RequestMapping(value = "/{id}/applyteam", method = RequestMethod.GET)
+    public ResponseEntity applyTeamForGame(@RequestParam("team") int teamID,
+                                           @PathVariable("id") int id) {
 
         UserTeam userTeam = userTeamService.byID(teamID);
 
@@ -583,6 +586,17 @@ public class GameController {
         gameService.applyTeamToGame(userTeam, game);
 
         return new ResponseEntity("Successfully applied team to game", HttpStatus.OK);
+    }
+
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.POST)
+    public ResponseEntity signupTeamForGame(@PathVariable("id") int id, @RequestParam("team") int teamID) {
+        UserTeam userTeam = userTeamService.byID(teamID);
+
+        Game game = gameService.getGame(id);
+
+        return null;
+
     }
 
     /**

@@ -116,9 +116,17 @@
 					background: $dgray;
 				}
 
-				&.selected {
-					background: color($green, base);
+				&.html {
+					background: color($orange, base);
 				}
+
+                &.css {
+                  background: color($blue, base);
+                }
+
+                &.js {
+                  background: color($yellow, base);
+                }
 			}
 		}
 

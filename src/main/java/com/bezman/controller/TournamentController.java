@@ -5,6 +5,7 @@ import com.bezman.annotation.JSONParam;
 import com.bezman.annotation.PathModel;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.Game;
+import com.bezman.model.TeamGameSignupUser;
 import com.bezman.model.Tournament;
 import com.bezman.model.User;
 import com.bezman.service.GameService;
@@ -47,24 +48,24 @@ public class TournamentController {
         return new ResponseEntity(tournamentService.upcomingTournaments(), HttpStatus.OK);
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/signupteam", method = RequestMethod.POST)
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping(value = "/applyteamforgame", method = RequestMethod.POST)
     public ResponseEntity signupTeamForTournamentFromGame(@AuthedUser User user,
                                                           @RequestParam("game") int id,
-                                                          @JSONParam("users") User[] users) {
+                                                          @JSONParam("users") TeamGameSignupUser[] users) {
         Game game = gameService.getGame(id);
 
         if (!game.getHasTournament())
             return new ResponseEntity("Game does not belong to tournament", HttpStatus.OK);
 
-        return signupTeamForTournament(user, game.getTournament().getId(), users);
+        return applyTeamForTournament(user, game.getTournament().getId(), users);
     }
 
     @PreAuthorization(minRole = User.Role.USER)
-    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.POST)
-    public ResponseEntity signupTeamForTournament(@AuthedUser User user,
+    @RequestMapping(value = "/{id}/applyteam", method = RequestMethod.POST)
+    public ResponseEntity applyTeamForTournament(@AuthedUser User user,
                                                   @PathVariable("id") int id,
-                                                  @JSONParam("users") User[] users) {
+                                                  @JSONParam("users") TeamGameSignupUser[] users) {
         if (user.getOwnedTeam() == null)
             return new ResponseEntity("You do not own a team", HttpStatus.FORBIDDEN);
 

@@ -17,14 +17,21 @@ public class TeamGameSignup extends BaseModel {
 
     private UserTeam userTeam;
 
-    private Set<User> users;
+    private Set<TeamGameSignupUser> teamGameSignupUsers;
 
     @JsonIgnore
     private Tournament tournament;
 
-    public TeamGameSignup(Tournament tournament, UserTeam userTeam, User[] users) {
+    public TeamGameSignup(Tournament tournament, UserTeam userTeam, TeamGameSignupUser[] users) {
         this.setTournament(tournament);
         this.setUserTeam(userTeam);
-        this.setUsers(new HashSet<>(Arrays.asList(users)));
+        this.setTeamGameSignupUsers(new HashSet<>(Arrays.asList(users)));
+    }
+
+    public TeamGameSignup(Tournament tournament, UserTeam userTeam) {
+        this.setTournament(tournament);
+        this.setUserTeam(userTeam);
+
+        this.teamGameSignupUsers = new HashSet<>();
     }
 }
