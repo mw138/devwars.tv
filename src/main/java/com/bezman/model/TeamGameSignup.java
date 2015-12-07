@@ -22,6 +22,9 @@ public class TeamGameSignup extends BaseModel {
     @JsonIgnore
     private Tournament tournament;
 
+    @JsonIgnore
+    private Game game;
+
     public TeamGameSignup(Tournament tournament, UserTeam userTeam, TeamGameSignupUser[] users) {
         this.setTournament(tournament);
         this.setUserTeam(userTeam);
@@ -31,7 +34,12 @@ public class TeamGameSignup extends BaseModel {
     public TeamGameSignup(Tournament tournament, UserTeam userTeam) {
         this.setTournament(tournament);
         this.setUserTeam(userTeam);
+        this.setTeamGameSignupUsers(new HashSet<>());
+    }
 
-        this.teamGameSignupUsers = new HashSet<>();
+    public TeamGameSignup(Game game, UserTeam userTeam) {
+        this.setGame(game);
+        this.setUserTeam(userTeam);
+        this.setTeamGameSignupUsers(new HashSet<>());
     }
 }

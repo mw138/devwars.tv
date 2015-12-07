@@ -64,6 +64,7 @@ var app = angular.module('app', [
     'app.ngCopyToClipboard',
     'app.stackedInput',
     'app.ngSignupTournament',
+    'app.ngSignupTeamGame',
     'app.team',
     'app.addGame',
     'app.UserTeamService',

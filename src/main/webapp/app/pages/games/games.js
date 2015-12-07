@@ -134,18 +134,20 @@ angular.module("app.games", [])
         };
 
         $scope.signupForGame = function (game, $event) {
-            if(game.hasTournament) {
-                $scope.applyMyTeamForGame(game, $event);
-                return;
-            };
+            if(!game.teamGame) {
+                if (game.hasTournament) {
+                    $scope.applyMyTeamForGame(game, $event);
+                    return;
+                }
 
-            if (AuthService.user && AuthService.user.role !== "PEDINNG") {
-                DialogService.applyForGame(game, $event);
-            } else {
-                if(!AuthService.user) {
-                    DialogService.signup($event);
+                if (AuthService.user && AuthService.user.role !== "PEDINNG") {
+                    DialogService.applyForGame(game, $event);
                 } else {
-                    ToastService.showDevwarsErrorToast("fa-envelope-o", "Error", "Please confirm your email before applying for games.")
+                    if (!AuthService.user) {
+                        DialogService.signup($event);
+                    } else {
+                        ToastService.showDevwarsErrorToast("fa-envelope-o", "Error", "Please confirm your email before applying for games.")
+                    }
                 }
             }
         };
@@ -167,7 +169,6 @@ angular.module("app.games", [])
                     }
                 })
                 .then(function (users) {
-                    console.log(users);
                     TournamentService.http.signupTeamForTournamentFromGame(game.id, JSON.stringify(users))
                         .then(function (success) {
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Applied " + $scope.myTeam.name + " for game");

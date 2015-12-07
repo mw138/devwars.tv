@@ -220,7 +220,7 @@ public class GameService {
                 .forEach(tag -> {
                     String source = tag.attr("src");
 
-                    if(!source.isEmpty()) {
+                    if (!source.isEmpty()) {
                         if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
 
@@ -396,16 +396,36 @@ public class GameService {
         session.close();
     }
 
+    public void signupTeamForGame(UserTeam userTeam, TeamGameSignupUser[] users, Game game) {
+        if (game.getTeamGame()) {
+            Session session = DatabaseManager.getSession();
+            session.beginTransaction();
+
+            TeamGameSignup teamGameSignup = new TeamGameSignup(game, userTeam);
+
+            for (TeamGameSignupUser user : users) {
+                teamGameSignup.getTeamGameSignupUsers().add(user);
+                session.save(user);
+            }
+
+            session.save(teamGameSignup);
+
+            game.getTeamGameSignups().add(teamGameSignup);
+
+            session.getTransaction().commit();
+            session.close();
+        }
+    }
+
     public Team getOpenTeamForGame(Game game) {
-        for(Team team : game.getTeams().values()) {
+        for (Team team : game.getTeams().values()) {
             if (team.getPlayers().size() == 0) return team;
         }
 
         return null;
     }
 
-    public void applyTeamToGame(UserTeam userTeam, Game game)
-    {
+    public void applyTeamToGame(UserTeam userTeam, Game game) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
@@ -430,7 +450,6 @@ public class GameService {
         if (team != null) {
             team.setUserTeam(teamGameSignup.getUserTeam());
         }
-
 
 
         session.merge(team);

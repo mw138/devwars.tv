@@ -182,12 +182,16 @@ public class GameController {
 
         Game game = gameService.defaultGame(tournament);
 
-        if (timestamp != 0) {
-            game.setTimestamp(new Timestamp(timestamp));
-        }
-
         if (name != null) {
             game.setName(name);
+
+            if (name.equals("Team Classic")) {
+                game.setTeamGame(true);
+            }
+        }
+
+        if (timestamp != 0) {
+            game.setTimestamp(new Timestamp(timestamp));
         }
 
         session.save(game);
@@ -571,25 +575,42 @@ public class GameController {
         return new ResponseEntity(HttpMessages.NO_GAME_FOUND, HttpStatus.NOT_FOUND);
     }
 
-    @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/applyteam", method = RequestMethod.GET)
-    public ResponseEntity applyTeamForGame(@RequestParam("team") int teamID,
+    /**
+     * Endpoint for team leaders to signup their team to a team game
+     * @param user (Resolved)
+     * @param users Array of TeamGameSignupUser
+     * @param id ID of game to apply to
+     * @return Response
+     */
+    @PreAuthorization(minRole = User.Role.USER)
+    @RequestMapping(value = "/{id}/applyteam", method = RequestMethod.POST)
+    public ResponseEntity applyTeamForGame(@AuthedUser User user,
+                                           @JSONParam("users") TeamGameSignupUser[] users,
                                            @PathVariable("id") int id) {
-
-        UserTeam userTeam = userTeamService.byID(teamID);
-
         Game game = gameService.getGame(id);
 
-        if (game == null || userTeam == null)
-            return new ResponseEntity("Game or Team not found", HttpStatus.BAD_REQUEST);
+        if (!game.getTeamGame())
+            return new ResponseEntity("Game must be a team game", HttpStatus.BAD_REQUEST);
 
-        gameService.applyTeamToGame(userTeam, game);
+        if (user.getOwnedTeam() == null)
+            return new ResponseEntity("You do not own a team", HttpStatus.FORBIDDEN);
+
+        if (!userTeamService.doesUserHaveAuthorization(user, user.getOwnedTeam()))
+            return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
+
+        if (users.length != 3)
+            return new ResponseEntity("You must only sign up three players", HttpStatus.BAD_REQUEST);
+
+        if (game.getTeamGameSignups().stream().anyMatch(team -> team.getUserTeam().getId() == user.getTeam().getId()))
+            return new ResponseEntity("You have already signed up for this game", HttpStatus.CONFLICT);
+
+        gameService.signupTeamForGame(user.getOwnedTeam(), users, game);
 
         return new ResponseEntity("Successfully applied team to game", HttpStatus.OK);
     }
 
     @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping(value = "/{id}/signupteam", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/addteamgamesignup", method = RequestMethod.POST)
     public ResponseEntity signupTeamForGame(@PathVariable("id") int id, @RequestParam("team") int teamID) {
         UserTeam userTeam = userTeamService.byID(teamID);
 

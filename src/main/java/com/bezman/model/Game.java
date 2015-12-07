@@ -26,7 +26,10 @@ public class Game extends BaseModel {
 
     private String name, theme, status;
 
-    private boolean active = false, done = false, teamGame;
+    private boolean active = false, done = false;
+
+    @HibernateDefault("false")
+    private Boolean teamGame;
 
     private String youtubeURL;
 
@@ -45,6 +48,9 @@ public class Game extends BaseModel {
 
     @HibernateDefault("false")
     private Boolean hasTournament;
+
+    @JsonIgnore
+    private Set<TeamGameSignup> teamGameSignups;
 
     public Team getTeamByID(int id) {
         for (Team team : this.getTeams().values()) {

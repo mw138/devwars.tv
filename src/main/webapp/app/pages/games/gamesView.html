@@ -22,7 +22,7 @@
                             <span>{{upcomingGame.name}}</span>
                         </div>
                         <div class="gameMedia" layout="row" layout-align="start center">
-                            <button ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
+                            <button ng-click="signupForGame(upcomingGame, $event)" ng-signup-team-game="upcomingGame" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
                             <button ng-click="resignFromGame(upcomingGame, $event)" ng-show="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Resign</button>
                             <a href="/modCP/createteams?game={{upcomingGame.id}}" ng-if="AuthService.isAdmin()"><button class="button"><i class="fa fa-cog fa--no-padding"></i></button></a>
                         </div>
@@ -206,7 +206,7 @@
                         <span>{{upcomingGame.name}}</span>
                     </div>
                     <div class="gameMedia" layout="row" layout-align="start center">
-                        <button ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
+                        <button ng-signup-team-game="upcomingGame" ng-click="signupForGame(upcomingGame, $event)" ng-hide="AuthService.user.appliedGames.indexOf(upcomingGame.id) > -1" class="button">Apply Now</button>
                         <a href="/modCP/createteams?game={{upcomingGame.id}}" ng-if="AuthService.isAdmin()"><button class="button"><i class="fa fa-cog fa--no-padding"></i></button></a>
                     </div>
                 </div> <!-- .game -->

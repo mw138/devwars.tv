@@ -11,6 +11,8 @@
 
         <many-to-one name="tournament" class="com.bezman.model.Tournament"/>
 
+        <many-to-one name="game" class="com.bezman.model.Game"/>
+
         <many-to-one name="userTeam" class="com.bezman.model.UserTeam" lazy="false"/>
 
         <set name="teamGameSignupUsers" table="team_signups_users">

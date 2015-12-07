@@ -7,39 +7,45 @@
 
     <class name="com.bezman.model.Game" table="games">
         <id name="id" type="int" column="id">
-            <generator class="increment"></generator>
+            <generator class="increment"/>
         </id>
         
-        <property name="timestamp" type="timestamp" column="date"></property>
-        <property name="name" type="string" column="name"></property>
-        <property name="theme" type="string" column="theme"></property>
-        <property name="active" type="boolean" column="active"></property>
-        <property name="done" type="boolean" column="done"></property>
-        <property name="status" type="string" column="status"></property>
-        <property name="season" type="integer"></property>
+        <property name="timestamp" type="timestamp" column="date"/>
+        <property name="name" type="string" column="name"/>
+        <property name="theme" type="string" column="theme"/>
+        <property name="active" type="boolean" column="active"/>
+        <property name="done" type="boolean" column="done"/>
+        <property name="status" type="string" column="status"/>
+        <property name="season" type="integer"/>
 
-        <property name="youtubeURL" type="string"></property>
+        <property name="youtubeURL" type="string"/>
 
         <property name="hasTournament" type="boolean" formula="tournament IS NOT NULL"/>
 
-        <many-to-one name="tournament" class="Tournament"></many-to-one>
+        <property name="teamGame" column="team_game" type="boolean"/>
+
+        <many-to-one name="tournament" class="Tournament"/>
 
         <map name="teams" lazy="false" cascade="all">
-            <key column="game_id"></key>
-            <map-key type="string" column="name"></map-key>
-            <one-to-many class="com.bezman.model.Team"></one-to-many>
+            <key column="game_id"/>
+            <map-key type="string" column="name"/>
+            <one-to-many class="com.bezman.model.Team"/>
         </map>
 
         <set name="signups" table="gamesignup" lazy="true">
-            <key column="game"></key>
-            <one-to-many class="GameSignup"></one-to-many>
+            <key column="game"/>
+            <one-to-many class="GameSignup"/>
         </set>
         
         <set name="objectives" lazy="false" order-by="order_id asc" cascade="all,delete,delete-orphan">
-            <key column="game"></key>
-            <one-to-many class="com.bezman.model.Objective"></one-to-many>
+            <key column="game"/>
+            <one-to-many class="com.bezman.model.Objective"/>
         </set>
 
+        <set name="teamGameSignups" lazy="false">
+            <key column="game"/>
+            <one-to-many class="TeamGameSignup"/>
+        </set>
 
     </class>
 
