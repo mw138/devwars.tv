@@ -65,9 +65,12 @@ public class UserConnectionController {
 
     @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
     @RequestMapping("/{provider}/disconnect")
-    public ResponseEntity disconnectAccount(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity disconnectAccount(@AuthedUser User user,
                                             @PathVariable("provider") String provider) {
-        com.bezman.model.User user = (com.bezman.model.User) request.getAttribute("user");
+
+        if (user.getPassword() == null) {
+            return new ResponseEntity("You must set a password first!", HttpStatus.CONFLICT);
+        }
 
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("update ConnectedAccount c set c.disconnected = true, c.username = '' where c.user.id = :id AND c.provider = :provider");

@@ -6,13 +6,14 @@
 <hibernate-mapping>
     <class name="com.bezman.model.ConnectedAccount" table="connected_accounts">
         <id name="id">
-            <generator class="increment"></generator>
+            <generator class="increment"/>
         </id>
 
-        <property name="username" type="string"></property>
-        <property name="provider" type="string"></property>
-        <property name="disconnected" type="boolean"></property>
+        <property name="username" type="string"/>
+        <property name="provider" type="string"/>
+        <property name="providerID" column="provider_id" type="string"/>
+        <property name="disconnected" type="boolean"/>
 
-        <many-to-one name="user" class="com.bezman.model.User" lazy="false"></many-to-one>
+        <many-to-one name="user" class="com.bezman.model.User" lazy="false"/>
     </class>
 </hibernate-mapping>

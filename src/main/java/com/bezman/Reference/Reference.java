@@ -29,7 +29,7 @@ public class Reference {
     public static String rootURL = "http://devwars.tv";
     //        public static String rootURL = "http://local.bezcode.com:9090";
 //    public static String rootURL = "http://localhost:8080";
-    public static String[] allowedHosts = new String[]{"localhost:8080", "localhost:81", "devwars.tv", "bezcode.com:9090"};
+    public static String[] allowedHosts = new String[]{"local.bezcode.com:9090", "localhost:8080", "localhost:81", "devwars.tv", "bezcode.com:9090"};
 
     public static Firebase firebase;
 

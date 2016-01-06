@@ -510,15 +510,11 @@ public class UserController extends BaseController {
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changepassword")
     public ResponseEntity changePassword(HttpServletRequest request, HttpServletResponse response,
-                                         @RequestParam("currentPassword") String currentPassword,
+                                         @RequestParam(value = "currentPassword", defaultValue = "", required = false) String currentPassword,
                                          @RequestParam("newPassword") String newPassword) {
         User user = (User) request.getAttribute("user");
 
-        if (!user.isNative()) {
-            return new ResponseEntity("You can't have a password, you're not native", HttpStatus.CONFLICT);
-        }
-
-        if (user.getPassword().equals(security.hash(currentPassword))) {
+        if (user.getPassword() == null || security.hash(currentPassword).equals(user.getPassword())) {
             userService.changePasswordForUser(user, newPassword);
 
             return new ResponseEntity("Success", HttpStatus.OK);

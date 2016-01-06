@@ -80,6 +80,12 @@ public class UserService {
         return null;
     }
 
+    public boolean userHasConnectedProvider(User user, String provider) {
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
+
+        return connectedAccount.isPresent();
+    }
+
     public User userForUsernameDevWars(String username) {
         Session session = DatabaseManager.getSession();
         Query query = session.createQuery("from User where username = :username and provider =  null");
