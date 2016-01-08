@@ -84,54 +84,6 @@ public class UserConnectionController {
         return new ResponseEntity("", HttpStatus.OK);
     }
 
-    @RequestMapping("/reddit")
-    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseEntity("We removed Reddit", HttpStatus.OK);
-
-//        try
-//        {
-//            response.sendRedirect("https://www.reddit.com/api/v1/authorize?client_id=" + Security.redditAppID2 + "&response_type=code&" +
-//                    "state=" + Util.randomText(32) + "&redirect_uri=" + Reference.rootURL + "/v1/connect/reddit_callback&duration=permanent&scope=identity");
-//        }catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-    }
-
-    @RequestMapping("/reddit_callback")
-    @PreAuthorization(minRole = com.bezman.model.User.Role.PENDING)
-    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) throws UnirestException, IOException {
-        com.bezman.model.User user = RedditProvider.userForCode2(code);
-        com.bezman.model.User currentUser = (com.bezman.model.User) request.getAttribute("user");
-
-        boolean connectedAccountExists = BaseModel.rowExists(ConnectedAccount.class, "provider = ? and user = ?", "REDDIT", currentUser);
-
-        if (user != null && !connectedAccountExists) {
-            Activity activity = new Activity(currentUser, currentUser, "Connected your Reddit account", DevBits.ACCOUNT_CONNECTION, 0);
-
-            currentUser.getRanking().addPoints(DevBits.ACCOUNT_CONNECTION);
-            DatabaseUtil.saveOrUpdateObjects(false, currentUser.getRanking());
-            DatabaseUtil.saveObjects(false, connectedAccountForUser(user, currentUser, "REDDIT"), activity);
-        } else {
-            Session session = DatabaseManager.getSession();
-            Query query = session.createQuery("update ConnectedAccount c set disconnected = false, username = :username where c.provider = :provider AND c.user = :user");
-            query.setString("provider", "REDDIT");
-            query.setParameter("user", currentUser);
-            query.setString("username", user.getUsername().substring(0, user.getUsername().length() - 4));
-
-            query.executeUpdate();
-
-            session.close();
-
-            DatabaseUtil.saveObjects(false, new Activity(currentUser, currentUser, "Connected your Reddit account", 0, 0));
-        }
-
-        response.sendRedirect("/settings/connections");
-        return null;
-    }
-
     @RequestMapping("/google")
     public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
