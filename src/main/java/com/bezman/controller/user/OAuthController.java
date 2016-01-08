@@ -7,6 +7,8 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.model.Ranking;
 import com.bezman.model.TwitchPointStorage;
 import com.bezman.oauth.*;
+import com.bezman.service.AuthService;
+import com.bezman.service.HttpService;
 import com.bezman.service.UserService;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.RequestToken;
@@ -33,8 +36,15 @@ import java.util.Enumeration;
 @Controller
 @RequestMapping("/v1/oauth")
 public class OAuthController {
+
     @Autowired
     UserService userService;
+
+    @Autowired
+    AuthService authService;
+
+    @Autowired
+    HttpService httpService;
 
     @RequestMapping("/reddit")
     public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response) {
@@ -104,33 +114,17 @@ public class OAuthController {
 
     @RequestMapping("/google_callback")
     public ResponseEntity googleCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = GoogleProvider.userForCode(code);
+        com.bezman.model.User user = GoogleProvider.userForCode(code);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Session session = DatabaseManager.getSession();
-
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -155,41 +149,24 @@ public class OAuthController {
     }
 
     @RequestMapping("/twitter_callback")
-    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) {
+    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) throws TwitterException {
         Twitter twitter = TwitterFactory.getSingleton();
 
-        try {
-            twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
+        twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
 
-            User twitterUser = twitter.showUser(twitter.getId());
-            com.bezman.model.User user = TwitterProvider.userForTwitterUser(twitterUser);
+        User twitterUser = twitter.showUser(twitter.getId());
+        com.bezman.model.User user = TwitterProvider.userForTwitterUser(twitterUser);
+        twitter.setOAuthAccessToken(null);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            twitter.setOAuthAccessToken(null);
-
-            Session session = DatabaseManager.getSession();
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -216,11 +193,7 @@ public class OAuthController {
 
             Session session = DatabaseManager.getSession();
 
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
+            com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
             if (queryUser == null) {
                 Query pointsQuery = session.createQuery("from TwitchPointStorage s where lower(s.username) = :username");
@@ -274,33 +247,17 @@ public class OAuthController {
 
     @RequestMapping("/facebook_callback")
     public ResponseEntity facebookCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = FacebookProvider.userForCode(code);
+        com.bezman.model.User user = FacebookProvider.userForCode(code);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Session session = DatabaseManager.getSession();
-
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -322,33 +279,17 @@ public class OAuthController {
 
     @RequestMapping("/github_callback")
     public ResponseEntity githubCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = GithubProvider.userForCode(code);
+        com.bezman.model.User user = GithubProvider.userForCode(code);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Session session = DatabaseManager.getSession();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
 
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }

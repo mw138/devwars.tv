@@ -60,12 +60,24 @@ public class GoogleProvider implements IProvider {
         return null;
     }
 
-    public static User userForCode(String code) throws UnirestException {
-        return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/google_callback");
+    public static User userForCode(String code) {
+        try {
+            return userForCodeWithRedirect(code, Reference.rootURL + "/v1/oauth/google_callback");
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
-    public static User userForCode2(String code) throws UnirestException {
-        return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/google_callback");
+    public static User userForCode2(String code) {
+        try {
+            return userForCodeWithRedirect(code, Reference.rootURL + "/v1/connect/google_callback");
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
