@@ -46,55 +46,6 @@ public class OAuthController {
     @Autowired
     HttpService httpService;
 
-    @RequestMapping("/reddit")
-    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseEntity("We removed Reddit", HttpStatus.OK);
-
-//        try
-//        {
-//            response.sendRedirect("https://www.reddit.com/api/v1/authorize?client_id=" + Security.redditAppID + "&response_type=code&" +
-//                    "state=" + Util.randomText(32) + "&redirect_uri=" + Reference.rootURL + "/v1/oauth/reddit_callback&duration=permanent&scope=identity");
-//        }catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-    }
-
-    @RequestMapping("/reddit_callback")
-    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = RedditProvider.userForCode(code);
-
-            Session session = DatabaseManager.getSession();
-
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     @RequestMapping("/google")
     public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
