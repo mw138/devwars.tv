@@ -1,19 +1,15 @@
 package com.bezman.controller.user;
 
 import com.bezman.Reference.Reference;
-import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.Ranking;
-import com.bezman.model.TwitchPointStorage;
 import com.bezman.oauth.*;
 import com.bezman.service.AuthService;
 import com.bezman.service.HttpService;
+import com.bezman.service.TwitchService;
 import com.bezman.service.UserService;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +20,6 @@ import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.RequestToken;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -37,14 +32,18 @@ import java.util.Enumeration;
 @RequestMapping("/v1/oauth")
 public class OAuthController {
 
-    @Autowired
     UserService userService;
-
-    @Autowired
     AuthService authService;
+    HttpService httpService;
+    TwitchService twitchService;
 
     @Autowired
-    HttpService httpService;
+    public OAuthController(UserService userService, AuthService authService, HttpService httpService, TwitchService twitchService) {
+        this.userService = userService;
+        this.authService = authService;
+        this.httpService = httpService;
+        this.twitchService = twitchService;
+    }
 
     @RequestMapping("/google")
     public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
@@ -139,44 +138,22 @@ public class OAuthController {
 
     @RequestMapping("/twitch_callback")
     public ResponseEntity twitchCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = TwitchProvider.userForCode(code);
+        com.bezman.model.User user = TwitchProvider.userForCode(code);
 
-            Session session = DatabaseManager.getSession();
+        Session session = DatabaseManager.getSession();
 
-            com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            if (queryUser == null) {
-                Query pointsQuery = session.createQuery("from TwitchPointStorage s where lower(s.username) = :username");
-                pointsQuery.setString("username", (user.getUsername().substring(0, user.getUsername().length() - 4)).toLowerCase());
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
 
-                TwitchPointStorage twitchPointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(pointsQuery);
-
-                session.close();
-
-                DatabaseUtil.saveObjects(true, user);
-
-                if (twitchPointStorage != null) {
-                    Ranking ranking = new Ranking();
-                    ranking.setXp((double) twitchPointStorage.getXp());
-                    ranking.setPoints((double) twitchPointStorage.getPoints());
-                    ranking.setId(user.getId());
-
-                    DatabaseUtil.saveOrUpdateObjects(false, ranking);
-                    DatabaseUtil.deleteObjects(twitchPointStorage);
-                }
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
+            twitchService.transferFromPoolToUser(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }

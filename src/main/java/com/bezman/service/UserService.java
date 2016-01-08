@@ -81,6 +81,12 @@ public class UserService {
         return null;
     }
 
+    public ConnectedAccount connectedAccountForProvider(User user, String provider) {
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
+
+        return connectedAccount.orElse(null);
+    }
+
     public boolean userHasConnectedProvider(User user, String provider) {
         Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
 
