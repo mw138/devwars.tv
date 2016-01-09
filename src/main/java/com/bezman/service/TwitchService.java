@@ -21,7 +21,23 @@ public class TwitchService {
     public void transferFromPoolToUser(User user) {
         TwitchPointStorage twitchPointStorage = this.pointStorageForUsername(this.userService.connectedAccountForProvider(user, "TWITCH").getUsername());
 
+        if (twitchPointStorage == null) {
+            return;
+        }
+
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user.getRanking().addPoints(twitchPointStorage.getPoints());
+        user.getRanking().addXP(twitchPointStorage.getXp());
+
+        session.merge(user);
+        session.delete(twitchPointStorage);
+
+        session.getTransaction().commit();
+        session.close();
     }
+
 
     public TwitchPointStorage pointStorageForUsername(String username) {
         TwitchPointStorage twitchPointStorage = null;

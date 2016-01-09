@@ -140,8 +140,6 @@ public class OAuthController {
     public ResponseEntity twitchCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
         com.bezman.model.User user = TwitchProvider.userForCode(code);
 
-        Session session = DatabaseManager.getSession();
-
         com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
         if (queryUser == null) {
