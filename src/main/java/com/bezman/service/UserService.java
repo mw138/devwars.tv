@@ -82,7 +82,7 @@ public class UserService {
     }
 
     public ConnectedAccount connectedAccountForProvider(User user, String provider) {
-        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equalsIgnoreCase(account.getProvider())).findFirst();
 
         return connectedAccount.orElse(null);
     }
@@ -226,35 +226,6 @@ public class UserService {
         session.close();
 
         return count.intValue();
-    }
-
-    public void addTwitchPointsToUser(User user) {
-        Session session = DatabaseManager.getSession();
-
-        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
-                .filter(account ->
-                        "TWITCH".equals(account.getProvider()) && account.getDisconnected() == false)
-                .findFirst();
-
-        boolean isTwitchAccount = "TWITCH".equals(user.getProvider());
-
-        if (!connectedAccount.isPresent() && !isTwitchAccount) return;
-
-        String username = connectedAccount.isPresent() ? connectedAccount.get().getUsername() : user.getUsername();
-
-        TwitchPointStorage twitchPointStorage = (TwitchPointStorage) session.createQuery("from TwitchPointStorage where username = :username")
-                .setString("username", username)
-                .setMaxResults(1)
-                .uniqueResult();
-
-        if (twitchPointStorage != null) {
-            user.getRanking().addPoints(twitchPointStorage.getPoints());
-            user.getRanking().addXP(twitchPointStorage.getXp());
-
-            session.delete(twitchPointStorage);
-        }
-
-        session.close();
     }
 
     public List<User> searchUsers(String username) {
