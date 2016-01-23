@@ -1,5 +1,6 @@
 package com.bezman.init;
 
+import com.bezman.Reference.Reference;
 import com.bezman.hibernate.interceptor.HibernateInterceptor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,6 +28,9 @@ public class DatabaseManager implements IInit {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setInterceptor(new HibernateInterceptor());
+
+        configuration.setProperty("hibernate.connection.username", Reference.getEnvironmentProperty("db.username"));
+        configuration.setProperty("hibernate.connection.password", Reference.getEnvironmentProperty("db.password"));
 
         ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);
