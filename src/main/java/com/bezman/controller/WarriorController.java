@@ -81,7 +81,7 @@ public class WarriorController {
         }
 
         if (month < 1) {
-            return new ResponseEntity("Invalid DOB", HttpStatus.CONFLICT);
+            return new ResponseEntity("Invalid DOB entered", HttpStatus.CONFLICT);
         }
 
         Calendar calendar = Calendar.getInstance();

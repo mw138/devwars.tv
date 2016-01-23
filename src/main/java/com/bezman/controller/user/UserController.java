@@ -1,5 +1,6 @@
 package com.bezman.controller.user;
 
+import com.bezman.Reference.BitShop;
 import com.bezman.Reference.HttpMessages;
 import com.bezman.Reference.Reference;
 import com.bezman.Reference.util.DatabaseUtil;
@@ -156,18 +157,18 @@ public class UserController extends BaseController {
         boolean emailValid = false;
 
         if (emailTaken) {
-            conflictJSONArray.put("Email already taken");
+            conflictJSONArray.put("An account is already registered with this email address");
         }
 
         if (usernameTaken) {
-            conflictJSONArray.put("Username already taken");
+            conflictJSONArray.put("An account is already registered with this username");
         }
 
         if (!emailTaken) {
             emailValid = EmailValidator.getInstance().isValid(email);
 
             if (!emailValid) {
-                conflictJSONArray.put("Invalid Email");
+                conflictJSONArray.put("Please enter a valid email address");
             }
         }
 
@@ -176,7 +177,7 @@ public class UserController extends BaseController {
         }
 
         if (!usernameLengthGood) {
-            conflictJSONArray.put("Username must be at least 4 characters and at most 25 characters");
+            conflictJSONArray.put("Username too " + (username.length() > 25 ? "long" : "short") + ", please try again");
         }
 
         if (!passwordLengthGood) {
@@ -184,7 +185,7 @@ public class UserController extends BaseController {
         }
 
         if (!usernameValid) {
-            conflictJSONArray.put("Username can contain characters, numbers and underscores");
+            conflictJSONArray.put("Usernames can only contain alphanumeric characters and underscores");
         }
 
         if (!emailTaken && !usernameTaken && emailValid && captchaValid && usernameLengthGood && passwordLengthGood && usernameValid) {
@@ -549,10 +550,10 @@ public class UserController extends BaseController {
                                         @RequestParam("password") String password,
                                         @RequestParam("password_confirmation") String passwordConfirmation) throws IOException {
         if (!password.equals(passwordConfirmation))
-            return new ResponseEntity("Passwords must be the same", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Password do not match, please try again.", HttpStatus.BAD_REQUEST);
 
         if (password.length() < 6)
-            return new ResponseEntity("Password must be at least six chars", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Password must be at least six characters", HttpStatus.BAD_REQUEST);
 
         User user = userService.getUser(id);
 
@@ -594,7 +595,7 @@ public class UserController extends BaseController {
 
                 return new ResponseEntity("Success", HttpStatus.OK);
             } else {
-                return new ResponseEntity("Invalid Email", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity("Please enter a valid email address.", HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity("Incorrect Password", HttpStatus.FORBIDDEN);
@@ -610,8 +611,12 @@ public class UserController extends BaseController {
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/changeavatar")
-    public ResponseEntity changeAvatar(@AuthedUser User user,
-                                       @RequestParam("file") MultipartFile image) throws IOException, DbxException {
+    public ResponseEntity changeAvatar(@AuthedUser User user, @RequestParam("file") MultipartFile image) throws IOException, DbxException {
+
+        if (user.getAvatarChanges() < 1) {
+            return new ResponseEntity("You must purchase an avatar change before you can do this.", HttpStatus.FORBIDDEN);
+        }
+
         userService.changeProfilePictureForUser(user, image.getInputStream());
 
         return new ResponseEntity("Successfully change profile picture", HttpStatus.OK);

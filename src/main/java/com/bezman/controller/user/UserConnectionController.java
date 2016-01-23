@@ -1,22 +1,16 @@
 package com.bezman.controller.user;
 
-import com.bezman.Reference.DevBits;
 import com.bezman.Reference.Reference;
-import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
-import com.bezman.init.DatabaseManager;
-import com.bezman.model.*;
+import com.bezman.model.User;
 import com.bezman.oauth.*;
 import com.bezman.service.ConnectedAccountService;
 import com.bezman.service.HttpService;
 import com.bezman.service.UserService;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Optional;
 
 /**
  * Created by root on 4/25/15.
@@ -61,7 +54,7 @@ public class UserConnectionController {
                                             @PathVariable("provider") String provider) {
 
         if (user.getPassword() == null) {
-            return new ResponseEntity("You must set a password first!", HttpStatus.CONFLICT);
+            return new ResponseEntity("You need to set a password before you can disconnect this account.", HttpStatus.CONFLICT);
         }
 
         this.connectedAccountService.disconnectProviderFromUser(provider, user);
