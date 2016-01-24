@@ -196,7 +196,6 @@ public class UserController extends BaseController {
             user.setEmail(email);
             user.setPassword(security.hash(password));
             user.setRole(User.Role.PENDING);
-            user.setAvatarChanges(1);
 
             session.save(user);
             session.flush();

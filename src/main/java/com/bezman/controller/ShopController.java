@@ -33,7 +33,7 @@ public class ShopController {
             if (user.canBuyItem(shopItem)) {
                 user.purchaseItem(shopItem);
 
-                user.setAvatarChanges(user.getAvatarChanges() + 1);
+                user.getInventory().setAvatarChanges(user.getInventory().getAvatarChanges() + 1);
 
                 DatabaseUtil.mergeObjects(false, user);
 

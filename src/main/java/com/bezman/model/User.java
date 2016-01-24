@@ -87,9 +87,6 @@ public class User extends BaseModel {
     @HibernateDefault("5")
     private Integer referredUsers;
 
-    @HibernateDefault("1")
-    private Integer avatarChanges;
-
     @HibernateDefault("/assets/img/default-avatar.png")
     private String avatarURL;
 
@@ -103,9 +100,6 @@ public class User extends BaseModel {
 
     private String location, url, company;
 
-    @HibernateDefault("1")
-    private Integer usernameChanges;
-
     @HibernateDefault("0")
     private Integer score;
 
@@ -116,6 +110,9 @@ public class User extends BaseModel {
 
     @HibernateDefault("0")
     private Integer gamesWatched;
+
+    @HibernateDefault
+    private UserInventory inventory;
 
     @JsonIgnore
     public boolean isNative() {
