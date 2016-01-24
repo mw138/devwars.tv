@@ -55,6 +55,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
                     try {
                         if (hibernateDefault != null && field.get(object) == null) {
                             Object generatedObject = Util.toObject(field.getType(), hibernateDefault.value());
+
                             field.set(object, generatedObject);
 
                             HibernateInterceptor.loadEntityDefaults(generatedObject);

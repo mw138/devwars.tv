@@ -181,14 +181,6 @@ public class User extends BaseModel {
         return this.getRanking().getPoints() >= item.getPrice() && this.rank.getLevel() >= item.getRequiredLevel();
     }
 
-    public void purchaseItem(ShopItem item) {
-        this.getRanking().setPoints(this.getRanking().getPoints() - item.getPrice());
-
-        Activity activity = new Activity(this, this, "Purchased : " + item.getName(), -1 * item.getPrice(), 0);
-        DatabaseUtil.saveObjects(false, activity);
-        DatabaseUtil.updateObjects(false, this.getRanking());
-    }
-
     public List<Badge> tryAllBadges() {
         List<Badge> badgesToAward = new ArrayList<>();
 

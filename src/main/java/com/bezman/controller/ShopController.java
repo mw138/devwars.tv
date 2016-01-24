@@ -5,8 +5,10 @@ import com.bezman.annotation.PreAuthorization;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.ShopItem;
 import com.bezman.model.User;
+import com.bezman.service.ShopService;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,13 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/v1/shop")
 public class ShopController {
 
+    private ShopService shopService;
+
+    @Autowired
+    public ShopController(ShopService shopService) {
+        this.shopService = shopService;
+    }
+
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/purchase/custom_avatar")
     public ResponseEntity purchaseCustomAvatar(HttpServletRequest request, HttpServletResponse response) {
@@ -31,11 +40,9 @@ public class ShopController {
 
         if (shopItem != null) {
             if (user.canBuyItem(shopItem)) {
-                user.purchaseItem(shopItem);
-
                 user.getInventory().setAvatarChanges(user.getInventory().getAvatarChanges() + 1);
 
-                DatabaseUtil.mergeObjects(false, user);
+                shopService.purchaseItemForUser(shopItem, user);
 
                 return new ResponseEntity("Purchased " + shopItem.getName(), HttpStatus.OK);
             } else {
