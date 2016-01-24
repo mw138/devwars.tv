@@ -19,6 +19,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -75,10 +76,11 @@ public class BlogController {
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
-    @RequestMapping("/create")
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity createBlog(@JSONParam("post") BlogPost blogPost,
                                      @AuthedUser User user,
                                      SessionImpl session) {
+
         Errors errors = new BeanPropertyBindingResult(blogPost, "blogPost");
         blogPostValidator.validate(blogPost, errors);
 
@@ -120,7 +122,7 @@ public class BlogController {
      */
     @Transactional
     @PreAuthorization(minRole = User.Role.BLOGGER)
-    @RequestMapping("/{id}/update")
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public ResponseEntity updateBlog(SessionImpl session,
                                      @PathVariable("id") int id,
                                      @JSONParam("post") BlogPost blogPost) {

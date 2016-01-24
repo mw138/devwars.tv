@@ -4,53 +4,6 @@ angular.module('app.BlogService', [])
 BlogService.http = {};
 
 /*
-Required Role : BLOGGER
-Path Variable {id} : int
-*/
-BlogService.deleteBlog = function(id, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/blog/' + id + '/delete',
-params: {}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-BlogService.http.deleteBlog = function(id, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/blog/' + id + '/delete',
-params: {}
-})};/*
-Required Role : BLOGGER
-*/
-BlogService.createBlog = function(post, successCallback, errorCallback){
-$http({
-method: 'GET',
-url: '/v1/blog/create',
-params: {post : post}
-})
-.then(function(success){
-successCallback(success)
-},
-function(error){
-errorCallback(error)
-});
-
-};
-
-BlogService.http.createBlog = function(post, successCallback, errorCallback){
-return $http({
-method: 'GET',
-url: '/v1/blog/create',
-params: {post : post}
-})};/*
 Path Variable {title} : java.lang.String
 */
 BlogService.getBlog = function(title, successCallback, errorCallback){
@@ -75,13 +28,12 @@ url: '/v1/blog/' + title + '',
 params: {}
 })};/*
 Required Role : BLOGGER
-Path Variable {id} : int
 */
-BlogService.updateBlog = function(id, post, successCallback, errorCallback){
+BlogService.createBlog = function(post, successCallback, errorCallback){
 $http({
-method: 'GET',
-url: '/v1/blog/' + id + '/update',
-params: {post : post}
+method: 'POST',
+url: '/v1/blog/create',
+data: {post : post}
 })
 .then(function(success){
 successCallback(success)
@@ -92,11 +44,11 @@ errorCallback(error)
 
 };
 
-BlogService.http.updateBlog = function(id, post, successCallback, errorCallback){
+BlogService.http.createBlog = function(post, successCallback, errorCallback){
 return $http({
-method: 'GET',
-url: '/v1/blog/' + id + '/update',
-params: {post : post}
+method: 'POST',
+url: '/v1/blog/create',
+data: {post : post}
 })};/*
 Query Parameter {month} : java.lang.Integer
 Query Parameter {year} : java.lang.Integer
@@ -122,5 +74,53 @@ return $http({
 method: 'GET',
 url: '/v1/blog/all',
 params: {month : month,year : year,day : day}
+})};/*
+Required Role : BLOGGER
+Path Variable {id} : int
+*/
+BlogService.updateBlog = function(id, post, successCallback, errorCallback){
+$http({
+method: 'POST',
+url: '/v1/blog/' + id + '/update',
+data: {post : post}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+BlogService.http.updateBlog = function(id, post, successCallback, errorCallback){
+return $http({
+method: 'POST',
+url: '/v1/blog/' + id + '/update',
+data: {post : post}
+})};/*
+Required Role : BLOGGER
+Path Variable {id} : int
+*/
+BlogService.deleteBlog = function(id, successCallback, errorCallback){
+$http({
+method: 'GET',
+url: '/v1/blog/' + id + '/delete',
+params: {}
+})
+.then(function(success){
+successCallback(success)
+},
+function(error){
+errorCallback(error)
+});
+
+};
+
+BlogService.http.deleteBlog = function(id, successCallback, errorCallback){
+return $http({
+method: 'GET',
+url: '/v1/blog/' + id + '/delete',
+params: {}
 })};return BlogService;
 }]);

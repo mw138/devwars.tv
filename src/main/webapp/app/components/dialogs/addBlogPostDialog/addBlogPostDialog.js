@@ -8,7 +8,7 @@ angular.module("app.addBlogPostDialog", [])
                 post.tags = $scope.tags.split(" ");
 
             if(post.title && post.description && post.text && post.image_url) {
-                BlogService.createBlog($scope.blog, $mdDialog.hide, $mdDialog.cancel);
+                BlogService.createBlog(JSON.stringify($scope.blog), $mdDialog.hide, $mdDialog.cancel);
             } else {
                 if(!$scope.title && !$scope.description) {
                     ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Missing input fields");
@@ -37,7 +37,7 @@ angular.module("app.addBlogPostDialog", [])
             if($scope.tags)
                 updatedPost.tags = $scope.tags.split(" ");
 
-            BlogService.updateBlog(post.id, updatedPost, function (success) {
+            BlogService.updateBlog(post.id, JSON.stringify(updatedPost), function (success) {
                 $mdDialog.hide();
             }, function (error) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Couldn't update post");
