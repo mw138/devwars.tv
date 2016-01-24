@@ -6,10 +6,7 @@ import com.bezman.Reference.util.Util;
 import com.bezman.exception.NonDevWarsUserException;
 import com.bezman.exception.UserNotFoundException;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.ConnectedAccount;
-import com.bezman.model.TwitchPointStorage;
-import com.bezman.model.User;
-import com.bezman.model.UserSession;
+import com.bezman.model.*;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import org.hibernate.Query;
@@ -326,6 +323,31 @@ public class UserService {
 
         user.setAvatarURL(pathForProfilePictureForUser(user));
         session.merge(user);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void updateInfoForUser(User user, String username, String url, String company, String location) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        user = (User) session.merge(user);
+        user.setUsername(username);
+        user.setUrl(url);
+        user.setLocation(location);
+        user.setCompany(company);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void useUsernameChange(User user) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        UserInventory inventory = (UserInventory) session.merge(user.getInventory());
+        inventory.setUsernameChanges(inventory.getUsernameChanges() - 1);
 
         session.getTransaction().commit();
         session.close();

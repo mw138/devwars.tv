@@ -2,6 +2,7 @@ package com.bezman.Reference.util;
 
 import com.bezman.Reference.EmailThread;
 import com.bezman.Reference.Reference;
+import com.bezman.model.UserInventory;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
@@ -97,6 +98,7 @@ public class Util {
         if (value.isEmpty()) {
             if (Timestamp.class == clazz) return new Timestamp(new Date().getTime());
             if (Date.class == clazz) return new Date();
+            if (UserInventory.class == clazz) return new UserInventory();
         }
 
         if (Boolean.class == clazz) return Boolean.parseBoolean(value);

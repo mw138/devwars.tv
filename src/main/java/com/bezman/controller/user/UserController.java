@@ -196,7 +196,6 @@ public class UserController extends BaseController {
             user.setEmail(email);
             user.setPassword(security.hash(password));
             user.setRole(User.Role.PENDING);
-            user.setAvatarChanges(1);
 
             session.save(user);
             session.flush();
@@ -692,30 +691,17 @@ public class UserController extends BaseController {
      */
     @PreAuthorization(minRole = User.Role.PENDING)
     @RequestMapping("/updateinfo")
-    public ResponseEntity updateInfo(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity updateInfo(@AuthedUser User user,
                                      @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "url", required = false) String url,
                                      @RequestParam(value = "company", required = false) String company,
                                      @RequestParam(value = "location", required = false) String location) {
-        User user = (User) request.getAttribute("user");
-
-        if (username != null && !user.getUsername().equalsIgnoreCase(username)) {
-            user.setUsername(username);
-        }
-
-        if (location != null) {
-            user.setLocation(location);
-        }
-
-        if (url != null) {
-            user.setUrl(url);
-        }
-
-        if (company != null) {
-            user.setCompany(company);
-        }
-
-        DatabaseUtil.mergeObjects(false, user);
+        if (!user.getUsername().equals(username) && user.getInventory().getUsernameChanges() > 0) {
+            userService.updateInfoForUser(user, username, url, company, location);
+            userService.useUsernameChange(user);
+        } else if (user.getUsername().equals(username))
+            userService.updateInfoForUser(user, username, url, company, location);
+        else return new ResponseEntity("Not Enough Username Changes", HttpStatus.CONFLICT); //I_AM_A_TEAPOT(418, "I\'m a teapot"),
 
         return new ResponseEntity("", HttpStatus.OK);
     }

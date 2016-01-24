@@ -3,6 +3,7 @@ package com.bezman.model;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.HibernateDefault;
+import com.bezman.annotation.PreFlush;
 import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
@@ -87,9 +88,6 @@ public class User extends BaseModel {
     @HibernateDefault("5")
     private Integer referredUsers;
 
-    @HibernateDefault("1")
-    private Integer avatarChanges;
-
     @HibernateDefault("/assets/img/default-avatar.png")
     private String avatarURL;
 
@@ -103,9 +101,6 @@ public class User extends BaseModel {
 
     private String location, url, company;
 
-    @HibernateDefault("1")
-    private Integer usernameChanges;
-
     @HibernateDefault("0")
     private Integer score;
 
@@ -116,6 +111,9 @@ public class User extends BaseModel {
 
     @HibernateDefault("0")
     private Integer gamesWatched;
+
+    @HibernateDefault
+    private UserInventory inventory;
 
     @JsonIgnore
     public boolean isNative() {
@@ -182,14 +180,6 @@ public class User extends BaseModel {
 
     public boolean canBuyItem(ShopItem item) {
         return this.getRanking().getPoints() >= item.getPrice() && this.rank.getLevel() >= item.getRequiredLevel();
-    }
-
-    public void purchaseItem(ShopItem item) {
-        this.getRanking().setPoints(this.getRanking().getPoints() - item.getPrice());
-
-        Activity activity = new Activity(this, this, "Purchased : " + item.getName(), -1 * item.getPrice(), 0);
-        DatabaseUtil.saveObjects(false, activity);
-        DatabaseUtil.updateObjects(false, this.getRanking());
     }
 
     public List<Badge> tryAllBadges() {
@@ -365,6 +355,11 @@ public class User extends BaseModel {
         }
 
         return false;
+    }
+
+    @PreFlush
+    public void preFlush() {
+        this.getInventory().setUser(this);
     }
 
     @PostLoad

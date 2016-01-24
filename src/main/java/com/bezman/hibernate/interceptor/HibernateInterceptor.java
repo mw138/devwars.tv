@@ -54,7 +54,11 @@ public class HibernateInterceptor extends EmptyInterceptor {
 
                     try {
                         if (hibernateDefault != null && field.get(object) == null) {
-                            field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
+                            Object generatedObject = Util.toObject(field.getType(), hibernateDefault.value());
+
+                            field.set(object, generatedObject);
+
+                            HibernateInterceptor.loadEntityDefaults(generatedObject);
                         }
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();

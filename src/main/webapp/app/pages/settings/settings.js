@@ -216,11 +216,19 @@ angular.module('app.settings', [
         };
 
         $scope.updateInfo = function (profile) {
-            UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function (success) {
-                location.reload();
-            }, function (error) {
-                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
-            })
+            AuthService.getUser()
+                .then(function (user){
+                    if(user.username !== profile.username){
+                        if(user.inventory.usernameChanges < 1) {
+                            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must purchase a username change");
+                            profile.username =  user.username;
+                        }
+                    }
+                    
+                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, angular.noop, function (error) {
+                        ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
+                    })
+                }, angular.noop);
         };
 
         $scope.$watch("selectedAvatarImage", function (oldVal, newVal) {
