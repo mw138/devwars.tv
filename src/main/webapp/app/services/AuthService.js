@@ -126,7 +126,7 @@ angular.module("app.AuthService", [])
             var deferred = $q.defer();
 
             $http({
-                url: "/v1/user"
+                url: "/v1/user/"
             }).then(function (success) {
                 deferred.resolve(success.data);
             }, function (error) {
