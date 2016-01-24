@@ -3,6 +3,7 @@ package com.bezman.model;
 import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.annotation.HibernateDefault;
+import com.bezman.annotation.PreFlush;
 import com.bezman.annotation.UserPermissionFilter;
 import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
@@ -354,6 +355,11 @@ public class User extends BaseModel {
         }
 
         return false;
+    }
+
+    @PreFlush
+    public void preFlush() {
+        this.getInventory().setUser(this);
     }
 
     @PostLoad
