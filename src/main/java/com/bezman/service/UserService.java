@@ -15,6 +15,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -348,6 +349,17 @@ public class UserService {
 
         UserInventory inventory = (UserInventory) session.merge(user.getInventory());
         inventory.setUsernameChanges(inventory.getUsernameChanges() - 1);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void useAvatarChange(User user) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        UserInventory inventory = (UserInventory) session.merge(user.getInventory());
+        inventory.setAvatarChanges(inventory.getAvatarChanges() - 1);
 
         session.getTransaction().commit();
         session.close();

@@ -615,8 +615,11 @@ public class UserController extends BaseController {
     @RequestMapping("/changeavatar")
     public ResponseEntity changeAvatar(@AuthedUser User user,
                                        @RequestParam("file") MultipartFile image) throws IOException, DbxException {
-        userService.changeProfilePictureForUser(user, image.getInputStream());
 
+        if (user.getInventory().getAvatarChanges() > 0) {
+            userService.changeProfilePictureForUser(user, image.getInputStream());
+            userService.useAvatarChange(user);
+        } else return new ResponseEntity("Not Enough Avatar Changes", HttpStatus.CONFLICT);
         return new ResponseEntity("Successfully change profile picture", HttpStatus.OK);
     }
 
