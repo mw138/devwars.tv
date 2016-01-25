@@ -30,14 +30,14 @@ public class RedirectServlet {
             response.sendRedirect("/dashboard");
             return null;
         } else {
-            return "index";
+            return "/index.html";
         }
     }
 
 
     @RequestMapping(value = {"rules", "addgame", "passwordreset", "modDoc", "team", "blog/*", "settings/warrior", "modCP/createteams", "modCP/createobjectives", "modCP/livegame", "modCP/postgame", "/modCP/creategames", "/dashboard/badges", "/leaderboards", "/coming", "/dashboard", "/dashboard/profile", "/warrior-signup", "/about", "/blog", "/games", "/contact", "/help", "/shop", "/badges", "/profile", "/settings", "/settings/profile", "/settings/notifications", "/settings/connections", "/leaderboard", "/live", "/gpanel"})
     public String about(HttpServletRequest request, HttpServletResponse response) {
-        return "index";
+        return "/index.html";
     }
 
     @RequestMapping("/unauth")

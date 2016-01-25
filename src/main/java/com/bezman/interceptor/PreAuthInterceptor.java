@@ -4,6 +4,7 @@ import com.bezman.Reference.Reference;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.User;
 import com.bezman.service.UserService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Terence on 3/22/2015.
  */
 @Component
+@NoArgsConstructor
 public class PreAuthInterceptor implements HandlerInterceptor {
     @Autowired
     UserService userService;
