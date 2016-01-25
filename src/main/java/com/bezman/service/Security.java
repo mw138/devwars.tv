@@ -15,6 +15,7 @@ import java.security.MessageDigest;
  * Created by Terence on 12/22/2014.
  */
 @Service
+@SuppressWarnings("deprecation")
 public class Security {
 
     public String hash(String item) {

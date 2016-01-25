@@ -6,6 +6,7 @@ src/main/webapp/node_modules/
 src/main/webapp/bower_components/
 src/main/webapp/.sass-cache/
 src/main/webapp/.tmp/
+/${catalina.home}
 src/main/webapp/dist/*
 /src/main/webapp/index.min.html
 src/main/webapp/assets/sass/.sass-cache/
