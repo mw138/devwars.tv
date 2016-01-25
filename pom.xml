@@ -5,7 +5,7 @@
     <groupId>com.bezman</groupId>
     <artifactId>DevWars</artifactId>
     <version>A1</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -37,17 +37,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <warSourceExcludes>node_modules/**</warSourceExcludes>
-                    <warSourceExcludes>assets/sass/.sass-cache/**</warSourceExcludes>
-                    <warSourceExcludes>.sass-cache/**</warSourceExcludes>
-                </configuration>
-            </plugin>
-
+            
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
