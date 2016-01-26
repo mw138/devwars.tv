@@ -46,11 +46,6 @@ public class RedirectServlet {
         return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.FORBIDDEN);
     }
 
-    @RequestMapping("/challenge")
-    public String challenge() {
-        return "/challenge/index";
-    }
-
     @RequestMapping("/codeview")
     public String codeView() {
         return "/codeview/index";

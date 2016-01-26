@@ -38,7 +38,7 @@ public class FacebookProvider implements IProvider {
                 if (meJSONObject != null) {
                     User user = new User();
 
-                    user.setUsername((String) meJSONObject.get("name") + Util.randomNumbers(4));
+                    user.setUsername(meJSONObject.get("name") + Util.randomNumbers(4));
                     user.setEmail((String) meJSONObject.get("email"));
                     user.setRole(User.Role.USER);
                     user.setProvider("FACEBOOK");

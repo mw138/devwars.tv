@@ -39,7 +39,7 @@ public class GoogleProvider implements IProvider {
 
             User user = new User();
             String email = (String) ((JSONObject) ((JSONArray) userObject.get("emails")).get(0)).get("value");
-            String username = (String) userObject.get("displayName") + Util.randomNumbers(4);
+            String username = userObject.get("displayName") + Util.randomNumbers(4);
             String providerID = (String) userObject.get("id");
             User.Role role = User.Role.USER;
 

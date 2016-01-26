@@ -8,14 +8,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import javax.persistence.PostLoad;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
 
 public class DatabaseManager implements IInit {
     public static SessionFactory sessionFactory;

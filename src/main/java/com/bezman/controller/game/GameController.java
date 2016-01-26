@@ -243,6 +243,7 @@ public class GameController {
      *
      * @return The updated Game
      */
+    @SuppressWarnings("MVCPathVariableInspection")
     @PreAuthorization(minRole = User.Role.ADMIN)
     @RequestMapping(value = "/{id}/update", method = {RequestMethod.POST})
     public ResponseEntity editGame(@PathModel("id") Game game, @JSONParam("game") Game newGame) throws IOException, UnirestException {

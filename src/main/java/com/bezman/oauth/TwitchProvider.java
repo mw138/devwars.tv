@@ -35,7 +35,7 @@ public class TwitchProvider implements IProvider {
 
                 User user = new User();
                 user.setEmail((String) userJSONObject.get("email"));
-                user.setUsername((String) userJSONObject.get("display_name") + Util.randomNumbers(4));
+                user.setUsername(userJSONObject.get("display_name") + Util.randomNumbers(4));
                 user.setRole(User.Role.USER);
                 user.setProvider("TWITCH");
                 user.setProviderID(String.valueOf(userJSONObject.get("_id")));
