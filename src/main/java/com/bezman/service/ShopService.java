@@ -1,9 +1,7 @@
 package com.bezman.service;
 
-import com.bezman.hibernate.interceptor.HibernateInterceptor;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.Activity;
-import com.bezman.model.Objective;
 import com.bezman.model.ShopItem;
 import com.bezman.model.User;
 import org.hibernate.Session;

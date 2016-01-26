@@ -29,7 +29,7 @@ public class UserPermissionSerializer extends JsonSerializer<Object> implements 
 
     @Override
     public void serialize(Object o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-        ArrayList<Field> fields = new ArrayList<Field>(Arrays.asList(o.getClass().getDeclaredFields()));
+        ArrayList<Field> fields = new ArrayList<>(Arrays.asList(o.getClass().getDeclaredFields()));
 
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = sra.getRequest();

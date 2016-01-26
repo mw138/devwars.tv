@@ -24,9 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by Terence on 5/27/2015.
- */
 @Controller
 @RequestMapping("/v1/warrior")
 public class WarriorController {

@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by Terence on 5/27/2015.
- */
 @Controller
 @RequestMapping("/v1/shop")
 public class ShopController {

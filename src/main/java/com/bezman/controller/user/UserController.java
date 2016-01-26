@@ -44,9 +44,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-/**
- * Created by Terence on 1/26/2015.
- */
 @Controller
 @RequestMapping(value = "/v1/user")
 public class UserController extends BaseController {
@@ -684,9 +681,6 @@ public class UserController extends BaseController {
     /**
      * Method to update the user's personal information
      *
-     * @param request
-     * @param response
-     * @param username
      * @param url
      * @param company
      * @param location
@@ -940,7 +934,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/notifications/read", method = RequestMethod.POST)
     public ResponseEntity markNotificationsAsRead(@JSONParam("notifications") Notification[] notificationList, @AuthedUser User user, SessionImpl session) {
         List notificationIDs = Arrays.asList(notificationList).stream()
-                .map(a -> a.getId())
+                .map(Notification::getId)
                 .collect(Collectors.toList());
 
         if (notificationList.length > 0) {

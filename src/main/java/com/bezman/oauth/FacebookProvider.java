@@ -8,9 +8,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 3/27/2015.
- */
 public class FacebookProvider implements IProvider {
     public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException {
         String accessTokenJSON = Unirest.get("https://graph.facebook.com/v2.3/oauth/access_token")

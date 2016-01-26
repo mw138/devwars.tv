@@ -10,7 +10,6 @@ import com.bezman.request.model.LegacyGame;
 import com.bezman.service.*;
 import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
-import com.dropbox.core.v1.DbxEntry;
 import com.google.common.cache.LoadingCache;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -32,10 +31,8 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -802,27 +799,25 @@ public class GameController {
         Player player = Reference.objectMapper.readValue(json, Player.class);
         player.setTeam(team);
 
-        if (player != null) {
-            Game game = gameService.getGame(id);
+        Game game = gameService.getGame(id);
 
-            if (game != null) {
-                Player oldPlayer = playerService.getPlayer(playerID);
+        if (game != null) {
+            Player oldPlayer = playerService.getPlayer(playerID);
 
-                if (oldPlayer != null) {
-                    Session session = DatabaseManager.getSession();
-                    session.beginTransaction();
+            if (oldPlayer != null) {
+                Session session = DatabaseManager.getSession();
+                session.beginTransaction();
 
-                    session.delete(oldPlayer);
-                    session.save(player);
+                session.delete(oldPlayer);
+                session.save(player);
 
-                    session.getTransaction().commit();
+                session.getTransaction().commit();
 
-                    session.refresh(player);
+                session.refresh(player);
 
-                    session.close();
+                session.close();
 
-                    return new ResponseEntity(player, HttpStatus.OK);
-                }
+                return new ResponseEntity(player, HttpStatus.OK);
             }
         }
 

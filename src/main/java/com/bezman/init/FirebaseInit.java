@@ -5,9 +5,6 @@ import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-/**
- * Created by teren on 8/19/2015.
- */
 public class FirebaseInit implements IInit {
 
     @Override

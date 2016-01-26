@@ -24,9 +24,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 
-/**
- * Created by Terence on 8/5/2015.
- */
 @Controller
 @RequestMapping("/v1/team")
 public class TeamController extends BaseController {

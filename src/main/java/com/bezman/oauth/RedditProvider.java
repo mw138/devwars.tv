@@ -8,9 +8,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 3/24/2015.
- */
 public class RedditProvider implements IProvider {
 
     public static User userForCodeWithKeys(String code, String access, String secret, String redirect) throws UnirestException {

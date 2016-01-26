@@ -27,9 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 
-/**
- * Created by Terence on 3/23/2015.
- */
 @Controller
 @RequestMapping("/v1/oauth")
 public class OAuthController {

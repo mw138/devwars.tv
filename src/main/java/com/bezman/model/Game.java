@@ -65,9 +65,7 @@ public class Game extends BaseModel {
         session.beginTransaction();
 
         for (Team team : this.getTeams().values()) {
-            for (Player player : team.getPlayers()) {
-                session.delete(player);
-            }
+            team.getPlayers().forEach(session::delete);
 
             session.delete(team);
         }

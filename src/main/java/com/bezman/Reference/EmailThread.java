@@ -5,9 +5,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-/**
- * Created by Terence on 12/22/2014.
- */
 public class EmailThread extends Thread {
 
     public String username, password, subject, message, recipient;

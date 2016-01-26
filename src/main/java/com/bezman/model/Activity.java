@@ -9,9 +9,6 @@ import lombok.Setter;
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- * Created by Terence on 4/27/2015.
- */
 @NoArgsConstructor
 @Getter
 @Setter

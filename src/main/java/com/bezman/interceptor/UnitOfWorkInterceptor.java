@@ -24,7 +24,7 @@ public class UnitOfWorkInterceptor implements HandlerInterceptor {
             if (unitOfWork != null) {
                 httpServletRequest.setAttribute("session", DatabaseManager.getSession());
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         return true;
@@ -42,7 +42,7 @@ public class UnitOfWorkInterceptor implements HandlerInterceptor {
                 Session session = (Session) httpServletRequest.getAttribute("session");
                 session.close();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

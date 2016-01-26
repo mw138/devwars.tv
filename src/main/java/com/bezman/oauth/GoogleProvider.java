@@ -10,9 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 3/24/2015.
- */
 public class GoogleProvider implements IProvider {
 
     public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException {
@@ -40,21 +37,19 @@ public class GoogleProvider implements IProvider {
 
             System.out.println(userObject.toJSONString());
 
-            if (userObject != null) {
-                User user = new User();
-                String email = (String) ((JSONObject) ((JSONArray) userObject.get("emails")).get(0)).get("value");
-                String username = (String) userObject.get("displayName") + Util.randomNumbers(4);
-                String providerID = (String) userObject.get("id");
-                com.bezman.model.User.Role role = com.bezman.model.User.Role.USER;
+            User user = new User();
+            String email = (String) ((JSONObject) ((JSONArray) userObject.get("emails")).get(0)).get("value");
+            String username = (String) userObject.get("displayName") + Util.randomNumbers(4);
+            String providerID = (String) userObject.get("id");
+            User.Role role = User.Role.USER;
 
-                user.setEmail(email);
-                user.setUsername(username);
-                user.setRole(role);
-                user.setProvider("GOOGLE");
-                user.setProviderID(providerID);
+            user.setEmail(email);
+            user.setUsername(username);
+            user.setRole(role);
+            user.setProvider("GOOGLE");
+            user.setProviderID(providerID);
 
-                return user;
-            }
+            return user;
         }
 
         return null;

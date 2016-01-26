@@ -15,9 +15,6 @@ import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Created by Terence on 12/22/2014.
- */
 public class Util {
 
     static Random random = new Random();

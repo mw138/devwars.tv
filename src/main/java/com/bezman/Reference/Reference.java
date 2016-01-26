@@ -22,9 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * Created by Terence on 12/22/2014.
- */
 public class Reference {
     public static String rootURL = "http://devwars.tv";
     //        public static String rootURL = "http://local.bezcode.com:9090";
@@ -87,6 +84,7 @@ public class Reference {
         for (int i = 0; i < query.length(); i++) {
             if (query.charAt(i) == '?') {
                 try {
+                    assert statement != null;
                     statement.setObject(valIndex, values[valIndex - 1]);
                     valIndex++;
                 } catch (Exception e) {

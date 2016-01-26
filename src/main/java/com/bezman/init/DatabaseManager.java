@@ -17,9 +17,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by Terence on 1/19/2015.
- */
 public class DatabaseManager implements IInit {
     public static SessionFactory sessionFactory;
 
@@ -52,20 +49,5 @@ public class DatabaseManager implements IInit {
         }
 
         return sessionFactory.openSession();
-    }
-
-    public static void clearCache() {
-        Map classMap = sessionFactory.getAllClassMetadata();
-        Collection values = classMap.values();
-        Iterator iter = values.iterator();
-        while (iter.hasNext()) {
-            ClassMetadata meta = (ClassMetadata) iter.next();
-            sessionFactory.evict(meta.getMappedClass());
-        }
-
-        sessionFactory.getCache().evictQueryRegions();
-        sessionFactory.getCache().evictCollectionRegions();
-        sessionFactory.getCache().evictEntityRegions();
-        sessionFactory.getCache().evictNaturalIdRegions();
     }
 }

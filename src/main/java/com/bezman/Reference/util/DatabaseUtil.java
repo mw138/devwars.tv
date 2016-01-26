@@ -6,9 +6,6 @@ import org.hibernate.Session;
 
 import java.util.List;
 
-/**
- * Created by Terence on 1/24/2015.
- */
 public class DatabaseUtil {
 
     public static Object getFirstFromQuery(Query query) {

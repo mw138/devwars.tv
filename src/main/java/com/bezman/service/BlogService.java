@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by Terence on 4/11/2015.
- */
 @Service
 public class BlogService {
 

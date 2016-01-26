@@ -8,9 +8,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 3/26/2015.
- */
 public class TwitchProvider implements IProvider {
 
     public static User userForCodeWithKeys(String code, String access, String secret, String redirect) {

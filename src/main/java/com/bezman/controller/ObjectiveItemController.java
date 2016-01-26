@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by Terence on 5/5/2015.
- */
 @Controller
 @RequestMapping("/v1/objective")
 public class ObjectiveItemController extends BaseController {

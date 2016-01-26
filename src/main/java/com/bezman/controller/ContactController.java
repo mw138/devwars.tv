@@ -11,9 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * Created by Terence on 4/28/2015.
- */
 @Controller
 @RequestMapping("/v1/contact")
 public class ContactController {
