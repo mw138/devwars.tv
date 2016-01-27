@@ -87,7 +87,7 @@ Overview
     |   |   |     |     ├── services       - Angular services.
     |   |   |     ├── assets
     |   |   |     |     ├── email
-    
+    ```
     
     ---
     ## License:
