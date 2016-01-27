@@ -14,9 +14,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Created by Terence on 3/22/2015.
- */
 @Component
 public class PreAuthInterceptor implements HandlerInterceptor {
     @Autowired
@@ -60,10 +57,11 @@ public class PreAuthInterceptor implements HandlerInterceptor {
             response.getWriter().println("You need to be at least : " + requiredRole.toString());
             response.setStatus(403);
             return false;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
+
         }
 
-        return successful;
+        return true;
     }
 
     @Override

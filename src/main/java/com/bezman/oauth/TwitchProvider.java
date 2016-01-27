@@ -8,9 +8,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 3/26/2015.
- */
 public class TwitchProvider implements IProvider {
 
     public static User userForCodeWithKeys(String code, String access, String secret, String redirect) {
@@ -38,7 +35,7 @@ public class TwitchProvider implements IProvider {
 
                 User user = new User();
                 user.setEmail((String) userJSONObject.get("email"));
-                user.setUsername((String) userJSONObject.get("display_name") + Util.randomNumbers(4));
+                user.setUsername(userJSONObject.get("display_name") + Util.randomNumbers(4));
                 user.setRole(User.Role.USER);
                 user.setProvider("TWITCH");
                 user.setProviderID(String.valueOf(userJSONObject.get("_id")));

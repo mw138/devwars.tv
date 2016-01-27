@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by teren on 9/14/2015.
- */
 @Component
 public class PastGamesCache extends CacheLoader<String, HashMap> {
     @Autowired

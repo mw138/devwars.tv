@@ -28,7 +28,7 @@ public class TransactionalInterceptor implements HandlerInterceptor {
 
                 httpServletRequest.setAttribute("session", session);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         return true;

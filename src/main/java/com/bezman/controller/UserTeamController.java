@@ -26,9 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by Terence on 7/21/2015.
- */
 @Controller
 @RequestMapping("/v1/teams")
 public class UserTeamController {

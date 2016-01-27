@@ -7,9 +7,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by Terence on 4/2/2015.
- */
 @Service
 public class PlayerService {
 

@@ -67,7 +67,7 @@ public class UserTeam extends BaseModel {
         Session session = DatabaseManager.getSession();
 
         this.rank = (Rank) session.createCriteria(Rank.class)
-                .add(Restrictions.le("xpRequired", this.getXp().intValue()))
+                .add(Restrictions.le("xpRequired", this.getXp()))
                 .addOrder(Order.desc("xpRequired"))
                 .setMaxResults(1)
                 .uniqueResult();

@@ -1,8 +1,5 @@
 package com.bezman.request.model;
 
-/**
- * Created by Terence on 7/7/2015.
- */
 public class EarnedBet {
 
     public String twitchUsername;

@@ -8,7 +8,6 @@ import com.bezman.controller.TournamentController;
 import com.bezman.controller.UserTeamController;
 import com.bezman.controller.game.GameController;
 import com.bezman.controller.user.UserController;
-import com.bezman.service.TournamentService;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -134,24 +133,24 @@ public class AngularServiceBuilder {
 
                             pathParams.keySet()
                                     .stream()
-                                    .forEach(p -> methodParamsList.add(p));
+                                    .forEach(methodParamsList::add);
 
                             pathModels.keySet().stream()
-                                    .forEach(s -> methodParamsList.add(s));
+                                    .forEach(methodParamsList::add);
 
                             queryParams.keySet()
                                     .stream()
                                     .filter(p -> queryParams.get(p).required())
-                                    .forEach(p -> methodParamsList.add(p));
+                                    .forEach(methodParamsList::add);
 
                             queryParams.keySet()
                                     .stream()
                                     .filter(p -> !queryParams.get(p).required())
-                                    .forEach(p -> methodParamsList.add(p));
+                                    .forEach(methodParamsList::add);
 
                             jsonParams.keySet()
                                     .stream()
-                                    .forEach(p -> methodParamsList.add(p));
+                                    .forEach(methodParamsList::add);
 
                             methodParamsList.add("successCallback");
                             methodParamsList.add("errorCallback");

@@ -7,9 +7,6 @@ import com.mashape.unirest.http.Unirest;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 5/16/2015.
- */
 public class GithubProvider implements IProvider {
 
     public static User userForCodeWithRedirect(String code, String redirect, String client, String secret) {

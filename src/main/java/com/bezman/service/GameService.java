@@ -27,9 +27,6 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
 
-/**
- * Created by Terence on 1/21/2015.
- */
 @Service
 public class GameService {
     @Autowired

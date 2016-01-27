@@ -7,9 +7,6 @@ import org.hibernate.Session;
 
 import java.util.List;
 
-/**
- * Created by Terence on 1/24/2015.
- */
 public class BaseModel {
     public static BaseModel byID(Class hibernateClass, int id) {
         BaseModel obj = null;

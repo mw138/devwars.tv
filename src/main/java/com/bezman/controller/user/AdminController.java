@@ -18,9 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Terence on 8/2/2015.
- */
 @RequestMapping("/v1/admin")
 @Controller
 public class AdminController {
@@ -64,6 +61,7 @@ public class AdminController {
                 session.getTransaction().commit();
                 session.close();
             } catch (NumberFormatException n) {
+                n.printStackTrace();
             }
         });
 
@@ -85,6 +83,7 @@ public class AdminController {
                 session.getTransaction().commit();
                 session.close();
             } catch (NumberFormatException n) {
+                n.printStackTrace();
             }
         });
 

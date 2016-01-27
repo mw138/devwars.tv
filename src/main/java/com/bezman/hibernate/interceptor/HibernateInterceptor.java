@@ -11,9 +11,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Iterator;
 
-/**
- * Created by Terence on 7/1/2015.
- */
 public class HibernateInterceptor extends EmptyInterceptor {
 
     @Override
@@ -78,9 +75,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
             if (method.getAnnotation(annotation) != null && method.getParameterCount() == 0) {
                 try {
                     method.invoke(obj, null);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
             }

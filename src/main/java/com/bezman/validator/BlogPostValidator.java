@@ -5,9 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-/**
- * Created by teren on 8/25/2015.
- */
 @Configuration
 public class BlogPostValidator implements Validator {
 

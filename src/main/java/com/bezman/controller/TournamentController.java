@@ -2,7 +2,6 @@ package com.bezman.controller;
 
 import com.bezman.annotation.AuthedUser;
 import com.bezman.annotation.JSONParam;
-import com.bezman.annotation.PathModel;
 import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.Game;
 import com.bezman.model.TeamGameSignupUser;
@@ -11,7 +10,6 @@ import com.bezman.model.User;
 import com.bezman.service.GameService;
 import com.bezman.service.TournamentService;
 import com.bezman.service.UserTeamService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

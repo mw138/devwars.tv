@@ -1,8 +1,5 @@
 package com.bezman.Reference;
 
-/**
- * Created by Terence on 1/24/2015.
- */
 public class HttpMessages {
 
     public static final String

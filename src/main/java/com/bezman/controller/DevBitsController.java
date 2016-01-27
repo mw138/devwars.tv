@@ -27,9 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Terence on 5/15/2015.
- */
 @Controller
 @RequestMapping("/v1/devbits")
 public class DevBitsController {

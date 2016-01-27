@@ -25,6 +25,7 @@ public class FileStorage {
         try {
             dropbox.dbxClientV2.files.delete(path);
         } catch (DbxException e) {
+            e.printStackTrace();
         }
 
         return dropbox.dbxClientV2.files.uploadBuilder(path).run(inputStream);

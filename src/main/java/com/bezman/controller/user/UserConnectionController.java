@@ -35,9 +35,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Optional;
 
-/**
- * Created by root on 4/25/15.
- */
 @Controller
 @RequestMapping("/v1/connect")
 public class UserConnectionController {

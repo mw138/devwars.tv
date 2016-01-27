@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Created by Terence on 2/25/2015.
- */
 @Controller
 @RequestMapping("/")
 public class RedirectServlet {
@@ -47,11 +44,6 @@ public class RedirectServlet {
         jsonObject.put("required", required);
 
         return new ResponseEntity(jsonObject.toJSONString(), HttpStatus.FORBIDDEN);
-    }
-
-    @RequestMapping("/challenge")
-    public String challenge() {
-        return "/challenge/index";
     }
 
     @RequestMapping("/codeview")

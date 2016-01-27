@@ -15,15 +15,11 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by Terence on 1/21/2015.
- */
 @Service
 public class UserService {
     @Autowired

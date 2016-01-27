@@ -218,14 +218,21 @@ angular.module('app.settings', [
         $scope.updateInfo = function (profile) {
             AuthService.getUser()
                 .then(function (user){
+                    var usernameChange = true;
                     if(user.username !== profile.username){
                         if(user.inventory.usernameChanges < 1) {
-                            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must purchase a username change");
+                            usernameChange = false;
                             profile.username =  user.username;
                         }
                     }
                     
-                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, angular.noop, function (error) {
+                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function() {
+                        if(usernameChange == false) {
+                            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Everything but username saved. Please purchase username change from bit shop.");
+                        } else {
+                            ToastService.showDevwarsToast("fa-check-circle", "Success", "Changes saved");
+                        }
+                    }, function (error) {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
                     })
                 }, angular.noop);

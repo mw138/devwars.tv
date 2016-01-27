@@ -20,9 +20,6 @@ import org.hibernate.criterion.Restrictions;
 import javax.persistence.PostLoad;
 import java.util.*;
 
-/**
- * Created by Terence on 12/22/2014.
- */
 @JsonSerialize(using = UserPermissionSerializer.class)
 @Getter
 @Setter

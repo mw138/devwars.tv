@@ -8,9 +8,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-/**
- * Created by Terence on 3/24/2015.
- */
 public class RedditProvider implements IProvider {
 
     public static User userForCodeWithKeys(String code, String access, String secret, String redirect) throws UnirestException {
@@ -41,7 +38,7 @@ public class RedditProvider implements IProvider {
         if (meJSONObject != null) {
             User user = new User();
             user.setEmail(null);
-            user.setUsername((String) meJSONObject.get("name") + Util.randomNumbers(4));
+            user.setUsername(meJSONObject.get("name") + Util.randomNumbers(4));
             user.setRole(User.Role.USER);
             user.setProvider("REDDIT");
             user.setProviderID((String) meJSONObject.get("id"));
