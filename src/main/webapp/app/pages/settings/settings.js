@@ -226,10 +226,10 @@ angular.module('app.settings', [
                         }
                     }
                     
-                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function(){
-                        if(usernameChange == false){
-                            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Everything but username saved. Please purchase" +
-                                " username change from bit shop."); } else {
+                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function() {
+                        if(usernameChange == false) {
+                            ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Everything but username saved. Please purchase username change from bit shop.");
+                        } else {
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Changes saved");
                         }
                     }, function (error) {
