@@ -89,5 +89,5 @@ Overview
     |   |   |     |     ├── email
     
 ---
-  ## License:
-  DevWars is licensed with a GPL V3 License
+## License:
+DevWars is licensed with a GPL V3 License
