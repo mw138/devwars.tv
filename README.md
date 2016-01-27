@@ -1,4 +1,4 @@
-# DevWars Twitch Bot <img align="right" src="https://raw.githubusercontent.com/DevWars/DW_Bot/master/logo.png">
+# DevWars <img align="right" src="https://raw.githubusercontent.com/DevWars/DW_Bot/master/logo.png">
 
 *Official Website for [Devwars.tv](http://devwars.tv/)* 
 
