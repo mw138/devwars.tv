@@ -1,4 +1,4 @@
-# DevWars <img align="right" src="https://raw.githubusercontent.com/DevWars/DW_Bot/master/logo.png">
+# DevWars <img align="right" src="http://i.imgur.com/D9giOVL.png">
 
 *Official Website for [Devwars.tv](http://devwars.tv/)* 
 
