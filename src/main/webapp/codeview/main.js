@@ -69,7 +69,18 @@ function set(action) {
         console.log('Updating', action);
         updateElement(action.id, clearText(data));
         hljs.highlightBlock(document.getElementById(action.id));
+        addLineNumbers(action.id);
     });
+}
+
+function addLineNumbers(elementId) {
+    var pre = document.getElementById(elementId);
+    pre.innerHTML = '<span class="line-number"></span>' + pre.innerHTML + '<span class="cl"></span>';
+    var num = pre.innerHTML.split(/\n|<br>/).length;
+    for (var i = 0; i < num; i++) {
+        var line_num = pre.getElementsByTagName('span')[0];
+        line_num.innerHTML += '<span>' + (i+1) + '</span>';
+    }
 }
 
 function clearText(data) {
