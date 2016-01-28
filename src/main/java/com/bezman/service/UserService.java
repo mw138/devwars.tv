@@ -360,4 +360,15 @@ public class UserService {
         session.getTransaction().commit();
         session.close();
     }
+
+    public void useTeamNameChange(User user) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        UserInventory inventory = (UserInventory) session.merge(user.getInventory());
+        inventory.setTeamNameChanges(inventory.getTeamNameChanges() - 1);
+
+        session.getTransaction().commit();
+        session.close();
+    }
 }

@@ -5,6 +5,7 @@ import com.bezman.annotation.PreAuthorization;
 import com.bezman.annotation.Transactional;
 import com.bezman.annotation.UnitOfWork;
 import com.bezman.model.*;
+import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
 import com.dropbox.core.DbxException;
 import org.hibernate.internal.SessionImpl;
@@ -36,6 +37,8 @@ public class UserTeamController {
     @Autowired
     UserTeamService userTeamService;
 
+    @Autowired
+    UserService userService;
     /**
      * Returns a team for a given ID
      *
@@ -379,4 +382,19 @@ public class UserTeamController {
 
         return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
     }
+
+    @RequestMapping("/changeteamname")
+    public ResponseEntity changeTeamName(@AuthedUser User user, @RequestParam("newName") String newName) {
+        if (!newName.equals(user.getOwnedTeam().getName()) && user.getInventory().getTeamNameChanges() > 0) {
+            userTeamService.changeTeamName(user.getOwnedTeam(), newName);
+            userService.useTeamNameChange(user);
+
+            return new ResponseEntity("Successfully Changed Team Name", HttpStatus.OK);
+        }
+        else if (user.getInventory().getTeamNameChanges() <= 0)
+            return new ResponseEntity("Not Enough Team Name Changes", HttpStatus.CONFLICT);
+
+        return new ResponseEntity("New Name same as Old Name", HttpStatus.CONFLICT);
+    }
+
 }

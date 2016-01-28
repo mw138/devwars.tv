@@ -236,6 +236,18 @@ public class UserTeamService {
         return userTeam != null;
     }
 
+    public void changeTeamName(UserTeam userTeam, String name) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        userTeam = (UserTeam) session.merge(userTeam);
+        userTeam.setName(name);
+
+        session.getTransaction().commit();
+        session.close();
+
+    }
+
     public boolean doesUserOwnUserTeam(User user, UserTeam userTeam) {
         return userTeam.getOwner().getId() == user.getId();
     }
@@ -247,4 +259,5 @@ public class UserTeamService {
     public boolean doesUserBelongToTeam(User user) {
         return user.getTeam() != null && user.getTeam().getOwner() != null;
     }
+
 }
