@@ -1,6 +1,6 @@
 <div class="leaderboardsView inner">
-	
-	
+
+
 	<div class="leaderboards">
 		<h1><i class="fa fa-trophy"></i>Leaderboards</h1>
 		<div class="leaderRow leaderRow--header">
@@ -13,8 +13,8 @@
 			<span class="gamesWon">GAMES WON</span>
 			<span class="ratio">RATIO</span>
 		</div> <!-- .leaderRow.leaderRow--header -->
-		
-		<div class="leaderRow" ng-repeat="user in users">
+
+		<a ng-href="/profile?username={{user.username}}" class="leaderRow" ng-repeat="user in users">
 			<span class="rank">{{$index + 1}}</span>
 			<span class="level">{{user.rank.level}}</span>
 			<span class="username">{{user.username}}</span>
@@ -23,14 +23,14 @@
 			<span class="games">{{user.gamesPlayed}}</span>
 			<span class="gamesWon">{{user.gamesWon}}</span>
 			<span class="ratio">{{(user.gamesWon / (user.gamesPlayed > 0.0 ? user.gamesPlayed : 1.0)) | number : 2 }}</span>
-		</div> <!-- .leaderRow -->
+		</a> <!-- .leaderRow -->
 
 		<div class="loadMore" ng-click="loadMore()">
 			Click To Load More
 		</div> <!-- .loadMore -->
-	
-	
+
+
 	</div> <!-- .leaderboards -->
-	
+
 
 </div> <!-- .leaderboardsView.inner -->
