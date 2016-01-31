@@ -1,18 +1,18 @@
 <md-dialog class="md-dialog-container--confirmDialog">
-    <i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i> <!-- .closeDialog -->
-    <div class="dialog-container">
+  <i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i> <!-- .closeDialog -->
+  <div class="dialog-container">
 
-        <div class="account-transfer-icons">
-            <i class="fa fa-user"></i>
-            <i class="fa fa-arrows-h"></i>
-            <i class="fa fa-user"></i>
-        </div>
-
-        <p class="dialog-container__message" ng-bind="message"></p>
-
-        <div class="dialog-container__actions" layout="row" layout-align="space-around center">
-            <button class="button" ng-click="$mdDialog.hide()">{{yes}}</button>
-            <button class="button button--warn" ng-click="$mdDialog.cancel()">{{no}}</button>
-        </div>
+    <div class="account-transfer-icons">
+      <i class="fa fa-user"></i>
+      <i class="fa fa-arrows-h"></i>
+      <i class="fa fa-user"></i>
     </div>
+
+    <p class="dialog-container__message" ng-bind="message"></p>
+
+    <div class="dialog-container__actions" layout="row" layout-align="space-around center">
+      <button class="button" ng-click="$mdDialog.hide()">{{yes}}</button>
+      <button class="button button--warn" ng-click="$mdDialog.cancel()">{{no}}</button>
+    </div>
+  </div>
 </md-dialog>

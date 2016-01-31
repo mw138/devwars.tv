@@ -1,6 +1,6 @@
 <div class="warriorRegView inner" ng-init="hasTS = false">
 
-    <div class="warrior-header">
+  <div class="warrior-header">
 		<span class="diamond-pattern--blue">
 			<span>&diams;</span>
 			<span>&diams;</span>
@@ -17,85 +17,91 @@
 			<span>&diams;</span>
 			<span>&diams;</span>
 		</span>
-        <img src="../../../assets/img/warrior-icon-filled.png" />
-    </div> <!-- .warrior-header -->
+    <img src="../../../assets/img/warrior-icon-filled.png"/>
+  </div> <!-- .warrior-header -->
 
-    <form class="warriorForm">
-        <h1>Become a DevWarrior</h1>
-        
-        
-		<h2 class="title--line"><span>About Yourself</span></h2>
-		<input type="text" placeholder="Name" ng-model="warrior.firstName"/>
-        <div class="split-inputs dateofbirth">
-			<span>D.O.B.</span>
-			<input type="text" placeholder="MM" ng-model="warrior.month"/>
-			<input type="text" placeholder="DD" ng-model="warrior.day"/>
-            <input type="text" placeholder="YYYY" ng-model="warrior.year"/>
-		</div>
-        <input type="email" ng-model="warrior.email" placeholder="Email" />
-        <input type="text" ng-model="warrior.company" placeholder="Company Name (Optional)" />
+  <form class="warriorForm">
+    <h1>Become a DevWarrior</h1>
 
-		<h2 class="title--line"><span>Skill Assessment</span></h2>
-        <div class="skillBox">          
-          	<div class="positionMain positionMain--html">
-				<div class="positionInfo">
-					<h6 class="positionName">HTML</h6>
-					<h6 class="skillName">{{ skillNames[warrior.htmlRate - 1] }}</h6>
-				</div> <!-- .positionInfo -->
-				<div class="skillMeter">
-					<span ng-class="{'html-hover': warrior.htmlRate >= i}" ng-repeat="i in getRange(1, 5) | reverse" ng-click="setHtml(i)"></span>
-				</div> <!-- .skillMeter -->
-				<p ng-bind="htmlTooltip"></p>
-			</div> <!-- .positionMain.positionMain--html -->
-			
-			<div class="positionMain positionMain--css">
-				<div class="positionInfo">
-					<h6 class="positionName">CSS</h6>
-                    <h6 class="skillName">{{ skillNames[warrior.cssRate - 1] }}</h6>
-				</div> <!-- .positionInfo -->
-				<div class="skillMeter">
-					<span ng-class="{'css-hover': warrior.cssRate >= i}" ng-repeat="i in getRange(1, 5) | reverse" ng-click="setCSS(i)"></span>
-				</div> <!-- .skillMeter -->
-				<p ng-bind="cssTooltip"></p>
-			</div> <!-- .positionMain.positionMain--css -->
 
-			<div class="positionMain positionMain--js">
-				<div class="positionInfo">
-					<h6 class="positionName">JAVASCRIPT</h6>
-                    <h6 class="skillName">{{ skillNames[warrior.jsRate - 1] }}</h6>
-				</div> <!-- .positionInfo -->
-				<div class="skillMeter">
-					<span ng-class="{'js-hover': warrior.jsRate >= i}" ng-repeat="i in getRange(1, 5) | reverse" ng-click="setJS(i)"></span>
-				</div> <!-- .skillMeter -->
-				<p class="no-margin-bottom" ng-bind="jsTooltip"></p>
-			</div> <!-- .positionMain.positionMain--js -->
+    <h2 class="title--line"><span>About Yourself</span></h2>
+    <input type="text" placeholder="Name" ng-model="warrior.firstName"/>
+    <div class="split-inputs dateofbirth">
+      <span>D.O.B.</span>
+      <input type="text" placeholder="MM" ng-model="warrior.month"/>
+      <input type="text" placeholder="DD" ng-model="warrior.day"/>
+      <input type="text" placeholder="YYYY" ng-model="warrior.year"/>
+    </div>
+    <input type="email" ng-model="warrior.email" placeholder="Email"/>
+    <input type="text" ng-model="warrior.company" placeholder="Company Name (Optional)"/>
 
-        </div> <!-- .skillBox -->
+    <h2 class="title--line"><span>Skill Assessment</span></h2>
+    <div class="skillBox">
+      <div class="positionMain positionMain--html">
+        <div class="positionInfo">
+          <h6 class="positionName">HTML</h6>
+          <h6 class="skillName">{{ skillNames[warrior.htmlRate - 1] }}</h6>
+        </div> <!-- .positionInfo -->
+        <div class="skillMeter">
+          <span ng-class="{'html-hover': warrior.htmlRate >= i}" ng-repeat="i in getRange(1, 5) | reverse"
+                ng-click="setHtml(i)"></span>
+        </div> <!-- .skillMeter -->
+        <p ng-bind="htmlTooltip"></p>
+      </div> <!-- .positionMain.positionMain--html -->
 
-		<h2 class="title--line"><span>Required Accounts</span></h2>
-        <div class="c9-register">
-            <a target="_blank" href="https://c9.io/web/sign-up/free"><img src="http://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/8389/vz1XuNqHTyfO4YsqI3f2" /></a>
-            <span>You must create a C9.io account to play</span>
-            <input type="text" placeholder="C9 username" ng-model="warrior.c9Name"/>
-        </div> <!-- .c9-register -->
-		
-		<div class="ts-register">
-            <a target="_blank" href="http://www.teamspeak.com/?page=downloads"><img src="http://gaming.sofurry.com/wp-content/uploads/2014/03/pre_1377468169__ts.png" /></a>
-			<span>You must have TeamSpeak installed to play</span>
-			<div class="toggleAccept">
-				<span ng-click="hasTS = true" ng-class="{selected: hasTS}" class="accept">I Have TS</span>
-				<span ng-click="hasTS = false" ng-class="{selected: !hasTS}" class="decline">I Don't Have TS</span>
-			</div> <!-- .toggleAccept -->
-		</div> <!-- .ts-register -->
-		<h2 class="title--line"><span>Public Introduction</span></h2>
-		<input type="text" placeholder="Country" ng-model="warrior.location"/>
-        <input type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
-        <input type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
-        <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
+      <div class="positionMain positionMain--css">
+        <div class="positionInfo">
+          <h6 class="positionName">CSS</h6>
+          <h6 class="skillName">{{ skillNames[warrior.cssRate - 1] }}</h6>
+        </div> <!-- .positionInfo -->
+        <div class="skillMeter">
+          <span ng-class="{'css-hover': warrior.cssRate >= i}" ng-repeat="i in getRange(1, 5) | reverse"
+                ng-click="setCSS(i)"></span>
+        </div> <!-- .skillMeter -->
+        <p ng-bind="cssTooltip"></p>
+      </div> <!-- .positionMain.positionMain--css -->
 
-        <button class="button" ng-click="register(warrior)" ng-hide="AuthService.user.warrior">Enter The Battlefield!</button>
-        <button class="button button--disabled" disabled ng-show="AuthService.user.warrior">Already Registered!</button>
-        <div class="gradient-bar"></div>
-    </form> <!-- form.warriorForm -->
+      <div class="positionMain positionMain--js">
+        <div class="positionInfo">
+          <h6 class="positionName">JAVASCRIPT</h6>
+          <h6 class="skillName">{{ skillNames[warrior.jsRate - 1] }}</h6>
+        </div> <!-- .positionInfo -->
+        <div class="skillMeter">
+          <span ng-class="{'js-hover': warrior.jsRate >= i}" ng-repeat="i in getRange(1, 5) | reverse"
+                ng-click="setJS(i)"></span>
+        </div> <!-- .skillMeter -->
+        <p class="no-margin-bottom" ng-bind="jsTooltip"></p>
+      </div> <!-- .positionMain.positionMain--js -->
+
+    </div> <!-- .skillBox -->
+
+    <h2 class="title--line"><span>Required Accounts</span></h2>
+    <div class="c9-register">
+      <a target="_blank" href="https://c9.io/web/sign-up/free"><img
+        src="http://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/8389/vz1XuNqHTyfO4YsqI3f2"/></a>
+      <span>You must create a C9.io account to play</span>
+      <input type="text" placeholder="C9 username" ng-model="warrior.c9Name"/>
+    </div> <!-- .c9-register -->
+
+    <div class="ts-register">
+      <a target="_blank" href="http://www.teamspeak.com/?page=downloads"><img
+        src="http://gaming.sofurry.com/wp-content/uploads/2014/03/pre_1377468169__ts.png"/></a>
+      <span>You must have TeamSpeak installed to play</span>
+      <div class="toggleAccept">
+        <span ng-click="hasTS = true" ng-class="{selected: hasTS}" class="accept">I Have TS</span>
+        <span ng-click="hasTS = false" ng-class="{selected: !hasTS}" class="decline">I Don't Have TS</span>
+      </div> <!-- .toggleAccept -->
+    </div> <!-- .ts-register -->
+    <h2 class="title--line"><span>Public Introduction</span></h2>
+    <input type="text" placeholder="Country" ng-model="warrior.location"/>
+    <input type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
+    <input type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
+    <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
+
+    <button class="button" ng-click="register(warrior)" ng-hide="AuthService.user.warrior">Enter The Battlefield!
+    </button>
+    <button class="button button--disabled" disabled ng-show="AuthService.user.warrior">Already Registered!</button>
+    <div class="gradient-bar"></div>
+  </form> <!-- form.warriorForm -->
 
 </div> <!-- .warriorRegView.inner -->

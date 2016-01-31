@@ -27,8 +27,8 @@ public class PastGamesCache extends CacheLoader<String, HashMap> {
     @Bean(name = "pastGamesLoadingCache")
     public LoadingCache<String, HashMap> pastGamesCache(PastGamesCache pastGamesCache) {
         return CacheBuilder.newBuilder()
-                .maximumSize(500)
-                .expireAfterWrite(30, TimeUnit.MINUTES)
-                .build(pastGamesCache);
+            .maximumSize(500)
+            .expireAfterWrite(30, TimeUnit.MINUTES)
+            .build(pastGamesCache);
     }
 }

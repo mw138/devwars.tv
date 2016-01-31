@@ -1,59 +1,59 @@
 <div class="gameControlPanelView">
 
-    <div class="menuBar" ng-if="game">
-        <div class="menuBar__leftButtons">
-            <button class="button datePicker" type="text" pick-a-date="pickedDate">Pick Date</button>
-            <button class="button timePicker" type="text" pick-a-time="pickedTime">Pick Time</button>
-            <span class="gameDate">{{getGameTimestamp() | date: 'medium' : 'UTC'}} (UTC)</span>
-        </div>
-
-        <div class="menuBar__middleButtons">
-            <button class="button addPlayer" ng-click="addPlayer(game, $event)">Add Player</button>
-        </div>
-
-        <div class="menuBar__rightActions">
-            <button class="button saveButton" ng-click="saveGame()">Save Game</button>
-            <button class="button refreshButton" ng-click="updateGame()">Refresh</button>
-            <button class="button activateButton" ng-click="activateGame()" ng-hide="game.active">Activate</button>
-            <button class="button deactivateButton" ng-click="deactivateGame()" ng-show="game.active">Deactivate</button>
-            <button class="button endGameButton" ng-click="endGame(game)" ng-if="!game.done">End Game</button>
-        </div>
+  <div class="menuBar" ng-if="game">
+    <div class="menuBar__leftButtons">
+      <button class="button datePicker" type="text" pick-a-date="pickedDate">Pick Date</button>
+      <button class="button timePicker" type="text" pick-a-time="pickedTime">Pick Time</button>
+      <span class="gameDate">{{getGameTimestamp() | date: 'medium' : 'UTC'}} (UTC)</span>
     </div>
 
-    <div class="panelInner" layout="row" layout-align="space-between">
-        <div class="leftColumn" flex="20">
-            <div class="gameTitle">
-                <label class="form__label--text">Game Title</label>
-                <input type="text" ng-model="game.name" class="form__input form__input--text" placeholder="Game Title">
-            </div>
+    <div class="menuBar__middleButtons">
+      <button class="button addPlayer" ng-click="addPlayer(game, $event)">Add Player</button>
+    </div>
 
-            <md-divider class="divider"></md-divider>
+    <div class="menuBar__rightActions">
+      <button class="button saveButton" ng-click="saveGame()">Save Game</button>
+      <button class="button refreshButton" ng-click="updateGame()">Refresh</button>
+      <button class="button activateButton" ng-click="activateGame()" ng-hide="game.active">Activate</button>
+      <button class="button deactivateButton" ng-click="deactivateGame()" ng-show="game.active">Deactivate</button>
+      <button class="button endGameButton" ng-click="endGame(game)" ng-if="!game.done">End Game</button>
+    </div>
+  </div>
 
-            <div class="gameLinks">
-                <label class="form__label--text">Youtube URL</label>
-                <input type="text" ng-model="game.youtubeURL" class="form__input form__input--text" placeholder="Youtube URL">
-            </div>
+  <div class="panelInner" layout="row" layout-align="space-between">
+    <div class="leftColumn" flex="20">
+      <div class="gameTitle">
+        <label class="form__label--text">Game Title</label>
+        <input type="text" ng-model="game.name" class="form__input form__input--text" placeholder="Game Title">
+      </div>
 
-            <div class="gameStatus">
-                <label class="form__label--text">Game Status</label>
-                <input type="text" ng-model="game.status" class="form__input form__input--text" placeholder="Game Status">
-            </div>
+      <md-divider class="divider"></md-divider>
 
-            <md-divider class="divider"></md-divider>
+      <div class="gameLinks">
+        <label class="form__label--text">Youtube URL</label>
+        <input type="text" ng-model="game.youtubeURL" class="form__input form__input--text" placeholder="Youtube URL">
+      </div>
 
-            <h2 class="appliedUserTitle">Applied Users</h2>
+      <div class="gameStatus">
+        <label class="form__label--text">Game Status</label>
+        <input type="text" ng-model="game.status" class="form__input form__input--text" placeholder="Game Status">
+      </div>
 
-            <div class="signedUpUsers">
-                <div class="signedUpUser" ng-repeat="user in signedUpUsers" layout="row" layout-align="space-between center">
-                    {{user.username}}
-                    <div ng-hide="user.provider" class="logo logo-icon"></div>
-                    <i ng-show="user.provider" class="fa fa-{{user.provider | lowercase}}"></i>
-                </div>
-            </div>
+      <md-divider class="divider"></md-divider>
+
+      <h2 class="appliedUserTitle">Applied Users</h2>
+
+      <div class="signedUpUsers">
+        <div class="signedUpUser" ng-repeat="user in signedUpUsers" layout="row" layout-align="space-between center">
+          {{user.username}}
+          <div ng-hide="user.provider" class="logo logo-icon"></div>
+          <i ng-show="user.provider" class="fa fa-{{user.provider | lowercase}}"></i>
         </div>
-        <div class="rightColumn" flex="75">
-            <div class="team" ng-repeat="team in game.teams">
-                <div class="teamName" layout="row" layout-align="space-around center">
+      </div>
+    </div>
+    <div class="rightColumn" flex="75">
+      <div class="team" ng-repeat="team in game.teams">
+        <div class="teamName" layout="row" layout-align="space-around center">
                     <span>
                         {{team.name}}
                     </span>
@@ -64,39 +64,45 @@
                         <button class="button" ng-click="addPointsToTeamInGame(team, game, $event)">Add Points</button>
                         <button class="button" ng-click="addXPToTeamInGame(team, game, $event)">Add XP</button>
                     </span>
-                </div>
-
-                <div class="player" ng-repeat="player in team.players" ng-click="editPlayer(game, player, team, $event)">
-                    <div class="role">{{player.language}}</div>
-                    <div class="player-name">{{player.user.username}}</div>
-
-                    <i class="remove-player fa fa-times" ng-click="removePlayer(game, player, $event)"></i>
-                </div>
-
-                <div class="teamUrlLinks">
-                    <label class="form__label--text">Code URL</label>
-                    <input class="form__input form__input--text" ng-model="team.codeUrl">
-                    <label class="form__label--text">Website URL Title</label>
-                    <input class="form__input form__input--text" ng-model="team.websiteUrl">
-                    <label class="form__label--text">Status</label>
-                    <input class="form__input form__input--text" ng-model="team.status">
-                </div>
-            </div>
-
-            <button class="button newObjectiveButton" ng-click="game.objectives.push({objectiveText: ''})" ng-if="game.teams"><i class="fa fa-plus-circle"></i> New Objective</button>
-
-            <input type="text" class="form__input form__input--text" ng-model="game.theme" placeholder="Theme"/>
-
-            <div class="objectives">
-                <div class="objective" ng-repeat="objective in game.objectives | orderBy : 'orderID'" layout="row">
-                    <input type="text" class="form__input form__input--text" ng-model="objective.objectiveText">
-                    <input type="number" class="form__input form__input--text order-input" ng-model="objective.orderID"/>
-                    <div class="teamCheck" layout="column" layout-align="center center">
-                        <md-checkbox class="teamCheckbox" ng-click="toggleTeamObjective(team, objective)" ng-model="teamHasObjective(team, objective)" ng-repeat="team in game.teams">{{team.name}}</md-checkbox>
-                    </div>
-                    <button class="button button--warn removeObjective" ng-click="removeObjectiveFromGame(objective, game)">Remove</button>
-                </div>
-            </div>
         </div>
+
+        <div class="player" ng-repeat="player in team.players" ng-click="editPlayer(game, player, team, $event)">
+          <div class="role">{{player.language}}</div>
+          <div class="player-name">{{player.user.username}}</div>
+
+          <i class="remove-player fa fa-times" ng-click="removePlayer(game, player, $event)"></i>
+        </div>
+
+        <div class="teamUrlLinks">
+          <label class="form__label--text">Code URL</label>
+          <input class="form__input form__input--text" ng-model="team.codeUrl">
+          <label class="form__label--text">Website URL Title</label>
+          <input class="form__input form__input--text" ng-model="team.websiteUrl">
+          <label class="form__label--text">Status</label>
+          <input class="form__input form__input--text" ng-model="team.status">
+        </div>
+      </div>
+
+      <button class="button newObjectiveButton" ng-click="game.objectives.push({objectiveText: ''})" ng-if="game.teams">
+        <i class="fa fa-plus-circle"></i> New Objective
+      </button>
+
+      <input type="text" class="form__input form__input--text" ng-model="game.theme" placeholder="Theme"/>
+
+      <div class="objectives">
+        <div class="objective" ng-repeat="objective in game.objectives | orderBy : 'orderID'" layout="row">
+          <input type="text" class="form__input form__input--text" ng-model="objective.objectiveText">
+          <input type="number" class="form__input form__input--text order-input" ng-model="objective.orderID"/>
+          <div class="teamCheck" layout="column" layout-align="center center">
+            <md-checkbox class="teamCheckbox" ng-click="toggleTeamObjective(team, objective)"
+                         ng-model="teamHasObjective(team, objective)" ng-repeat="team in game.teams">{{team.name}}
+            </md-checkbox>
+          </div>
+          <button class="button button--warn removeObjective" ng-click="removeObjectiveFromGame(objective, game)">
+            Remove
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

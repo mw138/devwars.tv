@@ -26,9 +26,9 @@ public class StartupServlet {
         Reference.loadDevWarsProperties();
 
         Class[] initializations = new Class[]{
-                FirebaseInit.class,
-                DatabaseManager.class,
-                TwitterInit.class
+            FirebaseInit.class,
+            DatabaseManager.class,
+            TwitterInit.class
         };
 
         //Run all init classes

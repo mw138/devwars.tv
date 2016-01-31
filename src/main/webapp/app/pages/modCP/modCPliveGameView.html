@@ -1,78 +1,83 @@
 <div class="modCPView right">
-    <h1>Live Game</h1>
+  <h1>Live Game</h1>
 
-    <div class="modcp-content">
+  <div class="modcp-content">
 
-       <div>
-           <button class="button" ng-if="!selectedGame.active" ng-click="activateGame(selectedGame)">Activate Game</button>
-           <button class="button" ng-if="selectedGame.active" ng-click="deactivateGame(selectedGame)">Deactivate Game</button>
-       </div>
-
-		<div class="players-selected livegame">
-			<div class="leaderRow leaderRow--header blueplayers">
-				<span class="position">POSITION</span>
-				<span class="username">USERNAME</span>
-				<span class="forfeit">FORFEIT?</span>
-			</div>
-			<!-- .leaderRow.leaderRow--header -->
-			<div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players">
-				<span class="position">{{ player.language }}</span>
-				<span class="username">{{ player.user.username }}</span>
-				<span class="forfeit forfeit-button" ng-click="forfeitPlayer(player)"><a class="forfeited" href="#">Penalise</a></span>
-			</div>
-			<!-- .leaderRow -->
-			<select ng-model="selectedGame.teams.blue.status">
-				<option value='' disabled selected>Team Status</option>
-				<option></option>
-				<option>Waiting for players...</option>
-				<option>Joining on TeamSpeak</option>
-				<option>Setting up C9</option>
-				<option>Ready to play!</option>
-			</select>
-			<button class="button" ng-click="saveGame(selectedGame)">Update</button>
-		</div>
-       
-        <div class="players-selected livegame">
-            <div class="leaderRow leaderRow--header redplayers">
-                <span class="position">POSITION</span>
-                <span class="username">USERNAME</span>
-                <span class="forfeit">FORFEIT?</span>
-            </div>
-            <!-- .leaderRow.leaderRow--header -->
-            <div class="leaderRow" ng-repeat="player in selectedGame.teams.red.players">
-                <span class="position">{{ player.language }}</span>
-                <span class="username">{{ player.user.username }}</span>
-                <span class="forfeit forfeit-button" ng-click="forfeitPlayer(player)"><a class="forfeited" href="#">Penalise</a></span>
-            </div>
-            <!-- .leaderRow -->
-            <select ng-model="selectedGame.teams.red.status">
-                <option value='' disabled selected>Team Status</option>
-                <option></option>
-				<option>Waiting for players...</option>
-				<option>Joining on TeamSpeak</option>
-				<option>Setting up C9</option>
-				<option>Ready to play!</option>
-            </select>
-            <button class="button" ng-click="saveGame(selectedGame)">Update</button>
-        </div>
-
-        <div class="livegame--objectives">
-            <div class="objectives--header">
-                <span class="list--objective">OBJECTIVES</span>
-				<span class="blue--objective">BLUE</span>
-                <span class="red--objective">RED</span>
-            </div>
-
-            <div class="livegame--objective_row" ng-repeat="objective in selectedGame.objectives">
-                <span class="livegame_objective"ng-bind="objective.objectiveText"></span>
-				<input type="checkbox" class="objective-check" ng-checked="teamHasObjective(selectedGame.teams.blue, objective)" ng-click="toggleObjective(objective, selectedGame.teams.blue)">
-                <input type="checkbox" class="objective-check" ng-checked="teamHasObjective(selectedGame.teams.red, objective)" ng-click="toggleObjective(objective, selectedGame.teams.red)">
-            </div>
-        </div>
-        <div class="livegame--winner">
-            <span class="blue-winner" ng-class="{'blue-active': selectedGame.teams.blue.win}" ng-click="endGame(selectedGame, selectedGame.teams.blue)">BLUE WINS</span>
-            <span class="red-winner" ng-class="{'red-active': selectedGame.teams.red.win}" ng-click="endGame(selectedGame, selectedGame.teams.red)">RED WINS</span>
-        </div>
+    <div>
+      <button class="button" ng-if="!selectedGame.active" ng-click="activateGame(selectedGame)">Activate Game</button>
+      <button class="button" ng-if="selectedGame.active" ng-click="deactivateGame(selectedGame)">Deactivate Game
+      </button>
     </div>
-    <!-- .modcp-content -->
+
+    <div class="players-selected livegame">
+      <div class="leaderRow leaderRow--header blueplayers">
+        <span class="position">POSITION</span>
+        <span class="username">USERNAME</span>
+        <span class="forfeit">FORFEIT?</span>
+      </div>
+      <!-- .leaderRow.leaderRow--header -->
+      <div class="leaderRow" ng-repeat="player in selectedGame.teams.blue.players">
+        <span class="position">{{ player.language }}</span>
+        <span class="username">{{ player.user.username }}</span>
+        <span class="forfeit forfeit-button" ng-click="forfeitPlayer(player)"><a class="forfeited" href="#">Penalise</a></span>
+      </div>
+      <!-- .leaderRow -->
+      <select ng-model="selectedGame.teams.blue.status">
+        <option value='' disabled selected>Team Status</option>
+        <option></option>
+        <option>Waiting for players...</option>
+        <option>Joining on TeamSpeak</option>
+        <option>Setting up C9</option>
+        <option>Ready to play!</option>
+      </select>
+      <button class="button" ng-click="saveGame(selectedGame)">Update</button>
+    </div>
+
+    <div class="players-selected livegame">
+      <div class="leaderRow leaderRow--header redplayers">
+        <span class="position">POSITION</span>
+        <span class="username">USERNAME</span>
+        <span class="forfeit">FORFEIT?</span>
+      </div>
+      <!-- .leaderRow.leaderRow--header -->
+      <div class="leaderRow" ng-repeat="player in selectedGame.teams.red.players">
+        <span class="position">{{ player.language }}</span>
+        <span class="username">{{ player.user.username }}</span>
+        <span class="forfeit forfeit-button" ng-click="forfeitPlayer(player)"><a class="forfeited" href="#">Penalise</a></span>
+      </div>
+      <!-- .leaderRow -->
+      <select ng-model="selectedGame.teams.red.status">
+        <option value='' disabled selected>Team Status</option>
+        <option></option>
+        <option>Waiting for players...</option>
+        <option>Joining on TeamSpeak</option>
+        <option>Setting up C9</option>
+        <option>Ready to play!</option>
+      </select>
+      <button class="button" ng-click="saveGame(selectedGame)">Update</button>
+    </div>
+
+    <div class="livegame--objectives">
+      <div class="objectives--header">
+        <span class="list--objective">OBJECTIVES</span>
+        <span class="blue--objective">BLUE</span>
+        <span class="red--objective">RED</span>
+      </div>
+
+      <div class="livegame--objective_row" ng-repeat="objective in selectedGame.objectives">
+        <span class="livegame_objective" ng-bind="objective.objectiveText"></span>
+        <input type="checkbox" class="objective-check" ng-checked="teamHasObjective(selectedGame.teams.blue, objective)"
+               ng-click="toggleObjective(objective, selectedGame.teams.blue)">
+        <input type="checkbox" class="objective-check" ng-checked="teamHasObjective(selectedGame.teams.red, objective)"
+               ng-click="toggleObjective(objective, selectedGame.teams.red)">
+      </div>
+    </div>
+    <div class="livegame--winner">
+      <span class="blue-winner" ng-class="{'blue-active': selectedGame.teams.blue.win}"
+            ng-click="endGame(selectedGame, selectedGame.teams.blue)">BLUE WINS</span>
+      <span class="red-winner" ng-class="{'red-active': selectedGame.teams.red.win}"
+            ng-click="endGame(selectedGame, selectedGame.teams.red)">RED WINS</span>
+    </div>
+  </div>
+  <!-- .modcp-content -->
 </div> <!-- modCPView.right -->

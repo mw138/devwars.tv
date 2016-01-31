@@ -46,9 +46,9 @@ public class UserConnectionController {
     @Transactional
     public ResponseEntity testConnectTwitchUser(SessionImpl session, @RequestParam("username") String username, @AuthedUser User currentUser) {
         TwitchPointStorage twitchPointStorage = (TwitchPointStorage) session.createQuery("from TwitchPointStorage s where s.username = :username")
-                .setString("username", username)
-                .setMaxResults(1)
-                .uniqueResult();
+            .setString("username", username)
+            .setMaxResults(1)
+            .uniqueResult();
 
         if (twitchPointStorage != null) {
             currentUser.getRanking().addXP(twitchPointStorage.getXp());
@@ -130,12 +130,12 @@ public class UserConnectionController {
     public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://accounts.google.com/o/oauth2/auth?scope=" +
-                    "profile email openid&" +
-                    "state=generate_a_unique_state_value&" +
-                    "redirect_uri=" + Reference.rootURL + "/v1/connect/google_callback&" +
-                    "response_type=code&" +
-                    "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
-                    "access_type=offline");
+                "profile email openid&" +
+                "state=generate_a_unique_state_value&" +
+                "redirect_uri=" + Reference.rootURL + "/v1/connect/google_callback&" +
+                "response_type=code&" +
+                "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
+                "access_type=offline");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,10 +247,10 @@ public class UserConnectionController {
     public ResponseEntity twitchAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://api.twitch.tv/kraken/oauth2/authorize" +
-                    "?response_type=code" +
-                    "&client_id=" + Reference.getEnvironmentProperty("twitchClientID2") +
-                    "&redirect_uri=" + Reference.rootURL + "/v1/connect/twitch_callback" +
-                    "&scope=user_read");
+                "?response_type=code" +
+                "&client_id=" + Reference.getEnvironmentProperty("twitchClientID2") +
+                "&redirect_uri=" + Reference.rootURL + "/v1/connect/twitch_callback" +
+                "&scope=user_read");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -266,16 +266,16 @@ public class UserConnectionController {
         User veteranUser = userService.userForUsername(user.getUsername().substring(0, user.getUsername().length() - 4));
 
         boolean alreadyConnected = user.getConnectedAccounts().stream()
-                .anyMatch(account -> !account.getDisconnected() && "TWITCH".equals(account.getProvider()));
+            .anyMatch(account -> !account.getDisconnected() && "TWITCH".equals(account.getProvider()));
 
         if (alreadyConnected) {
             return new ResponseEntity("Already Connected", HttpStatus.CONFLICT);
         }
 
         Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
-                .filter(account ->
-                        "TWITCH".equals(account.getProvider()) && account.getDisconnected())
-                .findFirst();
+            .filter(account ->
+                "TWITCH".equals(account.getProvider()) && account.getDisconnected())
+            .findFirst();
 
         if (connectedAccount.isPresent()) {
             connectedAccount.get().setUsername(twitchUser.getUsername().substring(0, twitchUser.getUsername().length() - 4));
@@ -306,10 +306,10 @@ public class UserConnectionController {
     public static ResponseEntity facebookAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://www.facebook.com/dialog/oauth?" +
-                    "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
-                    "&redirect_uri=" + Reference.rootURL + "/v1/connect/facebook_callback" +
-                    "&response_type=code" +
-                    "&scope=email");
+                "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
+                "&redirect_uri=" + Reference.rootURL + "/v1/connect/facebook_callback" +
+                "&response_type=code" +
+                "&scope=email");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -353,10 +353,10 @@ public class UserConnectionController {
     public ResponseEntity githubAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://github.com/login/oauth/authorize?" +
-                    "client_id=" + Reference.getEnvironmentProperty("githubClientID2") +
-                    "&redirect_uri=" + Reference.rootURL + "/v1/connect/github_callback" +
-                    "&scope=user,user:email" +
-                    "&state=" + Util.randomText(32));
+                "client_id=" + Reference.getEnvironmentProperty("githubClientID2") +
+                "&redirect_uri=" + Reference.rootURL + "/v1/connect/github_callback" +
+                "&scope=user,user:email" +
+                "&state=" + Util.randomText(32));
         } catch (IOException e) {
             e.printStackTrace();
         }

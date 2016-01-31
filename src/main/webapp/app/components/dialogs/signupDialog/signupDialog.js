@@ -26,7 +26,7 @@ angular.module("app.signup", [])
             var usernameValid = /^([A-Za-z0-9\-_]+)$/.test(credentials.username);
             var passwordsMatch = credentials.password && credentials.password2 && credentials.password === credentials.password2;
 
-            if(!usernameValid) {
+            if (!usernameValid) {
                 $scope.conflicts.push("Username can contain characters, numbers and underscores");
             }
 
@@ -40,7 +40,7 @@ angular.module("app.signup", [])
 
             var routeParams = $location.search();
 
-            if(routeParams.referral) {
+            if (routeParams.referral) {
                 credentials.referral = routeParams.referral;
             }
 

@@ -14,12 +14,12 @@ public class GoogleProvider implements IProvider {
 
     public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException {
         com.mashape.unirest.http.HttpResponse<String> accessTokenResponse = Unirest.post("https://www.googleapis.com/oauth2/v3/token")
-                .queryString("code", code)
-                .queryString("client_id", Reference.getEnvironmentProperty("googleClientID"))
-                .queryString("client_secret", Reference.getEnvironmentProperty("googleSecret"))
-                .queryString("redirect_uri", redirect)
-                .queryString("grant_type", "authorization_code")
-                .asString();
+            .queryString("code", code)
+            .queryString("client_id", Reference.getEnvironmentProperty("googleClientID"))
+            .queryString("client_secret", Reference.getEnvironmentProperty("googleSecret"))
+            .queryString("redirect_uri", redirect)
+            .queryString("grant_type", "authorization_code")
+            .asString();
 
         System.out.println(accessTokenResponse);
         JSONObject jsonObject = (JSONObject) JSONValue.parse(accessTokenResponse.getBody());
@@ -29,8 +29,8 @@ public class GoogleProvider implements IProvider {
         System.out.println("Access Token : " + accessToken);
 
         HttpResponse<String> meResponse = Unirest.get("https://www.googleapis.com/plus/v1/people/me")
-                .queryString("access_token", accessToken)
-                .asString();
+            .queryString("access_token", accessToken)
+            .asString();
 
         if (meResponse.getBody() != null) {
             JSONObject userObject = (JSONObject) JSONValue.parse(meResponse.getBody());

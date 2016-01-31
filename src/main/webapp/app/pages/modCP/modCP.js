@@ -1,6 +1,6 @@
 angular.module('app.modCP', [
-    'ui.router'
-])
+        'ui.router'
+    ])
     .config(['$stateProvider',
         function ($stateProvider) {
 
@@ -20,8 +20,8 @@ angular.module('app.modCP', [
 
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/modCP/modCPView.html',
                             controller: "ModCPController"
                         },
@@ -38,8 +38,8 @@ angular.module('app.modCP', [
 
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/modCP/modCPView.html',
                             controller: "ModCPController"
                         },
@@ -56,8 +56,8 @@ angular.module('app.modCP', [
 
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/modCP/modCPView.html',
                             controller: "ModCPController"
                         },
@@ -74,8 +74,8 @@ angular.module('app.modCP', [
 
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/modCP/modCPView.html',
                             controller: "ModCPController"
                         },
@@ -94,8 +94,8 @@ angular.module('app.modCP', [
 
                     parent: "modCP",
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/modCP/modCPView.html',
                             controller: "ModCPController"
                         },
@@ -109,7 +109,7 @@ angular.module('app.modCP', [
             ;
         }])
 
-    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", "PlayerService", "TournamentService", function($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService, TournamentService){
+    .controller("ModCPController", ["$scope", "GameService", "ToastService", "$filter", "$mdDialog", "$location", "$http", "PlayerService", "TournamentService", function ($scope, GameService, ToastService, $filter, $mdDialog, $location, $http, PlayerService, TournamentService) {
 
         $scope.pickedDate = new Date();
         $scope.pickedTime = new Date();
@@ -132,16 +132,17 @@ angular.module('app.modCP', [
             GameService.allGames(0, 10, function (success) {
                 $scope.availableGames = success.data;
 
-                if($location.search().game) {
+                if ($location.search().game) {
                     var game = parseInt($location.search().game);
 
                     $scope.availableGames.forEach(function (a) {
-                        if(a.id === game && !$scope.hasInit) {
+                        if (a.id === game && !$scope.hasInit) {
                             $scope.hasInit = true;
                             $scope.selectedGame = a;
                         }
                     });
-                };
+                }
+                ;
             }, angular.noop);
         };
 
@@ -158,7 +159,7 @@ angular.module('app.modCP', [
             $scope.dateWatch();
 
             var tournamentId = null;
-            if($scope.selectedTournament) {
+            if ($scope.selectedTournament) {
                 tournamentId = $scope.selectedTournament.id;
             }
 
@@ -172,14 +173,14 @@ angular.module('app.modCP', [
 
         $scope.addPlayer = function (player) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/addSelectedPlayerDialog/addSelectedPlayerDialogView.html",
-                controller: "AddSelectedPlayerDialogController",
+                    templateUrl: "/app/components/dialogs/addSelectedPlayerDialog/addSelectedPlayerDialogView.html",
+                    controller: "AddSelectedPlayerDialogController",
 
-                locals : {
-                    player: player,
-                    game: $scope.selectedGame
-                }
-            })
+                    locals: {
+                        player: player,
+                        game: $scope.selectedGame
+                    }
+                })
                 .then(function (success) {
                     PlayerService.addPlayer(success.team.id, success.language, JSON.stringify(player), function (playerSuccess) {
                         success.team.players.push(playerSuccess.data);
@@ -223,14 +224,14 @@ angular.module('app.modCP', [
             var hasObjective = $scope.teamHasObjective(team, objective);
 
             console.log("Has Objective : " + hasObjective);
-            
-            if(hasObjective) {
+
+            if (hasObjective) {
                 team.completedObjectives = team.completedObjectives.filter(function (a) {
                     return a.objective.id !== objective.id;
                 })
             } else {
                 team.completedObjectives.push({
-                    objective : objective,
+                    objective: objective,
                     team_id: team.id
                 });
             }
@@ -238,11 +239,11 @@ angular.module('app.modCP', [
             console.log(team.completedObjectives);
         };
 
-        $scope.teamHasObjective = function(team, objective) {
+        $scope.teamHasObjective = function (team, objective) {
             var hasObjective = false;
 
             team.completedObjectives.forEach(function (a) {
-                if(a.objective.id == objective.id) hasObjective = true;
+                if (a.objective.id == objective.id) hasObjective = true;
             });
 
             return hasObjective;
@@ -254,7 +255,7 @@ angular.module('app.modCP', [
 
                 game.active = true;
             }, function (error) {
-                ToastService.showDevwarsErrorToast("fa-exclamation-circle",  "Error", "Could not activate game");
+                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not activate game");
             })
         };
 
@@ -264,28 +265,28 @@ angular.module('app.modCP', [
 
                 game.active = false;
             }, function (error) {
-                ToastService.showDevwarsErrorToast("fa-exclamation-circle",  "Error", "Could not deactivate game");
+                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not deactivate game");
             })
         };
 
         $scope.saveGame = function (game) {
 
             //Remove objectives with no text (They're empty)
-            if(game.objectives) {
+            if (game.objectives) {
                 game.objectives = game.objectives.filter(function (objective) {
                     return objective.objectiveText.length > 0;
                 });
             }
 
-            for(var teamKey in game.teams) {
+            for (var teamKey in game.teams) {
                 var team = game.teams[teamKey];
 
                 //Cascade to team's completed objectives
-                if(team.completedObjectives) {
+                if (team.completedObjectives) {
                     team.completedObjectives = team.completedObjectives.filter(function (completed) {
                         var found = false;
 
-                        if(game.objectives) {
+                        if (game.objectives) {
                             game.objectives.forEach(function (objective) {
                                 if (objective.id == completed.objective.id) found = true;
                             });
@@ -309,13 +310,13 @@ angular.module('app.modCP', [
         };
 
         $scope.endGame = function (game, winner) {
-              GameService.endGame(game.id, winner.id, function (success) {
-                  $scope.updateSelectedGame();
+            GameService.endGame(game.id, winner.id, function (success) {
+                $scope.updateSelectedGame();
 
-                  ToastService.showDevwarsToast("fa-check-circle", "Success", winner.name + " won : Game Over");
-              }, function (error) {
-                  ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not end game");
-              });
+                ToastService.showDevwarsToast("fa-check-circle", "Success", winner.name + " won : Game Over");
+            }, function (error) {
+                ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not end game");
+            });
         };
 
         //Watchers
@@ -331,16 +332,16 @@ angular.module('app.modCP', [
             $scope.appliedTournamentTeams = $scope.selectedTournament.teamSignups;
         });
 
-        $scope.uploadFiles = function(team, file) {
+        $scope.uploadFiles = function (team, file) {
             var formData = new FormData();
 
             formData.append("zip", dataURItoBlob(file));
 
             $http.post("/v1/team/" + team.id + "/upload", formData, {
-                withCredentials: true,
-                headers: {'Content-Type': undefined},
-                transformRequest: angular.identity
-            })
+                    withCredentials: true,
+                    headers: {'Content-Type': undefined},
+                    transformRequest: angular.identity
+                })
                 .then(function (success) {
                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Uploaded files for team");
                 }, function () {
@@ -348,11 +349,11 @@ angular.module('app.modCP', [
                 });
         };
 
-        var dataURItoBlob = function(dataURI) {
+        var dataURItoBlob = function (dataURI) {
             var binary = atob(dataURI.split(',')[1]);
             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
             var array = [];
-            for(var i = 0; i < binary.length; i++) {
+            for (var i = 0; i < binary.length; i++) {
                 array.push(binary.charCodeAt(i));
             }
             return new Blob([new Uint8Array(array)], {type: mimeString});
@@ -363,24 +364,24 @@ angular.module('app.modCP', [
                 $scope.upcomingTournaments = success.data;
 
 
-                console.log('upcoming t: ',success.data);
+                console.log('upcoming t: ', success.data);
             }, angular.noop);
 
         $scope.applyTeamToGame = function (team) {
             console.log("ApplyTeamToGame: ", $scope.selectedGame.id, team.id);
 
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
-                controller: "ConfirmDialogController",
+                    templateUrl: "app/components/dialogs/confirmDialog/confirmationDialogView.html",
+                    controller: "ConfirmDialogController",
 
-                locals: {
-                    title: "Apply Team to Game",
-                    message: "This will add all players from '" + team.name +
-                    "' and apply them to " + $scope.selectedGame.name + " game on " + $filter('date')($scope.selectedGame.timestamp, 'mediumDate'),
-                    yes: "Yes",
-                    no: "No"
-                }
-            })
+                    locals: {
+                        title: "Apply Team to Game",
+                        message: "This will add all players from '" + team.name +
+                        "' and apply them to " + $scope.selectedGame.name + " game on " + $filter('date')($scope.selectedGame.timestamp, 'mediumDate'),
+                        yes: "Yes",
+                        no: "No"
+                    }
+                })
                 .then(function () {
                     GameService.http.signupTeamForGame($scope.selectedGame.id, team.id)
                         .then(function (success) {
@@ -391,7 +392,6 @@ angular.module('app.modCP', [
                         })
                 }, angular.noop)
         };
-
 
 
         $scope.updateGames();

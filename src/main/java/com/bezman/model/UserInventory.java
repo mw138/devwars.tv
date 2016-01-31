@@ -2,7 +2,6 @@ package com.bezman.model;
 
 import com.bezman.annotation.HibernateDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserInventory extends BaseModel{
+public class UserInventory extends BaseModel {
 
     private Integer id;
 

@@ -18,22 +18,21 @@ angular.module("app.contact", [])
         $scope.AuthService = AuthService;
 
         $scope.setDefaults = function () {
-            if(AuthService.user) {
+            if (AuthService.user) {
                 $scope.form.name = AuthService.user.username;
                 $scope.form.email = AuthService.user.email;
-            } else
-            {
+            } else {
                 AuthService.callbacks.push($scope.setDefaults);
             }
         };
 
         $scope.submit = function (form) {
-            if(form.name &&
+            if (form.name &&
                 form.email &&
                 form.type &&
                 form.text) {
 
-                if(form.text.length > 1000) {
+                if (form.text.length > 1000) {
                     ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Enquiry too long");
                 } else {
                     ContactService.create(form.name, form.text, form.type, form.email, function (success) {

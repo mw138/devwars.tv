@@ -56,9 +56,9 @@ public class BlogService {
         Session session = DatabaseManager.getSession();
 
         BlogPost blogPost = (BlogPost) session.createCriteria(BlogPost.class)
-                .add(Restrictions.eq("title", title.replace("-", " ")))
-                .setMaxResults(1)
-                .uniqueResult();
+            .add(Restrictions.eq("title", title.replace("-", " ")))
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -69,9 +69,9 @@ public class BlogService {
         Session session = DatabaseManager.getSession();
 
         BlogPost blogPost = (BlogPost) session.createCriteria(BlogPost.class)
-                .add(new SubstringCriterion("title", 1, title.length(), title.replace('-', ' ')))
-                .setMaxResults(1)
-                .uniqueResult();
+            .add(new SubstringCriterion("title", 1, title.length(), title.replace('-', ' ')))
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 

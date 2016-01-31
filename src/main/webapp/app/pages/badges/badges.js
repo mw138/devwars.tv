@@ -20,17 +20,17 @@ angular.module("app.badges", [])
         };
 
         $scope.userHasBadge = function (badge) {
-            for(var badgeKey in $scope.myBadges) {
+            for (var badgeKey in $scope.myBadges) {
                 var currentBadge = $scope.myBadges[badgeKey];
 
-                if(badge.id == currentBadge.id) return true;
+                if (badge.id == currentBadge.id) return true;
             }
 
             return false;
         };
 
         $scope.badgeForName = function (name) {
-            for(var badgeKey in $scope.badges) {
+            for (var badgeKey in $scope.badges) {
                 var badge = $scope.badges[badgeKey];
 
                 if (badge.name === name) return badge;
@@ -40,19 +40,19 @@ angular.module("app.badges", [])
         };
 
         $scope.badgePercentCalculators = {
-            "Authentic" : function () {
+            "Authentic": function () {
                 return AuthService.user.role == "PENDING" ? 0 : 100;
             },
 
-            "Making Links" : function () {
+            "Making Links": function () {
                 return Math.min(AuthService.user.connectedAccounts.length > 0 ? 100 : 0, 100);
             },
 
-            "Full Coverage" : function () {
+            "Full Coverage": function () {
                 return Math.min((AuthService.user.connectedAccounts.length / 5.0) * 100, 100);
             },
 
-            "Feed The Pig" : function () {
+            "Feed The Pig": function () {
                 return Math.min((AuthService.user.ranking.points / 5000.0) * 100, 100);
             },
 
@@ -80,15 +80,15 @@ angular.module("app.badges", [])
                 return AuthService.user.gamesWon > 0 ? 100 : 0;
             },
 
-            "Victorious" : function () {
+            "Victorious": function () {
                 return Math.min((AuthService.user.gamesWon / 5.0) * 100, 100);
             },
 
-            "Hotshot" : function () {
+            "Hotshot": function () {
                 return Math.min((AuthService.user.gamesWon / 10.0) * 100, 100);
             },
 
-            "Steamroller" : function () {
+            "Steamroller": function () {
                 return Math.min((AuthService.user.gamesWon / 25.0) * 100, 100);
             },
 
@@ -104,19 +104,19 @@ angular.module("app.badges", [])
                 return Math.min(AuthService.user.bettingBitsEarned / 10000.0 * 100, 100);
             },
 
-            "First Timer" : function () {
+            "First Timer": function () {
                 return Math.min(AuthService.user.gamesWatched / 1 * 100, 100);
             },
 
-            "Hobbyist" : function () {
+            "Hobbyist": function () {
                 return Math.min(AuthService.user.gamesWatched / 5 * 100, 100);
             },
 
-            "Biggest Fan" : function () {
+            "Biggest Fan": function () {
                 return Math.min(AuthService.user.gamesWatched / 25 * 100, 100);
             },
 
-            "Obsessed" : function () {
+            "Obsessed": function () {
                 return Math.min(AuthService.user.gamesWatched / 50 * 100, 100);
             }
         }

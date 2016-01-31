@@ -13,12 +13,12 @@ angular.module("app.help", [])
 
         }])
     .controller("HelpController", ["$scope", function ($scope) {
-        
+
     }]);
 
-app.controller('HelpController', function($scope, $location, $anchorScroll) {
-   $scope.scrollTo = function(id) {
-      $location.hash(id);
-      $anchorScroll();
-   }
+app.controller('HelpController', function ($scope, $location, $anchorScroll) {
+    $scope.scrollTo = function (id) {
+        $location.hash(id);
+        $anchorScroll();
+    }
 });

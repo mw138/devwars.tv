@@ -79,35 +79,35 @@ angular.module("app.AuthService", [])
         };
 
         AuthService.isAtLeast = function (min) {
-            if(!AuthService.user) return false;
+            if (!AuthService.user) return false;
 
             var minIndex = AuthService.roles.indexOf(min);
             var userIndex = AuthService.roles.indexOf(AuthService.user.role);
 
-            if(minIndex < 0) return false;
+            if (minIndex < 0) return false;
 
             return userIndex >= minIndex;
         };
 
         AuthService.hasProvider = function (provider) {
-            if(!AuthService.user || !AuthService.user.connectedAccounts) return false;
+            if (!AuthService.user || !AuthService.user.connectedAccounts) return false;
 
-            for(var key in AuthService.user.connectedAccounts) {
+            for (var key in AuthService.user.connectedAccounts) {
                 var account = AuthService.user.connectedAccounts[key];
 
-                if(account.provider.toUpperCase() === provider.toUpperCase() && account.disconnected == false) return true;
+                if (account.provider.toUpperCase() === provider.toUpperCase() && account.disconnected == false) return true;
             }
 
             return false;
         };
 
         AuthService.hasConnectedToProvider = function (provider) {
-            if(!AuthService.user || !AuthService.user.connectedAccounts) return false;
+            if (!AuthService.user || !AuthService.user.connectedAccounts) return false;
 
-            for(var key in AuthService.user.connectedAccounts) {
+            for (var key in AuthService.user.connectedAccounts) {
                 var account = AuthService.user.connectedAccounts[key];
 
-                if(account.provider.toUpperCase() === provider.toUpperCase()) return true;
+                if (account.provider.toUpperCase() === provider.toUpperCase()) return true;
             }
 
             return false;

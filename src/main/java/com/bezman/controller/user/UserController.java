@@ -81,12 +81,12 @@ public class UserController extends BaseController {
         List<Badge> badgesToAward = currentUser.tryAllBadges();
 
         badgesToAward.stream()
-                .filter(a -> !currentUser.hasBadge(a))
-                .forEach(badge -> {
-                    currentUser.awardBadge(badge);
-                    session.save(new Notification(currentUser, "Badge Get : " + badge.getName(), false));
-                    session.save(new Activity(currentUser, currentUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
-                });
+            .filter(a -> !currentUser.hasBadge(a))
+            .forEach(badge -> {
+                currentUser.awardBadge(badge);
+                session.save(new Notification(currentUser, "Badge Get : " + badge.getName(), false));
+                session.save(new Activity(currentUser, currentUser, "You earned a badge : " + badge.getName(), badge.getBitsAwarded(), badge.getXpAwarded()));
+            });
 
         return new ResponseEntity(user, HttpStatus.OK);
     }
@@ -106,10 +106,10 @@ public class UserController extends BaseController {
         Session session = DatabaseManager.getSession();
 
         List<Activity> results = session.createCriteria(Activity.class)
-                .add(Restrictions.eq("affectedUser", currentUser))
-                .addOrder(Order.desc("timestamp"))
-                .setMaxResults(200)
-                .list();
+            .add(Restrictions.eq("affectedUser", currentUser))
+            .addOrder(Order.desc("timestamp"))
+            .setMaxResults(200)
+            .list();
 
         session.close();
 
@@ -698,7 +698,8 @@ public class UserController extends BaseController {
             userService.useUsernameChange(user);
         } else if (user.getUsername().equals(username))
             userService.updateInfoForUser(user, username, url, company, location);
-        else return new ResponseEntity("Not Enough Username Changes", HttpStatus.CONFLICT); //I_AM_A_TEAPOT(418, "I\'m a teapot"),
+        else
+            return new ResponseEntity("Not Enough Username Changes", HttpStatus.CONFLICT); //I_AM_A_TEAPOT(418, "I\'m a teapot"),
 
         return new ResponseEntity("", HttpStatus.OK);
     }
@@ -877,8 +878,8 @@ public class UserController extends BaseController {
                                     @RequestParam("email") String email,
                                     @RequestParam("uid") String uid) throws UnirestException, MessagingException {
         String html = Unirest.get(Reference.rootURL + "/assets/email/verification.html")
-                .asString()
-                .getBody();
+            .asString()
+            .getBody();
         String message = html.replace("{{verifyLink}}", Reference.rootURL + "/v1/user/validate?uid=" + uid);
 
 
@@ -922,9 +923,9 @@ public class UserController extends BaseController {
     @RequestMapping("/notifications")
     public ResponseEntity getUnreadNotifications(@AuthedUser User user, SessionImpl session) {
         List results = session.createCriteria(Notification.class)
-                .add(Restrictions.eq("user.id", user.getId()))
-                .add(Restrictions.eq("hasRead", false))
-                .list();
+            .add(Restrictions.eq("user.id", user.getId()))
+            .add(Restrictions.eq("hasRead", false))
+            .list();
 
         return new ResponseEntity(results, HttpStatus.OK);
     }
@@ -934,17 +935,17 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/notifications/read", method = RequestMethod.POST)
     public ResponseEntity markNotificationsAsRead(@JSONParam("notifications") Notification[] notificationList, @AuthedUser User user, SessionImpl session) {
         List notificationIDs = Arrays.asList(notificationList).stream()
-                .map(Notification::getId)
-                .collect(Collectors.toList());
+            .map(Notification::getId)
+            .collect(Collectors.toList());
 
         if (notificationList.length > 0) {
             List<Notification> notifications = session.createCriteria(Notification.class)
-                    .add(Restrictions.eq("user.id", user.getId()))
-                    .add(Restrictions.in("id", notificationIDs))
-                    .list();
+                .add(Restrictions.eq("user.id", user.getId()))
+                .add(Restrictions.in("id", notificationIDs))
+                .list();
 
             notifications.stream()
-                    .forEach(a -> a.setHasRead(true));
+                .forEach(a -> a.setHasRead(true));
         }
 
         return new ResponseEntity(notificationList, HttpStatus.OK);

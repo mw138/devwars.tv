@@ -11,12 +11,12 @@ import org.json.simple.JSONValue;
 public class FacebookProvider implements IProvider {
     public static User userForCodeWithRedirect(String code, String redirect) throws UnirestException {
         String accessTokenJSON = Unirest.get("https://graph.facebook.com/v2.3/oauth/access_token")
-                .queryString("code", code)
-                .queryString("client_id", Reference.getEnvironmentProperty("facebookAppID"))
-                .queryString("client_secret", Reference.getEnvironmentProperty("facebookSecret"))
-                .queryString("redirect_uri", redirect)
-                .asString()
-                .getBody();
+            .queryString("code", code)
+            .queryString("client_id", Reference.getEnvironmentProperty("facebookAppID"))
+            .queryString("client_secret", Reference.getEnvironmentProperty("facebookSecret"))
+            .queryString("redirect_uri", redirect)
+            .asString()
+            .getBody();
 
         System.out.println(accessTokenJSON);
         JSONObject accessTokenJSONObject = (JSONObject) JSONValue.parse(accessTokenJSON);
@@ -26,10 +26,10 @@ public class FacebookProvider implements IProvider {
 
             if (accessToken != null) {
                 String meResponse = Unirest.get("https://graph.facebook.com/v2.3/me")
-                        .queryString("fields", "name, email, id")
-                        .queryString("access_token", accessToken)
-                        .asString()
-                        .getBody();
+                    .queryString("fields", "name, email, id")
+                    .queryString("access_token", accessToken)
+                    .asString()
+                    .getBody();
 
                 System.out.println(meResponse);
 

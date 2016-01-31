@@ -1,72 +1,76 @@
 <div class="settingsView">
-    <form class="settings-content">
-		<h2 class="title"><span>About Yourself</span></h2>
-		<label for="dwReg-name">Name</label>
-       <input id="dwReg-name" type="text" placeholder="Name" ng-model="warrior.firstName"/>
-        <div class="split-inputs dateofbirth">
-			<span>D.O.B.</span>
-			<label for="dwReg-month">Month</label>
-			<input id="dwReg-month" type="text" placeholder="MM" ng-model="warrior.month"/>
-			<label for="dwReg-day">Day</label>
-			<input id="dwReg-day" type="text" placeholder="DD" ng-model="warrior.day"/>
-			<label for="dwReg-year">Year</label>
-			<input id="dwReg-year" type="text" placeholder="YYYY" ng-model="warrior.year"/>
-		</div>
-        <input type="text" ng-model="warrior.company" placeholder="Company Name (Optional)" />
+  <form class="settings-content">
+    <h2 class="title"><span>About Yourself</span></h2>
+    <label for="dwReg-name">Name</label>
+    <input id="dwReg-name" type="text" placeholder="Name" ng-model="warrior.firstName"/>
+    <div class="split-inputs dateofbirth">
+      <span>D.O.B.</span>
+      <label for="dwReg-month">Month</label>
+      <input id="dwReg-month" type="text" placeholder="MM" ng-model="warrior.month"/>
+      <label for="dwReg-day">Day</label>
+      <input id="dwReg-day" type="text" placeholder="DD" ng-model="warrior.day"/>
+      <label for="dwReg-year">Year</label>
+      <input id="dwReg-year" type="text" placeholder="YYYY" ng-model="warrior.year"/>
+    </div>
+    <input type="text" ng-model="warrior.company" placeholder="Company Name (Optional)"/>
 
-		<h2 class="title"><span>Skill Assessment</span></h2>
-        <div class="skillBox">          
-          	<div class="positionMain positionMain--html">
-				<div class="positionInfo">
-					<h6 class="positionName">HTML</h6>
-					<h6 class="skillName">{{ skillNames[warrior.htmlRate - 1] }}</h6>
-				</div> <!-- .positionInfo -->
-				<div class="skillMeter">
-					<span ng-class="{'html-hover': warrior.htmlRate >= i}" ng-repeat="i in getRange(1, 5) | reverse" ng-click="setHtml(i)"></span>
-				</div> <!-- .skillMeter -->
-				<p ng-bind="htmlTooltip"></p>
-			</div> <!-- .positionMain.positionMain--html -->
-			
-			<div class="positionMain positionMain--css">
-				<div class="positionInfo">
-					<h6 class="positionName">CSS</h6>
-                    <h6 class="skillName">{{ skillNames[warrior.cssRate - 1] }}</h6>
-				</div> <!-- .positionInfo -->
-				<div class="skillMeter">
-					<span ng-class="{'css-hover': warrior.cssRate >= i}" ng-repeat="i in getRange(1, 5) | reverse" ng-click="setCSS(i)"></span>
-				</div> <!-- .skillMeter -->
-				<p ng-bind="cssTooltip"></p>
-			</div> <!-- .positionMain.positionMain--css -->
+    <h2 class="title"><span>Skill Assessment</span></h2>
+    <div class="skillBox">
+      <div class="positionMain positionMain--html">
+        <div class="positionInfo">
+          <h6 class="positionName">HTML</h6>
+          <h6 class="skillName">{{ skillNames[warrior.htmlRate - 1] }}</h6>
+        </div> <!-- .positionInfo -->
+        <div class="skillMeter">
+          <span ng-class="{'html-hover': warrior.htmlRate >= i}" ng-repeat="i in getRange(1, 5) | reverse"
+                ng-click="setHtml(i)"></span>
+        </div> <!-- .skillMeter -->
+        <p ng-bind="htmlTooltip"></p>
+      </div> <!-- .positionMain.positionMain--html -->
 
-			<div class="positionMain positionMain--js">
-				<div class="positionInfo">
-					<h6 class="positionName">JAVASCRIPT</h6>
-                    <h6 class="skillName">{{ skillNames[warrior.jsRate - 1] }}</h6>
-				</div> <!-- .positionInfo -->
-				<div class="skillMeter">
-					<span ng-class="{'js-hover': warrior.jsRate >= i}" ng-repeat="i in getRange(1, 5) | reverse" ng-click="setJS(i)"></span>
-				</div> <!-- .skillMeter -->
-				<p class="no-margin-bottom" ng-bind="jsTooltip"></p>
-			</div> <!-- .positionMain.positionMain--js -->
+      <div class="positionMain positionMain--css">
+        <div class="positionInfo">
+          <h6 class="positionName">CSS</h6>
+          <h6 class="skillName">{{ skillNames[warrior.cssRate - 1] }}</h6>
+        </div> <!-- .positionInfo -->
+        <div class="skillMeter">
+          <span ng-class="{'css-hover': warrior.cssRate >= i}" ng-repeat="i in getRange(1, 5) | reverse"
+                ng-click="setCSS(i)"></span>
+        </div> <!-- .skillMeter -->
+        <p ng-bind="cssTooltip"></p>
+      </div> <!-- .positionMain.positionMain--css -->
 
-        </div> <!-- .skillBox -->
+      <div class="positionMain positionMain--js">
+        <div class="positionInfo">
+          <h6 class="positionName">JAVASCRIPT</h6>
+          <h6 class="skillName">{{ skillNames[warrior.jsRate - 1] }}</h6>
+        </div> <!-- .positionInfo -->
+        <div class="skillMeter">
+          <span ng-class="{'js-hover': warrior.jsRate >= i}" ng-repeat="i in getRange(1, 5) | reverse"
+                ng-click="setJS(i)"></span>
+        </div> <!-- .skillMeter -->
+        <p class="no-margin-bottom" ng-bind="jsTooltip"></p>
+      </div> <!-- .positionMain.positionMain--js -->
 
-		<h2 class="title"><span>Required Accounts</span></h2>
-        <div class="c9-register">
-            <a target="_blank" href="https://c9.io/web/sign-up/free"><img src="http://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/8389/vz1XuNqHTyfO4YsqI3f2" /></a>
-            <span>You must have a valid C9.io account to play</span>
-            <input type="text" placeholder="C9 username" ng-model="warrior.c9Name"/>
-        </div> <!-- .c9-register -->
+    </div> <!-- .skillBox -->
 
-		<h2 class="title"><span>Public Introduction</span></h2>
-		<label for="dwReg-country"></label>
-		<input id="dwReg-country"type="text" placeholder="Country" ng-model="warrior.location"/>
-		<label for="dwReg-food"></label>
-        <input id="dwReg-food"type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
-		<label for="dwReg-tool"></label>
-        <input id="dwReg-tool" type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
-        <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
+    <h2 class="title"><span>Required Accounts</span></h2>
+    <div class="c9-register">
+      <a target="_blank" href="https://c9.io/web/sign-up/free"><img
+        src="http://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/8389/vz1XuNqHTyfO4YsqI3f2"/></a>
+      <span>You must have a valid C9.io account to play</span>
+      <input type="text" placeholder="C9 username" ng-model="warrior.c9Name"/>
+    </div> <!-- .c9-register -->
 
-        <button class="button" ng-click="update(warrior)">Update my details</button>
-    </form> <!-- form.warriorForm -->
+    <h2 class="title"><span>Public Introduction</span></h2>
+    <label for="dwReg-country"></label>
+    <input id="dwReg-country" type="text" placeholder="Country" ng-model="warrior.location"/>
+    <label for="dwReg-food"></label>
+    <input id="dwReg-food" type="text" placeholder="Favorite Food" ng-model="warrior.favFood"/>
+    <label for="dwReg-tool"></label>
+    <input id="dwReg-tool" type="text" placeholder="Favorite Dev Tool (i.e. Grunt)" ng-model="warrior.favTool"/>
+    <textarea placeholder="A short description about myself" ng-model="warrior.about"></textarea>
+
+    <button class="button" ng-click="update(warrior)">Update my details</button>
+  </form> <!-- form.warriorForm -->
 </div> <!-- .right -->

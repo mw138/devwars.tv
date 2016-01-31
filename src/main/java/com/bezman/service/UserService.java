@@ -182,9 +182,9 @@ public class UserService {
         Session session = DatabaseManager.getSession();
 
         Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream()
-                .filter(account ->
-                        "TWITCH".equals(account.getProvider()) && account.getDisconnected() == false)
-                .findFirst();
+            .filter(account ->
+                "TWITCH".equals(account.getProvider()) && account.getDisconnected() == false)
+            .findFirst();
 
         boolean isTwitchAccount = "TWITCH".equals(user.getProvider());
 
@@ -193,9 +193,9 @@ public class UserService {
         String username = connectedAccount.isPresent() ? connectedAccount.get().getUsername() : user.getUsername();
 
         TwitchPointStorage twitchPointStorage = (TwitchPointStorage) session.createQuery("from TwitchPointStorage where username = :username")
-                .setString("username", username)
-                .setMaxResults(1)
-                .uniqueResult();
+            .setString("username", username)
+            .setMaxResults(1)
+            .uniqueResult();
 
         if (twitchPointStorage != null) {
             user.getRanking().addPoints(twitchPointStorage.getPoints());
@@ -211,9 +211,9 @@ public class UserService {
         Session session = DatabaseManager.getSession();
 
         List<User> users = session.createQuery("select user.id as id, user.username as username from User user where lower(username) LIKE :username")
-                .setString("username", "%" + username.toLowerCase() + "%")
-                .setResultTransformer(Transformers.aliasToBean(User.class))
-                .list();
+            .setString("username", "%" + username.toLowerCase() + "%")
+            .setResultTransformer(Transformers.aliasToBean(User.class))
+            .list();
 
         session.close();
 
@@ -230,9 +230,9 @@ public class UserService {
         Session session = DatabaseManager.getSession();
 
         User user = (User) session.createQuery("from User user where user.session.sessionID = :token")
-                .setString("token", token)
-                .setMaxResults(1)
-                .uniqueResult();
+            .setString("token", token)
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -244,9 +244,9 @@ public class UserService {
         session.beginTransaction();
 
         UserSession userSession = (UserSession) session.createQuery("from UserSession session where session.id = :id")
-                .setInteger("id", user.getId())
-                .setMaxResults(1)
-                .uniqueResult();
+            .setInteger("id", user.getId())
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.delete(userSession);
 

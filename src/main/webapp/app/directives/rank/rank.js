@@ -4,10 +4,10 @@ angular.module("app.rank", [])
             restrict: "A",
 
             scope: {
-               rank: "="
+                rank: "="
             },
 
-            controller: function($scope) {
+            controller: function ($scope) {
 
             },
 

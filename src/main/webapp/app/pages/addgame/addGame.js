@@ -15,7 +15,7 @@ angular.module('app.addGame', [
 
         $scope.pickedDate = new Date();
         $scope.pickedTime = new Date();
-        $scope. game = {
+        $scope.game = {
             objectives: []
         };
 
@@ -34,7 +34,7 @@ angular.module('app.addGame', [
                 }, angular.noop);
         };
 
-        $scope.setGameTimeFromDateAndTime = function(game, pickedDate, pickedTime) {
+        $scope.setGameTimeFromDateAndTime = function (game, pickedDate, pickedTime) {
             game.timestamp = new Date($scope.pickedDate.getTime());
 
             game.timestamp.setHours($scope.pickedTime.getHours());

@@ -18,7 +18,7 @@ angular.module("app.rules", [])
         $scope.lodash = "https://raw.githubusercontent.com/lodash/lodash/3.10.1/lodash.js";
         $scope.jquery = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js";
 
-        $scope.scrollTo = function(id) {
+        $scope.scrollTo = function (id) {
             $location.hash(id);
             $anchorScroll();
         }

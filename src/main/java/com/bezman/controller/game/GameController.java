@@ -132,8 +132,8 @@ public class GameController {
     @UnitOfWork
     @RequestMapping("/pastgames")
     public ResponseEntity pastGames(
-            @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
-            @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
+        @RequestParam(value = "count", required = false, defaultValue = "16") int queryCount,
+        @RequestParam(value = "offset", required = false, defaultValue = "0") int queryOffset
     ) throws ExecutionException {
         HashMap games = pastGamesCache.get(queryCount + ":" + queryOffset);
 
@@ -148,14 +148,14 @@ public class GameController {
     @UnitOfWork
     @RequestMapping("/pastgamelist")
     public ResponseEntity getGameList(
-            @RequestParam("firstGame") int id,
-            @RequestParam(value = "count", required = false, defaultValue = "10") int count,
-            SessionImpl session) {
+        @RequestParam("firstGame") int id,
+        @RequestParam(value = "count", required = false, defaultValue = "10") int count,
+        SessionImpl session) {
         List<Game> pastGames = session.createCriteria(Game.class)
-                .add(Restrictions.le("id", id))
-                .setMaxResults(count)
-                .addOrder(Order.desc("id"))
-                .list();
+            .add(Restrictions.le("id", id))
+            .setMaxResults(count)
+            .addOrder(Order.desc("id"))
+            .list();
 
         return new ResponseEntity(pastGames, HttpStatus.OK);
     }
@@ -175,7 +175,7 @@ public class GameController {
                                      @RequestParam(required = false, value = "name") String name,
                                      @RequestParam(required = false, value = "tournament") Integer tournamentID) {
 
-        Tournament tournament = tournamentID == null ?  null : tournamentService.byID(tournamentID);
+        Tournament tournament = tournamentID == null ? null : tournamentService.byID(tournamentID);
 
         Game game = gameService.defaultGame(tournament);
 
@@ -251,10 +251,10 @@ public class GameController {
 
         if (newGame.isActive()) {
             Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
-                    .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
-                    .body(Reference.objectMapper.writeValueAsString(newGame))
-                    .asString()
-                    .getBody();
+                .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
+                .body(Reference.objectMapper.writeValueAsString(newGame))
+                .asString()
+                .getBody();
         }
 
         return getGame(game.getId());
@@ -407,20 +407,20 @@ public class GameController {
         Game game = (Game) session.get(Game.class, id);
 
         game.getTeams().values().stream()
-                .forEach(team -> {
-                    team.setWin(false);
+            .forEach(team -> {
+                team.setWin(false);
 
-                    team.getPlayers().stream().forEach(player -> {
-                        int xpChanged = player.getXpChanged();
-                        int pointsChanged = player.getPointsChanged();
+                team.getPlayers().stream().forEach(player -> {
+                    int xpChanged = player.getXpChanged();
+                    int pointsChanged = player.getPointsChanged();
 
-                        player.getUser().getRanking().addPoints(pointsChanged * -1);
-                        player.getUser().getRanking().addXP(xpChanged * -1);
+                    player.getUser().getRanking().addPoints(pointsChanged * -1);
+                    player.getUser().getRanking().addXP(xpChanged * -1);
 
-                        player.setXpChanged(0);
-                        player.setPointsChanged(0);
-                    });
+                    player.setXpChanged(0);
+                    player.setPointsChanged(0);
                 });
+            });
 
         return new ResponseEntity("Successfully reset game winner", HttpStatus.OK);
     }
@@ -553,7 +553,7 @@ public class GameController {
 
         if (game != null) {
             boolean hasSignedUp = game.getSignups().stream()
-                    .anyMatch(signup -> signup.getUser().getId() == user.getId());
+                .anyMatch(signup -> signup.getUser().getId() == user.getId());
 
             if (!hasSignedUp) {
 
@@ -575,9 +575,10 @@ public class GameController {
 
     /**
      * Endpoint for team leaders to signup their team to a team game
-     * @param user (Resolved)
+     *
+     * @param user  (Resolved)
      * @param users Array of TeamGameSignupUser
-     * @param id ID of game to apply to
+     * @param id    ID of game to apply to
      * @return Response
      */
     @PreAuthorization(minRole = User.Role.USER)
@@ -641,7 +642,7 @@ public class GameController {
             }
 
             boolean isUserApplied = game.getSignups().stream()
-                    .anyMatch(signup -> signup.getUser().getId() == twitchUser.getId());
+                .anyMatch(signup -> signup.getUser().getId() == twitchUser.getId());
 
             if (!isUserApplied) {
                 if (twitchUser.getWarrior() == null) {
@@ -666,8 +667,8 @@ public class GameController {
         Game game = (Game) session.get(Game.class, id);
 
         Optional<GameSignup> foundSignup = game.getSignups().stream()
-                .filter(a -> a.getUser().getId() == user.getId())
-                .findFirst();
+            .filter(a -> a.getUser().getId() == user.getId())
+            .findFirst();
 
         if (foundSignup.isPresent()) {
             session.delete(foundSignup.get());

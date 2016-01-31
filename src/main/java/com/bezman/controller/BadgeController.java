@@ -29,7 +29,7 @@ public class BadgeController {
     public ResponseEntity getAll(SessionImpl session) {
         System.out.println(session);
         List<Badge> badges = session.createCriteria(Badge.class)
-                .list();
+            .list();
 
         HashMap<String, Object> map = new HashMap<>();
 

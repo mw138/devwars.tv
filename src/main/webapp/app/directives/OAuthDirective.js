@@ -6,7 +6,7 @@ angular.module("app.OAuthDirective", [])
             controller: function ($scope, $element, $attrs) {
                 $element.bind("click", function () {
 
-                    if($attrs.provider) {
+                    if ($attrs.provider) {
                         location.href = "/v1/oauth/" + $attrs.provider;
                     }
 

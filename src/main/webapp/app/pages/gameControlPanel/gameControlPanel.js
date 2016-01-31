@@ -71,22 +71,22 @@ angular.module("app.gameControlPanel", [])
             $scope.getGameTimestamp();
 
             //Remove all completed objectives is game has been removed
-            for(var teamKey in $scope.game.teams) {
+            for (var teamKey in $scope.game.teams) {
                 var team = $scope.game.teams[teamKey];
 
-                for(var completedObjectiveKey in team.completedObjectives) {
+                for (var completedObjectiveKey in team.completedObjectives) {
                     var completedObjective = team.completedObjectives[completedObjectiveKey].objective;
 
                     var foundObjective = false;
-                    for(var gameObjectiveKey in $scope.game.objectives) {
+                    for (var gameObjectiveKey in $scope.game.objectives) {
                         var gameObjective = $scope.game.objectives[gameObjectiveKey];
 
-                        if(gameObjective.id && completedObjective.id && gameObjective.id === completedObjective.id) {
+                        if (gameObjective.id && completedObjective.id && gameObjective.id === completedObjective.id) {
                             foundObjective = true;
                         }
                     }
 
-                    if(!foundObjective) {
+                    if (!foundObjective) {
                         team.completedObjectives.splice(completedObjectiveKey, 1);
                     }
                 }
@@ -102,14 +102,14 @@ angular.module("app.gameControlPanel", [])
 
         $scope.addPlayer = function (game, $event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/addPlayerDialog/addPlayerDialogView.html",
-                controller: "AddPlayerDialogController",
-                targetEvent: $event,
+                    templateUrl: "/app/components/dialogs/addPlayerDialog/addPlayerDialogView.html",
+                    controller: "AddPlayerDialogController",
+                    targetEvent: $event,
 
-                locals: {
-                    game: game
-                }
-            })
+                    locals: {
+                        game: game
+                    }
+                })
                 .then(function (success) {
                     ToastService.showDevwarsToast("fa-check-circle", "Successfully added player", success.newPlayer.user.username);
                     $scope.updateGame();
@@ -131,16 +131,16 @@ angular.module("app.gameControlPanel", [])
 
         $scope.editPlayer = function (game, player, team, $event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/editPlayerDialog/editPlayerDialogView.html",
-                controller: "EditPlayerDialogController",
-                targetEvent: $event,
+                    templateUrl: "/app/components/dialogs/editPlayerDialog/editPlayerDialogView.html",
+                    controller: "EditPlayerDialogController",
+                    targetEvent: $event,
 
-                locals: {
-                    game: game,
-                    player: player,
-                    team: team
-                }
-            })
+                    locals: {
+                        game: game,
+                        player: player,
+                        team: team
+                    }
+                })
                 .then(function (success) {
                     $scope.updateGame();
                     ToastService.showDevwarsToast("fa-check-circle", "Successfully edited player", success.oldPlayer.user.username);
@@ -150,7 +150,7 @@ angular.module("app.gameControlPanel", [])
         };
 
         $scope.getGameTimestamp = function () {
-            if($scope.pickedDate) {
+            if ($scope.pickedDate) {
                 $scope.pickedDate.setHours(0);
                 $scope.pickedDate.setMinutes(0);
                 $scope.pickedDate.setSeconds(0);
@@ -158,7 +158,7 @@ angular.module("app.gameControlPanel", [])
 
                 $scope.game.timestamp = $scope.pickedDate.getTime();
 
-                if($scope.pickedTime) {
+                if ($scope.pickedTime) {
                     $scope.game.timestamp += ((($scope.pickedTime.getHours() * 60) + $scope.pickedTime.getMinutes()) * 60 * 1000);
                 }
             }
@@ -195,44 +195,44 @@ angular.module("app.gameControlPanel", [])
         }
 
         $scope.toggleTeamObjective = function (team, objective) {
-            if(!team.completedObjectives) {
+            if (!team.completedObjectives) {
                 console.log("Resetting");
                 team.completedObjectives = [];
             }
 
-            if($scope.teamHasObjective(team, objective)) {
+            if ($scope.teamHasObjective(team, objective)) {
                 var index = -1;
 
-                for(var i = 0; i < team.completedObjectives.length; i++) {
-                    if(objective.id === team.completedObjectives[i].objective.id) {
+                for (var i = 0; i < team.completedObjectives.length; i++) {
+                    if (objective.id === team.completedObjectives[i].objective.id) {
                         index = i;
                         i = team.completedObjectives.length;
                     }
                 }
 
-                if(index > -1) {
+                if (index > -1) {
                     team.completedObjectives.splice(index, 1);
                     console.log("Able to remove");
                 }
             } else {
                 team.completedObjectives.push({
                     team_id: team.id,
-                   objective: objective
+                    objective: objective
                 });
 
                 console.log("Able to add");
             }
 
             /*console.log("Does the team have the objective now?");
-            console.log($scope.teamHasObjective(team, objective));
-            console.log(team.completedObjectives);*/
+             console.log($scope.teamHasObjective(team, objective));
+             console.log(team.completedObjectives);*/
         };
 
         $scope.teamHasObjective = function (team, objective) {
-            for(var objectiveKey in team.completedObjectives) {
+            for (var objectiveKey in team.completedObjectives) {
                 var teamObjective = team.completedObjectives[objectiveKey].objective;
 
-                if(teamObjective.id === objective.id) {
+                if (teamObjective.id === objective.id) {
                     return true;
                 }
             }
@@ -241,17 +241,17 @@ angular.module("app.gameControlPanel", [])
         }
 
         $scope.removeObjectiveFromGame = function (objective, game) {
-            if(game.objectives) {
+            if (game.objectives) {
                 game.objectives.splice(game.objectives.indexOf(objective), 1);
             }
 
-            for(var teamKey in game.teams) {
+            for (var teamKey in game.teams) {
                 var team = game.teams[teamKey];
 
-                for(var completedObjectiveKey in team.completedObjectives) {
+                for (var completedObjectiveKey in team.completedObjectives) {
                     var completedObjective = team.completedObjectives[completedObjectiveKey].objective;
 
-                    if(completedObjective.id === objective.id) {
+                    if (completedObjective.id === objective.id) {
                         team.completedObjectives.splice(team.completedObjectives.indexOf(completedObjective, 1));
                     }
                 }

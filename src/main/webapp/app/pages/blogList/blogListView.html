@@ -1,12 +1,14 @@
 <div class="blogView inner">
 
-    <div class="col-2">
-        <div class="left">
-			<button class="button newPostButton" ng-click="newPost($event)" ng-if="AuthService.isAtLeast('BLOGGER')">New Post</button>
-			<blog class="blog-post blog-post--preview" post="post" ng-repeat="post in posts"></blog>
-        </div> <!-- .left -->
-        <div class="right">
-			<sidebar></sidebar> 
-   		</div> <!-- .right -->
-    </div> <!-- .col-2 -->
+  <div class="col-2">
+    <div class="left">
+      <button class="button newPostButton" ng-click="newPost($event)" ng-if="AuthService.isAtLeast('BLOGGER')">New
+        Post
+      </button>
+      <blog class="blog-post blog-post--preview" post="post" ng-repeat="post in posts"></blog>
+    </div> <!-- .left -->
+    <div class="right">
+      <sidebar></sidebar>
+    </div> <!-- .right -->
+  </div> <!-- .col-2 -->
 </div> <!-- .blogView.inner -->

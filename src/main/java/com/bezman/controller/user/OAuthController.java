@@ -86,12 +86,12 @@ public class OAuthController {
     public ResponseEntity googleAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://accounts.google.com/o/oauth2/auth?scope=" +
-                    "profile email openid&" +
-                    "state=generate_a_unique_state_value&" +
-                    "redirect_uri=" + Reference.rootURL + "/v1/oauth/google_callback&" +
-                    "response_type=code&" +
-                    "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
-                    "access_type=offline");
+                "profile email openid&" +
+                "state=generate_a_unique_state_value&" +
+                "redirect_uri=" + Reference.rootURL + "/v1/oauth/google_callback&" +
+                "response_type=code&" +
+                "client_id=" + Reference.getEnvironmentProperty("googleClientID") + "&" +
+                "access_type=offline");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,10 +195,10 @@ public class OAuthController {
     public ResponseEntity twitchAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://api.twitch.tv/kraken/oauth2/authorize" +
-                    "?response_type=code" +
-                    "&client_id=" + Reference.getEnvironmentProperty("twitchClientID") +
-                    "&redirect_uri=" + Reference.rootURL + "/v1/oauth/twitch_callback" +
-                    "&scope=user_read");
+                "?response_type=code" +
+                "&client_id=" + Reference.getEnvironmentProperty("twitchClientID") +
+                "&redirect_uri=" + Reference.rootURL + "/v1/oauth/twitch_callback" +
+                "&scope=user_read");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -258,10 +258,10 @@ public class OAuthController {
     public static ResponseEntity facebookAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://www.facebook.com/dialog/oauth?" +
-                    "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
-                    "&redirect_uri=" + Reference.rootURL + "/v1/oauth/facebook_callback" +
-                    "&response_type=code" +
-                    "&scope=email");
+                "client_id=" + Reference.getEnvironmentProperty("facebookAppID") +
+                "&redirect_uri=" + Reference.rootURL + "/v1/oauth/facebook_callback" +
+                "&response_type=code" +
+                "&scope=email");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -306,10 +306,10 @@ public class OAuthController {
     public ResponseEntity githubAuth(HttpServletRequest request, HttpServletResponse response) {
         try {
             response.sendRedirect("https://github.com/login/oauth/authorize?" +
-                    "client_id=" + Reference.getEnvironmentProperty("githubClientID") +
-                    "&redirect_uri=" + Reference.rootURL + "/v1/oauth/github_callback" +
-                    "&scope=user,user:email" +
-                    "&state=" + Util.randomText(32));
+                "client_id=" + Reference.getEnvironmentProperty("githubClientID") +
+                "&redirect_uri=" + Reference.rootURL + "/v1/oauth/github_callback" +
+                "&scope=user,user:email" +
+                "&state=" + Util.randomText(32));
         } catch (IOException e) {
             e.printStackTrace();
         }

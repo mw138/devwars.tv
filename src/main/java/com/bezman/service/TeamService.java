@@ -22,7 +22,7 @@ public class TeamService {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        for(User user : users) {
+        for (User user : users) {
             session.save(new Player(team, user, language));
         }
 
@@ -30,8 +30,7 @@ public class TeamService {
         session.close();
     }
 
-    public UserTeam userTeamForTeam(Team team)
-    {
+    public UserTeam userTeamForTeam(Team team) {
         if (team.getPlayers().size() < 1) return null;
 
         Session session = DatabaseManager.getSession();

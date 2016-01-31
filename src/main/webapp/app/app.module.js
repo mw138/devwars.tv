@@ -69,7 +69,7 @@ var app = angular.module('app', [
     'app.addGame',
     'app.UserTeamService',
     'app.editTeamImage',
-	'app.modDoc',
+    'app.modDoc',
     'app.tournament',
     'app.passReset',
     'app.rules',
@@ -86,7 +86,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
     // all page specific routes are in their js file
     $urlRouterProvider.otherwise('/');
 
-    if(false) {
+    if (false) {
         $httpProvider.interceptors.push(function () {
 
             var Interceptor = {};
@@ -116,7 +116,7 @@ app.config(['$urlRouterProvider', '$httpProvider', '$locationProvider', function
 
     $httpProvider.defaults.transformRequest = function (obj) {
         var str = [];
-        for(var p in obj)
+        for (var p in obj)
             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
         return str.join("&");
     };
@@ -147,7 +147,7 @@ app.filter("players", function () {
 
 app.filter('camel', function () {
     return function (data) {
-        var result = data.replace( /([A-Z])/g, " $1" );
+        var result = data.replace(/([A-Z])/g, " $1");
         var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
 
         return finalResult;
@@ -157,19 +157,18 @@ app.filter('camel', function () {
 app.run(function ($rootScope, $location, AuthService) {
     $rootScope.$on('$stateChangeStart', function (event, toState) {
         //Is the route protected
-        if(toState.auth) {
+        if (toState.auth) {
             //Are we logged in?
-            if(typeof(toState.auth) === "boolean")
-            {
+            if (typeof(toState.auth) === "boolean") {
                 AuthService.isLoggedIn()
-                .then(angular.noop, function (error) {
-                    $location.path('/');
-                });
+                    .then(angular.noop, function (error) {
+                        $location.path('/');
+                    });
 
             } else {
                 AuthService.isLoggedIn()
                     .then(function () {
-                        if(!AuthService.isAtLeast(toState.auth)) {
+                        if (!AuthService.isAtLeast(toState.auth)) {
                             $location.path("/");
                         }
                     }, function () {

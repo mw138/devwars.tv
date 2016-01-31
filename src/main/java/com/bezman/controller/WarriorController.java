@@ -114,8 +114,8 @@ public class WarriorController {
         Warrior oldWarrior = user.getWarrior();
 
         if (!oldWarrior.getHtmlRate().equals(warrior.getHtmlRate()) ||
-                !oldWarrior.getCssRate().equals(warrior.getCssRate()) ||
-                !oldWarrior.getJsRate().equals(warrior.getJsRate())) {
+            !oldWarrior.getCssRate().equals(warrior.getCssRate()) ||
+            !oldWarrior.getJsRate().equals(warrior.getJsRate())) {
             if (oldWarrior.getUpdatedAt() == null) {
                 warrior.setUpdatedAt(new Date());
             } else {

@@ -1,12 +1,12 @@
 angular.module("app.dashnav", [])
-	.directive("dashnav", function () {
+    .directive("dashnav", function () {
         return {
             restrict: "E",
-			templateUrl: "/app/directives/dashnavDirective/dashnavView.html",
+            templateUrl: "/app/directives/dashnavDirective/dashnavView.html",
 
             controller: function ($scope) {
                 $scope.goToProfile = function (profile) {
-                    location.href = "/profile?username=" +  profile;
+                    location.href = "/profile?username=" + profile;
                 }
             }
         };

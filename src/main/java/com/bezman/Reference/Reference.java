@@ -121,10 +121,10 @@ public class Reference {
 
         try {
             HttpResponse httpResponse = Unirest.post("https://www.google.com/recaptcha/api/siteverify")
-                    .field("secret", Reference.getEnvironmentProperty("recaptchaPrivateKey"))
-                    .field("response", response)
-                    .field("remoteip", ip)
-                    .asString();
+                .field("secret", Reference.getEnvironmentProperty("recaptchaPrivateKey"))
+                .field("response", response)
+                .field("remoteip", ip)
+                .asString();
 
             JSONObject responseObject = (JSONObject) JSONValue.parse(httpResponse.getBody().toString());
 

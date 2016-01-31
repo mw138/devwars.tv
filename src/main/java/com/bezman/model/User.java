@@ -365,10 +365,10 @@ public class User extends BaseModel {
 
         if (this.getRanking() != null) {
             this.rank = (Rank) session.createCriteria(Rank.class)
-                    .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
-                    .addOrder(Order.desc("xpRequired"))
-                    .setMaxResults(1)
-                    .uniqueResult();
+                .add(Restrictions.le("xpRequired", this.getRanking().getXp().intValue()))
+                .addOrder(Order.desc("xpRequired"))
+                .setMaxResults(1)
+                .uniqueResult();
 
             this.nextRank = (Rank) session.get(Rank.class, this.rank == null ? 1 : this.rank.getLevel() + 1);
         }

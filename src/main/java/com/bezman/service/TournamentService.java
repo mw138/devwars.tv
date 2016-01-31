@@ -33,8 +33,8 @@ public class TournamentService {
         Session session = DatabaseManager.getSession();
 
         tournamentList = session.createCriteria(Tournament.class)
-                .add(Restrictions.ge("end", new Date()))
-                .list();
+            .add(Restrictions.ge("end", new Date()))
+            .list();
 
         session.close();
 
@@ -42,14 +42,13 @@ public class TournamentService {
     }
 
 
-    public void signupTeamForTournament(UserTeam userTeam, Tournament tournament, TeamGameSignupUser[] users)
-    {
+    public void signupTeamForTournament(UserTeam userTeam, Tournament tournament, TeamGameSignupUser[] users) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
         TeamGameSignup teamGameSignup = new TeamGameSignup(tournament, userTeam);
 
-        for(TeamGameSignupUser user : users) {
+        for (TeamGameSignupUser user : users) {
             teamGameSignup.getTeamGameSignupUsers().add(user);
             session.save(user);
         }
@@ -63,8 +62,7 @@ public class TournamentService {
     }
 
 
-    public Tournament tournamentFromGame(Game game)
-    {
+    public Tournament tournamentFromGame(Game game) {
         Tournament tournament;
 
         Session session = DatabaseManager.getSession();

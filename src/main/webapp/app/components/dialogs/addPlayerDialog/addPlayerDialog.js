@@ -22,7 +22,7 @@ angular.module("app.addPlayerDialog", [])
         $scope.teamSearchQuery = function () {
             var teamsArray = [];
 
-            for(var lang in game.teams) {
+            for (var lang in game.teams) {
                 teamsArray.push(game.teams[lang]);
             }
 
@@ -33,7 +33,7 @@ angular.module("app.addPlayerDialog", [])
         };
 
         $scope.pendingPlayersQuery = function () {
-            if($scope.game.pendingPlayers) {
+            if ($scope.game.pendingPlayers) {
                 return $scope.game.pendingPlayers.filter(function (user) {
                     return user.username.toLowerCase().indexOf($scope.searchText.toLowerCase()) > -1 || $scope.searchText.toLowerCase().indexOf(user.username.toLowerCase()) > -1;
                 });
@@ -52,11 +52,11 @@ angular.module("app.addPlayerDialog", [])
             $scope.conflicts = [];
 
             //If the moderator didn't click a user but the query still matches an available user
-            if(!$scope.selectedUser && $scope.searchText) {
-                for(var i = 0; i < $scope.game.pendingPlayers.length; i++) {
+            if (!$scope.selectedUser && $scope.searchText) {
+                for (var i = 0; i < $scope.game.pendingPlayers.length; i++) {
                     var pendingUser = $scope.game.pendingPlayers[i];
 
-                    if(pendingUser.username.toUpperCase() === $scope.searchText.toUpperCase()) {
+                    if (pendingUser.username.toUpperCase() === $scope.searchText.toUpperCase()) {
                         $scope.selectedPlayer = {
                             team_id: $scope.selectedTeam.id,
                             language: $scope.selectedLanguage,
@@ -66,9 +66,9 @@ angular.module("app.addPlayerDialog", [])
                         };
                     }
                 }
-            } else if($scope.selectedUser) { //If the moderator did click a player, just make a new player blob to add to the game.
+            } else if ($scope.selectedUser) { //If the moderator did click a player, just make a new player blob to add to the game.
                 $scope.selectedPlayer = {
-                    team_id : $scope.selectedTeam.id,
+                    team_id: $scope.selectedTeam.id,
                     language: $scope.selectedLanguage,
                     user: {
                         id: $scope.selectedUser.id
@@ -76,13 +76,13 @@ angular.module("app.addPlayerDialog", [])
                 }
             }
 
-            if($scope.selectedPlayer) { //If all went well, add them to the game on the back end
+            if ($scope.selectedPlayer) { //If all went well, add them to the game on the back end
                 GameService.addPlayer($scope.selectedTeam.id, $scope.game.id, $scope.selectedPlayer, function (success) {
                     $mdDialog.hide({
                         newPlayer: success.data
                     });
                 }, function (error) {
-                    if(error.status === 409) {
+                    if (error.status === 409) {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Player is already in game.");
                     } else {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Could not add player.");

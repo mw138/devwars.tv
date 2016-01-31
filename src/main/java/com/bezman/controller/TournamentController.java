@@ -62,8 +62,8 @@ public class TournamentController {
     @PreAuthorization(minRole = User.Role.USER)
     @RequestMapping(value = "/{id}/applyteam", method = RequestMethod.POST)
     public ResponseEntity applyTeamForTournament(@AuthedUser User user,
-                                                  @PathVariable("id") int id,
-                                                  @JSONParam("users") TeamGameSignupUser[] users) {
+                                                 @PathVariable("id") int id,
+                                                 @JSONParam("users") TeamGameSignupUser[] users) {
         if (user.getOwnedTeam() == null)
             return new ResponseEntity("You do not own a team", HttpStatus.FORBIDDEN);
 

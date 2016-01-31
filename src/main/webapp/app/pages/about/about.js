@@ -1,6 +1,6 @@
 angular.module('app.about', [
-    'ui.router'
-])
+        'ui.router'
+    ])
     .config(['$stateProvider',
         function ($stateProvider) {
 

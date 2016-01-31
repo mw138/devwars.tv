@@ -39,7 +39,7 @@ public class UserTeamService {
 
     public boolean isUserInvitedToTeam(UserTeam team, User user) {
         return team.getInvites().stream()
-                .anyMatch(current -> current.getId() == user.getId());
+            .anyMatch(current -> current.getId() == user.getId());
     }
 
     public void disbandTeam(UserTeam userTeam, Integer newOwner) {
@@ -54,7 +54,7 @@ public class UserTeamService {
             userTeam.setOwner(newOwnerUser);
         } else {
             userTeam.getInvites().stream()
-                    .forEach(session::delete);
+                .forEach(session::delete);
 
             userTeam.setOwner(null);
         }
@@ -89,10 +89,10 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         List<Game> games = session.createQuery("from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id)")
-                .setInteger("id", userTeam.getId())
-                .setMaxResults(count)
-                .setFirstResult(count * (page - 1))
-                .list();
+            .setInteger("id", userTeam.getId())
+            .setMaxResults(count)
+            .setFirstResult(count * (page - 1))
+            .list();
 
         session.close();
 
@@ -103,8 +103,8 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         List<Game> games = session.createQuery("from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id)")
-                .setInteger("id", userTeam.getId())
-                .list();
+            .setInteger("id", userTeam.getId())
+            .list();
 
         session.close();
 
@@ -115,9 +115,9 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         Long gamesCount = (Long) session.createQuery("select count(*) from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id)")
-                .setInteger("id", userTeam.getId())
-                .setMaxResults(1)
-                .uniqueResult();
+            .setInteger("id", userTeam.getId())
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -128,9 +128,9 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         Long gamesCount = (Long) session.createQuery("select count(*) from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id and team.win = true)")
-                .setInteger("id", userTeam.getId())
-                .setMaxResults(1)
-                .uniqueResult();
+            .setInteger("id", userTeam.getId())
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -141,9 +141,9 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         Long gamesCount = (Long) session.createQuery("select count(*) from Game game where id in (select team.game.id from Team team where team.userTeam.id = :id and team.win = false)")
-                .setInteger("id", userTeam.getId())
-                .setMaxResults(1)
-                .uniqueResult();
+            .setInteger("id", userTeam.getId())
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -156,9 +156,9 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         place = (Long) session.createQuery("select count(*) from UserTeam u where u.gamesWon >= :gamesWon")
-                .setLong("gamesWon", userTeam.getGamesWon())
-                .setMaxResults(0)
-                .uniqueResult();
+            .setLong("gamesWon", userTeam.getGamesWon())
+            .setMaxResults(0)
+            .uniqueResult();
 
         session.close();
 
@@ -182,8 +182,8 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         returnList = session.createCriteria(UserTeamInvite.class)
-                .add(Restrictions.eq("user.id", user.getId()))
-                .list();
+            .add(Restrictions.eq("user.id", user.getId()))
+            .list();
 
         session.close();
 
@@ -210,10 +210,10 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
-                .add(Restrictions.ilike("name", name))
-                .add(Restrictions.isNotNull("owner"))
-                .setMaxResults(1)
-                .uniqueResult();
+            .add(Restrictions.ilike("name", name))
+            .add(Restrictions.isNotNull("owner"))
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -226,10 +226,10 @@ public class UserTeamService {
         Session session = DatabaseManager.getSession();
 
         UserTeam userTeam = (UserTeam) session.createCriteria(UserTeam.class)
-                .add(Restrictions.ilike("tag", name))
-                .add(Restrictions.isNotNull("owner"))
-                .setMaxResults(1)
-                .uniqueResult();
+            .add(Restrictions.ilike("tag", name))
+            .add(Restrictions.isNotNull("owner"))
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 

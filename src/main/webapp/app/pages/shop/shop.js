@@ -13,5 +13,5 @@ angular.module("app.shop", [])
 
         }])
     .controller("ShopController", ["$scope", function ($scope) {
-        
+
     }]);

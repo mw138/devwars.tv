@@ -4,7 +4,7 @@ angular.module('app.blogDirective', [])
             restrict: "E",
 
             scope: {
-                "post" : "="
+                "post": "="
             },
 
             controller: function ($scope, $location) {
@@ -13,7 +13,7 @@ angular.module('app.blogDirective', [])
                 $scope.AuthService = AuthService;
 
                 $scope.shouldShowTags = function (blog) {
-                    if(blog) {
+                    if (blog) {
                         return blog.tags.length > 0;
                     }
                 };

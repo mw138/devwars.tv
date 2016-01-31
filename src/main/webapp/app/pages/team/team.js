@@ -16,7 +16,7 @@ angular.module("app.team", [])
         $scope.team = null;
         $scope.isOwner = false;
 
-        $scope.updateMyTeam = function() {
+        $scope.updateMyTeam = function () {
             UserService.http.getMyTeam()
                 .then(function (success) {
                     $scope.team = success.data;
@@ -110,7 +110,7 @@ angular.module("app.team", [])
         };
 
         $scope.createTeam = function () {
-            if(!AuthService.user.warrior) {
+            if (!AuthService.user.warrior) {
                 ToastService.showDevwarsToast("fa-check-circle", "Error", "You must be a warrior");
                 return;
             }
@@ -136,7 +136,7 @@ angular.module("app.team", [])
                             $scope.team = success.data;
 
                         }, function (error) {
-                            if(error.status === 400)
+                            if (error.status === 400)
                                 ToastService.showErrorList(error.data);
                         })
 
@@ -221,7 +221,7 @@ angular.module("app.team", [])
         };
 
         $scope.shouldShowInvites = function () {
-            if($scope.invites)
+            if ($scope.invites)
                 return $scope.invites.length > 0;
         };
 
@@ -244,12 +244,12 @@ angular.module("app.team", [])
         };
 
         $scope.clickAvatarImage = function () {
-            if($scope.isOwner)
+            if ($scope.isOwner)
                 document.getElementById('fileInput').click();
         };
 
         $scope.$watch('chosenImage', function (newVal, oldVal) {
-            if(newVal !== oldVal) {
+            if (newVal !== oldVal) {
                 DialogService.getBase64ForImage($scope.chosenImage)
                     .then(function (image) {
                         var fd = new FormData();

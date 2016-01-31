@@ -19,10 +19,10 @@ angular.module("app.editAvatarImage", [])
             fd.append("file", dataURItoBlob(image));
 
             $http.post("/v1/user/changeavatar", fd, {
-                withCredentials: true,
-                headers: {'Content-Type': undefined},
-                transformRequest: angular.identity
-            })
+                    withCredentials: true,
+                    headers: {'Content-Type': undefined},
+                    transformRequest: angular.identity
+                })
                 .then(function (success) {
                     $mdDialog.hide();
                 }, function (error) {
@@ -30,11 +30,11 @@ angular.module("app.editAvatarImage", [])
                 });
         };
 
-        var dataURItoBlob = function(dataURI) {
+        var dataURItoBlob = function (dataURI) {
             var binary = atob(dataURI.split(',')[1]);
             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
             var array = [];
-            for(var i = 0; i < binary.length; i++) {
+            for (var i = 0; i < binary.length; i++) {
                 array.push(binary.charCodeAt(i));
             }
             return new Blob([new Uint8Array(array)], {type: mimeString});

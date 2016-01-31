@@ -39,6 +39,7 @@ public class UserTeamController {
 
     @Autowired
     UserService userService;
+
     /**
      * Returns a team for a given ID
      *
@@ -187,7 +188,7 @@ public class UserTeamController {
             return new ResponseEntity("You're not allowed to do that", HttpStatus.FORBIDDEN);
 
         userTeam.getMembers().removeIf(
-                user -> user.getId() == userID);
+            user -> user.getId() == userID);
 
         return new ResponseEntity("Successfully kicked player", HttpStatus.OK);
     }
@@ -212,7 +213,7 @@ public class UserTeamController {
             return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
 
         userTeam.getMembers().removeIf(currentUser ->
-                currentUser.getId() == user.getId());
+            currentUser.getId() == user.getId());
 
         return new ResponseEntity("Successfully left team", HttpStatus.OK);
     }
@@ -308,20 +309,20 @@ public class UserTeamController {
         }
 
         Optional<UserTeamInvite> removed = userTeam.getInvites().stream()
-                .filter(invite -> invite.getUser().getId() == user.getId())
-                .findFirst();
+            .filter(invite -> invite.getUser().getId() == user.getId())
+            .findFirst();
 
         if (removed.isPresent()) {
             session.delete(removed.get());
 
             userTeam.getMembers().stream()
-                    .forEach(currentUser -> {
-                        Activity activity = new Activity(currentUser, user, user.getUsername() + " joined your team : " + userTeam.getName(), 0, 0);
-                        Notification notification = new Notification(currentUser, user.getUsername() + " joined your team : " + userTeam.getName(), false);
+                .forEach(currentUser -> {
+                    Activity activity = new Activity(currentUser, user, user.getUsername() + " joined your team : " + userTeam.getName(), 0, 0);
+                    Notification notification = new Notification(currentUser, user.getUsername() + " joined your team : " + userTeam.getName(), false);
 
-                        session.save(activity);
-                        session.save(notification);
-                    });
+                    session.save(activity);
+                    session.save(notification);
+                });
 
             user.setTeam(userTeam);
 
@@ -390,8 +391,7 @@ public class UserTeamController {
             userService.useTeamNameChange(user);
 
             return new ResponseEntity("Successfully Changed Team Name", HttpStatus.OK);
-        }
-        else if (user.getInventory().getTeamNameChanges() <= 0)
+        } else if (user.getInventory().getTeamNameChanges() <= 0)
             return new ResponseEntity("Not Enough Team Name Changes", HttpStatus.CONFLICT);
 
         return new ResponseEntity("New Name same as Old Name", HttpStatus.CONFLICT);

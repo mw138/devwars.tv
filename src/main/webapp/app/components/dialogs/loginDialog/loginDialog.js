@@ -14,7 +14,7 @@ angular.module("app")
                     console.log(success);
                 },
                 function (error) {
-                    if(error.status === 401) {
+                    if (error.status === 401) {
                         $scope.incorrectCredentials = true;
                     }
                     console.log(error);

@@ -173,65 +173,65 @@ public class GameService {
         Document document = Jsoup.parse(Unirest.get(site + "/index.html").asString().getBody());
 
         document.getElementsByTag("script")
-                .forEach(tag -> {
-                    String source = tag.attr("src");
+            .forEach(tag -> {
+                String source = tag.attr("src");
 
-                    if (!source.isEmpty()) {
+                if (!source.isEmpty()) {
 
-                        if (source.charAt(0) == '/') source = source.substring(1);
+                    if (source.charAt(0) == '/') source = source.substring(1);
 
-                        source = source.replace("/", File.separator);
+                    source = source.replace("/", File.separator);
 
-                        if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
-                        try {
-                            downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                        } catch (IOException | DbxException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
+                    } catch (IOException | DbxException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+            });
 
         document.getElementsByTag("link")
-                .forEach(tag -> {
-                    String source = tag.attr("href");
+            .forEach(tag -> {
+                String source = tag.attr("href");
 
-                    if (!source.isEmpty()) {
+                if (!source.isEmpty()) {
 
-                        if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
 
-                        if (source.charAt(0) == '/') source = source.substring(1);
+                    if (source.charAt(0) == '/') source = source.substring(1);
 
-                        source = source.replace("/", File.separator);
+                    source = source.replace("/", File.separator);
 
-                        try {
-                            downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                        } catch (IOException | DbxException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
+                    } catch (IOException | DbxException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+            });
 
         document.getElementsByTag("img")
-                .forEach(tag -> {
-                    String source = tag.attr("src");
+            .forEach(tag -> {
+                String source = tag.attr("src");
 
-                    if (!source.isEmpty()) {
-                        if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
+                if (!source.isEmpty()) {
+                    if (source.indexOf("http") == 0 || source.indexOf("//") == 0) return;
 
 
-                        if (source.charAt(0) == '/') source = source.substring(1);
+                    if (source.charAt(0) == '/') source = source.substring(1);
 
-                        source = source.replace("/", File.separator);
+                    source = source.replace("/", File.separator);
 
-                        try {
-                            downloadURLToFile(site + "/" + source, (path + File.separator + source));
-                        } catch (IOException | DbxException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        downloadURLToFile(site + "/" + source, (path + File.separator + source));
+                    } catch (IOException | DbxException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+            });
 
         downloadURLToFile(site + "/index.html", (path + "/" + "index.html"));
     }
@@ -258,24 +258,24 @@ public class GameService {
          * Get all seasons
          */
         Criteria criteria = session.createCriteria(Game.class)
-                .setProjection(Projections.projectionList()
-                        .add(Projections.groupProperty("season"))
-                );
+            .setProjection(Projections.projectionList()
+                .add(Projections.groupProperty("season"))
+            );
 
         HashMap pastGames = new HashMap<>();
 
         criteria.list().stream()
-                .forEach(season ->
-                {
-                    Criteria seasonCriteria = session.createCriteria(Game.class)
-                            .add(Restrictions.eq("season", season))
-                            .add(Restrictions.eq("done", true))
-                            .addOrder(Order.desc("id"))
-                            .setMaxResults(count)
-                            .setFirstResult(queryOffset);
+            .forEach(season ->
+            {
+                Criteria seasonCriteria = session.createCriteria(Game.class)
+                    .add(Restrictions.eq("season", season))
+                    .add(Restrictions.eq("done", true))
+                    .addOrder(Order.desc("id"))
+                    .setMaxResults(count)
+                    .setFirstResult(queryOffset);
 
-                    pastGames.put(season, seasonCriteria.list());
-                });
+                pastGames.put(season, seasonCriteria.list());
+            });
 
         session.close();
 
@@ -288,11 +288,11 @@ public class GameService {
         Session session = DatabaseManager.getSession();
 
         game = (Game) session.createCriteria(Game.class)
-                .add(Restrictions.isNotNull("tournament"))
-                .add(Restrictions.ge("timestamp", new Date()))
-                .addOrder(Order.desc("timestamp"))
-                .setMaxResults(1)
-                .uniqueResult();
+            .add(Restrictions.isNotNull("tournament"))
+            .add(Restrictions.ge("timestamp", new Date()))
+            .addOrder(Order.desc("timestamp"))
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 
@@ -305,10 +305,10 @@ public class GameService {
         Session session = DatabaseManager.getSession();
 
         games = session.createCriteria(Game.class)
-                .add(Restrictions.isNotNull("tournament"))
-                .add(Restrictions.ge("timestamp", new Date()))
-                .addOrder(Order.desc("timestamp"))
-                .list();
+            .add(Restrictions.isNotNull("tournament"))
+            .add(Restrictions.ge("timestamp", new Date()))
+            .addOrder(Order.desc("timestamp"))
+            .list();
 
         session.close();
 

@@ -37,8 +37,8 @@ public class Badge extends BaseModel {
         Session session = DatabaseManager.getSession();
 
         Badge badge = (Badge) session.createCriteria(Badge.class)
-                .add(Restrictions.eq("name", name))
-                .uniqueResult();
+            .add(Restrictions.eq("name", name))
+            .uniqueResult();
 
         session.close();
 

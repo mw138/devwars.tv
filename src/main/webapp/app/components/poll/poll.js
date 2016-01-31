@@ -2,17 +2,17 @@ var _twitchUsername = 'b3zman41';
 var _appServer = 'http://dragon.umryn.net:22050';
 
 
-(function(angular, undefined) {
+(function (angular, undefined) {
     var angularSpectrumColorpicker = angular.module("angularSpectrumColorpicker", []);
-    (function(undefined) {
-        angularSpectrumColorpicker.directive("spectrumColorpicker", function() {
+    (function (undefined) {
+        angularSpectrumColorpicker.directive("spectrumColorpicker", function () {
             return {
                 restrict: "E",
                 require: "ngModel",
                 scope: false,
                 replace: true,
                 template: '<span><input class="input-small" /></span>',
-                link: function($scope, $element, attrs, $ngModel) {
+                link: function ($scope, $element, attrs, $ngModel) {
                     var $input = $element.find("input");
                     var fallbackValue = $scope.$eval(attrs.fallbackValue);
                     var format = $scope.$eval(attrs.format) || undefined;
@@ -28,12 +28,13 @@ var _appServer = 'http://dragon.umryn.net:22050';
                         }
                         $ngModel.$setViewValue(value)
                     }
-                    var onChange = function(color) {
-                        $scope.$apply(function() {
+
+                    var onChange = function (color) {
+                        $scope.$apply(function () {
                             setViewValue(color)
                         })
                     };
-                    var onToggle = function() {
+                    var onToggle = function () {
                         $input.spectrum("toggle");
                         return false
                     };
@@ -46,7 +47,7 @@ var _appServer = 'http://dragon.umryn.net:22050';
                     if (attrs.triggerId) {
                         angular.element(document.body).on("click", "#" + attrs.triggerId, onToggle)
                     }
-                    $ngModel.$render = function() {
+                    $ngModel.$render = function () {
                         $input.spectrum("set", $ngModel.$viewValue || "")
                     };
                     if (options.color) {
@@ -54,7 +55,7 @@ var _appServer = 'http://dragon.umryn.net:22050';
                         setViewValue(options.color)
                     }
                     $input.spectrum(options);
-                    $scope.$on("$destroy", function() {
+                    $scope.$on("$destroy", function () {
                         $input.spectrum("destroy")
                     })
                 }
@@ -62,11 +63,11 @@ var _appServer = 'http://dragon.umryn.net:22050';
         })
     })()
 })(window.angular);
-(function() {
-    angular.module("LivePoll-Client", ["Progress", "Tooltip", "angularSpectrumColorpicker"]).config(function($interpolateProvider) {
+(function () {
+    angular.module("LivePoll-Client", ["Progress", "Tooltip", "angularSpectrumColorpicker"]).config(function ($interpolateProvider) {
     })
 })();
-(function() {
+(function () {
     angular.module("LivePoll-Client").controller("LivePollClientCtrl", LivePollClientCtrl);
     LivePollClientCtrl.$inject = ["$rootScope", "$scope", "$timeout", "$interval"];
 
@@ -85,12 +86,12 @@ var _appServer = 'http://dragon.umryn.net:22050';
             outerTextColor: "#f1f1f1",
             outerTextShadowColor: "rgba(0, 0, 0, .5)"
         };
-        $scope.getDefaultStyle = function(styleRule) {
+        $scope.getDefaultStyle = function (styleRule) {
             if (typeof $scope.defaultStyle[styleRule] !== "undefined") {
                 return $scope.defaultStyle[styleRule]
             }
         };
-        $scope.resetStyles = function() {
+        $scope.resetStyles = function () {
             for (var styleRule in $scope.defaultStyle) {
                 $scope.input[styleRule] = $scope.defaultStyle[styleRule]
             }
@@ -121,15 +122,15 @@ var _appServer = 'http://dragon.umryn.net:22050';
         };
         var originalInput = angular.copy(defaultInput);
         $scope.input = angular.copy(originalInput);
-        $scope.updateStatus = function(connected, statusText) {
-            $timeout(function() {
+        $scope.updateStatus = function (connected, statusText) {
+            $timeout(function () {
                 $scope.connected = connected;
                 $scope.status = statusText
             })
         };
         $scope.testInterval = null;
-        $scope.testForm = function() {
-            $timeout(function() {
+        $scope.testForm = function () {
+            $timeout(function () {
                 $interval.cancel($scope.testInterval);
                 $scope.question = "Is this teh urn? (Fake Poll)";
                 $scope.totalVotes = 100;
@@ -142,32 +143,32 @@ var _appServer = 'http://dragon.umryn.net:22050';
                     keyword: "noep",
                     count: 50
                 }];
-                $scope.testInterval = $interval(function() {
+                $scope.testInterval = $interval(function () {
                     var randomBinary = Math.floor(Math.random() * 9);
-                    (randomBinary > 0) ? $scope.options[1].count += 1: $scope.options[0].count += 1;
+                    (randomBinary > 0) ? $scope.options[1].count += 1 : $scope.options[0].count += 1;
                     $scope.totalVotes += 1
                 }, 150)
             })
         };
         $scope.testForm();
-        $scope.percentage = function(count) {
+        $scope.percentage = function (count) {
             var percent = Number(count / $scope.totalVotes * 100).toFixed(2);
             return (isNaN(percent)) ? 0 : percent
         };
-        $scope.closePoll = function() {
+        $scope.closePoll = function () {
             $scope.throttleButtons();
             if (socket === undefined) {
                 return
             }
             socket.emit("close_poll", $scope.user)
         };
-        $scope.resetForm = function() {
+        $scope.resetForm = function () {
             $scope.input.options.splice(2, $scope.input.options.length - 2);
             $scope.input = angular.copy(originalInput);
             $scope.pollForm.$setPristine()
         };
-        $scope.addOption = function() {
-            $timeout(function() {
+        $scope.addOption = function () {
+            $timeout(function () {
                 var numOptions = $scope.input.options.length;
                 if (numOptions < 8) {
                     $scope.input.options.push({
@@ -177,8 +178,8 @@ var _appServer = 'http://dragon.umryn.net:22050';
                 }
             })
         };
-        $scope.removeOption = function() {
-            $timeout(function() {
+        $scope.removeOption = function () {
+            $timeout(function () {
                 var numOptions = $scope.input.options.length;
                 var lastIndex = numOptions - 1;
                 if (numOptions > 2) {
@@ -186,7 +187,7 @@ var _appServer = 'http://dragon.umryn.net:22050';
                 }
             })
         };
-        $scope.submitForm = function(valid) {
+        $scope.submitForm = function (valid) {
             $scope.throttleButtons();
             if (valid && typeof socket !== "undefined") {
                 var newPoll = {
@@ -207,19 +208,19 @@ var _appServer = 'http://dragon.umryn.net:22050';
                 socket.emit("create_poll", newPoll)
             }
         };
-        $scope.throttleButtons = function() {
+        $scope.throttleButtons = function () {
             $scope.throttled = true;
-            $timeout(function() {
+            $timeout(function () {
                 $scope.throttled = false
             }, 2000)
         };
-        $scope.incSubMult = function() {
+        $scope.incSubMult = function () {
             var value = Number($scope.input.subMult);
             if (value < 99) {
                 $scope.input.subMult = value + 1
             }
         };
-        $scope.decSubMult = function() {
+        $scope.decSubMult = function () {
             var value = Number($scope.input.subMult);
             if (value > 1) {
                 $scope.input.subMult = value - 1
@@ -230,55 +231,55 @@ var _appServer = 'http://dragon.umryn.net:22050';
             return
         }
         var socket = io(_appServer);
-        socket.on("connect", function() {
+        socket.on("connect", function () {
             $scope.updateStatus(true, "Connected.");
             socket.emit("client_connect", {
                 user: _twitchUsername,
                 token: _twitchToken
             })
         });
-        socket.on("disconnect", function() {
+        socket.on("disconnect", function () {
             $scope.updateStatus(false, "Disconnected, attempting to reconnect...")
         });
-        socket.on("user", function(user) {
+        socket.on("user", function (user) {
             if (user === null) {
                 $scope.updateStatus(false, "Your session data does not match what Twitch is telling me. You should try logging out and logging in again.");
                 return
             }
-            $timeout(function() {
+            $timeout(function () {
                 $scope.user = user
             })
         });
-        socket.on("poll", function(poll) {
+        socket.on("poll", function (poll) {
             $interval.cancel($scope.testInterval);
-            $timeout(function() {
+            $timeout(function () {
                 $scope.question = poll.question;
                 $scope.totalVotes = poll.totalVotes;
                 $scope.options = poll.options
             })
         });
-        socket.on("poll_closed", function() {
+        socket.on("poll_closed", function () {
             $scope.testForm()
         });
-        socket.on("vote", function(id) {
-            $timeout(function() {
+        socket.on("vote", function (id) {
+            $timeout(function () {
                 $scope.options[id].count += 1;
                 $scope.totalVotes += 1
             })
         });
-        socket.on("vote_switch", function(voteSwitch) {
-            $timeout(function() {
+        socket.on("vote_switch", function (voteSwitch) {
+            $timeout(function () {
                 $scope.options[voteSwitch.from].count -= 1;
                 $scope.options[voteSwitch.to].count += 1
             })
         })
     }
 })();
-(function() {
-    angular.module("LivePoll-Display", ["ngAnimate", "Progress"]).config(function($interpolateProvider) {
+(function () {
+    angular.module("LivePoll-Display", ["ngAnimate", "Progress"]).config(function ($interpolateProvider) {
     })
 })();
-(function() {
+(function () {
     angular.module("LivePoll-Display").controller("LivePollDisplayCtrl", LivePollDisplayCtrl);
     LivePollDisplayCtrl.$inject = ["$scope", "$window", "$interval", "$timeout"];
 
@@ -289,12 +290,13 @@ var _appServer = 'http://dragon.umryn.net:22050';
         $scope.question = "";
         $scope.style = {};
         $scope.totalVotes = 0;
-        $scope.percentage = function(count) {
+        $scope.percentage = function (count) {
             var percent = Number(count / $scope.totalVotes * 100).toFixed(2);
             return (isNaN(percent)) ? 0 : percent
         };
-        $scope.addColor = function() {};
-        $scope.textShadow = function(value) {
+        $scope.addColor = function () {
+        };
+        $scope.textShadow = function (value) {
             if (typeof value !== "undefined") {
                 return "1px 1px 0 " + value
             }
@@ -307,13 +309,13 @@ var _appServer = 'http://dragon.umryn.net:22050';
             return
         }
         var socket = io(_appServer);
-        socket.on("connect", function() {
+        socket.on("connect", function () {
             socket.emit("client_connect", {
                 user: _twitchUsername
             })
         });
-        socket.on("poll", function(poll) {
-            $timeout(function() {
+        socket.on("poll", function (poll) {
+            $timeout(function () {
                 $scope.style.bgColor = poll.style.bgColor;
                 $scope.style.barColor = poll.style.barColor;
                 $scope.style.barTextColor = poll.style.barTextColor;
@@ -331,21 +333,21 @@ var _appServer = 'http://dragon.umryn.net:22050';
             console.log("poll received");
             console.log(poll)
         });
-        socket.on("poll_closed", function() {
+        socket.on("poll_closed", function () {
             console.log("poll closed");
-            $timeout(function() {
+            $timeout(function () {
                 $scope.pollActive = false
             })
         });
-        socket.on("vote", function(id) {
-            $timeout(function() {
+        socket.on("vote", function (id) {
+            $timeout(function () {
                 $scope.options[id].count += 1;
                 $scope.totalVotes += 1
             });
             console.log("vote received: %s", id)
         });
-        socket.on("vote_switch", function(voteSwitch) {
-            $timeout(function() {
+        socket.on("vote_switch", function (voteSwitch) {
+            $timeout(function () {
                 $scope.options[voteSwitch.from].count -= 1;
                 $scope.options[voteSwitch.to].count += 1
             });
@@ -353,39 +355,39 @@ var _appServer = 'http://dragon.umryn.net:22050';
         })
     }
 })();
-(function() {
+(function () {
     angular.module("Progress", [])
 })();
-(function() {
+(function () {
     angular.module("Progress").directive("ngProgress", ngProgress);
 
     function ngProgress() {
         return {
-            link: function(scope, element, attrs) {
-                attrs.$observe("percent", function(val) {
+            link: function (scope, element, attrs) {
+                attrs.$observe("percent", function (val) {
                     element.css("width", val + "%")
                 })
             }
         }
     }
 })();
-(function() {
+(function () {
     angular.module("Tooltip", [])
 })();
-(function() {
+(function () {
     angular.module("Tooltip").directive("ngTooltip", ngTooltip);
     ngTooltip.$inject = ["$document"];
 
     function ngTooltip($document) {
         return {
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 var value = attrs.ngTooltip;
                 var body = angular.element($document[0].body);
                 var tooltip = angular.element('<div class="tooltip"></div>');
                 tooltip.html(value);
                 tooltip.css("display", "none");
                 body.append(tooltip);
-                element.hover(function() {
+                element.hover(function () {
                     var epos = element.offset();
                     var ey = epos.top;
                     var ex = epos.left;
@@ -394,7 +396,7 @@ var _appServer = 'http://dragon.umryn.net:22050';
                     tooltip.css("left", ex + ew + "px");
                     tooltip.css("top", (ey + (eh / 2)) - 25 + "px");
                     tooltip.stop().fadeIn(200)
-                }, function() {
+                }, function () {
                     tooltip.stop().fadeOut(200)
                 })
             }

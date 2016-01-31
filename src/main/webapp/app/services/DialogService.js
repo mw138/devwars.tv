@@ -19,16 +19,16 @@ angular.module("app.DialogService", [])
         };
 
         DialogService.applyForGame = function (game, $event, successCallback, errorCallback) {
-            if(AuthService.user && AuthService.user.warrior) {
+            if (AuthService.user && AuthService.user.warrior) {
                 $mdDialog.show({
-                    controller: "GameSignupConfirmDialogController",
-                    templateUrl: "app/components/dialogs/confirmGameSignupDialog/confirmGameSignupDialogView.html",
-                    targetEvent: $event,
+                        controller: "GameSignupConfirmDialogController",
+                        templateUrl: "app/components/dialogs/confirmGameSignupDialog/confirmGameSignupDialogView.html",
+                        targetEvent: $event,
 
-                    locals: {
-                        game: game
-                    }
-                })
+                        locals: {
+                            game: game
+                        }
+                    })
                     .then(function (success) {
                         GameService.signUpForGame(success.game.id, function (signupSuccess) {
                             AuthService.init();
@@ -37,9 +37,8 @@ angular.module("app.DialogService", [])
                             ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
                         })
                     }, null);
-            } else
-            {
-                if(!AuthService.user) {
+            } else {
+                if (!AuthService.user) {
                     DialogService.login($event);
                 } else {
                     $state.go("warriorReg");
@@ -50,17 +49,17 @@ angular.module("app.DialogService", [])
 
         DialogService.login = function ($event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/loginDialog/loginDialogView.html",
-                controller: "LoginDialogController",
-                targetEvent: $event,
+                    templateUrl: "/app/components/dialogs/loginDialog/loginDialogView.html",
+                    controller: "LoginDialogController",
+                    targetEvent: $event,
 
-                clickOutsideToClose: true,
-                escapeToClose: true
-            })
+                    clickOutsideToClose: true,
+                    escapeToClose: true
+                })
                 .then(function (success) {
 
                 }, function (error) {
-                    if(error && error.register) {
+                    if (error && error.register) {
                         DialogService.signup($event);
                     }
                 });
@@ -68,17 +67,17 @@ angular.module("app.DialogService", [])
 
         DialogService.signup = function ($event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/signupDialog/signupDialogView.html",
-                controller: "SignupDialogController",
-                targetEvent: $event,
+                    templateUrl: "/app/components/dialogs/signupDialog/signupDialogView.html",
+                    controller: "SignupDialogController",
+                    targetEvent: $event,
 
-                clickOutsideToClose: true,
-                escapeToClose: true
-            })
+                    clickOutsideToClose: true,
+                    escapeToClose: true
+                })
                 .then(function (success) {
 
                 }, function (error) {
-                    if(error && error.login) {
+                    if (error && error.login) {
                         DialogService.login($event);
                     }
                 });
@@ -86,16 +85,16 @@ angular.module("app.DialogService", [])
 
         DialogService.getInputWithMessage = function (title, message, $event, callback) {
             $mdDialog.show({
-                templateUrl: "app/components/dialogs/inputDialog/inputDialogView.html",
-                controller: "InputDialogController",
-                targetEvent: $event,
+                    templateUrl: "app/components/dialogs/inputDialog/inputDialogView.html",
+                    controller: "InputDialogController",
+                    targetEvent: $event,
 
-                locals: {
-                    title: title,
-                    message: message
-                }
+                    locals: {
+                        title: title,
+                        message: message
+                    }
 
-            })
+                })
                 .then(function (success) {
                     callback(success);
                 }, function (error) {

@@ -1,43 +1,68 @@
 <div class="settingsView" ng-init="checkVeteran()">
-    <div class="settings-content">
-        <ul class="connect-social">
-            <li ng-hide="AuthService.user.provider === 'TWITTER'" ng-class="{'disconnect-social': AuthService.hasProvider('twitter')}">
-                <div class="connect-social-button" ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('twitter')}" ng-click="disconnect('twitter')"><i class="fa fa-twitter"></i><span ng-hide="AuthService.hasProvider('twitter')">Connect with Twitter</span><span ng-show="AuthService.hasProvider('twitter')">Disconnect from Twitter</span></div>
-                <div class="tooltip">
-                    <span ng-if="!AuthService.hasConnectedToProvider('twitter')">+150</span>
-                    <img ng-if="!AuthService.hasConnectedToProvider('twitter')" src="http://i.imgur.com/3yXppe6.png"/>
-                </div>
-            </li>
-            <li ng-hide="AuthService.user.provider === 'FACEBOOK'" ng-class="{'disconnect-social': AuthService.hasProvider('facebook')}">
-                <div class="connect-social-button" ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('facebook')}" ng-click="disconnect('facebook')"><i class="fa fa-facebook"></i><span ng-hide="AuthService.hasProvider('facebook')">Connect with Facebook</span><span ng-show="AuthService.hasProvider('facebook')">Disconnect from Facebook</span></div>
-                <div class="tooltip">
-                    <span ng-if="!AuthService.hasConnectedToProvider('facebook')">+150</span>
-                    <img ng-if="!AuthService.hasConnectedToProvider('facebook')" src="http://i.imgur.com/3yXppe6.png"/>
-                </div>
-            </li>
-            <li ng-hide="AuthService.user.provider === 'GOOGLE'" ng-class="{'disconnect-social': AuthService.hasProvider('google')}">
-                <div class="connect-social-button" ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('google')}" ng-click="disconnect('google')"><i class="fa fa-google-plus"></i><span ng-hide="AuthService.hasProvider('google')">Connect with Google+</span><span ng-show="AuthService.hasProvider('google')">Disconnect from Google+</span></div>
-                <div class="tooltip">
-                    <span ng-if="!AuthService.hasConnectedToProvider('google')">+150</span>
-                    <img ng-if="!AuthService.hasConnectedToProvider('google')" src="http://i.imgur.com/3yXppe6.png"/>
-                </div>
-            </li>
-            <li ng-hide="AuthService.user.provider === 'TWITCH'" ng-class="{'disconnect-social': AuthService.hasProvider('twitch')}">
-                <div class="connect-social-button" ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('twitch')}" ng-click="disconnect('twitch')"><i class="fa fa-twitch"></i><span ng-hide="AuthService.hasProvider('twitch')">Connect with Twitch</span><span ng-show="AuthService.hasProvider('twitch')">Disconnect from Twitch</span></div>
-                <div class="tooltip">
-                    <span ng-if="!AuthService.hasConnectedToProvider('twitch')">+150</span>
-                    <img ng-if="!AuthService.hasConnectedToProvider('twitch')" src="http://i.imgur.com/3yXppe6.png"/>
-                </div>
-            </li>
-            <li ng-hide="AuthService.user.provider === 'GITHUB'" ng-class="{'disconnect-social': AuthService.hasProvider('github')}">
-                <div class="connect-social-button" ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('github')}" ng-click="disconnect('github')"><i class="fa fa-github-alt"></i><span ng-hide="AuthService.hasProvider('github')">Connect with GitHub</span><span ng-show="AuthService.hasProvider('github')">Disconnect from GitHub</span></div>
-                <div class="tooltip">
-                    <span ng-if="!AuthService.hasConnectedToProvider('github')">+150</span>
-                    <img ng-if="!AuthService.hasConnectedToProvider('github')" src="http://i.imgur.com/3yXppe6.png"/>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <!-- .settings-content -->
+  <div class="settings-content">
+    <ul class="connect-social">
+      <li ng-hide="AuthService.user.provider === 'TWITTER'"
+          ng-class="{'disconnect-social': AuthService.hasProvider('twitter')}">
+        <div class="connect-social-button"
+             ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('twitter')}"
+             ng-click="disconnect('twitter')"><i class="fa fa-twitter"></i><span
+          ng-hide="AuthService.hasProvider('twitter')">Connect with Twitter</span><span
+          ng-show="AuthService.hasProvider('twitter')">Disconnect from Twitter</span></div>
+        <div class="tooltip">
+          <span ng-if="!AuthService.hasConnectedToProvider('twitter')">+150</span>
+          <img ng-if="!AuthService.hasConnectedToProvider('twitter')" src="http://i.imgur.com/3yXppe6.png"/>
+        </div>
+      </li>
+      <li ng-hide="AuthService.user.provider === 'FACEBOOK'"
+          ng-class="{'disconnect-social': AuthService.hasProvider('facebook')}">
+        <div class="connect-social-button"
+             ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('facebook')}"
+             ng-click="disconnect('facebook')"><i class="fa fa-facebook"></i><span
+          ng-hide="AuthService.hasProvider('facebook')">Connect with Facebook</span><span
+          ng-show="AuthService.hasProvider('facebook')">Disconnect from Facebook</span></div>
+        <div class="tooltip">
+          <span ng-if="!AuthService.hasConnectedToProvider('facebook')">+150</span>
+          <img ng-if="!AuthService.hasConnectedToProvider('facebook')" src="http://i.imgur.com/3yXppe6.png"/>
+        </div>
+      </li>
+      <li ng-hide="AuthService.user.provider === 'GOOGLE'"
+          ng-class="{'disconnect-social': AuthService.hasProvider('google')}">
+        <div class="connect-social-button"
+             ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('google')}"
+             ng-click="disconnect('google')"><i class="fa fa-google-plus"></i><span
+          ng-hide="AuthService.hasProvider('google')">Connect with Google+</span><span
+          ng-show="AuthService.hasProvider('google')">Disconnect from Google+</span></div>
+        <div class="tooltip">
+          <span ng-if="!AuthService.hasConnectedToProvider('google')">+150</span>
+          <img ng-if="!AuthService.hasConnectedToProvider('google')" src="http://i.imgur.com/3yXppe6.png"/>
+        </div>
+      </li>
+      <li ng-hide="AuthService.user.provider === 'TWITCH'"
+          ng-class="{'disconnect-social': AuthService.hasProvider('twitch')}">
+        <div class="connect-social-button"
+             ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('twitch')}"
+             ng-click="disconnect('twitch')"><i class="fa fa-twitch"></i><span
+          ng-hide="AuthService.hasProvider('twitch')">Connect with Twitch</span><span
+          ng-show="AuthService.hasProvider('twitch')">Disconnect from Twitch</span></div>
+        <div class="tooltip">
+          <span ng-if="!AuthService.hasConnectedToProvider('twitch')">+150</span>
+          <img ng-if="!AuthService.hasConnectedToProvider('twitch')" src="http://i.imgur.com/3yXppe6.png"/>
+        </div>
+      </li>
+      <li ng-hide="AuthService.user.provider === 'GITHUB'"
+          ng-class="{'disconnect-social': AuthService.hasProvider('github')}">
+        <div class="connect-social-button"
+             ng-class="{'connect-social-button--disconnect': AuthService.hasProvider('github')}"
+             ng-click="disconnect('github')"><i class="fa fa-github-alt"></i><span
+          ng-hide="AuthService.hasProvider('github')">Connect with GitHub</span><span
+          ng-show="AuthService.hasProvider('github')">Disconnect from GitHub</span></div>
+        <div class="tooltip">
+          <span ng-if="!AuthService.hasConnectedToProvider('github')">+150</span>
+          <img ng-if="!AuthService.hasConnectedToProvider('github')" src="http://i.imgur.com/3yXppe6.png"/>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- .settings-content -->
 </div>
 <!-- .right -->

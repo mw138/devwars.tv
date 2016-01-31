@@ -13,10 +13,10 @@ angular.module("app.verify", [])
 
         }])
     .controller("VerifyController", ["$scope", function ($scope) {
-        
+
     }]);
 
-app.controller('VerifyController', ["$scope", "$location", "$anchorScroll", "$interval", function($scope, $location, $anchorScroll, $interval) {
+app.controller('VerifyController', ["$scope", "$location", "$anchorScroll", "$interval", function ($scope, $location, $anchorScroll, $interval) {
     var routeParams = $location.search();
 
     $scope.username = routeParams.username;
@@ -26,12 +26,12 @@ app.controller('VerifyController', ["$scope", "$location", "$anchorScroll", "$in
     $interval(function () {
         $scope.seconds--;
 
-        if($scope.seconds === 0) {
+        if ($scope.seconds === 0) {
             location.href = "/#/dashboard";
         }
     }, 1000, 10, true);
 
-    $scope.scrollTo = function(id) {
+    $scope.scrollTo = function (id) {
         $location.hash(id);
         $anchorScroll();
     }

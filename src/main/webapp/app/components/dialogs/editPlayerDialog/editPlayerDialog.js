@@ -28,18 +28,18 @@ angular.module("app.editPlayerDialog", [])
         $scope.teamSearchQuery = function () {
             var teamsArray = [];
 
-            for(var lang in game.teams) {
+            for (var lang in game.teams) {
                 teamsArray.push(game.teams[lang]);
             }
 
-             return teamsArray.filter(function (team) {
-                 console.log($scope.selectedTeam);
-                 return team.name.toLowerCase().indexOf($scope.teamSearchText.toLowerCase()) > -1 || $scope.teamSearchText.toLowerCase().indexOf(team.name.toLowerCase()) > -1;
-             });
+            return teamsArray.filter(function (team) {
+                console.log($scope.selectedTeam);
+                return team.name.toLowerCase().indexOf($scope.teamSearchText.toLowerCase()) > -1 || $scope.teamSearchText.toLowerCase().indexOf(team.name.toLowerCase()) > -1;
+            });
         };
 
         $scope.pendingPlayersQuery = function () {
-            if($scope.game.pendingPlayers) {
+            if ($scope.game.pendingPlayers) {
                 return $scope.game.pendingPlayers.filter(function (user) {
                     return user.username.toLowerCase().indexOf($scope.searchText.toLowerCase()) > -1 || $scope.searchText.toLowerCase().indexOf(user.username.toLowerCase()) > -1;
                 });
@@ -58,11 +58,11 @@ angular.module("app.editPlayerDialog", [])
         $scope.done = function () {
             $scope.conflicts = [];
 
-            if($scope.selectedUser === player.user && $scope.searchText) {
-                for(var i = 0; i < $scope.game.pendingPlayers.length; i++) {
+            if ($scope.selectedUser === player.user && $scope.searchText) {
+                for (var i = 0; i < $scope.game.pendingPlayers.length; i++) {
                     var pendingUser = $scope.game.pendingPlayers[i];
 
-                    if(pendingUser.username.toUpperCase() === $scope.searchText.toUpperCase()) {
+                    if (pendingUser.username.toUpperCase() === $scope.searchText.toUpperCase()) {
                         $scope.selectedPlayer = {
                             team_id: $scope.selectedTeam.id,
                             language: $scope.selectedLanguage,
@@ -72,9 +72,9 @@ angular.module("app.editPlayerDialog", [])
                         };
                     }
                 }
-            } else if($scope.selectedUser !== player.user) {
+            } else if ($scope.selectedUser !== player.user) {
                 $scope.selectedPlayer = {
-                    team_id : $scope.selectedTeam.id,
+                    team_id: $scope.selectedTeam.id,
                     language: $scope.selectedLanguage,
                     user: {
                         id: $scope.selectedUser.id
@@ -82,7 +82,7 @@ angular.module("app.editPlayerDialog", [])
                 }
             }
 
-            if($scope.selectedPlayer && $scope.selectedPlayer.user !== player.user) {
+            if ($scope.selectedPlayer && $scope.selectedPlayer.user !== player.user) {
                 GameService.editPlayer($scope.selectedTeam.id, $scope.game.id, player.id, $scope.selectedPlayer, function (success) {
                     $mdDialog.hide({
                         oldPlayer: player,

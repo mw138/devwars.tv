@@ -8,7 +8,7 @@ angular.module('app.ngSignupTeamGame', [])
             },
 
             controller: function ($scope, $element, $mdDialog, ToastService) {
-                if($scope.game.teamGame) {
+                if ($scope.game.teamGame) {
                     $element.bind('click', function (event) {
                         UserService.http.getMyTeam()
                             .then(function (success) {

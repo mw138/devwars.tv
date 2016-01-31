@@ -1,54 +1,55 @@
 <div class="contactView inner">
 
-	<div class="left">
-		<h2 class="title">Find Us</h2>
-		<h4>DevWars loves to hear from you!</h4>
-		<p>Do you have a question to ask the DevWars team? Do you have some feedback for us? Have you noticed a bug in the website that needs correcting? We appreciate all of your messages, and will answer each and every one.</p>
-		<p>Want to contact us through other means? We are also available to message via:</p>
-		<ul class="contactView__links">
-			<li><a href="https://www.facebook.com/DevWars" target="_blank"><i class="fa fa-facebook"></i>
- Facebook</a></li>
-			<li><a href="https://twitter.com/devwarstv" target="_blank"><i class="fa fa-twitter"></i> Twitter</a></li>
-			<li><a href="https://plus.google.com/+DevWars" target="_blank"><i class="fa fa-google-plus"></i> Google+</a></li>
-			<li><a href="http://www.reddit.com/r/devwars" target="_blank"><i class="fa fa-reddit"></i> Reddit</a></li>
-			<li><a href="http://www.twitch.tv/devwars" target="_blank"><i class="fa fa-twitch"></i> Twitch</a></li>
-		</ul>
+  <div class="left">
+    <h2 class="title">Find Us</h2>
+    <h4>DevWars loves to hear from you!</h4>
+    <p>Do you have a question to ask the DevWars team? Do you have some feedback for us? Have you noticed a bug in the
+      website that needs correcting? We appreciate all of your messages, and will answer each and every one.</p>
+    <p>Want to contact us through other means? We are also available to message via:</p>
+    <ul class="contactView__links">
+      <li><a href="https://www.facebook.com/DevWars" target="_blank"><i class="fa fa-facebook"></i>
+        Facebook</a></li>
+      <li><a href="https://twitter.com/devwarstv" target="_blank"><i class="fa fa-twitter"></i> Twitter</a></li>
+      <li><a href="https://plus.google.com/+DevWars" target="_blank"><i class="fa fa-google-plus"></i> Google+</a></li>
+      <li><a href="http://www.reddit.com/r/devwars" target="_blank"><i class="fa fa-reddit"></i> Reddit</a></li>
+      <li><a href="http://www.twitch.tv/devwars" target="_blank"><i class="fa fa-twitch"></i> Twitch</a></li>
+    </ul>
 
-	</div>
-	
-	<div class="right">
-		<h2 class="title">Contact Us</h2>
-		
-		<form>
-            <div ng-hide="AuthService.user">
-                <label>Name</label>
-                <input type="text" ng-model="form.name" />
-            </div>
+  </div>
 
-            <div ng-hide="AuthService.user">
-                <label>Email</label>
-                <input type="text" ng-model="form.email"/>
-            </div>
+  <div class="right">
+    <h2 class="title">Contact Us</h2>
 
-			<label>Enquiry</label>
-			<select ng-model="form.type">
-				<option value="Tournament">I want to apply my team for the tournament!</option>
-				<option value="General Enquiry">General Enquiry</option>
-				<option value="General Feedback">Feedback</option>
-				<option value="Bug Report">Bug Report</option>
-				<option value="User Report">Report a user</option>
-				<option value="User Support">I need support</option>
-				<option value="User Ban Appeal">I've been banned and would like to appeal this decision</option>
-				<option value="Idea Suggestion">I have a cool new idea to suggest!</option>
-				<option value="Advertising">I'd like to advertise on DevWars</option>
-			</select>
+    <form>
+      <div ng-hide="AuthService.user">
+        <label>Name</label>
+        <input type="text" ng-model="form.name"/>
+      </div>
 
-            <div class="enquiry__text__labels" layout="row" layout-align="space-between center">
-                <label>Message</label>
-                <label ng-class="{red: form.text.length > 1000}">{{1000 - form.text.length}}</label>
-            </div>
-			<textarea ng-model="form.text"></textarea>
-			<button class="button" ng-click="submit(form)">Submit</button>
-		</form>
-	</div>
+      <div ng-hide="AuthService.user">
+        <label>Email</label>
+        <input type="text" ng-model="form.email"/>
+      </div>
+
+      <label>Enquiry</label>
+      <select ng-model="form.type">
+        <option value="Tournament">I want to apply my team for the tournament!</option>
+        <option value="General Enquiry">General Enquiry</option>
+        <option value="General Feedback">Feedback</option>
+        <option value="Bug Report">Bug Report</option>
+        <option value="User Report">Report a user</option>
+        <option value="User Support">I need support</option>
+        <option value="User Ban Appeal">I've been banned and would like to appeal this decision</option>
+        <option value="Idea Suggestion">I have a cool new idea to suggest!</option>
+        <option value="Advertising">I'd like to advertise on DevWars</option>
+      </select>
+
+      <div class="enquiry__text__labels" layout="row" layout-align="space-between center">
+        <label>Message</label>
+        <label ng-class="{red: form.text.length > 1000}">{{1000 - form.text.length}}</label>
+      </div>
+      <textarea ng-model="form.text"></textarea>
+      <button class="button" ng-click="submit(form)">Submit</button>
+    </form>
+  </div>
 </div>

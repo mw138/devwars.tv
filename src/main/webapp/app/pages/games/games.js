@@ -32,7 +32,7 @@ angular.module("app.games", [])
             var seasons = success.data;
             var games = [];
 
-            for(var seasonKey in seasons) {
+            for (var seasonKey in seasons) {
                 var season = seasons[seasonKey];
 
                 season.forEach(function (game) {
@@ -44,15 +44,21 @@ angular.module("app.games", [])
                 _.values(game.teams).forEach(function (team) {
                     var newPlayers = [];
 
-                    team.players.filter(function (player) {return player.language.toLowerCase() === "html"}).forEach(function (player) {
+                    team.players.filter(function (player) {
+                        return player.language.toLowerCase() === "html"
+                    }).forEach(function (player) {
                         newPlayers.push(player);
                     });
 
-                    team.players.filter(function(player) { return player.language.toLowerCase() === "css"}).forEach(function (player) {
+                    team.players.filter(function (player) {
+                        return player.language.toLowerCase() === "css"
+                    }).forEach(function (player) {
                         newPlayers.push(player);
                     });
 
-                    team.players.filter(function(player) { return player.language.toLowerCase() === "js"}).forEach(function (player) {
+                    team.players.filter(function (player) {
+                        return player.language.toLowerCase() === "js"
+                    }).forEach(function (player) {
                         newPlayers.push(player);
                     });
 
@@ -65,8 +71,7 @@ angular.module("app.games", [])
             var game = $location.search().game;
             var season = $location.search().season;
 
-            if(game && season)
-            {
+            if (game && season) {
                 $scope.pastGames = $scope.pastGames.filter(function (a) {
                     return a.season != season;
                 });
@@ -91,7 +96,7 @@ angular.module("app.games", [])
         };
 
         $scope.setSeasonSelected = function (season) {
-            if($(document).width() > 840) {
+            if ($(document).width() > 840) {
                 $scope.selectedGame = $scope.pastGames.filter(function (game) {
                     return game.season == season;
                 })[0];
@@ -128,13 +133,13 @@ angular.module("app.games", [])
 
             if (teamPercentage >= .66) return 2;
 
-            if(teamPercentage >= .33) return 1;
+            if (teamPercentage >= .33) return 1;
 
             return 0;
         };
 
         $scope.signupForGame = function (game, $event) {
-            if(!game.teamGame) {
+            if (!game.teamGame) {
                 if (game.hasTournament) {
                     $scope.applyMyTeamForGame(game, $event);
                     return;
@@ -153,7 +158,7 @@ angular.module("app.games", [])
         };
 
         $scope.applyMyTeamForGame = function (game, $event) {
-            if($scope.myTeam.owner.id !== AuthService.user.id) {
+            if ($scope.myTeam.owner.id !== AuthService.user.id) {
                 ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "You must own the team to do that");
                 return;
             }
@@ -185,15 +190,15 @@ angular.module("app.games", [])
                         ToastService.showDevwarsToast("fa-check-circle", "Success", "Resigned from game");
                         AuthService.init();
                     }, angular.noop);
-                },  angular.noop);
+                }, angular.noop);
         };
 
         $scope.setSelectedGame = function (game, $index) {
             $scope.selectedGame = game;
 
 
-            if($index > -1 && (new Date().getTime() - $scope.lastTimeClicked) > 200) {
-                if($(".game" + $index).next().hasClass("slide")) {
+            if ($index > -1 && (new Date().getTime() - $scope.lastTimeClicked) > 200) {
+                if ($(".game" + $index).next().hasClass("slide")) {
                     $(".game" + $index).next().slideToggle();
                     $(".game" + $index).next().removeClass("slide");
                 } else {
@@ -223,11 +228,10 @@ angular.module("app.games", [])
         $scope.dataForGameCategory = function (game, category) {
             var data = [];
 
-            for(var teamKey in game.teams)
-            {
+            for (var teamKey in game.teams) {
                 var team = game.teams[teamKey];
 
-                if(team[category + "Votes"]) {
+                if (team[category + "Votes"]) {
                     data.push({
                         label: team.name,
                         value: team[category + "Votes"],
@@ -245,7 +249,7 @@ angular.module("app.games", [])
 
             var objectivePoints = game.teams[teamName].completedObjectives.length;
 
-            if(objectivePoints == game.objectives.length && game.objectives.length > 0) {
+            if (objectivePoints == game.objectives.length && game.objectives.length > 0) {
                 objectivePoints += 1;
             }
 
@@ -267,10 +271,10 @@ angular.module("app.games", [])
         };
 
         $scope.teamHasObjective = function (team, objective) {
-            for(var objectiveKey in team.completedObjectives) {
+            for (var objectiveKey in team.completedObjectives) {
                 var teamObjective = team.completedObjectives[objectiveKey].objective;
 
-                if(teamObjective.id === objective.id) {
+                if (teamObjective.id === objective.id) {
                     return true;
                 }
             }

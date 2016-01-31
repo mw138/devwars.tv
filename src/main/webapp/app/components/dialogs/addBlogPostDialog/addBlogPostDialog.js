@@ -4,18 +4,18 @@ angular.module("app.addBlogPostDialog", [])
         $scope.done = function () {
             var post = $scope.blog;
 
-            if($scope.tags)
+            if ($scope.tags)
                 post.tags = $scope.tags.split(" ");
 
-            if(post.title && post.description && post.text && post.image_url) {
+            if (post.title && post.description && post.text && post.image_url) {
                 BlogService.createBlog(JSON.stringify($scope.blog), $mdDialog.hide, $mdDialog.cancel);
             } else {
-                if(!$scope.title && !$scope.description) {
+                if (!$scope.title && !$scope.description) {
                     ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Missing input fields");
                 } else {
-                    if(!$scope.title) {
+                    if (!$scope.title) {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Missing title field");
-                    } else if(!$scope.description) {
+                    } else if (!$scope.description) {
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Missing post field");
                     }
                 }
@@ -26,7 +26,7 @@ angular.module("app.addBlogPostDialog", [])
             $mdDialog.cancel();
         }
     }])
-    .controller("EditBlogPostDialogController", ["$scope", "post", "$mdDialog", "BlogService", "ToastService", function($scope, post, $mdDialog, BlogService, ToastService) {
+    .controller("EditBlogPostDialogController", ["$scope", "post", "$mdDialog", "BlogService", "ToastService", function ($scope, post, $mdDialog, BlogService, ToastService) {
         $scope.blog = post;
 
         $scope.tags = post.tags.join(" ");
@@ -34,7 +34,7 @@ angular.module("app.addBlogPostDialog", [])
         $scope.done = function () {
             var updatedPost = $scope.blog;
 
-            if($scope.tags)
+            if ($scope.tags)
                 updatedPost.tags = $scope.tags.split(" ");
 
             BlogService.updateBlog(post.id, JSON.stringify(updatedPost), function (success) {

@@ -1,26 +1,26 @@
 <md-dialog class="addBlogPostDialogView">
-    <!-- Latest compiled and CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Latest compiled and CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    <div class="dialog-container">
-        <h2 class="dialog-container__title">Add a new blog post</h2>
+  <div class="dialog-container">
+    <h2 class="dialog-container__title">Add a new blog post</h2>
 
-        <div class="form__group">
-            <input type="text" class="form__input form__input--text" ng-model="blog.title" placeholder="Post Title">
+    <div class="form__group">
+      <input type="text" class="form__input form__input--text" ng-model="blog.title" placeholder="Post Title">
 
-            <input type="text" class="form__input form__input--text" ng-model="blog.image_url" placeholder="Image URL">
+      <input type="text" class="form__input form__input--text" ng-model="blog.image_url" placeholder="Image URL">
 
-            <input type="text" class="form__input form__input--text" ng-model="tags" placeholder="Tags (Separate by space)">
+      <input type="text" class="form__input form__input--text" ng-model="tags" placeholder="Tags (Separate by space)">
 
-            <textarea rows="5" class="descriptionArea" ng-model="blog.description" placeholder="Short Description"></textarea>
+      <textarea rows="5" class="descriptionArea" ng-model="blog.description" placeholder="Short Description"></textarea>
 
-            <div text-angular ng-model="blog.text"></div>
+      <div text-angular ng-model="blog.text"></div>
 
-            <div class="dialog-container__actions" layout="row" layout-align="space-around end">
-                <button class="button" ng-click="done()">Done</button>
-                <button class="button button--warn" ng-click="cancel()">Cancel</button>
-            </div>
+      <div class="dialog-container__actions" layout="row" layout-align="space-around end">
+        <button class="button" ng-click="done()">Done</button>
+        <button class="button button--warn" ng-click="cancel()">Cancel</button>
+      </div>
 
-        </div>
     </div>
+  </div>
 </md-dialog>

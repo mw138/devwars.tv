@@ -118,12 +118,12 @@ public class AngularServiceBuilder {
                             }
 
                             pathParams.keySet()
-                                    .stream()
-                                    .forEach(p -> printWriter.println("Path Variable {" + p + "}" + " : " + pathParamsTypes.get(p).getName()));
+                                .stream()
+                                .forEach(p -> printWriter.println("Path Variable {" + p + "}" + " : " + pathParamsTypes.get(p).getName()));
 
                             queryParams.keySet()
-                                    .stream()
-                                    .forEach(p -> printWriter.println("Query Parameter {" + p + "}" + " : " + queryParamsTypes.get(p).getName()));
+                                .stream()
+                                .forEach(p -> printWriter.println("Query Parameter {" + p + "}" + " : " + queryParamsTypes.get(p).getName()));
                             printWriter.println("*/");
 
                             String urlMethod = requestMapping.method().length > 0 ? requestMapping.method()[0].name() : "GET";
@@ -132,62 +132,62 @@ public class AngularServiceBuilder {
                             ArrayList methodParamsList = new ArrayList();
 
                             pathParams.keySet()
-                                    .stream()
-                                    .forEach(methodParamsList::add);
+                                .stream()
+                                .forEach(methodParamsList::add);
 
                             pathModels.keySet().stream()
-                                    .forEach(methodParamsList::add);
+                                .forEach(methodParamsList::add);
 
                             queryParams.keySet()
-                                    .stream()
-                                    .filter(p -> queryParams.get(p).required())
-                                    .forEach(methodParamsList::add);
+                                .stream()
+                                .filter(p -> queryParams.get(p).required())
+                                .forEach(methodParamsList::add);
 
                             queryParams.keySet()
-                                    .stream()
-                                    .filter(p -> !queryParams.get(p).required())
-                                    .forEach(methodParamsList::add);
+                                .stream()
+                                .filter(p -> !queryParams.get(p).required())
+                                .forEach(methodParamsList::add);
 
                             jsonParams.keySet()
-                                    .stream()
-                                    .forEach(methodParamsList::add);
+                                .stream()
+                                .forEach(methodParamsList::add);
 
                             methodParamsList.add("successCallback");
                             methodParamsList.add("errorCallback");
 
                             methodParams = ((ArrayList<String>) methodParamsList)
-                                    .stream()
-                                    .collect(Collectors.joining(", "));
+                                .stream()
+                                .collect(Collectors.joining(", "));
 
                             String queryParamsString = queryParamsTypes.keySet().stream()
-                                    .map(a -> a + " : " + a)
-                                    .collect(Collectors.joining(","));
+                                .map(a -> a + " : " + a)
+                                .collect(Collectors.joining(","));
 
                             printWriter.print(serviceName + "." + method.getName() + " = function(" + methodParams + "){");
                             printWriter.print("\n$http({\n" +
-                                    "method: '" + urlMethod + "',\n" +
-                                    "url: '" + absoluteUrl.replace("{", "' + ").replace("}", " + '") + "',\n" +
-                                    (urlMethod.equalsIgnoreCase("get") ? "params" : "data") + ": {" +
-                                    queryParamsString +
-                                    "}" +
-                                    "\n})" +
-                                    "\n.then(function(success){\n" +
-                                    "successCallback(success)\n" +
-                                    "},\n" +
-                                    "function(error){\n" +
-                                    "errorCallback(error)\n" +
-                                    "});\n");
+                                "method: '" + urlMethod + "',\n" +
+                                "url: '" + absoluteUrl.replace("{", "' + ").replace("}", " + '") + "',\n" +
+                                (urlMethod.equalsIgnoreCase("get") ? "params" : "data") + ": {" +
+                                queryParamsString +
+                                "}" +
+                                "\n})" +
+                                "\n.then(function(success){\n" +
+                                "successCallback(success)\n" +
+                                "},\n" +
+                                "function(error){\n" +
+                                "errorCallback(error)\n" +
+                                "});\n");
                             printWriter.print("\n};\n\n");
 
                             printWriter.print(serviceName + ".http." + method.getName() + " = function(" + methodParams + "){");
                             printWriter.print("\nreturn $http({\n" +
-                                    "method: '" + urlMethod + "',\n" +
-                                    "url: '" + absoluteUrl.replace("{", "' + ").replace("}", " + '") + "',\n" +
-                                    (urlMethod.equalsIgnoreCase("get") ? "params" : "data") + ": {" +
-                                    queryParamsString +
-                                    "}" +
-                                    "\n})" +
-                                    "};");
+                                "method: '" + urlMethod + "',\n" +
+                                "url: '" + absoluteUrl.replace("{", "' + ").replace("}", " + '") + "',\n" +
+                                (urlMethod.equalsIgnoreCase("get") ? "params" : "data") + ": {" +
+                                queryParamsString +
+                                "}" +
+                                "\n})" +
+                                "};");
 
                         }
                     } catch (ArrayIndexOutOfBoundsException e) {

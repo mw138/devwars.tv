@@ -12,12 +12,12 @@ public class RedditProvider implements IProvider {
 
     public static User userForCodeWithKeys(String code, String access, String secret, String redirect) throws UnirestException {
         String accessTokenJSON = Unirest.post("https://www.reddit.com/api/v1/access_token")
-                .queryString("grant_type", "authorization_code")
-                .queryString("code", code)
-                .queryString("redirect_uri", redirect)
-                .basicAuth(access, secret)
-                .asString()
-                .getBody();
+            .queryString("grant_type", "authorization_code")
+            .queryString("code", code)
+            .queryString("redirect_uri", redirect)
+            .basicAuth(access, secret)
+            .asString()
+            .getBody();
 
         JSONObject accessTokenJSONObject = (JSONObject) JSONValue.parse(accessTokenJSON);
         System.out.println("FIRST RESPONSE");
@@ -26,11 +26,11 @@ public class RedditProvider implements IProvider {
         String accessToken = (String) accessTokenJSONObject.get("access_token");
 
         String meResponse = Unirest.get("https://oauth.reddit.com/api/v1/me")
-                .queryString("access_token", accessToken)
-                .header("Authorization", "bearer " + accessToken)
-                .header("User-Agent", "DevWars2/0.1 by DevWars")
-                .asString()
-                .getBody();
+            .queryString("access_token", accessToken)
+            .header("Authorization", "bearer " + accessToken)
+            .header("User-Agent", "DevWars2/0.1 by DevWars")
+            .asString()
+            .getBody();
 
         System.out.println(meResponse);
         JSONObject meJSONObject = (JSONObject) JSONValue.parse(meResponse);

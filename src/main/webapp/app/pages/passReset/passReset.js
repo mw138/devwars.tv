@@ -2,8 +2,8 @@
  * Created by Beau on 07 May 2015.
  */
 angular.module('app.passReset', [
-    'ui.router'
-])
+        'ui.router'
+    ])
     .config(['$stateProvider',
         function ($stateProvider) {
 

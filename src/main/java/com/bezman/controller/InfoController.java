@@ -114,12 +114,12 @@ public class InfoController extends BaseController {
 
         Session session = DatabaseManager.getSession();
         String queryString = "select *, (select @gamesPlayed \\:= COUNT(*) from players where user_id = u.id),\n" +
-                "  (select @gamesWon \\:= COUNT(*) from players AS p where (p.user_id = u.id AND (select win from teams where id = p.team_id) = true)),\n" +
-                "  (select @ratio \\:= @gamesWon / @gamesPlayed),\n" +
-                "  ROUND(\n" +
-                "      (((select xp from devwars.ranking as ranking where ranking.id = u.id) *  @gamesPlayed) * \n" +
-                "      ( @ratio )) / 10\n" +
-                "  ) AS score from accounts as u order by score desc limit :maxResults offset :offset";
+            "  (select @gamesWon \\:= COUNT(*) from players AS p where (p.user_id = u.id AND (select win from teams where id = p.team_id) = true)),\n" +
+            "  (select @ratio \\:= @gamesWon / @gamesPlayed),\n" +
+            "  ROUND(\n" +
+            "      (((select xp from devwars.ranking as ranking where ranking.id = u.id) *  @gamesPlayed) * \n" +
+            "      ( @ratio )) / 10\n" +
+            "  ) AS score from accounts as u order by score desc limit :maxResults offset :offset";
 
         Query query = session.createSQLQuery(queryString).addEntity(User.class).addScalar("score");
 

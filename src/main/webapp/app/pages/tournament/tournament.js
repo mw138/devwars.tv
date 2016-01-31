@@ -10,5 +10,5 @@ angular.module("app.tournament", [])
 
         }])
     .controller("TournamentController", ["$scope", function ($scope) {
-        
+
     }]);

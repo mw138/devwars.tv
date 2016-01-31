@@ -22,16 +22,16 @@ angular.module("app.warriorReg", [])
         $scope.warrior.jsRate = 1;
 
         $scope.initWarrior = function () {
-            if(!AuthService.user) {
+            if (!AuthService.user) {
                 AuthService.callbacks.push($scope.initWarrior);
             } else {
-                if(!AuthService.user.warrior) $state.go('warriorReg');
+                if (!AuthService.user.warrior) $state.go('warriorReg');
 
                 $scope.warrior = AuthService.user.warrior;
 
                 var warrior = $scope.warrior;
 
-                if(warrior) {
+                if (warrior) {
                     warrior.month = $filter('date')(warrior.dob, 'MM');
                     warrior.day = $filter('date')(warrior.dob, 'dd');
                     warrior.year = $filter('date')(warrior.dob, 'yyyy');
@@ -51,10 +51,10 @@ angular.module("app.warriorReg", [])
         $scope.cssTooltip = $scope.cssTooltips[0];
         $scope.jsTooltip = $scope.jsTooltips[0];
 
-            $scope.getRange = function (start, finish) {
+        $scope.getRange = function (start, finish) {
             var returnArray = [];
 
-            for(var i = start; i <= finish; i++) {
+            for (var i = start; i <= finish; i++) {
                 returnArray.push(i);
             }
 
@@ -77,7 +77,7 @@ angular.module("app.warriorReg", [])
         };
 
         $scope.register = function (warrior) {
-            if($scope.hasTS) {
+            if ($scope.hasTS) {
                 $http({
                     url: "/v1/warrior/register",
                     method: "GET",

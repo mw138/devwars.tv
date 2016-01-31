@@ -25,42 +25,42 @@ public class HibernateInterceptor extends EmptyInterceptor {
 
     public static void setPreFlushers(Object object) {
         Arrays.stream(object.getClass().getDeclaredFields())
-                .forEach(field ->
-                {
-                    PreFlushHibernateDefault hibernateDefault = field.getAnnotation(PreFlushHibernateDefault.class);
+            .forEach(field ->
+            {
+                PreFlushHibernateDefault hibernateDefault = field.getAnnotation(PreFlushHibernateDefault.class);
 
-                    field.setAccessible(true);
+                field.setAccessible(true);
 
-                    try {
-                        if (hibernateDefault != null && field.get(object) == null) {
-                            field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                try {
+                    if (hibernateDefault != null && field.get(object) == null) {
+                        field.set(object, Util.toObject(field.getType(), hibernateDefault.value()));
                     }
-                });
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
     }
 
     public static void loadEntityDefaults(Object object) {
         Arrays.stream(object.getClass().getDeclaredFields())
-                .forEach(field ->
-                {
-                    HibernateDefault hibernateDefault = field.getAnnotation(HibernateDefault.class);
+            .forEach(field ->
+            {
+                HibernateDefault hibernateDefault = field.getAnnotation(HibernateDefault.class);
 
-                    field.setAccessible(true);
+                field.setAccessible(true);
 
-                    try {
-                        if (hibernateDefault != null && field.get(object) == null) {
-                            Object generatedObject = Util.toObject(field.getType(), hibernateDefault.value());
+                try {
+                    if (hibernateDefault != null && field.get(object) == null) {
+                        Object generatedObject = Util.toObject(field.getType(), hibernateDefault.value());
 
-                            field.set(object, generatedObject);
+                        field.set(object, generatedObject);
 
-                            HibernateInterceptor.loadEntityDefaults(generatedObject);
-                        }
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        HibernateInterceptor.loadEntityDefaults(generatedObject);
                     }
-                });
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
     }
 
     public static void postLoadAny(Object object) {

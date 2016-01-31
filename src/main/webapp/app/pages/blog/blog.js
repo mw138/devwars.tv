@@ -19,8 +19,7 @@ angular.module("app.blogList", [])
 
         $scope.AuthService = AuthService;
 
-        if($stateParams.title)
-        {
+        if ($stateParams.title) {
             BlogService.getBlog($stateParams.title, function (success) {
                 $scope.post = success.data;
             }, angular.noop);

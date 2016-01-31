@@ -45,8 +45,8 @@ public class BlogController {
     @RequestMapping("/all")
     public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day) {
         Criteria criteria = session.createCriteria(BlogPost.class)
-                .setMaxResults(10)
-                .addOrder(Order.desc("timestamp"));
+            .setMaxResults(10)
+            .addOrder(Order.desc("timestamp"));
 
         if (year != null) {
             criteria.add(new YearCriterion("timestamp", year));

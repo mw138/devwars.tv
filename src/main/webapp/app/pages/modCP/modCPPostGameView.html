@@ -1,12 +1,12 @@
 <div class="modCPView right">
-	<h1>Post Game</h1>
-	<div class="modcp-content">
+  <h1>Post Game</h1>
+  <div class="modcp-content">
 
-       <div ng-repeat="team in selectedGame.teams">
-           <h3 ng-bind="team.name"></h3>
-           <input type="file" fileread="files[team.name]">
-           <button class="button" ng-click="uploadFiles(team, files[team.name])">Upload</button>
-       </div>
+    <div ng-repeat="team in selectedGame.teams">
+      <h3 ng-bind="team.name"></h3>
+      <input type="file" fileread="files[team.name]">
+      <button class="button" ng-click="uploadFiles(team, files[team.name])">Upload</button>
+    </div>
 
-	</div> <!-- .modcp-content -->
+  </div> <!-- .modcp-content -->
 </div> <!-- modCPView.right -->

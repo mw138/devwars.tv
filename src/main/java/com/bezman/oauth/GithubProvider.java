@@ -12,21 +12,21 @@ public class GithubProvider implements IProvider {
     public static User userForCodeWithRedirect(String code, String redirect, String client, String secret) {
         try {
             String accessTokenResponse = Unirest.post("https://github.com/login/oauth/access_token")
-                    .queryString("code", code)
-                    .queryString("client_id", client)
-                    .queryString("client_secret", secret)
-                    .queryString("redirect_uri", redirect)
-                    .header("Accept", "application/json")
-                    .asString()
-                    .getBody();
+                .queryString("code", code)
+                .queryString("client_id", client)
+                .queryString("client_secret", secret)
+                .queryString("redirect_uri", redirect)
+                .header("Accept", "application/json")
+                .asString()
+                .getBody();
 
             JSONObject accessTokenJSON = (JSONObject) JSONValue.parse(accessTokenResponse);
             String accessToken = (String) accessTokenJSON.get("access_token");
 
             String userInfoResponse = Unirest.get("https://api.github.com/user")
-                    .queryString("access_token", accessToken)
-                    .asString()
-                    .getBody();
+                .queryString("access_token", accessToken)
+                .asString()
+                .getBody();
 
             JSONObject userInfoJSON = (JSONObject) JSONValue.parse(userInfoResponse);
 

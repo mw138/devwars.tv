@@ -1,6 +1,6 @@
 angular.module('app.auth', [
-    'ui.router'
-])
+        'ui.router'
+    ])
 
     .config(['$stateProvider',
         function ($stateProvider) {

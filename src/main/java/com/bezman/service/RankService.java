@@ -15,10 +15,10 @@ public class RankService {
         Session session = DatabaseManager.getSession();
 
         Rank rank = (Rank) session.createCriteria(Rank.class)
-                .add(Restrictions.le("xpRequired", ranking.getXp().intValue()))
-                .addOrder(Order.desc("xpRequired"))
-                .setMaxResults(1)
-                .uniqueResult();
+            .add(Restrictions.le("xpRequired", ranking.getXp().intValue()))
+            .addOrder(Order.desc("xpRequired"))
+            .setMaxResults(1)
+            .uniqueResult();
 
         session.close();
 

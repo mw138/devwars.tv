@@ -10,11 +10,11 @@ angular.module('app.createTeamDialog', [])
             tag: '',
         };
 
-        var dataURItoBlob = function(dataURI) {
+        var dataURItoBlob = function (dataURI) {
             var binary = atob(dataURI.split(',')[1]);
             var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
             var array = [];
-            for(var i = 0; i < binary.length; i++) {
+            for (var i = 0; i < binary.length; i++) {
                 array.push(binary.charCodeAt(i));
             }
             return new Blob([new Uint8Array(array)], {type: mimeString});
@@ -46,14 +46,14 @@ angular.module('app.createTeamDialog', [])
 
         $scope.$watch("selectedTeamImage", function (oldVal, newVal) {
 
-            if(oldVal !== newVal)
+            if (oldVal !== newVal)
                 $scope.editTeamImage($scope.selectedTeamImage);
         });
 
 
         $scope.submitTeam = function (teamName, teamTag) {
 
-            if(teamName && teamTag)
+            if (teamName && teamTag)
                 $mdDialog.hide({
                     name: teamName,
                     tag: teamTag

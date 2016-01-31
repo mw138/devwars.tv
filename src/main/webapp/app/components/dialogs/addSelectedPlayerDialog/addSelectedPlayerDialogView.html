@@ -1,22 +1,23 @@
 <md-dialog class="md-dialog-container--addSelectedPlayerDialog">
-    <i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i> <!-- .closeDialog -->
-    <div class="dialog-container">
-        <h2 class="dialog-container__title">Add a new player</h2>
+  <i class="closeDialog fa fa-close" ng-click="$mdDialog.hide()"></i> <!-- .closeDialog -->
+  <div class="dialog-container">
+    <h2 class="dialog-container__title">Add a new player</h2>
 
-        <div class="form__group">
+    <div class="form__group">
 
-            <md-radio-group ng-model="selectedTeam">
-                <md-radio-button class="teamRadioButton" ng-value="team" ng-repeat="team in game.teams">
-                    {{team.name}}
-                </md-radio-button>
-            </md-radio-group>
+      <md-radio-group ng-model="selectedTeam">
+        <md-radio-button class="teamRadioButton" ng-value="team" ng-repeat="team in game.teams">
+          {{team.name}}
+        </md-radio-button>
+      </md-radio-group>
 
-            <div class="dialog-container__actions" layout="row" layout-align="space-around end">
-                <button class="button" ng-click="$mdDialog.hide({team : selectedTeam, language: 'HTML'})">HTML</button>
-                <button class="button button--warn" ng-click="$mdDialog.hide({team: selectedTeam, language: 'CSS'})">CSS</button>
-                <button class="button" ng-click="$mdDialog.hide({team: selectedTeam, language: 'JS'})">JS</button>
-            </div>
+      <div class="dialog-container__actions" layout="row" layout-align="space-around end">
+        <button class="button" ng-click="$mdDialog.hide({team : selectedTeam, language: 'HTML'})">HTML</button>
+        <button class="button button--warn" ng-click="$mdDialog.hide({team: selectedTeam, language: 'CSS'})">CSS
+        </button>
+        <button class="button" ng-click="$mdDialog.hide({team: selectedTeam, language: 'JS'})">JS</button>
+      </div>
 
-        </div>
     </div>
+  </div>
 </md-dialog>

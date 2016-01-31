@@ -21,9 +21,9 @@ public class DevWarsObjectMapper extends ObjectMapper {
         configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         setVisibilityChecker(getSerializationConfig().getDefaultVisibilityChecker()
-                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
-                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
-                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
+            .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+            .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+            .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
 
         Reference.objectMapper = this;
     }

@@ -25,7 +25,7 @@ angular.module('app.confirmTeamSignupDialog', [])
             team.members.forEach(function (user) {
                 var language = $scope.langArray[user.clickCount % 4];
 
-                if(language) count++;
+                if (language) count++;
 
                 var dupeLang = team.members.some(function (secondUser) {
                     var secondLanguage = $scope.langArray[secondUser.clickCount % 4];
@@ -33,7 +33,7 @@ angular.module('app.confirmTeamSignupDialog', [])
                     return !!(secondLanguage == language && secondUser.id !== user.id);
                 });
 
-                if(dupeLang) count = 4;
+                if (dupeLang) count = 4;
             });
 
             return count == 3;
@@ -45,7 +45,7 @@ angular.module('app.confirmTeamSignupDialog', [])
             team.members.forEach(function (user) {
                 var language = $scope.langArray[user.clickCount % 4];
 
-                if(language) {
+                if (language) {
                     signupUsers.push({
                         user: {
                             id: user.id

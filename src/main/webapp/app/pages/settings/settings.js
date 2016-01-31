@@ -1,6 +1,6 @@
 angular.module('app.settings', [
-    'ui.router'
-])
+        'ui.router'
+    ])
     .config(['$stateProvider',
         function ($stateProvider) {
 
@@ -11,8 +11,8 @@ angular.module('app.settings', [
 
                     templateUrl: 'app/pages/settings/settingsView.html',
                     controller: ['$scope', '$state',
-                        function( $scope, $state) {
-                            if($state.current.name == "settings") {
+                        function ($scope, $state) {
+                            if ($state.current.name == "settings") {
                                 $state.go('settings.accountView');
                             }
                         }]
@@ -23,8 +23,8 @@ angular.module('app.settings', [
 
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/settings/settingsView.html',
                             controller: "SettingsController"
                         },
@@ -42,8 +42,8 @@ angular.module('app.settings', [
                     parent: 'settings',
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/settings/settingsView.html',
                             controller: "SettingsController"
                         },
@@ -61,8 +61,8 @@ angular.module('app.settings', [
                     parent: "settings",
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/settings/settingsView.html',
                             controller: "SettingsController"
                         },
@@ -79,8 +79,8 @@ angular.module('app.settings', [
 
                     auth: true,
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/settings/settingsView.html',
                             controller: "SettingsController"
                         },
@@ -95,8 +95,8 @@ angular.module('app.settings', [
                 .state('settings.warriorView', {
                     url: '/warrior/',
 
-                    views : {
-                        '' : {
+                    views: {
+                        '': {
                             templateUrl: 'app/pages/settings/settingsView.html',
                             controller: "SettingsController"
                         },
@@ -115,7 +115,7 @@ angular.module('app.settings', [
         var routeParams = $location.search();
 
         $scope.initProfile = function () {
-            if(!AuthService.user) {
+            if (!AuthService.user) {
                 $scope.profile = {};
                 AuthService.callbacks.push($scope.initProfile);
             } else {
@@ -124,14 +124,14 @@ angular.module('app.settings', [
         };
 
         $scope.checkVeteran = function () {
-            if(!AuthService.user) {
+            if (!AuthService.user) {
                 AuthService.callbacks.push($scope.checkVeteran);
             } else {
-                if(routeParams.veteran) {
+                if (routeParams.veteran) {
                     var twitchUsername = null;
 
-                    for(var key in AuthService.user.connectedAccounts) {
-                        if(AuthService.user.connectedAccounts[key].provider === 'TWITCH') twitchUsername = AuthService.user.connectedAccounts[key].username;
+                    for (var key in AuthService.user.connectedAccounts) {
+                        if (AuthService.user.connectedAccounts[key].provider === 'TWITCH') twitchUsername = AuthService.user.connectedAccounts[key].username;
                     }
 
                     DialogService.showConfirmDialog("Account Transfer", "We have record that you have played in Season 1 with your Twitch account " + twitchUsername + ". We have that username reserved for you. Would you like to claim it or keep your existing username? If you keep your username, we will release the username " + twitchUsername + " to the public.", "Claim " + twitchUsername, "Keep my username", null)
@@ -153,10 +153,10 @@ angular.module('app.settings', [
         };
 
         $scope.disconnect = function (provider) {
-            if(AuthService.hasProvider(provider)) {
+            if (AuthService.hasProvider(provider)) {
                 $http({
                     method: "GET",
-                    url: "/v1/connect/" + provider +  "/disconnect"
+                    url: "/v1/connect/" + provider + "/disconnect"
                 })
                     .then(function (success) {
                         console.log(success);
@@ -164,22 +164,21 @@ angular.module('app.settings', [
                     }, function (error) {
                         console.log(error);
                     });
-            } else
-            {
+            } else {
                 location.href = "/v1/connect/" + provider;
             }
         };
 
         $scope.editAvatarImage = function (image, $event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/editAvatarImageDialog/editAvatarImageView.html",
-                controller: "EditAvatarImageDialogController",
-                clickOutsideToClose: false,
+                    templateUrl: "/app/components/dialogs/editAvatarImageDialog/editAvatarImageView.html",
+                    controller: "EditAvatarImageDialogController",
+                    clickOutsideToClose: false,
 
-                locals: {
-                    image: image
-                }
-            })
+                    locals: {
+                        image: image
+                    }
+                })
                 .then(function (success) {
                     location.reload();
                 }, function (error) {
@@ -192,7 +191,7 @@ angular.module('app.settings', [
         };
 
         $scope.changePassword = function (passwordChange) {
-            if(passwordChange.newPassword1
+            if (passwordChange.newPassword1
                 && passwordChange.newPassword2
                 && passwordChange.newPassword1 === passwordChange.newPassword2) {
 
@@ -205,7 +204,7 @@ angular.module('app.settings', [
         };
 
         $scope.changeEmail = function (changeEmail) {
-            if(changeEmail.newEmail && changeEmail.currentPassword) {
+            if (changeEmail.newEmail && changeEmail.currentPassword) {
                 UserService.changeEmail(changeEmail.newEmail, changeEmail.currentPassword, function (success) {
                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Changed Email");
                     AuthService.init();
@@ -217,17 +216,17 @@ angular.module('app.settings', [
 
         $scope.updateInfo = function (profile) {
             AuthService.getUser()
-                .then(function (user){
+                .then(function (user) {
                     var usernameChange = true;
-                    if(user.username !== profile.username){
-                        if(user.inventory.usernameChanges < 1) {
+                    if (user.username !== profile.username) {
+                        if (user.inventory.usernameChanges < 1) {
                             usernameChange = false;
-                            profile.username =  user.username;
+                            profile.username = user.username;
                         }
                     }
-                    
-                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function() {
-                        if(usernameChange == false) {
+
+                    UserService.updateInfo(profile.company, profile.location, profile.url, profile.username, function () {
+                        if (usernameChange == false) {
                             ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", "Everything but username saved. Please purchase username change from bit shop.");
                         } else {
                             ToastService.showDevwarsToast("fa-check-circle", "Success", "Changes saved");
@@ -240,7 +239,7 @@ angular.module('app.settings', [
 
         $scope.$watch("selectedAvatarImage", function (oldVal, newVal) {
 
-            if(oldVal !== newVal)
+            if (oldVal !== newVal)
                 $scope.editAvatarImage($scope.selectedAvatarImage);
         });
 

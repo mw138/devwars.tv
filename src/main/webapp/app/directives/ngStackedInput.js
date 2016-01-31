@@ -17,7 +17,7 @@ angular.module('app.stackedInput', [])
                 scope.$watch("model", function (newVal, oldVal) {
                     scope.input = newVal;
 
-                    if(scope.lastTimeout) clearTimeout(scope.lastTimeout);
+                    if (scope.lastTimeout) clearTimeout(scope.lastTimeout);
 
                     scope.lastTimeout = setTimeout(scope.ngStackedInput, scope.time);
                 });

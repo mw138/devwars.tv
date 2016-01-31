@@ -24,18 +24,18 @@ angular.module("app.blog", [])
 
         $scope.newPost = function ($event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/addBlogPostDialog/addBlogPostDialogView.html",
-                controller: "AddBlogPostDialogController",
-                targetEvent: $event
-            })
+                    templateUrl: "/app/components/dialogs/addBlogPostDialog/addBlogPostDialogView.html",
+                    controller: "AddBlogPostDialogController",
+                    targetEvent: $event
+                })
                 .then(function (success) {
                     ToastService.showDevwarsToast("fa-check-circle", "Successfully published", success.title);
                     $scope.updatePosts();
                 }, function (error) {
                     //Otherwise means they just clicked cancel
-                    if(error) {
+                    if (error) {
                         var messages = error.data.map(function (error) {
-                           return error.defaultMessage;
+                            return error.defaultMessage;
                         }).join('\n');
 
                         ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", messages);
@@ -45,14 +45,14 @@ angular.module("app.blog", [])
 
         $scope.editPost = function (post, $event) {
             $mdDialog.show({
-                templateUrl: "/app/components/dialogs/addBlogPostDialog/addBlogPostDialogView.html",
-                controller: "EditBlogPostDialogController",
-                targetEvent: $event,
+                    templateUrl: "/app/components/dialogs/addBlogPostDialog/addBlogPostDialogView.html",
+                    controller: "EditBlogPostDialogController",
+                    targetEvent: $event,
 
-                locals: {
-                    post: post
-                }
-            })
+                    locals: {
+                        post: post
+                    }
+                })
                 .then(function (success) {
                     ToastService.showDevwarsToast("fa-check-circle", "Success", "Edited post");
                     $scope.updatePosts();

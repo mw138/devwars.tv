@@ -1,35 +1,38 @@
 <md-dialog class="team-dialog team-join__game">
-    <i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i>
+  <i class="closeDialog fa fa-close" ng-click="$mdDialog.cancel()"></i>
 
-    <h3 class="dialog-container__header">You are registering your team for a game on:</h3>
+  <h3 class="dialog-container__header">You are registering your team for a game on:</h3>
 
-    <div class="dialog-container__dateBox">
-            <div class="dateBox-date">
-                    <span>{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
-                    <span>{{game.timestamp | date : 'dd' : 'UTC'}}</span>
-            </div>
-            <div class="dateBox-time">
-                    <span>{{game.timestamp | date : 'shortTime' : 'UTC'}} UTC</span>
-            </div>
+  <div class="dialog-container__dateBox">
+    <div class="dateBox-date">
+      <span>{{game.timestamp | date : 'MMM' : 'UTC'}}</span>
+      <span>{{game.timestamp | date : 'dd' : 'UTC'}}</span>
     </div>
-
-    <div class="player-selector">
-    	<h3>Select your players</h3>
-
-        <span ng-repeat="user in team.members" ng-init="user.clickCount = 0;" ng-click="clickPlayer(user)" ng-class="getClassForUser(user)" ng-bind="user.username"></span>
-
+    <div class="dateBox-time">
+      <span>{{game.timestamp | date : 'shortTime' : 'UTC'}} UTC</span>
     </div>
+  </div>
 
-    <div class="warning" ng-hide="selectedPlayers.length >= 3">
-        <h4>You must choose three players</h4>
-    </div>
+  <div class="player-selector">
+    <h3>Select your players</h3>
 
-    <div class="warning">
-        <h4>WARNING: If your application to play is accepted and you do not turn up to play, your team and it's members will be penalised.</h4>
-    </div>
+    <span ng-repeat="user in team.members" ng-init="user.clickCount = 0;" ng-click="clickPlayer(user)"
+          ng-class="getClassForUser(user)" ng-bind="user.username"></span>
 
-    <div class="dialog-container__actions">
-        <button class="button" ng-class="{'button--disabled' : !enoughPlayers()}" ng-click="confirmSignUp()">Confirm</button>
-        <button class="button button--warn" ng-click="$mdDialog.cancel()">Cancel</button>
-    </div>
+  </div>
+
+  <div class="warning" ng-hide="selectedPlayers.length >= 3">
+    <h4>You must choose three players</h4>
+  </div>
+
+  <div class="warning">
+    <h4>WARNING: If your application to play is accepted and you do not turn up to play, your team and it's members will
+      be penalised.</h4>
+  </div>
+
+  <div class="dialog-container__actions">
+    <button class="button" ng-class="{'button--disabled' : !enoughPlayers()}" ng-click="confirmSignUp()">Confirm
+    </button>
+    <button class="button button--warn" ng-click="$mdDialog.cancel()">Cancel</button>
+  </div>
 </md-dialog>

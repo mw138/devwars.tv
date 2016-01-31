@@ -29,12 +29,12 @@ angular.module("app.dashboard", [])
                     auth: true,
 
                     views: {
-                        '' : {
+                        '': {
                             templateUrl: '/app/pages/dashboard/dashboardView.html',
                             controller: "DashboardController"
                         },
 
-                        'dashboardInner@dashboard' : {
+                        'dashboardInner@dashboard': {
                             templateUrl: '/app/pages/dashboard/dashboardHome.html',
                             controller: "DashboardController"
                         }
@@ -48,12 +48,12 @@ angular.module("app.dashboard", [])
                     auth: true,
 
                     views: {
-                        '' : {
+                        '': {
                             templateUrl: '/app/pages/dashboard/dashboardView.html',
                             controller: "DashboardController"
                         },
 
-                        'dashboardInner@dashboard' : {
+                        'dashboardInner@dashboard': {
                             templateUrl: '/app/pages/settings/settingsProfileView.html',
                             controller: "SettingsController"
                         }
@@ -77,12 +77,12 @@ angular.module("app.dashboard", [])
                     },
 
                     views: {
-                        '' : {
+                        '': {
                             templateUrl: '/app/pages/dashboard/dashboardView.html',
                             controller: "DashboardController"
                         },
 
-                        'dashboardInner@dashboard' : {
+                        'dashboardInner@dashboard': {
                             templateUrl: "/app/pages/badges/badgesView.html",
                             controller: "BadgesController"
                         }
@@ -104,7 +104,7 @@ angular.module("app.dashboard", [])
                 'Bronze III': "bronze3",
                 'Bronze IV': "bronze4",
                 'Bronze V': "bronze5",
-                'Silver I':  "silver1",
+                'Silver I': "silver1",
                 'Silver II': "silver2",
                 'Silver III': "silver3",
                 'Silver IV': "silver4",
