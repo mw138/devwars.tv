@@ -219,33 +219,6 @@ public class UserTeamController {
     }
 
     /**
-     * Change the name of a team
-     *
-     * @param session (Resolved)
-     * @param user    (Resolved)
-     * @param id      The ID of the team
-     * @param newName The new name of the team
-     * @return Message
-     */
-    @PreAuthorization(minRole = User.Role.USER)
-    @Transactional
-    @RequestMapping("/{id}/changename")
-    public ResponseEntity editTeamName(SessionImpl session, @AuthedUser User user, @PathVariable("id") int id, @RequestParam("newName") String newName) {
-
-        UserTeam userTeam = (UserTeam) session.get(UserTeam.class, id);
-
-        if (userTeam == null)
-            return new ResponseEntity("That team was not found", HttpStatus.NOT_FOUND);
-
-        if (!userTeamService.doesUserHaveAuthorization(user, userTeam))
-            return new ResponseEntity("You are not allowed to do that", HttpStatus.FORBIDDEN);
-
-        userTeam.setName(newName);
-
-        return new ResponseEntity("Successfully changed team name", HttpStatus.OK);
-    }
-
-    /**
      * Invites a player to a roster
      *
      * @param session    (Resolved)
