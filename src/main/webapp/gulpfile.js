@@ -1,65 +1,33 @@
-'use strict';
-
-// Include Gulp & Tools We'll Use
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var del = require('del');
-var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
-var pagespeed = require('psi');
-var reload = browserSync.reload;
-var concat = require('gulp-concat');
-var ngmin = require('gulp-ngmin');
-var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var sourcemaps = require('gulp-sourcemaps');
+var postcss = require('gulp-postcss');
+var sass = require('gulp-sass');
+var ngAnnotate = require('gulp-ng-annotate');
+var uglify = require('gulp-uglify');
 var pipe = require('multipipe');
+var useref = require('gulp-useref');
+var $ = require('gulp-load-plugins')();
 var url = require('url');
-var fs = require('fs');
+var reload = browserSync.reload;
 
-var AUTOPREFIXER_BROWSERS = [
-    'ie >= 10',
-    'ie_mob >= 10',
-    'ff >= 30',
-    'chrome >= 34',
-    'safari >= 7',
-    'opera >= 23',
-    'ios >= 7',
-    'android >= 4.4',
-    'bb >= 10'
-];
+var plugins = [require('precss'), require('autoprefixer'), require('cssnano'), require('postcss-grid')];
 
-// Compile and Automatically Prefix Stylesheets
 gulp.task('styles', function () {
-    // For best performance, don't add Sass partials to `gulp.src`
-    return gulp.src([
-        'assets/sass/*.scss',
-        'assets/sass/**/*.css'
-    ])
-        .pipe($.changed('styles', {extension: '.scss'}))
-        .pipe($.rubySass({
-            style: 'expanded',
-            precision: 10
-        }))
-        .on('error', console.error.bind(console))
-        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe(gulp.dest('.tmp/styles'))
-        // Concatenate And Minify Styles
-        .pipe($.if('*.css', $.csso()))
-        .pipe(gulp.dest('dist/styles'))
-        .pipe(gulp.dest('assets/sass'))
-        .pipe($.size({title: 'styles'}));
+    gulp.src('./assets/sass/main.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass().on('error', sass.logError))
+        .pipe(postcss(plugins))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('assets/sass/'));
 });
 
 gulp.task('dist', function () {
-    var assets = $.useref.assets();
-
     return gulp.src('index.html')
         .pipe(rename('index.min.html'))
-        .pipe(assets)
-        .pipe($.if('*.js', pipe(ngmin(), uglify())))
-        .pipe($.if('*.css', $.csso()))
-        .pipe(assets.restore())
-        .pipe($.useref())
+        .pipe(useref())
+        .pipe($.if('*.js', pipe(ngAnnotate(), uglify())))
         .pipe(gulp.dest('./'));
 });
 
@@ -87,7 +55,7 @@ gulp.task('serve', ['styles', 'watch-files'], function () {
                     return next();
                 }
             ]
-        },
+        }
     });
 });
 
