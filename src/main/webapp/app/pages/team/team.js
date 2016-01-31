@@ -250,14 +250,14 @@ angular.module("app.team", [])
         };
 
         $scope.changeTeamName = function (team) {
-          DialogService.getInputWithMessage("Team Name", "Enter new Team Name", null, function(teamName){
-              UserTeamService.http.changeTeamName(teamName)
-                .then(function(success) {
-                  ToastService.showDevwarsToast("fa-check-circle", "Success", "Team name changed");
-                  team.name = teamName;
-                  AuthService.user.inventory.teamNameChanges--;
-                }, angular.noop);
-          })
+            DialogService.getInputWithMessage("Team Name", "Enter new Team Name", null, function(teamName){
+                UserTeamService.http.changeTeamName(teamName)
+                    .then(function(success) {
+                        ToastService.showDevwarsToast("fa-check-circle", "Success", "Team name changed");
+                        team.name = teamName;
+                        AuthService.user.inventory.teamNameChanges--;
+                    }, angular.noop);
+            })
         };
 
 
