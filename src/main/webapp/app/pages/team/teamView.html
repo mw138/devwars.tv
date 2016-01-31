@@ -11,9 +11,9 @@
 			<div class="teamOverlay__dialog">
 				<div class="teamDialog__inner">
 					<h1>BUILD YOUR TEAM</h1>
-					
+
 					<div class="flex">
-					
+
 						<!-- add .button--disabled when there are no invites to the button below -->
 						<a class="button button--clear" ng-class="{'button--disabled': !shouldShowInvites()}" ng-click="showTeamInvites()">
 							<!-- when there are invites this div will show and the number of invites is placed inside of it -->
@@ -27,7 +27,7 @@
 			</div> <!-- .teamOverlay__dialog -->
 			<img src="../assets/img/codexplosion.jpg" />
 		</div> <!-- .teamOverlay -->
-		
+
 	<div>
 		<div ng-hide="isOwner">
 			<h1>member</h1>
@@ -91,7 +91,7 @@
 						<div class="team-rank rank--no-name" rank="team.rank"></div>
 						<span class="team-name" style="font-size: {{ fitTeamName(team.name) }}">{{ team.name }}</span>
 						<span class="team-tag">[{{ team.tag }}]</span>
-
+						<button ng-hide="AuthService.user.inventory.teamNameChanges < 1" ng-click="changeTeamName(team)" class="button">Change name</button>
 						<div class="team-xp">
 							<span>{{ team.rank.rank }}</span>
 							<span>{{ team.xp }}/{{ team.nextRank.xpRequired }} XP</span>
