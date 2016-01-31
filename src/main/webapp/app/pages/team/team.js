@@ -9,12 +9,13 @@ angular.module("app.team", [])
                 });
 
         }])
-    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", "ToastService", "DialogService", "$http", function ($scope, $mdDialog, UserService, UserTeamService, AuthService, ToastService, DialogService, $http) {
+    .controller("TeamController", ["$scope", "$mdDialog", "UserService", "UserTeamService", "AuthService", "ToastService", "DialogService", "$http",  function ($scope, $mdDialog, UserService, UserTeamService, AuthService, ToastService, DialogService, $http) {
 
 
         //Set team to null (the false state)
         $scope.team = null;
         $scope.isOwner = false;
+        $scope.AuthService = AuthService;
 
         $scope.updateMyTeam = function() {
             UserService.http.getMyTeam()
@@ -247,6 +248,18 @@ angular.module("app.team", [])
             if($scope.isOwner)
                 document.getElementById('fileInput').click();
         };
+
+        $scope.changeTeamName = function (team) {
+            DialogService.getInputWithMessage("Team Name", "Enter new Team Name", null, function(teamName){
+                UserTeamService.http.changeTeamName(teamName)
+                    .then(function(success) {
+                        ToastService.showDevwarsToast("fa-check-circle", "Success", "Team name changed");
+                        team.name = teamName;
+                        AuthService.user.inventory.teamNameChanges--;
+                    }, angular.noop);
+            })
+        };
+
 
         $scope.$watch('chosenImage', function (newVal, oldVal) {
             if(newVal !== oldVal) {
