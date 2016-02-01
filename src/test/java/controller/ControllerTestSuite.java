@@ -1,6 +1,8 @@
 package controller;
 
+import com.bezman.service.AuthService;
 import com.bezman.service.UserService;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +12,12 @@ import javax.servlet.http.Cookie;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses(value = {UserControllerTest.class})
-@ContextConfiguration(locations = {"classpath:/spring/application-config.xml"})
+@ContextConfiguration(locations = {"classpath:/spring/mvc-config.xml"})
 public class ControllerTestSuite {
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-
-
-    public Cookie loginForUsername(String username) {
-//        userService.
-        return null;
+    @BeforeClass
+    public static void before() {
+        System.setProperty("testing", "true");
     }
 
 }

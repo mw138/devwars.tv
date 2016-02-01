@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     Security security;
 
-    public void addUser(User user) {
+    public void saveUser(User user) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 

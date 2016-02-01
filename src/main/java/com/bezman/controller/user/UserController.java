@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import static jdk.nashorn.internal.objects.NativeArray.forEach;
+
 @Controller
 @RequestMapping(value = "/v1/user")
 public class UserController extends BaseController {
@@ -72,6 +74,7 @@ public class UserController extends BaseController {
 
         if (currentUser.getRanking() == null) {
             Ranking ranking = new Ranking();
+            ranking.setUser(currentUser);
             ranking.setId(currentUser.getId());
 
             currentUser.setRanking(ranking);
@@ -82,7 +85,7 @@ public class UserController extends BaseController {
         List<Badge> badgesToAward = currentUser.tryAllBadges();
 
         badgesToAward.stream()
-            .filter(a -> !currentUser.hasBadge(a))
+            .filter(a -> a != null && !currentUser.hasBadge(a))
             .forEach(badge -> {
                 currentUser.awardBadge(badge);
                 session.save(new Notification(currentUser, "Badge Get : " + badge.getName(), false));

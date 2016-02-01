@@ -4,11 +4,13 @@ import com.bezman.annotation.*;
 import com.bezman.hibernate.expression.DayCriterion;
 import com.bezman.hibernate.expression.MonthCriterion;
 import com.bezman.hibernate.expression.YearCriterion;
+import com.bezman.init.DatabaseManager;
 import com.bezman.model.BlogPost;
 import com.bezman.model.User;
 import com.bezman.service.BlogService;
 import com.bezman.validator.BlogPostValidator;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.internal.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,9 @@ public class BlogController {
      */
     @UnitOfWork
     @RequestMapping("/all")
-    public ResponseEntity allPosts(SessionImpl session, @RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day) {
+    public ResponseEntity allPosts(@RequestParam(value = "year", required = false) Integer year, @RequestParam(value = "month", required = false) Integer month, @RequestParam(value = "day", required = false) Integer day) {
+        Session session = DatabaseManager.getSession();
+
         Criteria criteria = session.createCriteria(BlogPost.class)
             .setMaxResults(10)
             .addOrder(Order.desc("timestamp"));
@@ -60,7 +64,11 @@ public class BlogController {
             criteria.add(new DayCriterion("timestamp", day));
         }
 
-        return new ResponseEntity(criteria.list(), HttpStatus.OK);
+        Object list = criteria.list();
+
+        session.close();
+
+        return new ResponseEntity(list, HttpStatus.OK);
     }
 
     /**

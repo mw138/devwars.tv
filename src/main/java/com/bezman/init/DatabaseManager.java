@@ -18,12 +18,21 @@ public class DatabaseManager implements IInit {
 
     @Override
     public void init() {
+        boolean testing = Boolean.parseBoolean(System.getProperty("testing"));
+
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setInterceptor(new HibernateInterceptor());
 
-        configuration.setProperty("hibernate.connection.username", Reference.getEnvironmentProperty("db.username"));
-        configuration.setProperty("hibernate.connection.password", Reference.getEnvironmentProperty("db.password"));
+        if (!testing) {
+            configuration.setProperty("hibernate.connection.username", Reference.getEnvironmentProperty("db.username"));
+            configuration.setProperty("hibernate.connection.password", Reference.getEnvironmentProperty("db.password"));
+        } else {
+            configuration.setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver");
+            configuration.setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:testdb");
+            configuration.setProperty("hibernate.connection.username", "sa");
+            configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
+        }
 
         ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);

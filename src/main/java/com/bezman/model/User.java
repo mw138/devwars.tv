@@ -9,9 +9,7 @@ import com.bezman.init.DatabaseManager;
 import com.bezman.jackson.serializer.UserPermissionSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -23,7 +21,8 @@ import java.util.*;
 @JsonSerialize(using = UserPermissionSerializer.class)
 @Getter
 @Setter
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class User extends BaseModel {
 
     public enum Role {
@@ -111,6 +110,8 @@ public class User extends BaseModel {
 
     @HibernateDefault
     private UserInventory inventory;
+
+    public User() {}
 
     @JsonIgnore
     public boolean isNative() {

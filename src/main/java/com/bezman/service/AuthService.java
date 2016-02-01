@@ -4,6 +4,8 @@ import com.bezman.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+
 @Service
 public class AuthService {
 
@@ -14,8 +16,12 @@ public class AuthService {
         this.httpService = httpService;
     }
 
-    public void loginUser(User user) {
-        this.httpService.setCookie("token", user.newSession());
+    public Cookie loginUser(User user) {
+        Cookie cookie = new Cookie("token", user.newSession());
+
+        this.httpService.setCookie(cookie.getName(), cookie.getValue());
+
+        return cookie;
     }
 
 }
