@@ -11,6 +11,7 @@ import com.bezman.storage.FileStorage;
 import com.dropbox.core.DbxException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,49 @@ public class UserService {
         }
 
         return null;
+    }
+
+    public ConnectedAccount connectedAccountForProvider(User user, String provider) {
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equalsIgnoreCase(account.getProvider())).findFirst();
+
+        return connectedAccount.orElse(null);
+    }
+
+    public boolean userHasConnectedProvider(User user, String provider) {
+        Optional<ConnectedAccount> connectedAccount = user.getConnectedAccounts().stream().filter(account -> provider.equals(account.getProvider())).findFirst();
+
+        return connectedAccount.isPresent();
+    }
+
+    public void createConnectedAccountFromPrimaryAccount(User user) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        ConnectedAccount connectedAccount = new ConnectedAccount(user, user.getProvider(), user.getProviderID(), user.getUsername().substring(0, user.getUsername().length() - 4));
+        user.setProvider(null);
+        user.setProviderID(null);
+
+        session.save(user);
+        session.save(connectedAccount);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public User userForProviderAndProviderID(String provider, String providerID) {
+        ConnectedAccount connectedAccount = null;
+
+        Session session = DatabaseManager.getSession();
+
+        connectedAccount = (ConnectedAccount) session.createCriteria(ConnectedAccount.class)
+                .add(Restrictions.eq("provider", provider))
+                .add(Restrictions.eq("providerID", providerID))
+                .setMaxResults(1)
+                .uniqueResult();
+
+        session.close();
+
+        return connectedAccount == null ? null : connectedAccount.getUser();
     }
 
     public User userForUsernameDevWars(String username) {

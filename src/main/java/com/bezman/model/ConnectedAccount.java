@@ -16,6 +16,9 @@ public class ConnectedAccount extends BaseModel {
     private String username, provider;
 
     @JsonIgnore
+    private String providerID;
+
+    @JsonIgnore
     private User user;
 
     @HibernateDefault("0")
@@ -26,5 +29,13 @@ public class ConnectedAccount extends BaseModel {
         this.provider = provider;
         this.username = username;
         this.disconnected = false;
+    }
+
+    public ConnectedAccount(User user, String provider, String providerID, String username) {
+        this.user = user;
+        this.provider = provider;
+        this.username = username;
+        this.disconnected = false;
+        this.providerID = providerID;
     }
 }

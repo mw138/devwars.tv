@@ -54,12 +54,12 @@
             <one-to-many class="ConnectedAccount"></one-to-many>
         </set>
 
-        <set name="activityLog" table="activity" order-by="timestamp desc" lazy="true">
+        <set name="activityLog" table="activity" order-by="timestamp desc" lazy="true" cascade="delete">
             <key column="user_affected"></key>
             <one-to-many class="Activity"></one-to-many>
         </set>
 
-        <set name="badges" table="users_badges" lazy="false" cascade="save-update" inverse="false">
+        <set name="badges" table="users_badges" lazy="false" cascade="save-update,delete" inverse="false">
             <key column="user_id"></key>
             <many-to-many column="badge_id" class="Badge"></many-to-many>
         </set>

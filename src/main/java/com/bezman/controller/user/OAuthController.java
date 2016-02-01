@@ -1,27 +1,25 @@
 package com.bezman.controller.user;
 
 import com.bezman.Reference.Reference;
-import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.init.DatabaseManager;
-import com.bezman.model.Ranking;
-import com.bezman.model.TwitchPointStorage;
 import com.bezman.oauth.*;
+import com.bezman.service.AuthService;
+import com.bezman.service.HttpService;
+import com.bezman.service.TwitchService;
 import com.bezman.service.UserService;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.auth.RequestToken;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,56 +28,18 @@ import java.util.Enumeration;
 @Controller
 @RequestMapping("/v1/oauth")
 public class OAuthController {
-    @Autowired
+
     UserService userService;
+    AuthService authService;
+    HttpService httpService;
+    TwitchService twitchService;
 
-    @RequestMapping("/reddit")
-    public ResponseEntity redditAuth(HttpServletRequest request, HttpServletResponse response) {
-        return new ResponseEntity("We removed Reddit", HttpStatus.OK);
-
-//        try
-//        {
-//            response.sendRedirect("https://www.reddit.com/api/v1/authorize?client_id=" + Security.redditAppID + "&response_type=code&" +
-//                    "state=" + Util.randomText(32) + "&redirect_uri=" + Reference.rootURL + "/v1/oauth/reddit_callback&duration=permanent&scope=identity");
-//        }catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-    }
-
-    @RequestMapping("/reddit_callback")
-    public ResponseEntity redditCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = RedditProvider.userForCode(code);
-
-            Session session = DatabaseManager.getSession();
-
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    @Autowired
+    public OAuthController(UserService userService, AuthService authService, HttpService httpService, TwitchService twitchService) {
+        this.userService = userService;
+        this.authService = authService;
+        this.httpService = httpService;
+        this.twitchService = twitchService;
     }
 
     @RequestMapping("/google")
@@ -101,33 +61,17 @@ public class OAuthController {
 
     @RequestMapping("/google_callback")
     public ResponseEntity googleCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = GoogleProvider.userForCode(code);
+        com.bezman.model.User user = GoogleProvider.userForCode(code);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Session session = DatabaseManager.getSession();
-
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -152,41 +96,24 @@ public class OAuthController {
     }
 
     @RequestMapping("/twitter_callback")
-    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) {
+    public ResponseEntity twitterCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("oauth_token") String token, @RequestParam("oauth_verifier") String verifier) throws TwitterException {
         Twitter twitter = TwitterFactory.getSingleton();
 
-        try {
-            twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
+        twitter.getOAuthAccessToken((RequestToken) request.getSession().getAttribute("requestToken"), verifier);
 
-            User twitterUser = twitter.showUser(twitter.getId());
-            com.bezman.model.User user = TwitterProvider.userForTwitterUser(twitterUser);
+        User twitterUser = twitter.showUser(twitter.getId());
+        com.bezman.model.User user = TwitterProvider.userForTwitterUser(twitterUser);
+        twitter.setOAuthAccessToken(null);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            twitter.setOAuthAccessToken(null);
-
-            Session session = DatabaseManager.getSession();
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -208,48 +135,20 @@ public class OAuthController {
 
     @RequestMapping("/twitch_callback")
     public ResponseEntity twitchCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = TwitchProvider.userForCode(code);
+        com.bezman.model.User user = TwitchProvider.userForCode(code);
 
-            Session session = DatabaseManager.getSession();
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
 
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            if (queryUser == null) {
-                Query pointsQuery = session.createQuery("from TwitchPointStorage s where lower(s.username) = :username");
-                pointsQuery.setString("username", (user.getUsername().substring(0, user.getUsername().length() - 4)).toLowerCase());
-
-                TwitchPointStorage twitchPointStorage = (TwitchPointStorage) DatabaseUtil.getFirstFromQuery(pointsQuery);
-
-                session.close();
-
-                DatabaseUtil.saveObjects(true, user);
-
-                if (twitchPointStorage != null) {
-                    Ranking ranking = new Ranking();
-                    ranking.setXp((double) twitchPointStorage.getXp());
-                    ranking.setPoints((double) twitchPointStorage.getPoints());
-                    ranking.setId(user.getId());
-
-                    DatabaseUtil.saveOrUpdateObjects(false, ranking);
-                    DatabaseUtil.deleteObjects(twitchPointStorage);
-                }
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
+            twitchService.transferFromPoolToUser(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -271,33 +170,17 @@ public class OAuthController {
 
     @RequestMapping("/facebook_callback")
     public ResponseEntity facebookCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = FacebookProvider.userForCode(code);
+        com.bezman.model.User user = FacebookProvider.userForCode(code);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Session session = DatabaseManager.getSession();
-
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
         }
+
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }
@@ -319,33 +202,17 @@ public class OAuthController {
 
     @RequestMapping("/github_callback")
     public ResponseEntity githubCallback(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
-        try {
-            com.bezman.model.User user = GithubProvider.userForCode(code);
+        com.bezman.model.User user = GithubProvider.userForCode(code);
+        com.bezman.model.User queryUser = userService.userForProviderAndProviderID(user.getProvider(), user.getProviderID());
 
-            Session session = DatabaseManager.getSession();
+        if (queryUser == null) {
+            userService.createConnectedAccountFromPrimaryAccount(user);
+        } else {
+            user.setId(queryUser.getId());
 
-            Query query = session.createQuery("from User where providerID = :providerID and provider = :provider");
-            query.setString("providerID", user.getProviderID());
-            query.setString("provider", user.getProvider());
-
-            com.bezman.model.User queryUser = (com.bezman.model.User) DatabaseUtil.getFirstFromQuery(query);
-
-            session.close();
-
-            if (queryUser == null) {
-                userService.addUser(user);
-            } else {
-                user.setId(queryUser.getId());
-            }
-
-            Cookie cookie = new Cookie("token", user.newSession());
-            cookie.setPath("/");
-
-            response.addCookie(cookie);
-            response.sendRedirect(Reference.rootURL + "/");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        this.authService.loginUser(user);
+        this.httpService.sendRedirect("/");
 
         return null;
     }

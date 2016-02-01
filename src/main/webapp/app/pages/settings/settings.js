@@ -162,7 +162,7 @@ angular.module('app.settings', [
                         console.log(success);
                         location.reload();
                     }, function (error) {
-                        console.log(error);
+                        ToastService.showDevwarsErrorToast("fa-exclamation-circle", "Error", error.data);
                     });
             } else {
                 location.href = "/v1/connect/" + provider;
