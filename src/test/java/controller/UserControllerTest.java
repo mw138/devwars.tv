@@ -4,22 +4,20 @@ import com.bezman.model.User;
 import com.bezman.service.AuthService;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.apache.tomcat.jni.User.username;
-import static org.reflections.util.ConfigurationBuilder.build;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,11 +49,11 @@ public class UserControllerTest {
             .password(security.hash("somepass"))
             .role(User.Role.USER)
             .build());
-     }
+    }
 
     @Test
     public void test_login() throws Exception {
-       mockMvc.perform(post("/v1/user/login")
+        mockMvc.perform(post("/v1/user/login")
             .param("username", "The New user")
             .param("password", "somepass"))
             .andExpect(cookie().exists("token"))
@@ -68,5 +66,14 @@ public class UserControllerTest {
             .cookie(authService.loginUser(userService.userForUsername("The New User"))))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.username").value("The New User"));
+    }
+
+    @Test
+    public void test_search_users() throws Exception {
+        mockMvc.perform(get("/v1/user/search")
+            .cookie(authService.loginUser(userService.userForUsername("The New User")))
+            .param("username", "The"))
+            .andDo(print())
+            .andExpect(jsonPath("$..username", Matchers.hasItems("The New User")));
     }
 }
