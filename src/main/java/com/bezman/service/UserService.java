@@ -417,4 +417,17 @@ public class UserService {
         session.getTransaction().commit();
         session.close();
     }
+
+    public void addXpAndPointsToUser(User user, int xp, int points) {
+        Session session = DatabaseManager.getSession();
+        session.beginTransaction();
+
+        Ranking ranking = (Ranking) session.merge(user.getRanking());
+
+        ranking.addXP(xp);
+        ranking.addPoints(points);
+
+        session.getTransaction().commit();
+        session.close();
+    }
 }

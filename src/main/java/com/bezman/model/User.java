@@ -51,6 +51,7 @@ public class User extends BaseModel {
     @JsonIgnore
     public String resetKey;
 
+    @HibernateDefault
     private Ranking ranking;
 
     @JsonIgnore
@@ -358,6 +359,7 @@ public class User extends BaseModel {
     @PreFlush
     public void preFlush() {
         this.getInventory().setUser(this);
+        this.getRanking().setUser(this);
     }
 
     @PostLoad

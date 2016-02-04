@@ -2,6 +2,7 @@ package com.bezman.Reference.util;
 
 import com.bezman.Reference.EmailThread;
 import com.bezman.Reference.Reference;
+import com.bezman.model.Ranking;
 import com.bezman.model.UserInventory;
 import org.apache.commons.io.IOUtils;
 
@@ -96,6 +97,7 @@ public class Util {
             if (Timestamp.class == clazz) return new Timestamp(new Date().getTime());
             if (Date.class == clazz) return new Date();
             if (UserInventory.class == clazz) return new UserInventory();
+            if (Ranking.class == clazz) return new Ranking();
         }
 
         if (Boolean.class == clazz) return Boolean.parseBoolean(value);
