@@ -22,6 +22,9 @@ public class UserInventory extends BaseModel {
     @HibernateDefault("0")
     private Integer teamNameChanges;
 
+    @HibernateDefault("0")
+    private Integer lotteryTickets;
+
     @JsonIgnore
     private User user;
 

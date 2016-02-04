@@ -15,6 +15,7 @@
         <property name="avatarChanges" column="avatar_changes"/>
         <property name="usernameChanges" column="username_changes"/>
         <property name="teamNameChanges" column="team_name_changes"/>
+        <property name="lotteryTickets" column="lottery_tickets"/>
 
         <one-to-one name="user" class="com.bezman.model.User" constrained="true"/>
 

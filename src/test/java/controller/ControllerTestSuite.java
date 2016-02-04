@@ -1,5 +1,6 @@
 package controller;
 
+import com.bezman.controller.LotteryController;
 import com.bezman.service.AuthService;
 import com.bezman.service.UserService;
 import org.junit.BeforeClass;
@@ -11,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.servlet.http.Cookie;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses(value = {UserControllerTest.class})
+@Suite.SuiteClasses(value = {UserControllerTest.class, LotteryControllerTest.class})
 @ContextConfiguration(locations = {"classpath:/spring/mvc-config.xml"})
 public class ControllerTestSuite {
 
