@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     Security security;
 
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
@@ -43,6 +43,8 @@ public class UserService {
 
         session.getTransaction().commit();
         session.close();
+
+        return user;
     }
 
     public User userForUsername(String username) {

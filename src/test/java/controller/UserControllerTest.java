@@ -40,14 +40,22 @@ public class UserControllerTest {
 
     private MockMvc mockMvc;
 
+    private static User user;
+
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-        userService.saveUser(User.builder()
+        user = userService.saveUser(User.builder()
             .username("The New User")
             .password(security.hash("somepass"))
             .role(User.Role.USER)
+            .build());
+
+        userService.saveUser(User.builder()
+            .username("The Admin User")
+            .password(security.hash("somepass"))
+            .role(User.Role.ADMIN)
             .build());
     }
 
@@ -73,7 +81,18 @@ public class UserControllerTest {
         mockMvc.perform(get("/v1/user/search")
             .cookie(authService.loginUser(userService.userForUsername("The New User")))
             .param("username", "The"))
-            .andDo(print())
             .andExpect(jsonPath("$..username", Matchers.hasItems("The New User")));
+    }
+
+    @Test
+    public void test_add_points_and_xp() throws Exception {
+        mockMvc.perform(post("/v1/user/" + user.getId() + "/addpoints")
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+            .param("points", "50")
+            .param("xp", "100"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.ranking.points").value(50D))
+            .andExpect(jsonPath("$.ranking.xp").value(100D));
+
     }
 }

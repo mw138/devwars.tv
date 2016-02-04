@@ -412,7 +412,7 @@ public class UserController extends BaseController {
                 session.saveOrUpdate(player);
             }
 
-            responseEntity = new ResponseEntity(user.toString(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(user, HttpStatus.OK);
         }
 
         session.getTransaction().commit();
