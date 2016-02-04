@@ -1,7 +1,9 @@
 package com.bezman.service;
 
 import com.bezman.init.DatabaseManager;
+import com.bezman.model.Ranking;
 import com.bezman.model.User;
+import com.bezman.model.UserInventory;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,11 @@ public class LotteryService {
         Session session = DatabaseManager.getSession();
         session.beginTransaction();
 
-        session.merge(user.getInventory());
-        session.merge(user.getRanking());
+        UserInventory userInventory = (UserInventory) session.merge(user.getInventory());
+        Ranking ranking = (Ranking) session.merge(user.getRanking());
 
-        user.getInventory().setLotteryTickets(user.getInventory().getLotteryTickets() + count);
-        user.getRanking().setPoints(user.getRanking().getPoints() - count * price);
+        userInventory.setLotteryTickets(user.getInventory().getLotteryTickets() + count);
+        ranking.setPoints(user.getRanking().getPoints() - count * price);
 
         session.getTransaction().commit();
         session.close();

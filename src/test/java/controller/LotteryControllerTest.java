@@ -53,19 +53,17 @@ public class LotteryControllerTest {
             .role(User.Role.USER)
             .build();
 
-        user.setRanking(new Ranking());
-        user.getRanking().setUser(user);
-        user.getRanking().addPoints(10000);
         userService.saveUser(user);
-        //more <code></code>
+        userService.addXpAndPointsToUser(user, 0, 10000);
+
         mockMvc.perform(post("/v1/lottery/purchase")
             .cookie(authService.loginUser(userService.userForUsername("The Lottery User")))
             .param("count","10"))
             .andExpect(status().isOk());
 
         mockMvc.perform(get("/v1/user/")
-        .cookie(authService.loginUser(userService.userForUsername("The Lottery User"))))
-        .andExpect(jsonPath("$.inventory.lotteryTickets").value(10)); //odd
+            .cookie(authService.loginUser(userService.userForUsername("The Lottery User"))))
+            .andExpect(jsonPath("$.inventory.lotteryTickets").value(10)); //odd
     }
 
 }
