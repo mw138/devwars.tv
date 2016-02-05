@@ -1,6 +1,8 @@
 package com.bezman.controller;
 
+import com.bezman.Reference.DevBits;
 import com.bezman.annotation.AuthedUser;
+import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.User;
 import com.bezman.service.LotteryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +20,20 @@ public class LotteryController {
     private LotteryService lotteryService;
 
     @RequestMapping("/purchase")
+    @PreAuthorization(minRole = User.Role.USER)
     public ResponseEntity purchaseTickets(@RequestParam("count") Integer count, @AuthedUser User user) { //Stupid
-        int price = 100;
-
-        if (user.getRanking().getPoints() >= count * price) {
+        if (user.getRanking().getPoints() >= count * DevBits.LOTTERY_TICKET_PRICE) {
             lotteryService.purchaseLotteryTicketsForUser(user, count);
             return new ResponseEntity("Successfully Purchased Lottery Tickets", HttpStatus.OK);
         }
         return new ResponseEntity("Not Enough Devbits To Purchase Tickets", HttpStatus.CONFLICT);
     }
 
+    @RequestMapping("/draw")
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    public ResponseEntity drawWinner() {
+        User user = lotteryService.drawWinner();
+
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
 }
