@@ -5,9 +5,11 @@ import com.bezman.model.BlogPost;
 import com.bezman.model.Game;
 import com.bezman.model.Ranking;
 import com.bezman.model.User;
+import com.bezman.service.InfoService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/v1/info")
 public class InfoController extends BaseController {
+
+    @Autowired
+    private InfoService infoService;
+
 
     /**
      * Returns Stat info (User count, game count, blog post count, DevBits earned)
@@ -62,15 +68,7 @@ public class InfoController extends BaseController {
      */
     @RequestMapping("/bitsleaderboard")
     public ResponseEntity bitsLeaderboard(HttpServletRequest request, HttpServletResponse response) {
-        List<User> users = null;
-
-        Session session = DatabaseManager.getSession();
-        Query query = session.createQuery("from User u order by u.ranking.points desc");
-        query.setMaxResults(5);
-
-        users = query.list();
-
-        session.close();
+        List<User> users = infoService.bitsLeaderboard();
 
         return new ResponseEntity(users, HttpStatus.OK);
     }
@@ -84,15 +82,7 @@ public class InfoController extends BaseController {
      */
     @RequestMapping("/xpleaderboard")
     public ResponseEntity xpLeaderboard(HttpServletRequest request, HttpServletResponse response) {
-        List<User> users = null;
-
-        Session session = DatabaseManager.getSession();
-        Query query = session.createQuery("from User u order by u.ranking.xp desc");
-        query.setMaxResults(5);
-
-        users = query.list();
-
-        session.close();
+        List<User> users = infoService.xpLeaderboard();
 
         return new ResponseEntity(users, HttpStatus.OK);
     }
