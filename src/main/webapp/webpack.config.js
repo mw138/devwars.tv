@@ -64,9 +64,7 @@ var PARAMS_PER_TARGET = {
     DIST: {
         debug: false,
         output: {
-            path: './dist',
-            // TODO remove hack-fix when gh-pages work again
-            publicPath: '/angular-js-es6-testing-example/'
+            path: './dist'
         },
         plugins: [
             new CleanWebpackPlugin(['dist']),
