@@ -1,226 +1,45 @@
-<!DOCTYPE html>
-<html ng-app="app">
-<head lang="en">
+<!doctype html>
+<html lang="en" data-framework="angularjs">
+  <head>
+      <meta charset=" utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      <meta name="viewport" content="width = device-width, minimal-ui, initial-scale = 1, user-scalable = no" />
+      <meta name="apple-mobile-web-app-title" content="Demo App">
+      <title>Demo App</title>
+      <base href="/">
+  </head>
+  <body ng-cloak>
 
-    <base href="/">
+    <noscript>
+      <div class="deprecation-warning">
+        <h1>Please enable Javascript</h1>
+        <p>Demo requires your browser to have Javascript enabled.
+        <a href="http://enable-javascript.com" target="_blank">Learn more</a></p>
+      </div>
+    </noscript>
 
-    <!-- Google SEO Meta Tags -->
-    <title>DevWars.tv - The Developers Battleground</title>
-    <meta name="description" content="Prove your skills as a web developer in HTML, CSS and JavaScript. Can you build the best website in 60 minutes? What's your Strategy? Are you a DevWarrior?"/>
-    <meta name="google-site-verification" content="p2Fp-Uf85kE0o3D1xiX3nH0-Q_uFBlGtZEM_9wpXAAo" />
+    <h1>Welcome</h1>
+    <a ui-sref="login" href="#">Login</a> |
+    <a ui-sref="dashboards" href="#">Dashboard</a> |
+    <a ui-sref="forms" href="#">Forms</a> |
+    <a ui-sref="admin" href="#">Admin</a>
 
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="DevWars - The Developers Battleground">
-    <meta property="og:url" content="http://www.devwars.tv/">
-    <meta property="og:description" content="Two teams of three battle to produce the best work of their coding ability, taking the reigns of a single programming language each: HTML, CSS and JavaScript.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="http://devwars.tv/assets/img/socialmeta/opengraph.png"/>
+    <ui-view class="content-area" ></ui-view>
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@devwarstv">
-    <meta name="twitter:title" content="DevWars - The Developers Battleground">
-    <meta name="twitter:description" content="Two teams of three battle to produce the best work of their coding ability, taking the reigns of a single programming language each: HTML, CSS and JavaScript.">
-    <meta name="twitter:creator" content="@beauaugust">
-    <meta name="twitter:image" content="http://devwars.tv/assets/img/socialmeta/twitter.png">
-
-    <!-- Schema Meta Tags -->
-    <meta itemprop="name" content="DevWars - The Developers Battleground">
-    <meta itemprop="description" content="Two teams of three battle to produce the best work of their coding ability, taking the reigns of a single programming language each: HTML, CSS and JavaScript.">
-    <meta itemprop="image" content="http://devwars.tv/assets/img/socialmeta/schema.png">
-
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width,
-            minimum-scale=1.0,
-            maximum-scale=1.0,
-            user-scalable=no"
-          name="viewport">
-
-    <meta name="google-signin-clientid" content="140697828804-s9j0bcgita2s59nof7j1cg82663ug0br.apps.googleusercontent.com" />
-    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login" />
-    <meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
-    <meta name="google-signin-cookiepolicy" content="single_host_origin" />
-
-
-    <link rel="icon" type="image/ico" href="/assets/img/favicon.ico"/>
-
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
-    <!-- build:css /dist/all.css -->
-    <link rel="stylesheet" href="/bower_components/normalize-scss/normalize.css"/>
-    <link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
-    <link rel='stylesheet' href='/bower_components/textAngular/src/textAngular.css'>
-    <link rel="stylesheet" href="/bower_components/ngImgCrop/compile/minified/ng-img-crop.css">
-    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.css"/>
-    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.date.css"/>
-    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/classic.time.css"/>
-    <link rel="stylesheet" href="/assets/sass/main.css">
+    <!-- build:dev -->
+    <script src="jspm_packages/system.js"></script>
+    <script src="system.config.js"></script>
     <!-- endbuild -->
-</head>
-<body>
 
-<!--Header Include-->
-<div ng-include src="'/app/components/header/headerView.html'"></div>
+    <!-- build:prod -->
+    <!-- <script src="dist/app/app.js?bust={{date}}"></script> -->
+    <!-- endbuild -->
 
-<div ui-view class="mainbox"></div>
+    <script>
+      System.import('app/app');
+    </script>
 
-<!--Footer Include-->
-<div ng-include src="'/app/components/footer/footerView.html'"></div>
-
-<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
-
-<!-- build:js /dist/all.js async -->
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/bower_components/jquery-mobile-bower/js/jquery.mobile-1.4.5.min.js"></script>
-
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-<script src="/bower_components/angular/angular.js"></script>
-<script src="/bower_components/angular-cookies/angular-cookies.js"></script>
-
-<!--Underscore JS -->
-<script src="/bower_components/underscore/underscore-min.js"></script>
-
-<script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-
-<script src="/bower_components/angular-aria/angular-aria.js"></script>
-<script src="/bower_components/angular-animate/angular-animate.js"></script>
-<script src="/bower_components/angular-material/angular-material.js"></script>
-
-<script src="/bower_components/vc-angular-recaptcha/release/angular-recaptcha.min.js"></script>
-
-<!--Text Angular WYSIWYG -->
-<script src='/bower_components/textAngular/dist/textAngular-rangy.min.js'></script>
-<script src='/bower_components/textAngular/dist/textAngular-sanitize.min.js'></script>
-<script src='/bower_components/textAngular/dist/textAngular.min.js'></script>
-<!-- End Text Angular -->
-
-<!-- NgImgCrop -->
-<script src="/bower_components/ngImgCrop/compile/minified/ng-img-crop.js"></script>
-
-<!-- Date Picker -->
-
-<script src="/bower_components/pickadate/lib/picker.js"></script>
-<script src="/bower_components/pickadate/lib/picker.date.js"></script>
-<script src="/bower_components/pickadate/lib/picker.time.js"></script>
-<script src="/bower_components/ng-pickadate/ng-pickadate.js"></script>
-
-<!-- Custom Scripts -->
-<script src="/assets/js/sidebarscroll.js"></script>
-
-<script src="/app/app.module.js"></script>
-
-<!-- Dialogs -->
-<script src="/app/components/dialogs/loginDialog/loginDialog.js"></script>
-<script src="/app/components/dialogs/signupDialog/signupDialog.js"></script>
-<script src="/app/components/dialogs/confirmGameSignupDialog/confirmGameSignupDialog.js"></script>
-<script src="/app/components/dialogs/editPlayerDialog/editPlayerDialog.js"></script>
-<script src="/app/components/dialogs/addPlayerDialog/addPlayerDialog.js"></script>
-<script src="/app/components/dialogs/addBlogPostDialog/addBlogPostDialog.js"></script>
-<script src="/app/components/dialogs/inputDialog/inputDialog.js"></script>
-<script src="/app/components/dialogs/editAvatarImageDialog/editAvatarImageDialog.js"></script>
-<script src="/app/components/dialogs/confirmDialog/confirmDialog.js"></script>
-<script src="/app/components/dialogs/addSelectedPlayerDialog/addSelectedPlayerDialog.js"></script>
-<script src="/app/components/dialogs/createTeamDialog/createTeamDialog.js"></script>
-<script src="/app/components/dialogs/teamInviteDialog/teamInviteDialog.js"></script>
-<script src="/app/components/dialogs/invitePlayerDialog/invitePlayerDialog.js"></script>
-<script src="/app/components/dialogs/leaveTeamDialog/leaveTeamDialog.js"></script>
-<script src="/app/components/dialogs/disbandTeamDialog/disbandTeamDialog.js"></script>
-<script src="/app/components/dialogs/editTeamImageDialog/editTeamImageDialog.js"></script>
-<script src="/app/components/dialogs/confirmTeamSignupDialog/confirmTeamSignupDialog.js"></script>
-<script src="/app/components/dialogs/changeAvatarImageDialog/changeAvatarImageDialog.js"></script>
-
-<!-- Toasts -->
-<script src="/app/components/toasts/devwarsToast/devwarsToast.js"></script>
-
-<!--Directives -->
-<script src="/app/directives/enterDirective.js"></script>
-<script src="/app/directives/subscribeDirective.js"></script>
-<script src="/app/directives/OAuthDirective.js"></script>
-<script src="/app/directives/sidebarDirective/sidebar.js"></script>
-<script src="/app/directives/FileReadDirective.js"></script>
-<script src="/app/directives/rank/rank.js"></script>
-<script src="/app/directives/dashnavDirective/dashnav.js"></script>
-<script src="/app/directives/blog/blogDirective.js"></script>
-<script src="/app/directives/ngScrollBottom.js"></script>
-<script src="/app/directives/ngNoScrollOther.js"></script>
-<script src="/app/directives/ngStackedInput.js"></script>
-<script src="/app/directives/ngSignupTournament.js"></script>
-<script src="/app/directives/ngSmoothHref.js"></script>
-<script src="/app/directives/ngCopyToClipboard.js"></script>
-<script src="/app/directives/ngSignupTeamGame.js"></script>
-
-<!--Pages-->
-<script src="/app/pages/coming/coming.js"></script>
-<script src="/app/pages/home/home.js"></script>
-<script src="/app/pages/gameControlPanel/gameControlPanel.js"></script>
-<script src="/app/pages/games/games.js"></script>
-<script src="/app/pages/blogList/blogList.js"></script>
-<script src="/app/pages/blog/blog.js"></script>
-<script src="/app/pages/contact/contact.js"></script>
-<script src="/app/pages/about/about.js"></script>
-<script src="/app/pages/dashboard/dashboard.js"></script>
-<script src="/app/pages/badges/badges.js"></script>
-<script src="/app/pages/warriorReg/warriorReg.js"></script>
-<script src="/app/pages/settings/settings.js"></script>
-<script src="/app/pages/help/help.js"></script>
-<script src="/app/pages/verify/verify.js"></script>
-<script src="/app/pages/livegame/livegame.js"></script>
-<script src="/app/pages/shop/shop.js"></script>
-<script src="/app/pages/profile/profile.js"></script>
-<script src="/app/pages/leaderboards/leaderboards.js"></script>
-<script src="/app/pages/modCP/modCP.js"></script>
-<script src="/app/pages/team/team.js"></script>
-<script src="/app/pages/addgame/addGame.js"></script>
-<script src="/app/pages/modDoc/modDoc.js"></script>
-<script src="/app/pages/tournament/tournament.js"></script>
-<script src="/app/pages/passReset/passReset.js"></script>
-<script src="/app/pages/rules/rules.js"></script>
-
-<!--Components-->
-<script src="/app/components/header/header.js"></script>
-<script src="/app/components/user/user.js"></script>
-
-<!--Services-->
-<script src="/app/services/AuthService.js"></script>
-<script src="/app/services/GameService.js"></script>
-<script src="/app/services/ToastService.js"></script>
-<script src="/app/services/BlogService.js"></script>
-<script src="/app/services/InfoService.js"></script>
-<script src="/app/services/UserService.js"></script>
-<script src="/app/services/DialogService.js"></script>
-<script src="/app/services/ContactService.js"></script>
-<script src="/app/services/WarriorService.js"></script>
-<script src="/app/services/BadgeService.js"></script>
-<script src="/app/services/PlayerService.js"></script>
-<script src="/app/services/UserTeamService.js"></script>
-<script src="/app/services/TournamentService.js"></script>
-<!-- endbuild -->
-
-<!-- Smooth Scroll -->
-<script>
-    $(document).ready(function () {
-        $.mobile.loading().hide();
-    });
-</script>
-</body>
-
-<!-- Google Analytics -->
-<script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-61426517-1', 'auto');
-    ga('send', 'pageview');
-</script>
-
-
-
-
-
-
-<!-- End Google Analytics -->
+  </body>
 </html>
