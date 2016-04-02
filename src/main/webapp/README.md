@@ -1,67 +1,53 @@
-# SystemJS + AngularJS
+# Angular JS 1.5 - ES6 Module Unit testing and Karma Integration testing seed [![Build Status](https://travis-ci.org/tomastrajan/angular-js-es6-testing-example.svg?branch=master)](https://travis-ci.org/tomastrajan/angular-js-es6-testing-example)
 
-Seed project for ES6 modules via SystemJS with ES6 syntax using Babel that lazy-load and bundle build with AngularJS.
+Great seed for enterprise projects with heavy focus on unit and integration testing.
 
-![](http://media.giphy.com/media/EldfH1VJdbrwY/giphy.gif)
+This repository contains two releases:
+
+1. `1.0.0` - for Angular JS 1.4 and lower (uses [Component Pattern for Angular JS](https://medium.com/@tomastrajan/component-paradigm-cf32e94ba78b))
+2. `1.5.0` - for Angular JS 1.5 and abowe which supports native `.componet(name, options)` API
+
+## Info
+
+* original blog post describing [Proper testing of Angular JS 1.X applications with ES6 modules](https://medium.com/@tomastrajan/proper-testing-of-angular-js-applications-with-es6-modules-8cf31113873f)
+* [demo project](http://tomastrajan.github.io/angular-js-es6-testing-example/) with examples of mocha unit & karma integration tests
+* [presentation](http://slides.com/tomastrajan/angularjs-unit-testing-with-es6-modules) about the concepts used in this repository
+* [video](https://www.youtube.com/watch?v=JTkEsu-cEzc) from Angular JS Meetup Zurich
 
 
-This project does:
+![Components](/src/asset/image/testing.png?raw=true "Proper testing of Angular JS 1.X applications with ES6 modules")
 
-- ES6 Syntax via Babel with source maps
-- ES6 Modules via SystemJS
-- Karma / Jasmine unit tests with coverage report
-- Lazy-loading modules via routes with AngularJS
-- Easy watch/browser-sync/lint/test/build setup via Gulp
-- LESS CSS Support with source maps and minification
-- AngularJS Template Compilation
-- AngularJS Annotatation
-- Bundle builds via SystemJS Builder
-- Cache Busting with SystemJS
-- Demonstrates on-demand theme loading
+## Getting started
 
-This seed project demonstrates the [systemjs-route-bundler](https://github.com/Swimlane/systemjs-route-bundler) build tool.
+1. Clone repository `git clone https://github.com/tomastrajan/angular-js-es6-testing-example.git`
+2. Enter project directory `cd angular-js-es6-testing-example`
+3. Install dependencies `npm i` or `npm install`
 
-### Install & Run
+## Scripts
 
-1. `npm start`
-2. Browse to `http://localhost:9000`
+All scripts are run with `npm run [script]`, for example: `npm run test`.
 
-### Gulp Tasks
+* `start` - start development server, try it by opening `http://localhost:8081/webpack-dev-server/index.html`
 
-- `gulp test` to run karma tests
-- `gulp webdriver-standalone` and `gulp sauce-test` to run e2e test
-- `gulp lint` to run jshint
-- `gulp release` to bundle, cache busting, and minify
+* `build` - create dev build, check `build` directory
+* `dist` - create production build, check `dist` directory
 
-### Versions
-The project has been tested with the following environment:
+* `server_build` - serve content from `build` directory
+* `server_dist` - serve content from `dist` directory
 
-- node v4.1.0
-- npm v2.14.3
-- jspm v0.19.3
+* `lint` - lint code (with ESLint)
+* `mocha` - run all unit tests (with Mocha)
+* `watch` - run and watch all unit tests (with Mocha)
+* `karma` - run all integration tests (with Karma / Jasmine)
+* `test` - lint code and run all tests (with Mocha and Karma)
 
-### Tooling
+* `ci` - for Travis CI
 
-- [EditorConfig](http://editorconfig.org/)
-- [JSHint](http://jshint.com/install/)
-- [VS Task Launcher](https://visualstudiogallery.msdn.microsoft.com/8e1b4368-4afb-467a-bc13-9650572db708)
+# Tests
 
-### Best Practices
+For more detailed info about tests check the original [blog post](https://medium.com/@tomastrajan/proper-testing-of-angular-js-applications-with-es6-modules-8cf31113873f).
 
-- https://github.com/johnpapa/angularjs-styleguide
-- https://github.com/gocardless/angularjs-style-guide
-- http://sett.ociweb.com/sett/settApr2014.html
 
-### Research & Resources
-
-- https://github.com/angular/material-start/tree/es6
-- https://github.com/systemjs/systemjs
-- https://github.com/gocardless/es6-angularjs
-- http://glenmaddern.com/articles/javascript-in-2015
-- https://github.com/marcj/angular-es6-annotations
-- https://github.com/robianmcd/angular-next
-- https://github.com/ng-next/ng-next-example
-
-### Credits
-
-`angular-systemjs-seed` is a [Swimlane](http://swimlane.com) open-source project; we believe in giving back to the open-source community by sharing some of the projects we build for our application. Swimlane is an automated cyber security operations and incident response platform that enables cyber security teams to leverage threat intelligence, speed up incident response and automate security operations.
+* `*.test.js` - mocha unit tests
+* `*.integration.test.js` - mocha integration tests (manual)
+* `*.spec.js` - karma integration tests (spin up Angular JS app context)
