@@ -1,10 +1,12 @@
 export function routing($urlRouterProvider, $stateProvider) {
 
-    $urlRouterProvider.otherwise('/');
+  console.log('config url');
 
-    $stateProvider
-        .state('app', {
-            url: '/',
-            template: '<app-component></app-component>'
-        })
+  $urlRouterProvider.otherwise('/');
+
+  $stateProvider
+    .state('app', {
+      url: '/',
+      template: '<app-component></app-component>'
+    })
 }
