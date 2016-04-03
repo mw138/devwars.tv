@@ -14,9 +14,10 @@
     "watch": "mocha --compilers js:babel-register -w ./src/**/*.test.js",
     "karma": "karma start",
     "test": "npm run lint && npm run mocha && karma start --single-run",
-    "ci": "npm run lint && npm run mocha && npm run dist"
+    "ci": "npm run lint && npm run mocha && npm run dist",
+    "generate": "node stubs/generate.js"
   },
-  "author": "tomas.trajan@gmail.com",
+  "author": "accounts@devwars.tv",
   "license": "ISC",
   "dependencies": {
     "angular": "1.5",
@@ -39,6 +40,7 @@
     "chai": "3.2.0",
     "chalk": "1.1.0",
     "clean-webpack-plugin": "0.1.3",
+    "command-line-args": "^2.1.6",
     "connect": "3.4.0",
     "css-loader": "0.15.6",
     "eslint": "1.10.3",
@@ -52,7 +54,8 @@
     "karma-jasmine": "0.3.6",
     "karma-mocha-reporter": "1.1.1",
     "karma-webpack": "1.7.0",
-    "minimist": "1.1.3",
+    "minimist": "^1.1.3",
+    "mkdirp": "^0.5.1",
     "mocha": "2.2.5",
     "ngtemplate-loader": "1.3.0",
     "node-sass": "^3.4.2",
@@ -64,6 +67,7 @@
     "typescript": "1.5.3",
     "url-loader": "0.5.6",
     "webpack": "1.10.5",
-    "webpack-dev-server": "1.10.1"
+    "webpack-dev-server": "1.10.1",
+    "yargs": "^4.3.2"
   }
 }
