@@ -1,6 +1,5 @@
 // Styles
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './main.scss';
+import './devwars.css';
 
 // 3rd party modules
 //import bootstrap from 'bootstrap';
@@ -12,9 +11,9 @@ import angularUiBootstrap from 'angular-ui-bootstrap';
 import app from './components/app/app.module';
 
 angular.module('main', [
-    angularAnimate, angularUiBootstrap, app
+  angularAnimate, angularUiBootstrap, app
 ]);
 
 angular.element(document).ready(() => {
-    angular.bootstrap(document, ['main']);
+  angular.bootstrap(document, ['main']);
 });
