@@ -1,5 +1,5 @@
 // Styles
-import './devwars.css';
+import './main.css';
 
 // 3rd party modules
 //import bootstrap from 'bootstrap';

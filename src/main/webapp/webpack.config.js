@@ -13,7 +13,7 @@ var PARAMS_DEFAULT = {
   },
   entry: {
     main: './src/main.js',
-    vendor: ['lodash', 'jquery', 'bootstrap', 'angular', 'angular-animate', 'angular-ui-bootstrap']
+    vendor: ['lodash', 'angular', 'angular-animate']
   },
   output: {
     filename: '[name].[chunkhash].js',
@@ -23,10 +23,6 @@ var PARAMS_DEFAULT = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: 'body'
-    }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery'
     }),
     new webpack.optimize.DedupePlugin()
   ],
