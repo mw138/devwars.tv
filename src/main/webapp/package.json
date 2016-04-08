@@ -44,6 +44,7 @@
     "command-line-args": "^2.1.6",
     "connect": "3.4.0",
     "css-loader": "0.15.6",
+    "css-mqpacker": "^4.0.1",
     "cssnano": "^3.5.2",
     "eslint": "1.10.3",
     "eslint-config-defaults": "8.0.2",
