@@ -6,45 +6,6 @@ Contents:
 	03. Paragraph
 	04. Link
 
-Variables
-$file__element--property_modifier
-========================================================================== */
-
-
-$base--font-face 									: 'Open Sans', sans-serif;
-$alt--font-face 									: 'Montserrat', sans-serif;
-$sans--font-face 									: Arial, Verdana, Helvetica, sans-serif;
-
-$base--line-height 									: normal;
-$base--font-size 									: 18px;
-
-$headings--color 									: $base-font--color;
-
-$h1--transform              						: uppercase;
-$h1--font-weight            						: bold;
-$h1--font-family									: $alt--font-face;
-$h1--font-size               						: 72px;
-
-$h2--transform              						: none;
-$h2--font-weight            						: bold;
-$h2--font-family									: $alt--font-face;
-$h2--font-size               						: 35px;
-
-$h3--font-weight            						: x;
-$h3--font-size										: x;
-
-$h4--font-weight            						: x;
-$h4--font-size               						: x;
-
-$h5--font-weight            						: x;
-$h5--font-size               						: x;
-
-$h6--font-weight            						: x;
-$h6--font-size               						: x;
-
-$link--color 										: x;
-$link--color_hover 									: x;
-
 /* =========================================================================
 	01. Typeface import
 ========================================================================== */

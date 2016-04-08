@@ -7,11 +7,11 @@ Variables
 $file__element--property_modifier
 ========================================================================== */
 
-$tooltip--padding                  					: x;
-$tooltip--width                    					: x;
-$tooltip--font-size                					: x;
-$tooltip--color                   					: x;
-$tooltip--background               					: x;
+$tooltip--padding                  					: ;
+$tooltip--width                    					: ;
+$tooltip--font-size                					: ;
+$tooltip--color                   					: ;
+$tooltip--background               					: ;
 
 /* ==========================================================================
 	01.

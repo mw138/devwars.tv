@@ -69,18 +69,18 @@ $grid__container--lg 								: 1200px;
 	03. Generate responsive columns
 ========================================================================== */
 
-@for $i from 1 to $grid__columns {
+@for $i from 1 through $grid__columns {
 	
-	.col-sm-$i {
+	.col-sm-#{$i} {
 		width: percentage($i / $grid__columns);
 	}
 }
 	
 @include breakpoint(md) {
 	
-	@for $i from 1 to $grid__columns {
+	@for $i from 1 through $grid__columns {
 		
-		.col-md-$i {
+		.col-md-#{$i} {
 			width: percentage($i / $grid__columns);
 		}
 	}
@@ -88,9 +88,9 @@ $grid__container--lg 								: 1200px;
 
 @include breakpoint(lg) {
 	
-	@for $i from 1 to $grid__columns {
+	@for $i from 1 through $grid__columns {
 		
-		.col-lg-$i {
+		.col-lg-#{$i} {
 			width: percentage($i / $grid__columns);
 		}
 	}

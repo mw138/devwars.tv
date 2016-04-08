@@ -14,14 +14,14 @@ $file__element--property_modifier
 ========================================================================== */
 
 
-$header__topbar--line-height 						: x;
+$header__topbar--line-height 						: ;
 
-$header__nav-item--color 		 					: x;
-$header__nav-item--color_hover 						: x;
-$header__nav-item--background_hover					: x;
-$header__nav-item--line-height-xs 					: x;
-$header__nav-item--line-height-md 					: x;
-$header__nav-item--font-size	 					: x;
+$header__nav-item--color 		 					: ;
+$header__nav-item--color_hover 						: ;
+$header__nav-item--background_hover					: ;
+$header__nav-item--line-height-xs 					: ;
+$header__nav-item--line-height-md 					: ;
+$header__nav-item--font-size	 					: ;
 
 /* ==========================================================================
 	01. Top bar

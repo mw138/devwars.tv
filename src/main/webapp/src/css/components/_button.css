@@ -1,14 +1,15 @@
-/** Name:            Buttons
-*
-*	Contents:
-*		01. Default
-*			01.1 Build button variants
-*	
-*	Variables
-*	$file__element--property_modifier
-*========================================================================== */
+/* Name:            Buttons
 
-$button--padding 									: 0 20px;
+Contents:
+	01. Default
+		01.1 Build button variants
+
+Variables
+$file__element--property_modifier
+========================================================================== */
+
+
+$button--padding 									: 0 10px;
 $button--text-transform 							: uppercase;
 $button--line-height 								: 40px;
 $button--font-size 									: 14px;
@@ -35,9 +36,9 @@ $button--variants: (
 	btn-disabled $button__disabled--color $button__disabled--background
 );
 
-/**========================================================================
-*	01. Default
-*========================================================================== */
+/* ========================================================================
+	01. Default
+ ========================================================================== */
 
 .button {
 	display: inline-block;

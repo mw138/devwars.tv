@@ -12,40 +12,40 @@ $file__element--property_modifier
 $icon--font-face 									: 'DevWars Brand Icons';
 $icon--font-size 									: 16px;
 
-$icon__facebook										: x;
-$icon__twitter										: x;
-$icon__twitch										: x;
-$icon__google										: x;
-$icon__cloud9										: x;
-$icon__slack										: x;
-$icon__github										: x;
-$icon__youtube										: x;
-$icon__linkedin										: x;
-$icon__reddit										: x;
-$icon__codepen										: x;
-$icon__website										: x;
-$icon__email										: x;
-$icon__podcast										: x;
-$icon__search										: x;
-$icon__devbit										: x;
-$icon__user											: x;
-$icon__team											: x;
-$icon__games										: x;
-$icon__tutorial										: x;
-$icon__blog											: x;
-$icon__podcast										: x;
-$icon__chevron										: x;
-$icon__check										: x;
-$icon__cross										: x;
-$icon__settings										: x;
-$icon__record										: x;
-$icon__comment										: x;
+$icon__facebook										: '';
+$icon__twitter										: '';
+$icon__twitch										: '';
+$icon__google										: '';
+$icon__cloud9										: '';
+$icon__slack										: '';
+$icon__github										: '';
+$icon__youtube										: '';
+$icon__linkedin										: '';
+$icon__reddit										: '';
+$icon__codepen										: '';
+$icon__website										: '';
+$icon__email										: '';
+$icon__podcast										: '';
+$icon__search										: '';
+$icon__devbit										: '';
+$icon__user											: '';
+$icon__team											: '';
+$icon__games										: '';
+$icon__tutorial										: '';
+$icon__blog											: '';
+$icon__podcast										: '';
+$icon__chevron										: '';
+$icon__check										: '';
+$icon__cross										: '';
+$icon__settings										: '';
+$icon__record										: '';
+$icon__comment										: '';
 
 /* ==========================================================================
 	01. Icon Import
 ========================================================================== */
 
-@charset "UTF-8";
+// @charset "UTF-8";
 
 // @font-face {
 // 	font-family: "DevWars Brand Icons";
