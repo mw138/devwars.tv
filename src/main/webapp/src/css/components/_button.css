@@ -1,0 +1,93 @@
+/** Name:            Buttons
+*
+*	Contents:
+*		01. Default
+*			01.1 Build button variants
+*	
+*	Variables
+*	$file__element--property_modifier
+*========================================================================== */
+
+$button--padding 									: 0 20px;
+$button--text-transform 							: uppercase;
+$button--line-height 								: 40px;
+$button--font-size 									: 14px;
+
+$button--color 										: #fff;
+$button--background 								: $brand-primary--color;
+
+$button__secondary--color							: #fff;
+$button__secondary--background						: $brand-secondary--color;
+
+$button__positive--color 							: #fff;
+$button__positive--background 						: $positive--color;
+
+$button__negative--color 							: #fff;
+$button__negative--background 						: $negative--color;
+
+$button__disabled--color 							: $black--color;
+$button__disabled--background 						: $grey--color;
+
+$button--variants: (
+	btn-secondary $button__secondary--color $button__secondary--background,
+	btn-positive $button__positive--color $button__positive--background,
+	btn-negative $button__negative--color $button__negative--background,
+	btn-disabled $button__disabled--color $button__disabled--background
+);
+
+/**========================================================================
+*	01. Default
+*========================================================================== */
+
+.button {
+	display: inline-block;
+	vertical-align: top;
+	width: auto;
+}
+
+.btn {
+	display: inline-block;
+	vertical-align: middle;
+	box-sizing: border-box;
+	cursor: pointer;
+	outline: none;
+	border: none;
+	text-decoration: none;
+	text-align: center;
+	font-style: normal;
+	margin: 0;
+	padding: $button--padding;
+	height: $button--line-height;
+	line-height: $button--line-height;
+	text-transform: $button--text-transform;
+	color: $button--color;
+	background-color: $button--background;
+	font-size: $button--font-size;
+	transition: all .25s;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	
+	&:hover {
+		color: contrast($button--background);
+		background-color: lighten($button--background, 10%);
+	}
+}
+
+/* ========================================================================
+	01.1 Build button variants
+ ========================================================================== */
+
+.button {
+
+	@each $button-type in $button--variants {
+
+		&.#{nth($button-type, 1)} .btn {
+		color: #{nth($button-type, 2)};
+		background: #{nth($button-type, 3)};
+
+			&:hover {
+				color: #{nth($button-type, 2)};
+				background-color: lighten(nth($button-type, 3), 10%);
+			}
+		}
+	}
+}

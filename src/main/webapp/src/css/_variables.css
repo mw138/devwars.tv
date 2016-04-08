@@ -1,0 +1,77 @@
+/* Name:            Variables
+
+Contents:
+	01. Colors
+		01.1 Brand Colors
+		01.2 Tutorial Colors
+		01.3 Base Colors
+	02. Responsive
+
+Variables
+$file__element--property_modifier
+========================================================================== */
+
+
+$file__element--property_modifier 					: ;
+
+/* ==========================================================================
+	01.1 Brand Colors
+========================================================================== */
+
+$brand-primary--color 								: #03a9f4;
+$brand-secondary--color 							: #e91e63;
+$brand-tertiary--color 								: #fff;
+
+$brand-primary--background							: #232323;
+$brand-secondary--background 						: #303030;
+$brand-tertiary--background 						: #424242;
+
+$devbit--color 										: #f8bf3f;
+
+/* ==========================================================================
+	01.2 Tutorial Colors
+========================================================================== */
+
+$tutorials__angular--color 							: #e03237;
+$tutorials__bower--color 							: #ef5734;
+$tutorials__css--color  							: #6a528f;
+$tutorials__grunt--color 							: #e48632;
+$tutorials__gulp--color 							: #cf4646;
+$tutorials__html--color 							: #ec622d;
+$tutorials__java--color 							: #bf8520;
+$tutorials__javascript--color 						: #f4e46c;
+$tutorials__jquery--color 							: #0769ad;
+$tutorials__node--color 							: #8CC84b;
+$tutorials__php--color 								: #6172a6;
+$tutorials__react--color 							: #00d8ff;
+$tutorials__ruby--color 							: #85211c;
+$tutorials__ruby-on-rails--color 					: #c00;
+$tutorials__sublime--color 							: #ff8100;
+$tutorials__typescript--color 						: #35879b;
+
+/* ==========================================================================
+	01.3 Base Colors
+========================================================================== */
+
+$red--color 										: #c0392b;
+$yellow--color										: #f1c40f;
+$purple--color										: #9b59b6;
+$green--color 										: #2ecc71;
+$blue--color 										: #3498db;
+$orange--color										: #e67e22;
+$grey--color 										: #7f8c8d;
+$black--color 										: #000;
+
+$positive--color 									: $green--color;
+$negative--color 									: $red--color;
+
+$base-font--color 									: #fff;
+$body--background 									: $brand-primary--background;
+
+/* ==========================================================================
+	02. Responsive
+========================================================================== */
+
+$responsive__sm										: 768px;
+$responsive__md										: 980px;
+$responsive__lg										: 1240px;

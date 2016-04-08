@@ -1,0 +1,67 @@
+/* Name:            Social Icons
+
+Contents:
+	01.
+
+Variables
+$file__element--property_modifier
+========================================================================== */
+
+
+$socialicons__facebook--background  				: #0b5998;
+$socialicons__twitter--background   				: #4099ff;
+$socialicons__google--background    				: #da4835;
+$socialicons__youtube--background   				: #e52d27;
+$socialicons__reddit--background    				: #ff4500;
+$socialicons__twitch--background    				: #6441a5;
+$socialicons__slack--background     				: #e9a820;
+$socialicons__cloud9--background     				: #1aa6da;
+$socialicons__github--background     				: #4183c4;
+$socialicons__linkedin--background     				: #0077b5;
+$socialicons__codepen--background     				: #fff;
+$socialicons__website--background     				: #fff;
+$socialicons__email--background     				: #fff;
+
+$social--backgrounds:  (
+	facebook $socialicons__facebook--background $icon__facebook,
+	twitter $socialicons__twitter--background $icon__twitter,
+	google $socialicons__google--background $icon__google,
+	youtube $socialicons__youtube--background $icon__youtube,
+	reddit $socialicons__reddit--background $icon__reddit,
+	twitch $socialicons__twitch--background $icon__twitch,
+	slack $socialicons__slack--background $icon__slack,
+	cloud9 $socialicons__cloud9--background $icon__cloud9,
+	github $socialicons__github--background $icon__github,
+	linkedin $socialicons__linkedin--background $icon__linkedin,
+	codepen $socialicons__codepen--background $icon__codepen,
+	website $socialicons__website--background $icon__website,
+	email $socialicons__email--background $icon__email
+);
+
+/* ==========================================================================
+	01. Build colors and icons
+========================================================================== */
+
+.social-icons {
+
+	li {
+
+		@each $social-type in $social--backgrounds {
+
+			&.#{nth($social-type, 1)} {
+
+				a {
+					color: #{nth($social-type, 2)};	
+
+					&:hover {
+						color: darken(nth($social-type, 2), 10%);
+					}
+				}
+
+				.icon:before {
+					content: #{nth($social-type, 3)};
+				}
+			}
+		}
+	}
+}

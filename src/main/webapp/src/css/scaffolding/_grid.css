@@ -1,0 +1,108 @@
+/* Name:            Grid System
+
+Contents:
+	01. Containers
+	02. Rows
+	03. Generate responsive columns
+	04. Columns
+
+Variables
+$file__element--property_modifier
+========================================================================== */
+
+
+$grid__columns 										: 12;
+$grid__gutter--width								: 20px;
+
+$grid__container--sm 								: 728px;
+$grid__container--md 								: 940px;
+$grid__container--lg 								: 1200px;
+
+/* ==========================================================================
+	01. Containers
+========================================================================== */
+
+.container {
+	margin: $grid__gutter--width $grid__gutter--width 0;
+}
+
+@include breakpoint(sm) {
+
+	.container {
+		margin: ($grid__gutter--width * 2) auto 0;
+		width: $grid__container--sm;
+	}
+}
+
+@include breakpoint(md) {
+
+	.container {
+		width: $grid__container--md;
+	}
+}
+
+@include breakpoint(lg) {
+
+	.container {
+		width: $grid__container--lg;
+	}
+}
+
+/* ==========================================================================
+	02. Rows
+========================================================================== */
+
+.row {
+	box-sizing: border-box;
+	margin-left: -$grid__gutter--width;
+	margin-right: -$grid__gutter--width;
+}
+
+@include breakpoint(sm) {
+
+	.row {
+		display: flex;
+	}
+}
+
+/* ==========================================================================
+	03. Generate responsive columns
+========================================================================== */
+
+@for $i from 1 to $grid__columns {
+	
+	.col-sm-$i {
+		width: percentage($i / $grid__columns);
+	}
+}
+	
+@include breakpoint(md) {
+	
+	@for $i from 1 to $grid__columns {
+		
+		.col-md-$i {
+			width: percentage($i / $grid__columns);
+		}
+	}
+}
+
+@include breakpoint(lg) {
+	
+	@for $i from 1 to $grid__columns {
+		
+		.col-lg-$i {
+			width: percentage($i / $grid__columns);
+		}
+	}
+}
+
+/* ==========================================================================
+	04. Columns
+========================================================================== */
+
+[class^=col-] {
+	box-sizing: border-box;
+	padding-left: $grid__gutter--width;
+	padding-right: $grid__gutter--width;
+	width: 100%;
+}

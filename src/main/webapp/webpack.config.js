@@ -100,7 +100,7 @@ module.exports = {
   progress: params.progress,
   colors: params.colors,
   postcss: function() {
-    return [require('precss'), require('css-mqpacker'), require('cssnano'), require('autoprefixer'),require('postcss-grid')]
+    return [require('css-mqpacker'), require('cssnano')]
   }
 };
 
