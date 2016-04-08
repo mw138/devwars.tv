@@ -90,7 +90,7 @@ module.exports = {
       {test: /\.tpl.html/, loader: 'html'},
       {test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/, loader: 'url?limit=50000'},
       {test: /\.scss$/, loaders: ["style", "css", "sass"]},
-      {test: /\.css$/, loader: "style-loader!css-loader!postcss-loader"}
+      {test: /\.css$/, loader: "style-loader!css-loader!postcss-loader!sass-loader"}
     ]
   },
   plugins: params.plugins,
