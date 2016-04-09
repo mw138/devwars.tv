@@ -3,8 +3,8 @@
 Contents:
 	01. Containers
 	02. Rows
-	03. Generate responsive columns
-	04. Columns
+	03. Columns
+	04. Generate responsive columns
 
 Variables
 $file__element--property_modifier
@@ -12,7 +12,7 @@ $file__element--property_modifier
 
 
 $grid__columns 										: 12;
-$grid__gutter--width								: 20px;
+$grid__gutter--width								: 10px;
 
 $grid__container--sm 								: 728px;
 $grid__container--md 								: 940px;
@@ -23,13 +23,13 @@ $grid__container--lg 								: 1200px;
 ========================================================================== */
 
 .container {
-	margin: $grid__gutter--width $grid__gutter--width 0;
+	margin: $grid__gutter--width ($grid__gutter--width * 2) 0;
 }
 
 @include breakpoint(sm) {
 
 	.container {
-		margin: ($grid__gutter--width * 2) auto 0;
+		margin: 0 auto;
 		width: $grid__container--sm;
 	}
 }
@@ -56,26 +56,40 @@ $grid__container--lg 								: 1200px;
 	box-sizing: border-box;
 	margin-left: -$grid__gutter--width;
 	margin-right: -$grid__gutter--width;
-}
 
-@include breakpoint(sm) {
-
-	.row {
-		display: flex;
+	&:after {
+		content: '';
+		display: table;
+		clear: both;
 	}
 }
 
 /* ==========================================================================
-	03. Generate responsive columns
+	03. Columns
 ========================================================================== */
 
-@for $i from 1 through $grid__columns {
-	
-	.col-sm-#{$i} {
-		width: percentage($i / $grid__columns);
+[class^=col-] {
+	float: left;
+	box-sizing: border-box;
+	padding-left: $grid__gutter--width;
+	padding-right: $grid__gutter--width;
+	width: 100%;
+}
+
+/* ==========================================================================
+	04. Generate responsive columns
+========================================================================== */
+
+@include breakpoint(sm) {
+
+	@for $i from 1 through $grid__columns {
+		
+		.col-sm-#{$i} {
+			width: percentage($i / $grid__columns);
+		}
 	}
 }
-	
+		
 @include breakpoint(md) {
 	
 	@for $i from 1 through $grid__columns {
@@ -94,15 +108,4 @@ $grid__container--lg 								: 1200px;
 			width: percentage($i / $grid__columns);
 		}
 	}
-}
-
-/* ==========================================================================
-	04. Columns
-========================================================================== */
-
-[class^=col-] {
-	box-sizing: border-box;
-	padding-left: $grid__gutter--width;
-	padding-right: $grid__gutter--width;
-	width: 100%;
 }

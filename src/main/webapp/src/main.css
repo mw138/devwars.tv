@@ -4,8 +4,8 @@
 
 // Scaffolding
 // ==================================
-@import "css/scaffolding/reset";
 @import "css/scaffolding/utilities";
+@import "css/scaffolding/reset";
 @import "css/scaffolding/icons";
 @import "css/scaffolding/grid";
 @import "css/scaffolding/type";
@@ -23,6 +23,7 @@
 @import "css/components/button";
 @import "css/components/breadcrumbs";
 @import "css/components/dialog";
+@import "css/components/list-item";
 @import "css/components/social-icons";
 
 // Layout
