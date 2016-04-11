@@ -15,6 +15,16 @@ body {
 	background: $body--background;
 	font-size: $base--font-size;
 	-webkit-font-smoothing: antialiased;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 500px;
+		background: $brand-secondary--background;
+	}
 }
 
 *,
@@ -26,6 +36,11 @@ body {
 img {
 	border: 0;
 	max-width: 100%;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
 }
 
 audio:not([controls]) {

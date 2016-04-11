@@ -34,15 +34,6 @@ Contents:
 	overflow: hidden;
 }
 
-.fixed {
-	-webkit-transform: translateZ(0);
-	position: fixed;
-	z-index: 100;
-	top: 0;
-	right: 0;
-	left: 0;
-}
-
 /* ==========================================================================
 	02. Placeholders
 ========================================================================== */

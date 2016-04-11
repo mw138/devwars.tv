@@ -1,58 +1,270 @@
 /* Name:            Header
 
 Contents:
-	01.  Top bar
-		01.1 Twitch message
-		01.2 Social icons
-	02. Logo 
-	03. Navbar
-	04. Search
-	05. User details
+	01. Mobile
+	02. Tablet
+	03. Logo 
+	04. Navbar
+	05. Search
+	06. User details
 
 Variables
 $file__element--property_modifier
 ========================================================================== */
 
 
-$header__topbar--line-height 						: ;
+$header__topbar--line-height 						: 40px;
+$header__topbar--background 						: $brand-primary--background;
+$header__background 		 						: $black--color;
 
-$header__nav-item--color 		 					: ;
-$header__nav-item--color_hover 						: ;
-$header__nav-item--background_hover					: ;
-$header__nav-item--line-height-xs 					: ;
-$header__nav-item--line-height-md 					: ;
-$header__nav-item--font-size	 					: ;
+$header__nav-item--color 		 					: $base-font--color;
+$header__nav-item--color_hover 						: $link--color;
+$header__nav-item--background_hover					: transparent;
+$header__nav-item--line-height-xs 					: 40px;
+$header__nav-item--line-height-md 					: 90px;
+$header__nav-item--text-transform 					: uppercase;
+$header__nav-item--font-family	 					: $alt--font-face;
+$header__nav-item--font-size	 					: 14px;
 
 /* ==========================================================================
-	01. Top bar
+	01. Mobile
+========================================================================== */
+
+.header {
+	background: $header__background;
+	position: fixed;
+	z-index: 100;
+	top: 0;
+	right: 0;
+	left: 0;
+	transform: translateZ(0);
+
+	&__bottom-bar {
+
+		.row {
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+	}
+
+	.logo {
+
+		img {
+			display: block;
+			max-height: 90px;
+			transition: all .25s;
+		}
+	}
+}
+
+
+/* ==========================================================================
+	02. Tablet
+========================================================================== */
+
+@include breakpoint(sm) {
+
+	header {
+		padding-bottom: 130px;
+
+		.container {
+			width: auto;
+		}
+
+		.row {
+			margin: 0;
+			padding: 0 40px;
+		}
+	}
+
+	.header {
+
+		&__top-bar {
+			overflow: hidden;
+			height: $header__topbar--line-height;
+			line-height: $header__topbar--line-height;
+			background: $header__topbar--background;
+			transition: all .25s;
+
+			.twitch-live {
+				display: inline-block;
+				vertical-align: top;
+				word-spacing: 3px;
+				text-transform: uppercase;
+				text-decoration: none;
+				color: $base-font--color;
+				font-family: $alt--font-face;
+				font-size: 14px;
+
+				span {
+					text-decoration: underline;
+					color: $brand-secondary--color;
+				}
+
+				.icon {
+					position: relative;
+					vertical-align: top;
+					margin: 0 5px 0 0;
+					line-height: $header__topbar--line-height;
+					color: $red--color;
+
+					&:before {
+						position: relative;
+						z-index: 2;
+						content: $icon__record;
+						border-radius: 100%;
+					}
+
+					&:after {
+						content: '';
+						position: absolute;
+						z-index: 1;
+						top: 50%;
+						left: 50%;
+						width: 5px;
+						height: 5px;
+						transform: translate(-50%, -50%);
+						border-radius: 100%;
+						box-shadow: 0 0 0 0 rgba(#F0F0F0, 1), 0 0 0 0 rgba($red--color, 0.7);
+						animation: pulse 2s infinite cubic-bezier( 0.66, 0.33, 0, 1);
+					}
+				}
+			}
+
+			.social-icons {
+				float: right;
+			}
+		}
+
+		&.is-scrolling {
+
+			.header__top-bar {
+				height: 0;
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+	03. Desktop
+========================================================================== */
+
+@include breakpoint(md) {
+
+	.header {
+
+		&__bottom-bar {
+
+			.logo {
+				width: 15%;
+			}
+
+			.navbar {
+				width: 65%;
+			}
+
+			.search {
+				width: 5%;
+			}
+
+			.account {
+				width: 10%;
+			}
+		}
+
+		&.is-scrolling {
+
+			.logo img {
+				max-height: 40px;
+			}
+
+			.navbar li>a {
+				line-height: ($header__nav-item--line-height-md / 3) * 2;
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+	04. Navbar
+========================================================================== */
+
+.navbar {
+
+	ul {
+		list-style-type: none;
+	}
+
+	li {
+
+		&.current a {
+			color: $header__nav-item--color_hover;
+			background: $header__nav-item--background_hover;
+		}
+
+		> a {
+			display: block;
+			text-decoration: none;
+			padding: 0 5px;
+			color: $header__nav-item--color;
+			line-height: $header__nav-item--line-height-xs;
+			text-transform: $header__nav-item--text-transform;
+			font-family: $header__nav-item--font-family;
+			font-size: $header__nav-item--font-size;
+		}
+	}
+}
+
+
+@include breakpoint(md) {
+
+	.navbar {
+
+		ul {
+			display: flex;
+			justify-content: space-around;
+		}
+
+		li {
+
+			> a {
+				position: relative;
+				line-height: $header__nav-item--line-height-md;
+				transition: all 0.25s;
+
+				&:before {
+					content: '';
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					right: 0;
+					height: 3px;
+					transition: all 0.25s;
+				}
+			}
+
+			&.current,
+			&:hover {
+
+				> a {
+					color: $header__nav-item--color_hover;
+					
+					&:before {
+						background: $header__nav-item--color_hover;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+/* ==========================================================================
+	05. Search
 ========================================================================== */
 
 
 /* ==========================================================================
-	01.1 Twitch message
-========================================================================== */
-
-
-/* ==========================================================================
-	01.2 Social icons
-========================================================================== */
-
-
-/* ==========================================================================
-	02. Logo
-========================================================================== */
-
-
-/* ==========================================================================
-	03. Navbar
-========================================================================== */
-
-
-/* ==========================================================================
-	04. Search
-========================================================================== */
-
-
-/* ==========================================================================
-	05. User details
+	06. User details
 ========================================================================== */

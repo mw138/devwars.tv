@@ -8,54 +8,52 @@ Variables
 $file__element--property_modifier
 ========================================================================== */
 
-
 $icon--font-face 									: 'DevWars Brand Icons';
 $icon--font-size 									: 16px;
 
-$icon__facebook										: '';
-$icon__twitter										: '';
-$icon__twitch										: '';
-$icon__google										: '';
-$icon__cloud9										: '';
-$icon__slack										: '';
-$icon__github										: '';
-$icon__youtube										: '';
-$icon__linkedin										: '';
-$icon__reddit										: '';
-$icon__codepen										: '';
-$icon__website										: '';
-$icon__email										: '';
-$icon__podcast										: '';
-$icon__search										: '';
-$icon__devbit										: '';
-$icon__user											: '';
-$icon__team											: '';
-$icon__games										: '';
-$icon__tutorial										: '';
-$icon__blog											: '';
-$icon__podcast										: '';
-$icon__chevron										: '';
-$icon__check										: '';
-$icon__cross										: '';
-$icon__settings										: '';
-$icon__record										: '';
-$icon__comment										: '';
+$icon__facebook										: '\e000';
+$icon__twitter										: '\e001';
+$icon__twitch										: '\e002';
+$icon__google										: '\e017';
+$icon__cloud9										: '\e018';
+$icon__slack										: '\e003';
+$icon__github										: '\e004';
+$icon__youtube										: '\e005';
+$icon__linkedin										: '\e006';
+$icon__reddit										: '\e015';
+$icon__codepen										: '\e007';
+$icon__website										: '\e016';
+$icon__email										: '\e008';
+$icon__podcast										: '\e009';
+$icon__search										: '\e00a';
+$icon__devbit										: '\e019';
+$icon__user											: '\e00b';
+$icon__team											: '\e00c';
+$icon__games										: '\e00d';
+$icon__tutorial										: '\e00e';
+$icon__blog											: '\e00f';
+$icon__chevron										: '\e01a';
+$icon__check										: '\e010';
+$icon__cross										: '\e011';
+$icon__settings										: '\e012';
+$icon__record										: '\e013';
+$icon__comment										: '\e014';
 
 /* ==========================================================================
 	01. Icon Import
 ========================================================================== */
 
-// @charset "UTF-8";
+@charset "UTF-8";
 
-// @font-face {
-// 	font-family: "DevWars Brand Icons";
-// 	src:url("../../icon/devwars-icons.eot");
-// 	src:url("../../icon/devwars-icons.eot?#iefix") format("embedded-opentype"),
-// 		url("../../icon/devwars-icons.woff") format("woff"),
-// 		url("../../icon/devwars-icons.ttf") format("truetype");
-// 	font-weight: normal;
-// 	font-style: normal;
-// }
+@font-face {
+	font-family: "DevWars Brand Icons";
+	src:url("asset/icon/devwars-icons.eot");
+	src:url("asset/icon/devwars-icons.eot?#iefix") format("embedded-opentype"),
+		url("asset/icon/devwars-icons.woff") format("woff"),
+		url("asset/icon/devwars-icons.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
 
 /* ==========================================================================
 	01. Icon Styles

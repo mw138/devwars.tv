@@ -16,7 +16,7 @@ $list-item__spacing 								: 20px;
 .list-item {
 	position: relative;
 	display: block;
-	margin-top: $list-item__spacing;
+	margin-bottom: $list-item__spacing;
 	min-height: $list-item__spacing;
 	font-size: 100px;
 
