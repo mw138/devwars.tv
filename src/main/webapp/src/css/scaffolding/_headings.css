@@ -1,14 +1,86 @@
 /* Name:            Page Headings
 
 Contents:
-	01.
+	01. Headings styles
+	02. Generate Headings colors
 
 Variables
 $file__element--property_modifier
 ========================================================================== */
 
-
+$tutorials: (
+	angular $tutorials__angular--color,
+	bower $tutorials__bower--color,
+	css $tutorials__css--color,
+	grunt $tutorials__grunt--color,
+	gulp $tutorials__gulp--color,
+	html $tutorials__html--color,
+	java $tutorials__java--color,
+	javascript $tutorials__javascript--color,
+	jquery $tutorials__jquery--color,
+	node $tutorials__node--color,
+	php $tutorials__php--color,
+	react $tutorials__react--color,
+	ruby $tutorials__ruby--color,
+	ror $tutorials__ruby-on-rails--color,
+	sublime $tutorials__sublime--color,
+	typescript $tutorials__typescript--color
+);
 
 /* ==========================================================================
 	01.
 ========================================================================== */
+
+.headings {
+	display: flex;
+	align-items: center;
+	height: 70px;
+
+	h1 {
+		text-align: center;
+		font-size: 26px;
+	}
+
+	@each $tutorial in $tutorials {
+
+		&.#{nth($tutorial, 1)} {
+
+			h1 { 
+				color: #{nth($tutorial, 2)}; 
+			}
+		}
+	}
+}
+
+@include breakpoint(sm) {
+
+	.headings {
+		height: 100px;
+
+		h1 {
+			font-size: 36px;
+		}
+	}
+}
+
+@include breakpoint(md) {
+
+	.headings {
+		height: 150px;
+
+		h1 {
+			font-size: 50px;
+		}
+	}
+}
+
+@include breakpoint(lg) {
+
+	.headings {
+		height: 230px;
+
+		h1 {
+			font-size: 72px;
+		}
+	}
+}

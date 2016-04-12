@@ -22,7 +22,7 @@ $socialicons__codepen--background     				: #fff;
 $socialicons__website--background     				: #fff;
 $socialicons__email--background     				: #fff;
 
-$social--backgrounds:  (
+$social--sets:  (
 	facebook $socialicons__facebook--background $icon__facebook,
 	twitter $socialicons__twitter--background $icon__twitter,
 	google $socialicons__google--background $icon__google,
@@ -44,24 +44,41 @@ $social--backgrounds:  (
 
 .social-icons {
 
-	li {
+	ul {
+		list-style-type: none;
+	}
 
-		@each $social-type in $social--backgrounds {
+	li {
+		display: inline-block;
+		line-height: 30px;
+
+		@each $social-type in $social--sets {
 
 			&.#{nth($social-type, 1)} {
 
 				a {
-					color: #{nth($social-type, 2)};	
+					background: #{nth($social-type, 2)};	
 
 					&:hover {
-						color: darken(nth($social-type, 2), 10%);
+						background: darken(nth($social-type, 2), 10%);
 					}
 				}
 
 				.icon:before {
-					content: #{nth($social-type, 3)};
+					content: nth($social-type, 3);
 				}
 			}
+		}
+
+		a {
+			display: block;
+			padding: 0 8px;
+			color: #fff;
+		}
+
+		.icon:before {
+			vertical-align: top;
+			line-height: 30px;
 		}
 	}
 }

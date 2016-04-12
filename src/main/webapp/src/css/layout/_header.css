@@ -43,7 +43,7 @@ $header__nav-item--font-size	 					: 14px;
 
 		.row {
 			display: flex;
-			justify-content: space-around;
+			justify-content: space-between;
 			align-items: center;
 		}
 	}

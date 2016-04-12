@@ -76,7 +76,7 @@ $list-item__spacing 								: 20px;
 			bottom: 0;
 			left: 0;
 			opacity: 0.8;
-			background: url('asset/image/tech.jpg');
+			background: url('../assets/image/tech.jpg');
 			background-size: 100%;
 			background-position: 50% 50%;
 			transition: all .4s;

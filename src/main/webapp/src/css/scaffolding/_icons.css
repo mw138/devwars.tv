@@ -47,10 +47,10 @@ $icon__comment										: '\e014';
 
 @font-face {
 	font-family: "DevWars Brand Icons";
-	src:url("asset/icon/devwars-icons.eot");
-	src:url("asset/icon/devwars-icons.eot?#iefix") format("embedded-opentype"),
-		url("asset/icon/devwars-icons.woff") format("woff"),
-		url("asset/icon/devwars-icons.ttf") format("truetype");
+	src:url("../assets/icon/devwars-icons.eot");
+	src:url("../assets/icon/devwars-icons.eot?#iefix") format("embedded-opentype"),
+		url("../assets/icon/devwars-icons.woff") format("woff"),
+		url("../assets/icon/devwars-icons.ttf") format("truetype");
 	font-weight: normal;
 	font-style: normal;
 }
