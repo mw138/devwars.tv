@@ -129,7 +129,7 @@ generator.addHandlerForType('page', (args) => {
     'DummyRoute': route
   };
 
-  generator.createFromStub('page', params, './src/components/pages/' + toHyphenCase(name));
+  generator.createFromStub('page', params, './src/pages/' + toHyphenCase(name));
 });
 
 var type = argv._[0];
