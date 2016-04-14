@@ -108,7 +108,7 @@ Generator.prototype.createFromStub = function (stub, params, out) {
 var args = getArgs();
 var generator = new Generator(args, './stubs');
 
-generator.addHandlerForType('component', function (args) {
+generator.addHandlerForType('component', (args) => {
   var name = args.name;
   var params = {
     'DummyName': name + 'Component',
@@ -117,6 +117,19 @@ generator.addHandlerForType('component', function (args) {
   };
 
   generator.createFromStub('component', params, './src/components/' + toHyphenCase(name));
+});
+
+generator.addHandlerForType('page', (args) => {
+  var name = args.name;
+  var route = args.route;
+  var params = {
+    'DummyName': name + 'Component',
+    'DummyShort': toHyphenCase(name),
+    'DummyTag': toLowerCamelCase(name),
+    'DummyRoute': route
+  };
+
+  generator.createFromStub('page', params, './src/components/pages/' + toHyphenCase(name));
 });
 
 var type = argv._[0];
