@@ -14,6 +14,7 @@ angular.module('main', [
   angularAnimate, angularUiBootstrap, app
 ]);
 
+
 angular.element(document).ready(() => {
   angular.bootstrap(document, ['main']);
 });
