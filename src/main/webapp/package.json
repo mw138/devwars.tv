@@ -4,7 +4,7 @@
   "description": "Enhanced testing of Angular JS 1.X applications using ES6 modules",
   "main": "src/app.js",
   "scripts": {
-    "start": "webpack-dev-server --TARGET=DEV",
+    "start": "webpack-dev-server --inline --TARGET=DEV",
     "build": "webpack --display-chunks --display-reasons --display-error-details --display-modules",
     "dist": "webpack --TARGET=DIST",
     "server_build": "node server.js",
@@ -38,6 +38,7 @@
     "babel-preset-es2015": "6.3.13",
     "babel-register": "6.5",
     "babel-runtime": "6.5",
+    "browser-sync-webpack-plugin": "^1.0.1",
     "chai": "3.2.0",
     "chalk": "1.1.0",
     "clean-webpack-plugin": "0.1.3",
