@@ -50,7 +50,8 @@ $social--sets:  (
 
 	li {
 		display: inline-block;
-		line-height: 30px;
+		margin: 0 1px;
+		line-height: 26px;
 
 		@each $social-type in $social--sets {
 
@@ -72,13 +73,19 @@ $social--sets:  (
 
 		a {
 			display: block;
-			padding: 0 8px;
+			text-align: center;
+			width: 26px;
+			border-radius: 5px;
 			color: #fff;
 		}
 
-		.icon:before {
+		.icon {
 			vertical-align: top;
-			line-height: 30px;
+
+			&:before {
+				vertical-align: top;
+				line-height: 26px;
+			}
 		}
 	}
 }

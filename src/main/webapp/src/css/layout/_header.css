@@ -32,14 +32,9 @@ $header__nav-item--font-size	 					: 14px;
 
 .header {
 	background: $header__background;
-	position: fixed;
-	z-index: 100;
-	top: 0;
-	right: 0;
-	left: 0;
-	transform: translateZ(0);
 
 	&__bottom-bar {
+		margin: 0 20px;
 
 		.row {
 			display: flex;
@@ -49,11 +44,30 @@ $header__nav-item--font-size	 					: 14px;
 	}
 
 	.logo {
+		padding: 10px 0;
 
 		img {
 			display: block;
-			max-height: 90px;
+			max-height: 50px;
 			transition: all .25s;
+		}
+	}
+}
+
+@include breakpoint(xs-only) {
+
+	header {
+		padding-top: 40px;
+	}
+
+	.header {
+
+		.logo {
+			max-width: 60%;
+		}
+
+		&__top-bar {
+			display: none;
 		}
 	}
 }
@@ -79,6 +93,12 @@ $header__nav-item--font-size	 					: 14px;
 	}
 
 	.header {
+		position: fixed;
+		z-index: 100;
+		top: 0;
+		right: 0;
+		left: 0;
+		transform: translateZ(0);
 
 		&__top-bar {
 			overflow: hidden;
@@ -86,58 +106,58 @@ $header__nav-item--font-size	 					: 14px;
 			line-height: $header__topbar--line-height;
 			background: $header__topbar--background;
 			transition: all .25s;
+		}
 
-			.twitch-live {
-				display: inline-block;
-				vertical-align: top;
-				word-spacing: 3px;
-				text-transform: uppercase;
-				text-decoration: none;
-				color: $base-font--color;
-				font-family: $alt--font-face;
-				font-size: 14px;
+		.twitch-live {
+			display: inline-block;
+			vertical-align: top;
+			word-spacing: 3px;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: $base-font--color;
+			font-family: $alt--font-face;
+			font-size: 14px;
 
-				span {
-					text-decoration: underline;
-					color: $brand-secondary--color;
-				}
-
-				.icon {
-					position: relative;
-					vertical-align: top;
-					margin: 0 5px 0 0;
-					line-height: $header__topbar--line-height;
-					color: $red--color;
-
-					&:before {
-						position: relative;
-						z-index: 2;
-						content: $icon__record;
-						border-radius: 100%;
-					}
-
-					&:after {
-						content: '';
-						position: absolute;
-						z-index: 1;
-						top: 50%;
-						left: 50%;
-						width: 5px;
-						height: 5px;
-						transform: translate(-50%, -50%);
-						border-radius: 100%;
-						box-shadow: 0 0 0 0 rgba(#F0F0F0, 1), 0 0 0 0 rgba($red--color, 0.7);
-						animation: pulse 2s infinite cubic-bezier( 0.66, 0.33, 0, 1);
-					}
-				}
+			span {
+				text-decoration: underline;
+				color: $brand-secondary--color;
 			}
 
-			.social-icons {
-				float: right;
+			.icon {
+				position: relative;
+				vertical-align: top;
+				margin: 0 5px 0 0;
+				line-height: $header__topbar--line-height;
+				color: $red--color;
+
+				&:before {
+					position: relative;
+					z-index: 2;
+					content: $icon__record;
+					border-radius: 100%;
+				}
+
+				&:after {
+					content: '';
+					position: absolute;
+					z-index: 1;
+					top: 50%;
+					left: 50%;
+					width: 5px;
+					height: 5px;
+					transform: translate(-50%, -50%);
+					border-radius: 100%;
+					box-shadow: 0 0 0 0 rgba(#F0F0F0, 1), 0 0 0 0 rgba($red--color, 0.7);
+					animation: pulse 2s infinite cubic-bezier( 0.66, 0.33, 0, 1);
+				}
 			}
 		}
 
-		&.is-scrolling {
+		.social-icons {
+			float: right;
+		}
+
+		&.is-scrolling-down {
 
 			.header__top-bar {
 				height: 0;
@@ -154,26 +174,28 @@ $header__nav-item--font-size	 					: 14px;
 
 	.header {
 
-		&__bottom-bar {
+		.logo {
+			width: 15%;
+			padding: 0;
 
-			.logo {
-				width: 15%;
-			}
-
-			.navbar {
-				width: 65%;
-			}
-
-			.search {
-				width: 5%;
-			}
-
-			.account {
-				width: 10%;
+			img {
+				max-height: 90px;
 			}
 		}
 
-		&.is-scrolling {
+		.navbar {
+			width: 65%;
+		}
+
+		.search {
+			width: 5%;
+		}
+
+		.account {
+			width: 10%;
+		}
+
+		&.is-scrolling-down {
 
 			.logo img {
 				max-height: 40px;
