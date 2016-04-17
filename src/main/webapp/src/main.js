@@ -8,7 +8,7 @@ import angularAnimate from 'angular-animate';
 import angularUiBootstrap from 'angular-ui-bootstrap';
 
 // Pages
-import home from './pages/home/home.module';
+// import home from './pages/home/home.module';
 
 // Modules
 import app from './components/app/app.module';
@@ -16,7 +16,7 @@ import header from './components/header/header.module';
 import ListItem from './components/list-item/list-item.module';
 
 angular.module('main', [
-  angularAnimate, angularUiBootstrap, app, header, ListItem, home
+  angularAnimate, angularUiBootstrap, app, header, ListItem
 ]);
 
 

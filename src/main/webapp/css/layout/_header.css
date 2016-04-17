@@ -12,7 +12,6 @@ Variables
 $file__element--property_modifier
 ========================================================================== */
 
-
 $header__topbar--line-height 						: 40px;
 $header__topbar--background 						: $brand-primary--background;
 $header__background 		 						: $black--color;
@@ -32,6 +31,7 @@ $header__nav-item--font-size	 					: 14px;
 
 .header {
 	background: $header__background;
+	transition: all .6s;
 
 	&__bottom-bar {
 		margin: 0 20px;
@@ -41,6 +41,10 @@ $header__nav-item--font-size	 					: 14px;
 			justify-content: space-between;
 			align-items: center;
 		}
+	}
+
+	.row:after {
+		content: none;
 	}
 
 	.logo {
@@ -72,7 +76,6 @@ $header__nav-item--font-size	 					: 14px;
 	}
 }
 
-
 /* ==========================================================================
 	02. Tablet
 ========================================================================== */
@@ -98,7 +101,6 @@ $header__nav-item--font-size	 					: 14px;
 		top: 0;
 		right: 0;
 		left: 0;
-		transform: translateZ(0);
 
 		&__top-bar {
 			overflow: hidden;
@@ -166,6 +168,18 @@ $header__nav-item--font-size	 					: 14px;
 	}
 }
 
+@include breakpoint(sm-max) {
+
+	.navbar--active {
+
+		.header {
+			left: -20%;
+			right: 20%;
+		}
+	}
+}
+
+
 /* ==========================================================================
 	03. Desktop
 ========================================================================== */
@@ -183,15 +197,13 @@ $header__nav-item--font-size	 					: 14px;
 			}
 		}
 
-		.navbar {
-			width: 65%;
-		}
-
 		.search {
+			order: 2;
 			width: 5%;
 		}
 
 		.account {
+			order: 3;
 			width: 10%;
 		}
 
@@ -213,6 +225,11 @@ $header__nav-item--font-size	 					: 14px;
 ========================================================================== */
 
 .navbar {
+
+	&__container {
+		width: 65%;
+		right: -65%;
+	}
 
 	ul {
 		list-style-type: none;
@@ -238,10 +255,90 @@ $header__nav-item--font-size	 					: 14px;
 	}
 }
 
+@include breakpoint(sm-max) {
+
+	.navbar {	
+
+		&--active {
+
+			.navbar__container {
+				z-index: 100;
+				right: 0;
+				transition: all .4s;
+			}
+		}	
+
+		&__hamburger {
+			display: block;
+			position: relative;
+			padding: 7px 0;
+			width: 24px;
+			border-top: 2px solid #fff;
+			border-bottom: 2px solid #fff;
+
+			&:before {
+				content: '';
+				position: absolute;
+				transform: translateY(-50%);
+				top: 50%;
+				right: 0;
+				left: 0;
+				height: 2px;
+				background: #fff;
+			}
+
+			&:hover {
+
+				~ .navbar__container {
+					right: 0;
+				}
+			}
+		}
+
+		&__container {
+			position: fixed;
+			display: flex;
+			align-items: center;
+			top: 0;
+			bottom: 0;
+			min-height: 100%;
+			background: $brand-tertiary--background;
+			border-left: 6px solid lighten($brand-tertiary--background, 10%);
+			transition: all .6s;
+		}
+
+		ul {
+			width: 100%;
+			text-align: center;
+		}
+
+		li > a {
+			line-height: 80px;
+		}
+	}
+}
+
+@include breakpoint(sm) {
+
+	.navbar__container {
+		width: 45%;
+		right: -45%;
+	}
+}
 
 @include breakpoint(md) {
 
 	.navbar {
+		order: 1;
+		width: 65%;
+
+		&__hamburger {
+			display: none;
+		}
+
+		&__container {
+			width: auto;
+		}
 
 		ul {
 			display: flex;
@@ -280,7 +377,6 @@ $header__nav-item--font-size	 					: 14px;
 		}
 	}
 }
-
 
 /* ==========================================================================
 	05. Search
