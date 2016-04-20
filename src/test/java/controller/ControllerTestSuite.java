@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.servlet.http.Cookie;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses(value = {UserControllerTest.class, LotteryControllerTest.class, InfoControllerTest.class})
+@Suite.SuiteClasses(value = {UserControllerTest.class, LotteryControllerTest.class, InfoControllerTest.class, PodcastControllerTest.class})
 @ContextConfiguration(locations = {"classpath:/spring/mvc-config.xml"})
 public class ControllerTestSuite {
 
