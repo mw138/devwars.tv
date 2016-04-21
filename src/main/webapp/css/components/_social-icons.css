@@ -46,11 +46,12 @@ $social--sets:  (
 
 	ul {
 		list-style-type: none;
+		font-size: 0;
 	}
 
 	li {
 		display: inline-block;
-		margin: 0 1px;
+		margin: 0 3px;
 		line-height: 26px;
 
 		@each $social-type in $social--sets {
@@ -81,11 +82,38 @@ $social--sets:  (
 
 		.icon {
 			vertical-align: top;
+			font-size: 16px;
 
 			&:before {
 				vertical-align: top;
 				line-height: 26px;
 			}
+		}
+	}
+
+	&--inverted {
+
+		li {
+
+			@each $social-type in $social--sets {
+
+				&.#{nth($social-type, 1)} {
+
+					a {
+						color: #{nth($social-type, 2)};	
+						background: $brand-primary--background;
+
+						&:hover {
+							color: darken(nth($social-type, 2), 10%);
+							background: $brand-primary--background;
+						}
+					}
+
+					.icon:before {
+						content: nth($social-type, 3);
+					}
+				}
+			}		
 		}
 	}
 }

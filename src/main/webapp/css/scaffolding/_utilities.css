@@ -1,41 +1,12 @@
 /* Name:            Utilities
 
 Contents:
-	01. Utilities
-	02. Placeholders
-	03. Mixins
+	01. Placeholders
+	02. Mixins
 */
 
 /* ==========================================================================
-	01. Utilities
-========================================================================== */
-
-.pull-left {
-	float: left;
-}
-
-.pull-right {
-	float: right;
-}
-
-.align-center {
-	text-align: center;
-}
-
-.hidden {
-	visibility: hidden !important;
-}
-
-.hide {
-	display: none !important;
-}
-
-.noscroll {
-	overflow: hidden;
-}
-
-/* ==========================================================================
-	02. Placeholders
+	01. Placeholders
 ========================================================================== */
 
 %truncate {
@@ -52,7 +23,7 @@ Contents:
 }
 
 /* ==========================================================================
-	03. Mixins
+	02. Mixins
 ========================================================================== */
 
 @mixin size($width, $height: $width) {
