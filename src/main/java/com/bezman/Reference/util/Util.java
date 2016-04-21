@@ -20,6 +20,12 @@ public class Util {
 
     static Random random = new Random();
 
+    public static byte[] byteArrayFromResources(String path) throws IOException {
+        ClassLoader classLoader = Util.class.getClassLoader();
+
+        return IOUtils.toByteArray(classLoader.getResourceAsStream(path));
+    }
+
     public static String randomText(int length) {
         String allChars = "abcdefghijklmnopqrstuvwxyz0123456789";
 

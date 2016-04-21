@@ -21,6 +21,8 @@ public class FileStorage {
 
     public final String SITE_STORAGE_PATH = "/sitestorage";
 
+    public final String PODCAST_AUDIO_STORAGE_PATH = "/podcasts";
+
     public Files.FileMetadata uploadFile(String path, InputStream inputStream) throws IOException, DbxException {
         try {
             dropbox.dbxClientV2.files.delete(path);

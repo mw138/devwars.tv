@@ -1,63 +1,66 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD//EN"
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+  "-//Hibernate/Hibernate Configuration DTD//EN"
+  "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="connection.url">jdbc:mysql://localhost:3306/devwars</property>
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/devwars</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
-        <property name="hibernate.connection.pool_size">100</property>
-        <!-- Use this when you delete the DB again you fucking moron -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    <property name="hibernate.connection.pool_size">100</property>
+    <!-- Use this when you delete the DB again you fucking moron -->
+    <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <property name="hibernate.show_sql">false</property>
-        <property name="hibernate.cache.use_query_cache">false</property>
-        <property name="hibernate.cache.use_second_level_cache">false</property>
-        
-        <property name="hibernate.connection.isolation">2</property>
+    <property name="hibernate.show_sql">false</property>
+    <property name="hibernate.cache.use_query_cache">false</property>
+    <property name="hibernate.cache.use_second_level_cache">false</property>
 
-        <!--<property name="hibernate.connection.isolation">4</property>-->
+    <property name="hibernate.connection.isolation">2</property>
 
-        <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
+    <!--<property name="hibernate.connection.isolation">4</property>-->
 
-        <!-- DB schema will be updated if needed -->
+    <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext
+    </property>
 
-        <mapping resource="config/hibernate/mapping/Game.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Team.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Player.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/User.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Email_Confirmation.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Ranking.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Session.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/GameSignup.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Blog.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Objective.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/CompletedObjective.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/UserReset.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/SecretKey.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/ConnectedAccount.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Activity.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Contact.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/ObjectiveItem.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/TwitchPointStorage.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Rank.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Variable.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/ShopItem.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Warrior.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Badge.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Notification.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/UserTeam.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/TeamGameSignup.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/UserTeamInvite.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/Tournament.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/TeamGameSignupUser.hbm.xml"/>
+    <!-- DB schema will be updated if needed -->
+
+    <mapping resource="config/hibernate/mapping/Game.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Team.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Player.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/User.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Email_Confirmation.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Ranking.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Session.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/GameSignup.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Blog.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Objective.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/CompletedObjective.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/UserReset.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/SecretKey.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/ConnectedAccount.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Activity.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Contact.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/ObjectiveItem.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/TwitchPointStorage.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Rank.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Variable.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/ShopItem.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Warrior.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Badge.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Notification.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/UserTeam.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/TeamGameSignup.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/UserTeamInvite.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/Tournament.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/TeamGameSignupUser.hbm.xml"/>
 
 
-        <mapping resource="config/hibernate/mapping/Access.hbm.xml"/>
-        <mapping resource="config/hibernate/mapping/UserInventory.hbm.xml"/>
-    </session-factory>
-    
+    <mapping resource="config/hibernate/mapping/Access.hbm.xml"/>
+    <mapping resource="config/hibernate/mapping/UserInventory.hbm.xml"/>
+
+    <mapping class="com.bezman.model.PodcastEpisode"/>
+  </session-factory>
+
 </hibernate-configuration>
 
