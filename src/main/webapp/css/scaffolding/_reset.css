@@ -17,7 +17,7 @@ body {
 	background: $body--background;
 	font-size: $base--font-size;
 	-webkit-font-smoothing: antialiased;
-	transition: all .6s;
+	transition: position .6s;
 
 	&:before {
 		content: '';
@@ -28,10 +28,6 @@ body {
 		right: 0;
 		height: 500px;
 		background: $brand-secondary--background;
-	}
-
-	&.navbar--active {
-		right: 20%;
 	}
 }
 

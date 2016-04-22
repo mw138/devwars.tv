@@ -5,6 +5,7 @@ Contents:
 	02. Tablet
 	03. Logo 
 	04. Navbar
+		04.1 Navbar Active
 	05. Search
 	06. User details
 
@@ -19,8 +20,7 @@ $header__background 		 						: $black--color;
 $header__nav-item--color 		 					: $base-font--color;
 $header__nav-item--color_hover 						: $link--color;
 $header__nav-item--background_hover					: transparent;
-$header__nav-item--line-height-xs 					: 40px;
-$header__nav-item--line-height-md 					: 90px;
+$header__nav-item--line-height	 					: 90px;
 $header__nav-item--text-transform 					: uppercase;
 $header__nav-item--font-family	 					: $alt--font-face;
 $header__nav-item--font-size	 					: 14px;
@@ -83,7 +83,7 @@ $header__nav-item--font-size	 					: 14px;
 @include breakpoint(sm) {
 
 	header {
-		padding-bottom: 130px;
+		padding-bottom: 110px;
 
 		.container {
 			width: auto;
@@ -110,7 +110,7 @@ $header__nav-item--font-size	 					: 14px;
 			transition: all .25s;
 		}
 
-		.twitch-live {
+		.twitch-notification {
 			display: inline-block;
 			vertical-align: top;
 			word-spacing: 3px;
@@ -130,17 +130,16 @@ $header__nav-item--font-size	 					: 14px;
 				vertical-align: top;
 				margin: 0 5px 0 0;
 				line-height: $header__topbar--line-height;
-				color: $red--color;
+				color: $socialicons__twitch--background;
 
 				&:before {
 					position: relative;
 					z-index: 2;
-					content: $icon__record;
+					content: $icon__twitch;
 					border-radius: 100%;
 				}
 
 				&:after {
-					content: '';
 					position: absolute;
 					z-index: 1;
 					top: 50%;
@@ -153,9 +152,25 @@ $header__nav-item--font-size	 					: 14px;
 					animation: pulse 2s infinite cubic-bezier( 0.66, 0.33, 0, 1);
 				}
 			}
+
+			&--live {
+
+				.icon {
+					color: $red--color;
+
+					&:before {
+						content: $icon__record;
+					}
+
+					&:after {
+						content: '';
+					}
+				}
+			}
 		}
 
 		.social-icons {
+			position: relative;
 			float: right;
 		}
 
@@ -168,23 +183,15 @@ $header__nav-item--font-size	 					: 14px;
 	}
 }
 
-@include breakpoint(sm-max) {
-
-	.navbar--active {
-
-		.header {
-			left: -20%;
-			right: 20%;
-		}
-	}
-}
-
-
 /* ==========================================================================
 	03. Desktop
 ========================================================================== */
 
 @include breakpoint(md) {
+
+	header {
+		padding-bottom: 130px
+	}
 
 	.header {
 
@@ -214,7 +221,7 @@ $header__nav-item--font-size	 					: 14px;
 			}
 
 			.navbar li>a {
-				line-height: ($header__nav-item--line-height-md / 3) * 2;
+				line-height: ($header__nav-item--line-height / 3) * 2;
 			}
 		}
 	}
@@ -227,12 +234,23 @@ $header__nav-item--font-size	 					: 14px;
 .navbar {
 
 	&__container {
+		position: fixed;
+		display: flex;
+		align-items: center;
+		top: 0;
+		bottom: 0;
 		width: 65%;
 		right: -65%;
+		min-height: 100%;
+		background: $brand-tertiary--background;
+		border-left: 6px solid lighten($brand-tertiary--background, 10%);
+		transition: position .6s;
 	}
 
 	ul {
 		list-style-type: none;
+		text-align: center;
+		width: 100%;
 	}
 
 	li {
@@ -247,73 +265,30 @@ $header__nav-item--font-size	 					: 14px;
 			text-decoration: none;
 			padding: 0 5px;
 			color: $header__nav-item--color;
-			line-height: $header__nav-item--line-height-xs;
+			line-height: $header__nav-item--line-height;
 			text-transform: $header__nav-item--text-transform;
 			font-family: $header__nav-item--font-family;
 			font-size: $header__nav-item--font-size;
 		}
 	}
-}
 
-@include breakpoint(sm-max) {
+	&__hamburger {
+		display: block;
+		position: relative;
+		padding: 7px 0;
+		width: 24px;
+		border-top: 2px solid #fff;
+		border-bottom: 2px solid #fff;
 
-	.navbar {	
-
-		&--active {
-
-			.navbar__container {
-				z-index: 100;
-				right: 0;
-				transition: all .4s;
-			}
-		}	
-
-		&__hamburger {
-			display: block;
-			position: relative;
-			padding: 7px 0;
-			width: 24px;
-			border-top: 2px solid #fff;
-			border-bottom: 2px solid #fff;
-
-			&:before {
-				content: '';
-				position: absolute;
-				transform: translateY(-50%);
-				top: 50%;
-				right: 0;
-				left: 0;
-				height: 2px;
-				background: #fff;
-			}
-
-			&:hover {
-
-				~ .navbar__container {
-					right: 0;
-				}
-			}
-		}
-
-		&__container {
-			position: fixed;
-			display: flex;
-			align-items: center;
-			top: 0;
-			bottom: 0;
-			min-height: 100%;
-			background: $brand-tertiary--background;
-			border-left: 6px solid lighten($brand-tertiary--background, 10%);
-			transition: all .6s;
-		}
-
-		ul {
-			width: 100%;
-			text-align: center;
-		}
-
-		li > a {
-			line-height: 80px;
+		&:before {
+			content: '';
+			position: absolute;
+			transform: translateY(-50%);
+			top: 50%;
+			right: 0;
+			left: 0;
+			height: 2px;
+			background: #fff;
 		}
 	}
 }
@@ -337,7 +312,10 @@ $header__nav-item--font-size	 					: 14px;
 		}
 
 		&__container {
+			position: static;
 			width: auto;
+			border: none;
+			background: none;
 		}
 
 		ul {
@@ -349,7 +327,6 @@ $header__nav-item--font-size	 					: 14px;
 
 			> a {
 				position: relative;
-				line-height: $header__nav-item--line-height-md;
 				transition: all 0.25s;
 
 				&:before {
@@ -375,6 +352,25 @@ $header__nav-item--font-size	 					: 14px;
 				}
 			}
 		}
+	}
+}
+
+/* ==========================================================================
+	01. Mobile
+========================================================================== */
+
+.navbar--active {
+	right: 20%;
+
+	.header {
+		left: -20%;
+		right: 20%;
+	}
+
+	.navbar__container {
+		z-index: 100;
+		right: 0;
+		transition: all .4s;
 	}
 }
 

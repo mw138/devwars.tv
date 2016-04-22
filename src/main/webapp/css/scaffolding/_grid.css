@@ -11,7 +11,8 @@ $file__element--property_modifier
 ========================================================================== */
 
 $grid__columns 										: 12;
-$grid__gutter--width								: 10px;
+$grid__gutter--width-xs 							: 10px;
+$grid__gutter--width-sm 							: 10px;
 
 $grid__container--sm 								: 728px;
 $grid__container--md 								: 940px;
@@ -22,7 +23,7 @@ $grid__container--lg 								: 1200px;
 ========================================================================== */
 
 .container {
-	margin: $grid__gutter--width ($grid__gutter--width * 2) 0;
+	margin: $grid__gutter--width-xs ($grid__gutter--width-xs * 2) 0;
 }
 
 @include breakpoint(sm) {
@@ -53,8 +54,8 @@ $grid__container--lg 								: 1200px;
 
 .row {
 	box-sizing: border-box;
-	margin-left: -$grid__gutter--width;
-	margin-right: -$grid__gutter--width;
+	margin-left: -$grid__gutter--width-sm;
+	margin-right: -$grid__gutter--width-sm;
 
 	&:after {
 		content: '';
@@ -70,14 +71,24 @@ $grid__container--lg 								: 1200px;
 [class^=col-] {
 	float: left;
 	box-sizing: border-box;
-	padding-left: $grid__gutter--width;
-	padding-right: $grid__gutter--width;
+	padding-left: $grid__gutter--width-sm;
+	padding-right: $grid__gutter--width-sm;
 	width: 100%;
 }
 
 /* ==========================================================================
 	04. Generate responsive columns
 ========================================================================== */
+
+@include breakpoint(xs-only) {
+
+	@for $i from 1 through $grid__columns {
+		
+		.col-xs-#{$i} {
+			width: percentage($i / $grid__columns);
+		}
+	}
+}
 
 @include breakpoint(sm) {
 
