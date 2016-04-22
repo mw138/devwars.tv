@@ -142,6 +142,13 @@
       <version>1.9.13</version>
     </dependency>
 
+    <dependency>
+      <groupId>rome</groupId>
+      <artifactId>rome</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+
     <!-- Websocket & Tomcat -->
     <dependency>
       <groupId>org.apache.tomcat</groupId>
@@ -191,6 +198,12 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
     </dependency>
 
     <dependency>

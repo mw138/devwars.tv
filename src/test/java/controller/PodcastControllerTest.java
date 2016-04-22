@@ -5,6 +5,7 @@ import com.bezman.Reference.util.Util;
 import com.bezman.jackson.DevWarsObjectMapper;
 import com.bezman.model.PodcastEpisode;
 import com.bezman.service.AuthService;
+import com.bezman.service.PodcastEpisodeService;
 import com.bezman.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,6 +41,9 @@ public class PodcastControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    PodcastEpisodeService podcastEpisodeService;
 
     @Autowired
     private AuthService authService;
@@ -53,6 +58,25 @@ public class PodcastControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    @Test
+    public void test_rss_feed() throws Exception {
+        PodcastEpisode podcastEpisode = PodcastEpisode.builder()
+            .episodeName("Hello World")
+            .episodeNumber(5)
+            .episodeDescription("Lorem Ipsum")
+            .showNotes("Long list here")
+            .build();
+
+        for(int i = 0; i < 10; i++) {
+            podcastEpisodeService.saveEpisode(podcastEpisode, null, null);
+            podcastEpisode.setId(null);
+        }
+
+         MvcResult result = mockMvc.perform(get("/v1/podcast/rss"))
+            .andReturn();
+
+        System.out.println(result.getResponse().getContentAsString());
+    }
     @Test
     public void test_get_podcast() throws Exception {
          PodcastEpisode podcastEpisode = PodcastEpisode.builder()
@@ -161,4 +185,5 @@ public class PodcastControllerTest {
         mockMvc.perform(get("/v1/podcast/" + returnEpisode.getId()))
             .andExpect(status().is(404));
     }
+
 }

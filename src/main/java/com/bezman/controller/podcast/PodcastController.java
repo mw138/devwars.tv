@@ -6,6 +6,10 @@ import com.bezman.annotation.PreAuthorization;
 import com.bezman.model.PodcastEpisode;
 import com.bezman.model.User;
 import com.bezman.service.PodcastEpisodeService;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.LinkedList;
 
 @Controller
 @RequestMapping("/v1/podcast")
@@ -29,6 +37,20 @@ public class PodcastController {
         } else {
             return new ResponseEntity("Not Found.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @RequestMapping("/rss")
+    public void rssFeed(HttpServletResponse response) throws IOException, FeedException {
+        SyndFeed feed = new SyndFeedImpl();
+        feed.setFeedType("atom_1.0");
+        feed.setEntries(new LinkedList());
+
+        podcastEpisodeService.allPodcasts().forEach(podcastEpisode -> {
+            feed.getEntries().add(podcastEpisode.getSyndEntry());
+        });
+
+        SyndFeedOutput output = new SyndFeedOutput();
+        output.output(feed, response.getWriter());
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

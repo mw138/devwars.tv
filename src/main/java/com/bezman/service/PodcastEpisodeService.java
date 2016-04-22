@@ -11,12 +11,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class PodcastEpisodeService {
 
     @Autowired
     FileStorage fileStorage;
+
+    public List<PodcastEpisode> allPodcasts() {
+        List returnList = null;
+
+        Session session = DatabaseManager.getSession();
+
+        returnList = session.createCriteria(PodcastEpisode.class)
+            .list();
+
+        session.close();
+
+        return returnList;
+    }
 
     public String uploadPodcastForEpisode(PodcastEpisode episode, MultipartFile podcastAudio) throws Exception {
         if (podcastAudio != null) {
