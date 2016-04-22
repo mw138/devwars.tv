@@ -86,6 +86,7 @@ public class PodcastControllerTest {
 
         mockMvc.perform(fileUpload("/v1/podcast/create")
             .file("file", Util.byteArrayFromResources("mpthreetest.mp3"))
+            .file("image", Util.byteArrayFromResources("dogtest.jpg"))
             .param("episode", Reference.objectMapper.writeValueAsString(podcastEpisode))
             .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
         )
@@ -93,6 +94,7 @@ public class PodcastControllerTest {
             .andExpect(jsonPath("$.episodeNumber", is(podcastEpisode.getEpisodeNumber())))
             .andExpect(jsonPath("$.episodeDescription", is(podcastEpisode.getEpisodeDescription())))
             .andExpect(jsonPath("$.podcastAudioURL").exists())
+            .andExpect(jsonPath("$.podcastImageURL").exists())
             .andExpect(jsonPath("$.showNotes", is(podcastEpisode.getShowNotes())));
     }
 
@@ -107,6 +109,7 @@ public class PodcastControllerTest {
 
         MvcResult mvcResult = mockMvc.perform(fileUpload("/v1/podcast/create")
             .file("file", Util.byteArrayFromResources("mpthreetest.mp3"))
+            .file("image", Util.byteArrayFromResources("dogtest.jpg"))
             .param("episode", Reference.objectMapper.writeValueAsString(podcastEpisode))
             .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
         ).andReturn();
@@ -119,6 +122,7 @@ public class PodcastControllerTest {
 
         mockMvc.perform(fileUpload("/v1/podcast/edit")
             .file("file", Util.byteArrayFromResources("mpthreetest.mp3"))
+            .file("image", Util.byteArrayFromResources("dogtest.jpg"))
             .param("episode", Reference.objectMapper.writeValueAsString(returnEpisode))
             .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
         )
@@ -126,6 +130,7 @@ public class PodcastControllerTest {
             .andExpect(jsonPath("$.episodeNumber", is(returnEpisode.getEpisodeNumber())))
             .andExpect(jsonPath("$.episodeDescription", is(returnEpisode.getEpisodeDescription())))
             .andExpect(jsonPath("$.podcastAudioURL").exists())
+            .andExpect(jsonPath("$.podcastImageURL").exists())
             .andExpect(jsonPath("$.showNotes", is(returnEpisode.getShowNotes())));
 
     }

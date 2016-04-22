@@ -33,16 +33,20 @@ public class PodcastController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @PreAuthorization(minRole = User.Role.BLOGGER)
-    public ResponseEntity createEpisode(@JSONParam("episode") PodcastEpisode podcastEpisode, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
-        podcastEpisodeService.saveEpisode(podcastEpisode, file);
+    public ResponseEntity createEpisode(@JSONParam("episode") PodcastEpisode podcastEpisode,
+                                        @RequestParam(value = "file", required = false) MultipartFile podcastAudio,
+                                        @RequestParam(value = "image", required = false) MultipartFile podcastImage) throws Exception {
+        podcastEpisodeService.saveEpisode(podcastEpisode, podcastAudio, podcastImage);
 
         return new ResponseEntity(podcastEpisode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @PreAuthorization(minRole = User.Role.BLOGGER)
-    public ResponseEntity editEpisode(@JSONParam("episode") PodcastEpisode podcastEpisode, @RequestParam(value = "file", required = false) MultipartFile multipartFile) throws Exception {
-        podcastEpisodeService.editEpisode(podcastEpisode, multipartFile);
+    public ResponseEntity editEpisode(@JSONParam("episode") PodcastEpisode podcastEpisode,
+                                      @RequestParam(value = "file", required = false) MultipartFile podcastAudio,
+                                      @RequestParam(value = "image", required = false) MultipartFile podcastImage) throws Exception {
+        podcastEpisodeService.editEpisode(podcastEpisode, podcastAudio, podcastImage);
 
         return new ResponseEntity(podcastEpisode, HttpStatus.OK);
     }

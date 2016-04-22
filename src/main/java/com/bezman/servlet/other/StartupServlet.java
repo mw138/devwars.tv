@@ -42,7 +42,7 @@ public class StartupServlet {
             }
         }
 
-        AngularServiceBuilder.buildServicesFromPackage(Reference.getEnvironmentProperty("service_package"), Reference.getEnvironmentProperty("service_output"), Reference.rootURL, Reference.getEnvironmentProperty("service_app_name"));
+//        AngularServiceBuilder.buildServicesFromPackage(Reference.getEnvironmentProperty("service_package"), Reference.getEnvironmentProperty("service_output"), Reference.rootURL, Reference.getEnvironmentProperty("service_app_name"));
     }
 
     @PreDestroy

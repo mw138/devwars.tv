@@ -25,7 +25,7 @@ public class PodcastEpisode extends BaseModel {
 
     @Getter
     @Setter
-    private String episodeName, podcastAudioURL;
+    private String episodeName, podcastAudioURL, podcastImageURL;
 
     @Type(type = "text")
     @Getter
