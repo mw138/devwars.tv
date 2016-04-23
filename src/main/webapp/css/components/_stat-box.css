@@ -7,6 +7,7 @@ Contents:
 		01.4 Accolades / Friends
 		01.5 Scores
 		01.6 Social
+		01.7 Activity log
 
 Variables
 $file__element--property_modifier
@@ -41,6 +42,28 @@ $file__element--property_modifier
 		display: block;
 		margin: 0 auto 15px;
 		max-width: 100px;
+	}
+}
+
+@include breakpoint(sm) {
+
+	.stat-box {
+		font-size: 120px;
+
+		&__inner {
+			min-height: 250px;
+		}
+	}
+}
+
+@include breakpoint(md) {
+
+	.stat-box {
+		font-size: 130px;
+
+		&__inner {
+			min-height: 269px;
+		}
 	}
 }
 
@@ -89,16 +112,18 @@ $file__element--property_modifier
 .stat-box--accolades {
 
 	.stat-box__inner {
-		
-		&:after {
-			content: '';
-			display: inline-block;
-			clear: both;
-		}
+		@extend %clearfix;
 	}
 }
 
 .stat-box {
+
+	&--friends {
+
+		.stat-box__image {
+			border-radius: 100%;
+		}
+	}
 
 	&__item {
 		float: left;
@@ -152,6 +177,21 @@ $file__element--property_modifier
 			}
 		}
 	}
+
+	.stat-box--friends {
+
+		.stat-box__item:hover {
+
+			.stat-box__image {
+				transform: scale(1.1);
+			}
+		}
+
+		.stat-box__image {
+			transform: none;
+			transition: transform 0.3s;
+		}
+	}
 }
 
 /* ==========================================================================
@@ -182,6 +222,10 @@ $file__element--property_modifier
 			margin: 0 0 15px;
 			width: 33.33%;
 
+			&:nth-child(n+8) {
+				margin: 0;
+			}
+
 			a {
 				display: block;
 				margin: 0 auto;
@@ -205,6 +249,66 @@ $file__element--property_modifier
 			li {
 				margin: 15px 0;
 				width: 20%;
+
+				&:nth-child(n+6) {
+					margin: 0;
+				}
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+	01.7 Activity Log
+========================================================================== */
+
+.stat-box {
+
+	&--activity-log {
+		display: none;
+	}
+}
+
+@include breakpoint(sm) {
+
+	.stat-box {
+
+		&--activity-log {
+			display: block;
+		}
+
+		&__entry {
+			line-height: 40px;
+			font-size: (14em / 100);
+
+			> span {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			&--date {
+				width: 12%;
+			}
+
+			&--desc {
+				width: 58%;
+				@extend %truncate;
+			}
+
+			&--xp,
+			&--devbits {
+				text-align: right;
+			}
+
+			&--xp {
+				text-transform: uppercase;
+				width: 12%;
+				color: $green--color;
+			}
+
+			&--devbits {
+				width: 18%;
+				color: $devbit--color;
 			}
 		}
 	}

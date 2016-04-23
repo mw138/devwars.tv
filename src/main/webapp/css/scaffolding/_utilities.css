@@ -9,6 +9,15 @@ Contents:
 	01. Placeholders
 ========================================================================== */
 
+%clearfix {
+
+	&:after {
+		content: '';
+		display: inline-block;
+		clear: both;
+	}
+}
+
 %truncate {
 	overflow: hidden;
 	text-overflow: ellipsis;
