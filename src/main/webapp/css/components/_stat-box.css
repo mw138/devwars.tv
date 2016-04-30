@@ -19,6 +19,7 @@ $file__element--property_modifier
 ========================================================================== */
 
 .stat-box {
+	display: block;
 	padding: 0 0 20px;
 	font-size: 100px;
 
@@ -126,6 +127,8 @@ $file__element--property_modifier
 	}
 
 	&__item {
+		position: relative;
+		cursor: pointer;
 		float: left;
 		width: 50%;
 
@@ -144,6 +147,13 @@ $file__element--property_modifier
 
 			&:nth-of-type(n+3) {
 				display: block;
+			}
+
+			&:hover {
+
+				.tooltip {
+					opacity: 1;
+				}
 			}
 		}
 

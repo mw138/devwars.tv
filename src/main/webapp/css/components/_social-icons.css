@@ -78,6 +78,7 @@ $social--sets:  (
 			width: 26px;
 			border-radius: 5px;
 			color: #fff;
+			transition: all .25s;
 		}
 
 		.icon {
