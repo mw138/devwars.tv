@@ -244,7 +244,7 @@ $header__nav-item--font-size	 					: 14px;
 		min-height: 100%;
 		background: $brand-tertiary--background;
 		border-left: 6px solid lighten($brand-tertiary--background, 10%);
-		transition: position .6s;
+		transition: right .6s;
 	}
 
 	ul {

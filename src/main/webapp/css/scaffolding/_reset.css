@@ -17,7 +17,7 @@ body {
 	background: $body--background;
 	font-size: $base--font-size;
 	-webkit-font-smoothing: antialiased;
-	transition: position .6s;
+	transition: right .6s;
 
 	&:before {
 		content: '';
