@@ -113,13 +113,12 @@ $file__element--property_modifier
     .recap__js { color: $js--color; }
   }
   
-  &__btn {
-    margin-top: 40px;
-  }
+  &__btn { margin-top: 40px; }
 }
 
 .home-blog {
   
+  &__btn { margin-top: 40px; }
 }
 
 

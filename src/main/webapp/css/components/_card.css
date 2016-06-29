@@ -1,0 +1,71 @@
+/* Name:            Card
+
+Contents:
+        01. Card
+		01.2 Rank
+		01.3 Team
+		01.4 Accolades / Friends
+		01.5 Scores
+		01.6 Social
+		01.7 Activity log
+
+Variables
+$file__element--property_modifier
+========================================================================== */
+
+
+/* ==========================================================================
+	01. Card
+========================================================================== */
+
+.card {
+	display: block;
+	padding: 0 0 20px;
+	font-size: 100px;
+
+	a {
+		text-decoration: none;
+	}
+
+	&__inner {
+		min-height: 234px;
+		padding: (15em / 100);
+		border-top: 3px solid $brand-secondary--color;
+		background: $brand-tertiary--background;
+	}
+
+	&__title {
+		padding: 0 0 15px;
+		font-size: (18em / 100);
+	}
+
+	&__image {
+		display: block;
+		margin: 0 auto 15px;
+		max-width: 100px;
+	}
+}
+
+@include breakpoint(sm) {
+
+	.card {
+		font-size: 120px;
+
+		&__inner {
+			min-height: 250px;
+		}
+	}
+}
+
+@include breakpoint(md) {
+
+	.card {
+		font-size: 130px;
+
+		&__inner {
+			min-height: 269px;
+		}
+	}
+}
+
+
