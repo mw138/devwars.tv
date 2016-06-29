@@ -19,8 +19,8 @@ $file__element--property_modifier
 ========================================================================== */
 
 .card {
+    @extend %material;
 	display: block;
-	padding: 0 0 20px;
 	font-size: 100px;
 
 	a {
