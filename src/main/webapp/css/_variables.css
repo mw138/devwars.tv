@@ -26,6 +26,10 @@ $brand-primary--background							: #232323;
 $brand-secondary--background 						: #303030;
 $brand-tertiary--background 						: #424242;
 
+$brand-text-primary--color                          : #FFFFFF;
+$brand-text-muted--color                            : transparentize(#FFFFFF, 0.3);
+
+
 $devbit--color 										: #f8bf3f;
 
 /* ==========================================================================

@@ -47,14 +47,14 @@ $file__element--property_modifier
 
 
 .home-card {
+  height: 300px;
   font-size: 16px;
   font-family: $alt--font-face;
   margin-top: 20px;
-  
+  text-align: center;
 }
 
 .home-recap {
-  text-align: center;
   
   &__team, &__score {
     vertical-align: middle;
@@ -117,6 +117,53 @@ $file__element--property_modifier
 }
 
 .home-blog {
+  
+  &__blogs {
+    list-style: none;
+  }
+  
+  &__blog {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    &:last-of-type { margin-bottom: 0; }
+  }
+  
+  &__thumb {
+    width: 135px;
+    height: 76px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: auto;
+      vertical-align: top;
+    }
+  }
+  
+  &__text {
+    width: calc(100% - 135px - 20px);
+    text-align: left;
+  }
+  
+  &__title {
+    font-size: 18px;
+  }
+  
+  &__meta, &__desc {
+    display: block;
+    font-family: $base--font-face;
+    font-size: 14px;
+  }
+  
+  &__meta {
+    color: $brand-text-muted--color;
+    margin-bottom: 5px;
+  }
+  
+  &__desc {
+    font-size: 15px;
+  }
   
   &__btn { margin-top: 40px; }
 }
