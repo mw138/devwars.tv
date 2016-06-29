@@ -9,10 +9,11 @@ $file__element--property_modifier
 ========================================================================== */
 
 
-$button--padding 									: 0 10px;
+$button--padding 									: 0 25px;
 $button--text-transform 							: uppercase;
-$button--line-height 								: 40px;
+$button--line-height 								: 45px;
 $button--font-size 									: 14px;
+$button--font-weight 								: 600;
 
 $button--color 										: #fff;
 $button--background 								: $brand-primary--color;
@@ -64,6 +65,7 @@ $button--variants: (
 	color: $button--color;
 	background-color: $button--background;
 	font-size: $button--font-size;
+    font-weight: $button--font-weight;
 	transition: all .25s;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	
