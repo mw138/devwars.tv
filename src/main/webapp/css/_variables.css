@@ -20,9 +20,9 @@ $file__element--property_modifier 					: ;
 
 $brand-primary--color 								: #03a9f4;
 $brand-secondary--color 							: #e91e63;
-$brand-tertiary--color 								: ;
+$brand-tertiary--color 								: mix($brand-primary--color, $brand-secondary--color, 50%);
 
-$brand-primary--background							: #232323;
+$brand-primary--background							: #212121;
 $brand-secondary--background 						: #303030;
 $brand-tertiary--background 						: #424242;
 
@@ -70,7 +70,7 @@ $negative--color 									: $red--color;
 $positive--color 									: $green--color;
 
 $base-font--color 									: #fff;
-$body--background 									: $brand-primary--background;
+$body--background 									: $brand-secondary--background;
 
 $html--color                                        : #ff7200;
 $css--color                                         : #0ebeff;

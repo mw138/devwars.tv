@@ -21,7 +21,8 @@ $home__card--margin                                    : 80px;
 .hero {
   width: 100%;
   height: $home__hero--height;
-  background-color: lighten($black--color, 5%);
+  background-image: url('/assets/image/hero-bg.jpg');
+  background-size: cover;
   text-align: center;
   position: relative;
 
