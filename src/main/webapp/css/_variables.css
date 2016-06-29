@@ -68,6 +68,10 @@ $positive--color 									: $green--color;
 $base-font--color 									: #fff;
 $body--background 									: $brand-primary--background;
 
+$html--color                                        : #ff7200;
+$css--color                                         : #0ebeff;
+$js--color                                          : #e5ff0e;
+
 /* ==========================================================================
 	02. Responsive
 ========================================================================== */

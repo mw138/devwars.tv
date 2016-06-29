@@ -108,9 +108,9 @@ $file__element--property_modifier
     list-style: none;
     text-align: center;
     
-    .recap__html { color: $tutorials__html--color; }
-    .recap__css { color: $tutorials__css--color; }
-    .recap__js { color: $tutorials__javascript--color; }
+    .recap__html { color: $html--color; }
+    .recap__css { color: $css--color; }
+    .recap__js { color: $js--color; }
   }
   
   &__btn {
