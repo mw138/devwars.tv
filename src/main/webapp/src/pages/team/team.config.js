@@ -1,7 +1,7 @@
 export function routing($urlRouterProvider, $stateProvider) {
   $stateProvider
     .state('team', {
-      url: 'C:/Program Files (x86)/Git/team',
+      url: '/team',
       template: '<team></team>'
     })
 }
