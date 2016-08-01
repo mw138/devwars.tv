@@ -1,5 +1,6 @@
 package com.bezman.service;
 
+import com.bezman.hibernate.db.DB;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import org.hibernate.Session;
@@ -43,22 +44,18 @@ public class TournamentService {
 
 
     public void signupTeamForTournament(UserTeam userTeam, Tournament tournament, TeamGameSignupUser[] users) {
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
+        DB.withTransaction(session -> {
+            TeamGameSignup teamGameSignup = new TeamGameSignup(tournament, userTeam);
 
-        TeamGameSignup teamGameSignup = new TeamGameSignup(tournament, userTeam);
+            for (TeamGameSignupUser user : users) {
+                teamGameSignup.getTeamGameSignupUsers().add(user);
+                session.save(user);
+            }
 
-        for (TeamGameSignupUser user : users) {
-            teamGameSignup.getTeamGameSignupUsers().add(user);
-            session.save(user);
-        }
+            session.save(teamGameSignup);
 
-        session.save(teamGameSignup);
-
-        tournament.getTeamSignups().add(teamGameSignup);
-
-        session.getTransaction().commit();
-        session.close();
+            tournament.getTeamSignups().add(teamGameSignup);
+        });
     }
 
 

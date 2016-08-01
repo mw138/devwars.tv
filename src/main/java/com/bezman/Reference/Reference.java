@@ -36,6 +36,8 @@ public class Reference {
 
     public static ObjectMapper objectMapper;
 
+    public static boolean testing = false;
+
     public static Cookie getCookieFromArray(Cookie[] cookies, String key) {
         if (cookies != null && key != null) {
             for (Cookie cookie : cookies) {

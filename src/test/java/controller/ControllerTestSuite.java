@@ -1,5 +1,6 @@
 package controller;
 
+import com.bezman.Reference.Reference;
 import com.bezman.controller.LotteryController;
 import com.bezman.service.AuthService;
 import com.bezman.service.UserService;
@@ -18,6 +19,7 @@ public class ControllerTestSuite {
 
     @BeforeClass
     public static void before() {
+        Reference.testing = true;
         System.setProperty("testing", "true");
     }
 

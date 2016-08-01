@@ -1,6 +1,7 @@
 package com.bezman.service;
 
 import com.bezman.Reference.util.Util;
+import com.bezman.hibernate.db.DB;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.PodcastEpisode;
 import com.bezman.storage.FileStorage;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -20,14 +22,11 @@ public class PodcastEpisodeService {
     FileStorage fileStorage;
 
     public List<PodcastEpisode> allPodcasts() {
-        List returnList = null;
+        List returnList = new LinkedList();
 
-        Session session = DatabaseManager.getSession();
-
-        returnList = session.createCriteria(PodcastEpisode.class)
-            .list();
-
-        session.close();
+        DB.session(session -> {
+            returnList.addAll(session.createCriteria(PodcastEpisode.class).list());
+        });
 
         return returnList;
     }
@@ -41,7 +40,7 @@ public class PodcastEpisodeService {
             return fileStorage.shareableUrlForPath(audioPath);
         }
 
-       return null;
+        return null;
     }
 
     public String uploadImageForEpisode(PodcastEpisode episode, MultipartFile podcastImage) throws IOException, DbxException {
@@ -61,35 +60,23 @@ public class PodcastEpisodeService {
         podcastEpisode.setPodcastAudioURL(this.uploadPodcastForEpisode(podcastEpisode, podcastAudio));
         podcastEpisode.setPodcastImageURL(this.uploadImageForEpisode(podcastEpisode, podcastImage));
 
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
-
-        session.save(podcastEpisode);
-
-        session.getTransaction().commit();
-        session.close();
+        DB.withTransaction(session -> {
+            session.save(podcastEpisode);
+        });
     }
 
     public void editEpisode(PodcastEpisode podcastEpisode, MultipartFile podcastAudio, MultipartFile podcastImage) throws Exception {
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
+        DB.withTransaction(session -> {
+            PodcastEpisode mergedPodcastEpisode = (PodcastEpisode) session.merge(podcastEpisode);
 
-        podcastEpisode = (PodcastEpisode) session.merge(podcastEpisode);
-        podcastEpisode.setPodcastAudioURL(this.uploadPodcastForEpisode(podcastEpisode, podcastAudio));
-        podcastEpisode.setPodcastImageURL(this.uploadImageForEpisode(podcastEpisode, podcastImage));
+            podcastEpisode.setPodcastAudioURL(this.uploadPodcastForEpisode(mergedPodcastEpisode, podcastAudio));
+            podcastEpisode.setPodcastImageURL(this.uploadImageForEpisode(mergedPodcastEpisode, podcastImage));
+        });
 
-        session.getTransaction().commit();
-        session.close();
     }
 
     public void deleteEpisode(PodcastEpisode podcastEpisode) {
-        Session session = DatabaseManager.getSession();
-        session.beginTransaction();
-
-        session.delete(podcastEpisode);
-
-        session.getTransaction().commit();
-        session.close();
+        DB.withTransaction(session -> session.delete(podcastEpisode));
     }
 
 }

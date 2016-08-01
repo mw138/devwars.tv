@@ -1,5 +1,6 @@
 package com.bezman.storage;
 
+import com.bezman.Reference.Reference;
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.Files;
@@ -24,6 +25,8 @@ public class FileStorage {
     public final String PODCAST_AUDIO_STORAGE_PATH = "/podcasts";
 
     public Files.FileMetadata uploadFile(String path, InputStream inputStream) throws IOException, DbxException {
+        if(Reference.testing) return null;
+
         try {
             dropbox.dbxClientV2.files.delete(path);
         } catch (DbxException e) {
@@ -50,6 +53,8 @@ public class FileStorage {
     }
 
     public String shareableUrlForPath(String path) {
+        if(Reference.testing) return "TESTURL";
+
         try {
             String url = dropbox.dbxClientV2.sharing.createSharedLink(path).url;
             url = url.split("\\?")[0];
