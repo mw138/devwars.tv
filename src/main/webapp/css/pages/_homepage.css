@@ -19,168 +19,173 @@ $home__card--margin                                    : 80px;
 ========================================================================== */
 
 .hero {
-  width: 100%;
-  height: $home__hero--height;
-  background-image: url('/assets/image/hero-bg.jpg');
-  background-size: cover;
-  text-align: center;
-  position: relative;
-
-  &__inner {
-    @extend %absolute-vertical;
     width: 100%;
-    z-index: 1;
-    margin-top: -($home__card--margin / 2);
-  }
-  
-  &__title, &__subtitle {
-    font-weight: 400;
-    text-transform: none;
-  }
-  
-  &__title {
-    font-size: 42px;
-    margin-bottom: 10px;
-  }
-  
-  &__subtitle {
-    font-size: 24px;
-    margin-bottom: 40px;
-    color: $brand-text-muted--color;
-  }
-  
-  &__btn {
-    margin: 0 10px;
-  }
+    height: $home__hero--height;
+    background-image: url('/assets/image/hero-bg.jpg');
+    background-size: cover;
+    text-align: center;
+    position: relative;
+
+    &__inner {
+        @extend %absolute-vertical;
+        width: 100%;
+        z-index: 1;
+        margin-top: -($home__card--margin / 2);
+    }
+
+    &__title,
+    &__subtitle {
+        font-weight: 400;
+        text-transform: none;
+    }
+
+    &__title {
+        font-size: 42px;
+        margin-bottom: 10px;
+    }
+
+    &__subtitle {
+        font-size: 24px;
+        margin-bottom: 40px;
+        color: $brand-text-muted--color;
+    }
+
+    &__btn {
+        margin: 0 10px;
+    }
 }
 
 .card--home {
-  position: relative;
-  z-index: 1;
-  margin-top: -$home__card--margin;
+    position: relative;
+    z-index: 1;
+    margin-top: -$home__card--margin;
 }
 
 .home-card {
-  height: 300px;
-  font-size: 16px;
-  font-family: $alt--font-face;
-  margin-top: 20px;
-  text-align: center;
-  position: relative;
+    height: 300px;
+    font-size: 16px;
+    font-family: $alt--font-face;
+    margin-top: 20px;
+    text-align: center;
+    position: relative;
 }
 
 .home-recap {
-  
-  &__team, &__score {
-    vertical-align: middle;
-  }
-  
-  &__team {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-  }
-  
-  &__score { 
-    display: inline-block;
-    text-transform: uppercase;
-    margin: 0 40px;
-  }
-  
-  &__gamemode, &__points { display: block; }
-  
-  &__gamemode {}
-  
-  &__points {
-    font-size: 48px;
-    letter-spacing: 5px;
-  }
-  
-  &__matchup {
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
-    margin: 10px auto 0;
-    
-    li {
-      margin-top: 20px;  
+
+    &__team, &__score {
+        vertical-align: middle;
     }
-  }
-  
-  &__players {
-    list-style: none;
-    
-    &--blue {
-      text-align: left;
+
+    &__team {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
     }
-  
-    &--red {
-      text-align: right;
+
+    &__score { 
+        display: inline-block;
+        text-transform: uppercase;
+        margin: 0 40px;
     }
-  }
-  
-  &__pos {
-    list-style: none;
-    text-align: center;
-    
-    .recap__html { color: $html--color; }
-    .recap__css { color: $css--color; }
-    .recap__js { color: $js--color; }
-  }
-  
-  &__btn { margin-top: 40px; }
+
+    &__gamemode,
+    &__points {
+        display: block;
+    }
+
+    &__gamemode {}
+
+    &__points {
+        font-size: 48px;
+        letter-spacing: 5px;
+    }
+
+    &__matchup {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        margin: 10px auto 0;
+
+        li {
+          margin-top: 20px;  
+        }
+    }
+
+    &__players {
+        list-style: none;
+
+        &--blue {
+          text-align: left;
+        }
+
+        &--red {
+          text-align: right;
+        }
+    }
+
+    &__pos {
+        list-style: none;
+        text-align: center;
+
+        .recap__html { color: $html--color; }
+        .recap__css { color: $css--color; }
+        .recap__js { color: $js--color; }
+    }
+
+    &__btn { margin-top: 40px; }
 }
 
 .home-blog {
   
-  &__blogs {
-    list-style: none;
-  }
-  
-  &__blog {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    &:last-of-type { margin-bottom: 0; }
-  }
-  
-  &__thumb {
-    width: 135px;
-    height: 76px;
-    overflow: hidden;
-    
-    img {
-      width: 100%;
-      height: auto;
-      vertical-align: top;
+    &__blogs {
+        list-style: none;
     }
-  }
-  
-  &__text {
-    width: calc(100% - 135px - 20px);
-    text-align: left;
-  }
-  
-  &__title {
-    font-size: 18px;
-  }
-  
-  &__meta, &__desc {
-    display: block;
-    font-family: $base--font-face;
-    font-size: 14px;
-  }
-  
-  &__meta {
-    color: $brand-text-muted--color;
-    margin-bottom: 5px;
-  }
-  
-  &__desc {
-    font-size: 15px;
-  }
-  
-  &__btn { margin-top: 40px; }
+
+    &__blog {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        &:last-of-type { margin-bottom: 0; }
+    }
+
+    &__thumb {
+        width: 135px;
+        height: 76px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: auto;
+            vertical-align: top;
+        }
+    }
+
+    &__text {
+        width: calc(100% - 135px - 20px);
+        text-align: left;
+    }
+
+    &__title {
+        font-size: 18px;
+    }
+
+    &__meta,
+    &__desc {
+        display: block;
+        font-family: $base--font-face;
+        font-size: 14px;
+    }
+
+    &__meta {
+        color: $brand-text-muted--color;
+        margin-bottom: 5px;
+    }
+
+    &__desc {
+        font-size: 15px;
+    }
+
+    &__btn { margin-top: 40px; }
 }
 
 
