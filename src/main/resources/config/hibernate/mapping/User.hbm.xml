@@ -32,7 +32,7 @@
         <property name="resetKey" type="string"/>
 
         <one-to-one name="session" class="com.bezman.model.UserSession" lazy="false"/>
-        <one-to-one name="ranking" class="com.bezman.model.Ranking" lazy="false" cascade="save-update"/>
+        <one-to-one name="ranking" class="com.bezman.model.Ranking" lazy="false" cascade="all"/>
         <one-to-one name="warrior" class="Warrior" lazy="false" cascade="save-update"/>
         <one-to-one name="emailConfirmation" class="EmailConfirmation"/>
         <one-to-one name="inventory" class="com.bezman.model.UserInventory" lazy="false" cascade="save-update"/>

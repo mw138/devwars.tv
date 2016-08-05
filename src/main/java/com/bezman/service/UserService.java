@@ -5,6 +5,7 @@ import com.bezman.Reference.util.DatabaseUtil;
 import com.bezman.Reference.util.Util;
 import com.bezman.exception.NonDevWarsUserException;
 import com.bezman.exception.UserNotFoundException;
+import com.bezman.hibernate.db.DB;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.*;
 import com.bezman.storage.FileStorage;
@@ -45,6 +46,12 @@ public class UserService {
         session.close();
 
         return user;
+    }
+
+    public void editUser(User user) {
+        DB.withTransaction(session -> {
+            User mergedUser = (User) session.merge(user);
+        });
     }
 
     public User userForUsername(String username) {

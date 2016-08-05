@@ -1,9 +1,11 @@
 package controller;
 
+import com.bezman.jackson.DevWarsObjectMapper;
 import com.bezman.model.User;
 import com.bezman.service.AuthService;
 import com.bezman.service.Security;
 import com.bezman.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +39,9 @@ public class UserControllerTest {
 
     @Autowired
     Security security;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
 
@@ -93,6 +98,22 @@ public class UserControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.ranking.points").value(50D))
             .andExpect(jsonPath("$.ranking.xp").value(100D));
+
+    }
+
+    @Test
+    public void test_admin_can_edit_user() throws Exception {
+        user.setUsername("New Username");
+        user.getRanking().setPoints(200D);
+        user.getRanking().setXp(300D);
+
+        mockMvc.perform(post("/v1/user/" + user.getId() + "/edit")
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+            .param("user", objectMapper.writeValueAsString(user)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username").value("New Username"))
+            .andExpect(jsonPath("$.ranking.points").value(200D))
+            .andExpect(jsonPath("$.ranking.xp").value(300D));
 
     }
 }

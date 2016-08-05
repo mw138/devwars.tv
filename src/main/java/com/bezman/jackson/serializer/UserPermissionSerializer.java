@@ -36,7 +36,10 @@ public class UserPermissionSerializer extends JsonSerializer<Object> implements 
 
         jsonGenerator.writeStartObject();
 
-        boolean hasSecretKey = (boolean) request.getAttribute("hasSecretKey");
+        Object hasSecretKeyAttribute = request.getAttribute("hasSecretKey");
+
+        boolean hasSecretKey = hasSecretKeyAttribute != null && (boolean) request.getAttribute("hasSecretKey");
+
         User currentUser = (User) request.getAttribute("user");
 
         fields.forEach(field -> {

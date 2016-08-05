@@ -303,6 +303,22 @@ public class UserController extends BaseController {
         return responseEntity;
     }
 
+    /**
+     * Edit a user in the system
+     *
+     * @param id
+     * @return
+     */
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/{id}/edit")
+    public ResponseEntity editUser(@PathVariable("id") int id, @JSONParam("user") User user) {
+        userService.editUser(user);
+
+        User editedUser = userService.getUser(user.getId());
+
+        return new ResponseEntity(editedUser, HttpStatus.OK);
+    }
+
     @PreAuthorization(minRole = User.Role.USER)
     @UnitOfWork
     @RequestMapping("/search")
