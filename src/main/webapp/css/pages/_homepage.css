@@ -59,15 +59,15 @@ $home__card--margin                                    : 80px;
     position: relative;
     z-index: 1;
     margin-top: -$home__card--margin;
-}
-
-.card__contents {
-    height: 300px;
-    font-size: 16px;
-    font-family: $alt--font-face;
-    margin-top: 20px;
-    text-align: center;
-    position: relative;
+    
+    &__contents {
+        height: 300px;
+        font-size: 16px;
+        font-family: $alt--font-face;
+        margin-top: 20px;
+        text-align: center;
+        position: relative;
+    }
 }
 
 .home-recap {
