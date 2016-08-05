@@ -61,7 +61,7 @@ $home__card--margin                                    : 80px;
     margin-top: -$home__card--margin;
 }
 
-.home-card {
+.card__contents {
     height: 300px;
     font-size: 16px;
     font-family: $alt--font-face;
