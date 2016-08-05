@@ -2,9 +2,7 @@ package com.bezman.model;
 
 import com.bezman.Reference.Reference;
 import com.bezman.annotation.HibernateDefault;
-import com.sun.syndication.feed.rss.Enclosure;
 import com.sun.syndication.feed.synd.*;
-import jdk.internal.instrumentation.TypeMapping;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
