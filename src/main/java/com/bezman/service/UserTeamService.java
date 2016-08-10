@@ -1,5 +1,6 @@
 package com.bezman.service;
 
+import com.bezman.hibernate.db.DB;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.Game;
 import com.bezman.model.User;
@@ -33,6 +34,22 @@ public class UserTeamService {
         userTeam = (UserTeam) session.get(UserTeam.class, id);
 
         session.close();
+
+        return userTeam;
+    }
+
+    public UserTeam createTeam(UserTeam userTeam) {
+        DB.withTransaction(session -> {
+            session.save(userTeam);
+        });
+
+        return userTeam;
+    }
+
+    public UserTeam editTeam(UserTeam userTeam) {
+        DB.withTransaction(session -> {
+            session.merge(userTeam);
+        });
 
         return userTeam;
     }

@@ -4,9 +4,7 @@ import com.bezman.annotation.HibernateDefault;
 import com.bezman.hibernate.validation.annotation.AlphaNumeric;
 import com.bezman.init.DatabaseManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -19,6 +17,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class UserTeam extends BaseModel {
 
     private int id;

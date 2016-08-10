@@ -1,9 +1,6 @@
 package com.bezman.controller;
 
-import com.bezman.annotation.AuthedUser;
-import com.bezman.annotation.PreAuthorization;
-import com.bezman.annotation.Transactional;
-import com.bezman.annotation.UnitOfWork;
+import com.bezman.annotation.*;
 import com.bezman.model.*;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
@@ -79,6 +76,29 @@ public class UserTeamController {
         userTeamService.changeTeamPicture(userTeam, multipartFile.getInputStream());
 
         return new ResponseEntity("Successfully changed picture", HttpStatus.OK);
+    }
+
+    /**
+     * Change a teams avatar
+     *
+     * @param id ID of team to edit
+     * @return Response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    public ResponseEntity editTeam(@AuthedUser User user,
+                                   @JSONParam("userTeam") UserTeam userTeam,
+                                   @PathVariable("id") int id) throws IOException, DbxException {
+
+        UserTeam oldUserTeam = (UserTeam) UserTeam.byID(UserTeam.class, id);
+
+        if (oldUserTeam == null)
+            return new ResponseEntity("Team not found", HttpStatus.NOT_FOUND);
+
+        userTeamService.editTeam(userTeam);
+
+        return new ResponseEntity(userTeam, HttpStatus.OK);
     }
 
     /**
