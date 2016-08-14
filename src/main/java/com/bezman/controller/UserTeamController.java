@@ -238,6 +238,20 @@ public class UserTeamController {
         return new ResponseEntity("Successfully left team", HttpStatus.OK);
     }
 
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping("/{id}/addplayer")
+    public ResponseEntity addPlayerToTeam(@PathModel("id") UserTeam userTeam, @RequestParam("user") int userID) {
+        User user = (User) User.byID(User.class, userID);
+
+        if (user == null) {
+            return new ResponseEntity("User Not Found", HttpStatus.NOT_FOUND);
+        }
+
+        userTeamService.forcePlayerToTeam(user, userTeam);
+
+        return new ResponseEntity("Successfully added player to team", HttpStatus.OK);
+    }
+
     /**
      * Invites a player to a roster
      *

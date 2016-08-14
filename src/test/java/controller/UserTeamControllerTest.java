@@ -50,11 +50,13 @@ public class UserTeamControllerTest {
 
     private UserTeam userTeam;
 
+    private User user;
+
     @Before
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
-        User user = userService.saveUser(User.builder()
+        user = userService.saveUser(User.builder()
             .username("The First User")
             .password(security.hash("somepass"))
             .role(User.Role.USER)
@@ -101,5 +103,26 @@ public class UserTeamControllerTest {
             .andExpect(jsonPath("$.name").value("New Team Name"))
             .andExpect(jsonPath("$.tag").value("new"))
             .andExpect(jsonPath("$.xp").value(30));
+    }
+
+    @Test
+    public void test_admin_can_add_player_to_team() throws Exception {
+        User newUser = userService.saveUser(User.builder()
+            .username("Another New User")
+            .password(security.hash("somepass"))
+            .role(User.Role.USER)
+            .build());
+
+        mockMvc.perform(post("/v1/teams/" + userTeam.getId() + "/addplayer")
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+            .param("user", String.valueOf(newUser.getId()))
+        )
+            .andExpect(status().isOk());
+
+        mockMvc.perform(post("/v1/teams/" + userTeam.getId())
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.members[*].id").value(newUser.getId()));
     }
 }
