@@ -7,7 +7,6 @@ import com.bezman.service.Security;
 import com.bezman.service.UserService;
 import com.bezman.service.UserTeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +15,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -124,5 +125,38 @@ public class UserTeamControllerTest {
         )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.members[*].id").value(newUser.getId()));
+    }
+
+    @Test
+    public void test_admin_can_remove_player_from_team() throws Exception {
+        User newUser = userService.saveUser(User.builder()
+            .username("Another New User")
+            .password(security.hash("somepass"))
+            .role(User.Role.USER)
+            .build());
+
+        mockMvc.perform(post("/v1/teams/" + userTeam.getId() + "/addplayer")
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+            .param("user", String.valueOf(newUser.getId()))
+        )
+            .andExpect(status().isOk());
+
+        mockMvc.perform(post("/v1/teams/" + userTeam.getId())
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.members[*].id").value(newUser.getId()));
+
+        mockMvc.perform(post("/v1/teams/" + userTeam.getId() + "/removeplayer")
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+            .param("user", String.valueOf(newUser.getId()))
+        )
+            .andExpect(status().isOk());
+
+        mockMvc.perform(post("/v1/teams/" + userTeam.getId())
+            .cookie(authService.loginUser(userService.userForUsername("The Admin User")))
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.members[*].id", not(hasItem(newUser.getId()))));
     }
 }

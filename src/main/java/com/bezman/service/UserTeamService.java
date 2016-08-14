@@ -273,6 +273,14 @@ public class UserTeamService {
         });
     }
 
+    public void forcePlayerOffTeam(User user, UserTeam userTeam) {
+        DB.withTransaction(session -> {
+            User mergedUser = (User) session.merge(user);
+
+            mergedUser.setTeam(null);
+        });
+    }
+
     public boolean doesUserOwnUserTeam(User user, UserTeam userTeam) {
         return userTeam.getOwner().getId() == user.getId();
     }

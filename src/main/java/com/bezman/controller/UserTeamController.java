@@ -239,7 +239,7 @@ public class UserTeamController {
     }
 
     @PreAuthorization(minRole = User.Role.ADMIN)
-    @RequestMapping("/{id}/addplayer")
+    @RequestMapping(value = "/{id}/addplayer", method = RequestMethod.POST)
     public ResponseEntity addPlayerToTeam(@PathModel("id") UserTeam userTeam, @RequestParam("user") int userID) {
         User user = (User) User.byID(User.class, userID);
 
@@ -248,6 +248,20 @@ public class UserTeamController {
         }
 
         userTeamService.forcePlayerToTeam(user, userTeam);
+
+        return new ResponseEntity("Successfully added player to team", HttpStatus.OK);
+    }
+
+    @PreAuthorization(minRole = User.Role.ADMIN)
+    @RequestMapping(value = "/{id}/removeplayer", method = RequestMethod.POST)
+    public ResponseEntity removePlayerFromTeam(@PathModel("id") UserTeam userTeam, @RequestParam("user") int userID) {
+        User user = (User) User.byID(User.class, userID);
+
+        if (user == null) {
+            return new ResponseEntity("User Not Found", HttpStatus.NOT_FOUND);
+        }
+
+        userTeamService.forcePlayerOffTeam(user, userTeam);
 
         return new ResponseEntity("Successfully added player to team", HttpStatus.OK);
     }
