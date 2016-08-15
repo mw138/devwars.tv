@@ -1,9 +1,10 @@
-package controller;
+package suite;
 
 import com.bezman.Reference.Reference;
 import com.bezman.controller.LotteryController;
 import com.bezman.service.AuthService;
 import com.bezman.service.UserService;
+import controller.*;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

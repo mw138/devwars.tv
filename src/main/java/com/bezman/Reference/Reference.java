@@ -1,10 +1,10 @@
 package com.bezman.Reference;
 
 import com.bezman.Reference.util.DatabaseUtil;
+import com.bezman.firebase.Firebase;
 import com.bezman.init.DatabaseManager;
 import com.bezman.model.SecretKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.firebase.client.Firebase;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import org.hibernate.Query;

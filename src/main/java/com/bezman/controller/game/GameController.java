@@ -250,11 +250,7 @@ public class GameController {
         gameService.updateGame(game, newGame);
 
         if (newGame.isActive()) {
-            Unirest.patch("https://devwars-tv.firebaseio.com/frame/game/.json")
-                .queryString("auth", Reference.getEnvironmentProperty("firebaseToken"))
-                .body(Reference.objectMapper.writeValueAsString(newGame))
-                .asString()
-                .getBody();
+            Reference.firebase.patchValueAtPath("game", Reference.objectMapper.writeValueAsString(newGame));
         }
 
         return getGame(game.getId());
