@@ -62,6 +62,10 @@ $grid__container--lg 								: 1200px;
 		display: table;
 		clear: both;
 	}
+    
+    &--lift {
+        margin-top: -($global__ribbon / 1.3);
+    }
 }
 
 /* ==========================================================================
