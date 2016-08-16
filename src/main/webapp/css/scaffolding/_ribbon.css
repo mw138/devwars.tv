@@ -1,0 +1,34 @@
+/* Name:            Card
+
+Contents:
+01. Ribbon
+
+Variables
+$file__element--property_modifier
+========================================================================== */
+$ribbon--height                                     : 300px;
+$ribbon--color 										: #213E56;
+
+
+/* ==========================================================================
+01. Ribbon
+========================================================================== */
+
+.ribbon {
+    width: 100%;
+    height: 30vh;
+    min-height: $ribbon--height;
+    background-color: $ribbon--color;
+}
+
+@include breakpoint(sm) {
+
+
+}
+
+@include breakpoint(md) {
+
+
+}
+
+

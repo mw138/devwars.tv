@@ -17,6 +17,7 @@
 @import "../css/scaffolding/tooltip";
 @import "../css/scaffolding/rank";
 @import "../css/scaffolding/headings";
+@import "../css/scaffolding/ribbon";
 
 // Components
 // ==================================
@@ -42,7 +43,7 @@
 @import "../css/pages/wiki";
 @import "../css/pages/games";
 @import "../css/pages/homepage";
-@import "../css/pages/leaderboard";
+@import "../css/pages/leaderboards";
 @import "../css/pages/profile";
 @import "../css/pages/shop";
 @import "../css/pages/tutorial-listing";
