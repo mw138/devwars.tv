@@ -6,8 +6,31 @@ Contents:
 Variables
 $file__element--property_modifier
 ========================================================================== */
+$form__control--height                                     : null;
+$form__control--line-height                                : null;
+
 
 
 /* ==========================================================================
 	01.
 ========================================================================== */
+
+.form-control {
+    
+}
+
+.select--clear {
+    color: $brand-text-primary--color;
+    background: transparent;
+    border: none;
+    font-family: $alt--font-face;
+    text-transform: uppercase;
+    font-weight: bold;
+    outline: none;
+    
+    option {
+        background-color: $white--color;
+        color: $black--color;
+    }
+}
+
