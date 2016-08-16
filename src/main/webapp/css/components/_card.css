@@ -13,7 +13,6 @@ Variables
 $file__element--property_modifier
 ========================================================================== */
 
-
 /* ==========================================================================
 	01. Card
 ========================================================================== */
@@ -23,6 +22,8 @@ $file__element--property_modifier
 	display: block;
 	font-size: 100px;
     margin-bottom: 20px;
+    border-top: 3px solid $brand-secondary--color;
+    background-color: $brand-tertiary--background;
 
 	a {
 		text-decoration: none;
@@ -31,8 +32,6 @@ $file__element--property_modifier
 	&__inner {
 		min-height: 234px;
 		padding: (15em / 100);
-		border-top: 3px solid $brand-secondary--color;
-		background: $brand-tertiary--background;
 	}
 
 	&__title {
@@ -45,6 +44,18 @@ $file__element--property_modifier
 		margin: 0 auto 15px;
 		max-width: 100px;
 	}
+    
+    &--plain {
+        border-top: none;
+    }
+    
+    &--ribbon {
+        border-top: none;
+        
+        .card__inner {
+            padding: (15em / 100) (30em / 100);
+        }
+    }
 }
 
 @include breakpoint(sm) {
