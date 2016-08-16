@@ -25,6 +25,9 @@ $brand-tertiary--color 								: mix($brand-primary--color, $brand-secondary--co
 $brand-primary--background							: #212121;
 $brand-secondary--background 						: #303030;
 $brand-tertiary--background 						: #424242;
+$brand-quaternary--background                       : #4b4b4b;
+
+$divider--color                                     : #555555;
 
 $brand-text-primary--color                          : #FFFFFF;
 $brand-text-muted--color                            : transparentize(#FFFFFF, 0.3);
@@ -65,6 +68,7 @@ $blue--color 										: #3498db;
 $orange--color										: #e67e22;
 $grey--color 										: #7f8c8d;
 $black--color 										: #000;
+$white--color                                       : #FFF;
 
 $negative--color 									: $red--color;
 $positive--color 									: $green--color;
@@ -81,6 +85,7 @@ $js--color                                          : #e5ff0e;
 ========================================================================== */
 
 $global__gutter                                    : 20px;
+$global__ribbon                                    : 300px;
 
 /* ==========================================================================
     03. Responsive
