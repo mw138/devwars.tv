@@ -20,7 +20,6 @@ $file__element--property_modifier
 .card {
     @extend %material;
 	display: block;
-	font-size: 100px;
     margin-bottom: 20px;
     border-top: 3px solid $brand-secondary--color;
     background-color: $brand-tertiary--background;
@@ -30,13 +29,12 @@ $file__element--property_modifier
 	}
 
 	&__inner {
-		min-height: 234px;
-		padding: (15em / 100);
+		padding: 15px;
 	}
 
 	&__title {
 		padding: 0 0 15px;
-		font-size: (18em / 100);
+		font-size: 18px;
 	}
 
 	&__image {
@@ -53,7 +51,7 @@ $file__element--property_modifier
         border-top: none;
         
         .card__inner {
-            padding: (15em / 100) (30em / 100);
+            padding: 15px 30px;
         }
     }
 }
@@ -61,22 +59,14 @@ $file__element--property_modifier
 @include breakpoint(sm) {
 
 	.card {
-		font-size: 120px;
 
-		&__inner {
-			min-height: 250px;
-		}
 	}
 }
 
 @include breakpoint(md) {
 
 	.card {
-		font-size: 130px;
 
-		&__inner {
-			min-height: 269px;
-		}
 	}
 }
 

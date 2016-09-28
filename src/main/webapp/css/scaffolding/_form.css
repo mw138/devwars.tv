@@ -15,8 +15,30 @@ $form__control--line-height                                : null;
 	01.
 ========================================================================== */
 
+.form-group {
+    margin-bottom: $grid__gutter--width-sm * 2;
+}
+
 .form-control {
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: $brand-text-primary--color;
+    background-color: transparent;
+    background-image: none;
+    background-clip: padding-box;
+    border: none;
+    border-bottom: 1px solid $brand-text-disabled--color;
+    outline: none;
+    transition: all 50ms ease-in-out;
     
+    &:focus {
+        border-color: $brand-primary--color;
+        border-width: 2px;
+        margin-bottom: 0;
+    }
 }
 
 .select--clear {

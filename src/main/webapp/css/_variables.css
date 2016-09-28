@@ -31,6 +31,7 @@ $divider--color                                     : #555555;
 
 $brand-text-primary--color                          : #FFFFFF;
 $brand-text-muted--color                            : transparentize(#FFFFFF, 0.3);
+$brand-text-disabled--color                         : transparentize(#FFFFFF, 0.5);
 
 
 $devbit--color 										: #f8bf3f;
