@@ -7,8 +7,180 @@ Variables
 $file__element--property_modifier
 ========================================================================== */
 
-
+$games-gutter                                          : 20px;
+$games-avatar-size                                     : 50px;
+$games-players-padding                                 : 10px;
+$games-player-padding                                  : 10px;
 
 /* ==========================================================================
 	01.
 ========================================================================== */
+
+.games-page {
+    
+}
+
+.games-sidebar,
+.games-view {
+    min-height: 100vh;
+}
+
+
+.games-sidebar {
+    background-color: $brand-primary--background;
+}
+
+.games-view {
+    background-color: #050505;
+}
+
+
+.games-roster {
+    position: relative;
+    
+    &__positions {
+        @extend %absolute-horizontal;
+        list-style: none;
+        text-align: center;
+        bottom: $games-players-padding;
+        
+        li {
+            height: $games-avatar-size + ($games-player-padding * 2);
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .html-color { color: $html--color; }
+        .css-color { color: $css--color; }
+        .js-color { color: $js--color; }
+    }
+}
+
+.games-banner {
+    background-size: cover;
+    padding: $games-gutter;
+    
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    &__meta {
+        
+    }
+    &__date {
+        font-size: 16px;
+    }
+    &__gamemode {}
+    
+    &__btn {
+        
+    }
+    
+    &--classic {
+        background-image: url('/assets/image/classic-bg.jpg');
+    }
+}
+
+.games-team {
+    
+    &__header {
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+        text-transform: uppercase;
+    }
+    
+    &__header-inner {
+        padding: 0 $games-gutter;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    &__name {
+        font-size: 24px;
+    }
+    
+    &__score {}
+    
+    &__points,
+    &__win {
+        vertical-align: middle;
+    }
+    
+    &__points {
+        font-size: 42px;
+        font-weight: bold;
+    }
+    
+    &__win {
+        padding: 0 20px;
+        color: $positive--color;
+        font-weight: bold;
+        font-size: 18px;
+    }
+}
+
+.games-players {
+    padding: $games-players-padding;
+}
+
+.games-player {
+    padding: $games-player-padding 0;
+    
+    &__avatar,
+    &__name {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    &__avatar {
+        height: $games-avatar-size;
+        width: $games-avatar-size;
+        border-radius: 50%;
+    }
+    
+    &__name {
+        padding: 0 15px;
+    }
+}
+
+.games-team--blue {
+    
+    .games-team__header {
+        background: linear-gradient(to right, transparent 60%, $brand-primary--color);
+        border-color: $brand-primary--color;
+    }
+    
+    .games-team__name { color: $brand-primary--color; }
+}
+
+.games-team--red {
+    
+    .games-team__header {
+        background: linear-gradient(to left, transparent 60%, $brand-secondary--color);
+        border-color: $brand-secondary--color;
+    }
+    
+    .games-team__name { color: $brand-secondary--color; }
+    
+    .games-player { text-align: right; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -41,6 +41,12 @@ Contents:
     transform: translateY(-50%);
 }
 
+%absolute-horizontal {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 /* ==========================================================================
 	02. Mixins
 ========================================================================== */
