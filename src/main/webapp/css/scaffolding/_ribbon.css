@@ -16,8 +16,7 @@ $ribbon--color 										: #213E56;
 
 .ribbon {
     width: 100%;
-    height: 30vh;
-    min-height: $ribbon--height;
+    height: $ribbon--height;
     background-color: $ribbon--color;
 }
 
