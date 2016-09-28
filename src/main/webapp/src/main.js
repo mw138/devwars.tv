@@ -15,6 +15,7 @@ import home from './pages/home/home.module';
 import profile from './pages/profile/profile.module';
 import leaderboards from './pages/leaderboards/leaderboards.module';
 import contact from './pages/contact/contact.module';
+import games from './pages/games/games.module';
 import BlogListing from './pages/blog-listing/blog-listing.module';
 
 // Layout
