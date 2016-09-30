@@ -25,7 +25,30 @@ $games-avatar-size                         : 50px;
 
 
 .games-sidebar {
-    background-color: $brand-primary--background;
+    height: 100vh;
+    background-color: $brand-secondary--background;
+    position: fixed;
+    left: 0;
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar{
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track-piece{
+        background-color: $brand-tertiary--background;
+    }
+
+    &::-webkit-scrollbar-thumb{
+        background-color: $grey--color;
+        outline: 2px solid $grey--color;
+        outline-offset: -2px;
+        border: .1px solid $grey--color;
+    }
+
+    &::-webkit-scrollbar-thumb:hover{
+        background-color: lighten($grey--color, 10%);
+    }
 }
 
 
@@ -35,6 +58,7 @@ $games-avatar-size                         : 50px;
     align-items: center;
     padding: $grid__gutter--width-xs;
     border-bottom: 1px solid $divider--color;
+    background-color: $brand-primary--background;
     cursor: pointer;
     
     &:hover {
@@ -94,6 +118,8 @@ $games-avatar-size                         : 50px;
 
 .games-view {
     background-color: #050505;
+    position: absolute;
+    right: 0;
 }
 
 
