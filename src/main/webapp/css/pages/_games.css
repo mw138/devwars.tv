@@ -7,10 +7,8 @@ Variables
 $file__element--property_modifier
 ========================================================================== */
 
-$games-gutter                                          : 20px;
-$games-avatar-size                                     : 50px;
-$games-players-padding                                 : 10px;
-$games-player-padding                                  : 10px;
+$games-avatar-size                         : 50px;
+
 
 /* ==========================================================================
 	01.
@@ -73,7 +71,7 @@ $games-player-padding                                  : 10px;
     
     &__theme {
         display: block;
-        margin-top: 5px;
+        margin-top: $xxs-space;
         font-size: 20px;
         
     }
@@ -106,10 +104,10 @@ $games-player-padding                                  : 10px;
         @extend %absolute-horizontal;
         list-style: none;
         text-align: center;
-        bottom: $games-players-padding;
+        bottom: $xs-space;
         
         li {
-            height: $games-avatar-size + ($games-player-padding * 2);
+            height: $games-avatar-size + ($xs-space * 2);
             display: flex;
             align-items: center;
             text-align: center;
@@ -126,7 +124,7 @@ $games-player-padding                                  : 10px;
 
 .games-banner {
     background-size: cover;
-    padding: $games-gutter;
+    padding: $s-space;
     
     &__inner {
         display: flex;
@@ -160,7 +158,7 @@ $games-player-padding                                  : 10px;
     }
     
     &__header-inner {
-        padding: 0 $games-gutter;
+        padding: 0 $s-space;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -183,7 +181,7 @@ $games-player-padding                                  : 10px;
     }
     
     &__win {
-        padding: 0 20px;
+        padding: 0 $s-space;
         color: $positive--color;
         font-weight: bold;
         font-size: 18px;
@@ -191,11 +189,11 @@ $games-player-padding                                  : 10px;
 }
 
 .games-players {
-    padding: $games-players-padding;
+    padding: $xs-space;
 }
 
 .games-player {
-    padding: $games-player-padding 0;
+    padding: $xs-space 0;
     
     &__avatar,
     &__name {
@@ -206,11 +204,12 @@ $games-player-padding                                  : 10px;
     &__avatar {
         height: $games-avatar-size;
         width: $games-avatar-size;
+        border: $xxxs-space solid transparent;
         border-radius: 50%;
     }
     
     &__name {
-        padding: 0 15px;
+        padding: 0 $xs-space;
     }
 }
 
@@ -222,6 +221,7 @@ $games-player-padding                                  : 10px;
     }
     
     .games-team__name { color: $brand-primary--color; }
+    .games-player__avatar { border-color: $brand-primary--color; }
 }
 
 .games-team--red {
@@ -234,13 +234,14 @@ $games-player-padding                                  : 10px;
     .games-team__name { color: $brand-secondary--color; }
     
     .games-player { text-align: right; }
+    .games-player__avatar { border-color: $brand-secondary--color; }
 }
 
 
 .games-resources {
     display: flex;
     justify-content: space-between;
-    padding: $games-gutter;
+    padding: $s-space;
 }
 
 
