@@ -1,51 +1,65 @@
-/* Name:            Buttons
+/* Name:            btns
 
 Contents:
 	01. Default
-		01.1 Build button variants
+		01.1 Build Button Variants
+		01.2 Build Outline Button Variants
 
 Variables
 $file__element--property_modifier
 ========================================================================== */
 
 
-$button--padding 									: 0 25px;
-$button--text-transform 							: uppercase;
-$button--line-height 								: 45px;
-$button--font-size 									: 14px;
-$button--font-weight 								: 600;
+$btn--padding 									: 0 25px;
+$btn--text-transform 							: uppercase;
+$btn--line-height 								: 45px;
+$btn--font-size 							    : 14px;
+$btn--font-weight 								: 600;
 
-$button--color 										: #fff;
-$button--background 								: $brand-primary--color;
+$btn--color 								    : #fff;
+$btn--background 								: $brand-primary--color;
 
-$button__secondary--color							: #fff;
-$button__secondary--background						: $brand-secondary--color;
+$btn__primary--color							: #fff;
+$btn__primary--background						: $brand-primary--color;
 
-$button__positive--color 							: #fff;
-$button__positive--background 						: $positive--color;
+$btn__secondary--color							: #fff;
+$btn__secondary--background						: $brand-secondary--color;
 
-$button__negative--color 							: #fff;
-$button__negative--background 						: $negative--color;
+$btn__positive--color 							: #fff;
+$btn__positive--background 						: $positive--color;
 
-$button__disabled--color 							: $black--color;
-$button__disabled--background 						: $grey--color;
+$btn__negative--color 							: #fff;
+$btn__negative--background 						: $negative--color;
 
-$button--variants: (
-	btn-secondary $button__secondary--color $button__secondary--background,
-	btn-positive $button__positive--color $button__positive--background,
-	btn-negative $button__negative--color $button__negative--background,
-	btn-disabled $button__disabled--color $button__disabled--background
+$btn__disabled--color 							: $black--color;
+$btn__disabled--background 						: $grey--color;
+
+$btn__gray--color 							    : #fff;
+$btn__gray--background 						    : lightgray;
+
+$btn--variants: (
+    btn-primary $btn__primary--background $btn__primary--color,
+    btn-secondary $btn__secondary--background $btn__secondary--color ,
+    btn-positive $btn__positive--background $btn__positive--color ,
+    btn-negative $btn__negative--background $btn__negative--color ,
+    btn-disabled $btn__disabled--background $btn__disabled--color ,
+    btn-gray $btn__gray--background $btn__gray--color ,
+    btn-youtube $youtube--color #fff
+);
+
+$btn-outline--variants: (
+    btn-outline-primary $btn__primary--background white,
+    btn-outline-secondary $btn__secondary--background white,
+    btn-outline-positive $btn__positive--background white,
+    btn-outline-negative $btn__negative--background white,
+    btn-outline-disabled $btn__disabled--background white,
+    btn-outline-white $white--color black,
+    btn-outline-gray $btn__gray--background black
 );
 
 /* ========================================================================
 	01. Default
  ========================================================================== */
-
-.button {
-	display: inline-block;
-	vertical-align: top;
-	width: auto;
-}
 
 .btn {
 	display: inline-block;
@@ -58,51 +72,146 @@ $button--variants: (
 	text-align: center;
 	font-style: normal;
 	margin: 0;
-	padding: $button--padding;
-	height: $button--line-height;
-	line-height: $button--line-height;
-	text-transform: $button--text-transform;
-	color: $button--color;
-	background-color: $button--background;
-	font-size: $button--font-size;
-    font-weight: $button--font-weight;
-	transition: all .25s;
+	padding: $btn--padding;
+	height: $btn--line-height;
+	line-height: $btn--line-height;
+	text-transform: $btn--text-transform;
+	color: $btn--color;
+	background-color: $btn--background;
+	font-size: $btn--font-size;
+    font-weight: $btn--font-weight;
+    user-select: none;
+	transition: all 0.25s ease-in-out;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	
 	&:hover {
-		color: contrast($button--background);
-		background-color: lighten($button--background, 10%);
+		color: contrast($btn--background);
+		background-color: lighten($btn--background, 10%);
 	}
-}
-
-.btn--ghost {
-    @extend .btn;
-    background-color: transparent;
-    border-color: $brand-primary--color;
-    color: $brand-primary--color;
     
-    &:hover {
-        border-color: $brand-primary--color;
-        color: $white--color;
+    &,
+    &:active,
+    &.active {
+        background-image: none;
+        outline: 0;
+        &:focus,
+        &.focus {
+            outline: 0;
+        }
+    }
+
+    &:focus,
+    &.focus {
+        text-decoration: none;
+    }
+
+    &.disabled,
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
     }
 }
 
+.btn-link {
+    font-weight: normal;
+    color: $brand-primary--color;
+    border-radius: 0;
+
+    &,
+    &:active,
+    &.active,
+    &:disabled {
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    &,
+    &:focus,
+    &:active {
+        border-color: transparent;
+    }
+
+    &:disabled {
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+
 /* ========================================================================
-	01.1 Build button variants
+	01.1 Build Button Variants
  ========================================================================== */
 
-.button {
-
-	@each $button-type in $button--variants {
-
-		&.#{nth($button-type, 1)} .btn {
-		color: #{nth($button-type, 2)};
-		background: #{nth($button-type, 3)};
-
+.btn {
+	@each $btn-type in $btn--variants {
+		&.#{nth($btn-type, 1)} {
+            background-color: #{nth($btn-type, 2)};
+		    color: #{nth($btn-type, 3)};
+		
 			&:hover {
-				color: #{nth($button-type, 2)};
-				background-color: lighten(nth($button-type, 3), 10%);
+				color: #{nth($btn-type, 3)};
+				background-color: lighten(nth($btn-type, 2), 10%);
 			}
 		}
 	}
+}
+
+
+/* ========================================================================
+01.1 Build Outline Button Variants
+========================================================================== */
+
+.btn {
+    @each $btn-type in $btn-outline--variants {
+        &.#{nth($btn-type, 1)} {
+            background-image: none;
+            background-color: transparent;
+            border-color: #{nth($btn-type, 2)};
+            color: #{nth($btn-type, 2)};
+
+            &:hover {
+                color: #{nth($btn-type, 3)};
+                background-color:  nth($btn-type, 2);
+                border-color: nth($btn-type, 2);
+            }
+        }
+    }
+}
+
+
+/* ==========================================================================
+02. Button Modifiers
+========================================================================== */
+
+.btn-sm {
+    font-weight: $btn--font-weight;
+}
+
+.btn-lg {
+    font-weight: $btn--font-weight;
+}
+
+a.btn.disabled,
+fieldset[disabled] a.btn {
+    pointer-events: none;
+}
+
+a.btn {
+    text-decoration: none;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="btn"] {
+    &.btn-block {
+        width: 100%;
+    }
 }
