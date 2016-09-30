@@ -105,15 +105,15 @@ $responsive__lg										: 1300px;
 
 $base-space  										: 40px;
 
-$xxxs-space                                         : $base-space / 8;
-$xxs-space                                          : $base-space / 6;
+$xxxs-space                                         : $base-space / 16;
+$xxs-space                                          : $base-space / 8;
 $xs-space                                           : $base-space / 4;
 $s-space                                            : $base-space / 2;
 $m-space                                            : $base-space;
 $l-space                                            : $base-space * 2;
 $xl-space                                           : $base-space * 4;
-$xxl-space                                          : $base-space * 6;
-$xxxl-space                                         : $base-space * 8;
+$xxl-space                                          : $base-space * 8;
+$xxxl-space                                         : $base-space * 16;
 
 $sm-space                                           : $base-space - $xs-space;
 $ms-space                                           : $base-space + $s-space;

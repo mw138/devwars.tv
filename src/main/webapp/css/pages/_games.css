@@ -51,9 +51,9 @@ $games-player-padding                                  : 10px;
     }
     
     &__gamemode {
-        padding: 1px 5px;
+        padding: $xxxs-space $xxs-space;
         border: 1px solid $brand-primary--color;
-        margin-right: 2.5px;
+        margin-right: $xxs-space;
         color: $brand-primary--color;
         font-size: 10px;
         
