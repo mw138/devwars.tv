@@ -173,6 +173,53 @@ $games-player-padding                                  : 10px;
 }
 
 
+.games-resources {
+    display: flex;
+    justify-content: space-between;
+    padding: $games-gutter;
+    
+    &__btn {
+        &--blue {}
+        &--red {
+            color: $brand-secondary--color;
+            border-color: $brand-secondary--color;
+            &:hover {
+                background-color: $brand-secondary--color;
+                border-color: $brand-secondary--color;
+            }
+        }
+        &--game {
+            color: $white--color;
+            border-color: $white--color;
+            &:hover {
+                background-color: $white--color;
+                border-color: $white--color;
+                color: $black--color;
+            }
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

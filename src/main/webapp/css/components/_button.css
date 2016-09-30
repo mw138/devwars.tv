@@ -53,7 +53,7 @@ $button--variants: (
 	box-sizing: border-box;
 	cursor: pointer;
 	outline: none;
-	border: none;
+	border: 1px solid transparent;
 	text-decoration: none;
 	text-align: center;
 	font-style: normal;
@@ -73,6 +73,18 @@ $button--variants: (
 		color: contrast($button--background);
 		background-color: lighten($button--background, 10%);
 	}
+}
+
+.btn--ghost {
+    @extend .btn;
+    background-color: transparent;
+    border-color: $brand-primary--color;
+    color: $brand-primary--color;
+    
+    &:hover {
+        border-color: $brand-primary--color;
+        color: $white--color;
+    }
 }
 
 /* ========================================================================
