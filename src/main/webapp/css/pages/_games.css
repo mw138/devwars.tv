@@ -30,6 +30,70 @@ $games-player-padding                                  : 10px;
     background-color: $brand-primary--background;
 }
 
+
+.game-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $grid__gutter--width-xs;
+    border-bottom: 1px solid $divider--color;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: $brand-secondary--background;
+    }
+    
+    &__meta {}
+        
+    &__date {
+        font-size: 13px;
+        color: lightgray;
+    }
+    
+    &__gamemode {
+        padding: 1px 5px;
+        border: 1px solid $brand-primary--color;
+        margin-right: 2.5px;
+        color: $brand-primary--color;
+        font-size: 10px;
+        
+        &--classic {
+            border: 1px solid $brand-primary--color;
+            color: $brand-primary--color;
+        }
+        &--zen {
+            border: 1px solid $green--color;
+            color: $green--color;
+        }
+        &--coffee {
+            border: 1px solid $yellow--color;
+            color: $yellow--color;
+        }
+    }
+    
+    &__theme {
+        display: block;
+        margin-top: 5px;
+        font-size: 20px;
+        
+    }
+    
+    &__icons {
+        font-size: 24px;
+    }
+    
+    &__youtube {
+        color: $youtube--color;
+    }
+
+}
+
+
+
+
+
+
+
 .games-view {
     background-color: #050505;
 }
@@ -177,28 +241,6 @@ $games-player-padding                                  : 10px;
     display: flex;
     justify-content: space-between;
     padding: $games-gutter;
-    
-    &__btn {
-        &--blue {}
-        &--red {
-            color: $brand-secondary--color;
-            border-color: $brand-secondary--color;
-            &:hover {
-                background-color: $brand-secondary--color;
-                border-color: $brand-secondary--color;
-            }
-        }
-        &--game {
-            color: $white--color;
-            border-color: $white--color;
-            &:hover {
-                background-color: $white--color;
-                border-color: $white--color;
-                color: $black--color;
-            }
-        }
-    }
-    
 }
 
 
