@@ -150,7 +150,7 @@ $games-avatar-size                         : 50px;
 
 .games-banner {
     background-size: cover;
-    padding: $s-space;
+    padding: $m-space $s-space;
     
     &__inner {
         display: flex;
