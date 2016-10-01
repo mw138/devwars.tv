@@ -1,7 +1,7 @@
-/* Name:            Card
+/* Name:			Card
 
 Contents:
-        01. Card
+	01. Card
 		01.2 Rank
 		01.3 Team
 		01.4 Accolades / Friends
@@ -11,18 +11,20 @@ Contents:
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
-/* ==========================================================================
+
+
+/*  ========================================================================
 	01. Card
-========================================================================== */
+	======================================================================== */
 
 .card {
-    @extend %material;
+	@extend %material;
 	display: block;
-    margin-bottom: 20px;
-    border-top: 3px solid $brand-secondary--color;
-    background-color: $brand-tertiary--background;
+	margin-bottom: 20px;
+	border-top: 3px solid $brand-secondary--color;
+	background-color: $brand-tertiary--background;
 
 	a {
 		text-decoration: none;
@@ -42,18 +44,18 @@ $file__element--property_modifier
 		margin: 0 auto 15px;
 		max-width: 100px;
 	}
-    
-    &--plain {
-        border-top: none;
-    }
-    
-    &--ribbon {
-        border-top: none;
-        
-        .card__inner {
-            padding: 15px 30px;
-        }
-    }
+	
+	&--plain {
+		border-top: none;
+	}
+	
+	&--ribbon {
+		border-top: none;
+		
+		.card__inner {
+			padding: 15px 30px;
+		}
+	}
 }
 
 @include breakpoint(sm) {
@@ -69,5 +71,3 @@ $file__element--property_modifier
 
 	}
 }
-
-

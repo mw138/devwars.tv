@@ -1,4 +1,4 @@
-/* Name:            Grid System
+/* Name:			Grid System
 
 Contents:
 	01. Containers
@@ -8,33 +8,32 @@ Contents:
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
-$grid__columns 										: 12;
-$grid__gutter--width-xs 							: 10px;
-$grid__gutter--width-sm 							: 10px;
+$grid__columns										: 12;
+$grid__gutter--width-xs								: 10px;
+$grid__gutter--width-sm								: 10px;
 
-$grid__container--sm 								: 728px;
-$grid__container--md 								: 940px;
-$grid__container--lg 								: 1200px;
+$grid__container--sm								: 728px;
+$grid__container--md								: 940px;
+$grid__container--lg								: 1200px;
 
-/* ==========================================================================
+/*  ========================================================================
 	01. Containers
-========================================================================== */
+	======================================================================== */
 
 .container {
 	margin: $grid__gutter--width-xs ($grid__gutter--width-xs * 2) 0;
 }
 
 .container-fluid {
-    width: 100%;
+	width: 100%;
 }
 
 .no-gutter {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
-
 
 @include breakpoint(sm) {
 
@@ -58,12 +57,11 @@ $grid__container--lg 								: 1200px;
 	}
 }
 
-/* ==========================================================================
+/*  ========================================================================
 	02. Rows
-========================================================================== */
+	======================================================================== */
 
 .row {
-	box-sizing: border-box;
 	margin-left: -$grid__gutter--width-sm;
 	margin-right: -$grid__gutter--width-sm;
 
@@ -72,27 +70,26 @@ $grid__container--lg 								: 1200px;
 		display: table;
 		clear: both;
 	}
-    
-    &--lift {
-        margin-top: -($global__ribbon / 1.3);
-    }
+	
+	&--lift {
+		margin-top: -($global__ribbon / 1.3);
+	}
 }
 
-/* ==========================================================================
+/*  ========================================================================
 	03. Columns
-========================================================================== */
+	======================================================================== */
 
 [class*=col-] {
 	float: left;
-	box-sizing: border-box;
 	padding-left: $grid__gutter--width-sm;
 	padding-right: $grid__gutter--width-sm;
 	width: 100%;
 }
 
-/* ==========================================================================
+/*  ========================================================================
 	04. Generate responsive columns
-========================================================================== */
+	======================================================================== */
 
 @include breakpoint(xs-only) {
 

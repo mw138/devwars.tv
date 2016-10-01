@@ -1,260 +1,255 @@
-/* Name:            Homepage
+/* Name:			Homepage
 
 Contents:
 	01. Main
-    02. Mobile
-    03. Tablet
-    04. Desktop
+	02. Mobile
+	03. Tablet
+	04. Desktop
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
-$home__hero--height                                    : 500px;
-$home__card--margin                                    : 80px;
+$home__hero--height									: 500px;
+$home__card--margin									: 80px;
 
-
-/* ==========================================================================
-01. Main
-========================================================================== */
+/*  ========================================================================
+	01. Main
+	======================================================================== */
 
 .hero {
-    width: 100%;
-    height: $home__hero--height;
-    background-image: url('/assets/image/hero-bg.jpg');
-    background-size: cover;
-    text-align: center;
-    position: relative;
+	width: 100%;
+	height: $home__hero--height;
+	background-image: url('/assets/image/hero-bg.jpg');
+	background-size: cover;
+	text-align: center;
+	position: relative;
 
-    &__inner {
-        @extend %absolute-vertical;
-        width: 100%;
-        z-index: 1;
-        margin-top: -($home__card--margin / 2);
-        padding: 0 $global__gutter;
-        left: 0;
-    }
+	&__inner {
+		@extend %absolute-vertical;
+		width: 100%;
+		z-index: 1;
+		margin-top: -($home__card--margin / 2);
+		padding: 0 $global__gutter;
+		left: 0;
+	}
 
-    &__title,
-    &__subtitle {
-        font-weight: 400;
-        text-transform: none;
-    }
+	&__title,
+	&__subtitle {
+		font-weight: 400;
+		text-transform: none;
+	}
 
-    &__title {
-        font-size: 32px;
-        margin-bottom: 10px;
-        @include breakpoint(md) {
-            font-size: 42px;
-        }
-    }
+	&__title {
+		font-size: 32px;
+		margin-bottom: 10px;
+		@include breakpoint(md) {
+			font-size: 42px;
+		}
+	}
 
-    &__subtitle {
-        font-size: 24px;
-        margin-bottom: 40px;
-        color: $brand-text-muted--color;
-    }
+	&__subtitle {
+		font-size: 24px;
+		margin-bottom: 40px;
+		color: $base-font--color_muted;
+	}
 
-    &__btn {
-        width: 100%;
-        max-width: 360px;
-        margin-bottom: 10px;
-        @include breakpoint(sm) {
-            width: auto;
-            max-width: none;
-            margin: 0 10px;
-        }
-    }
+	&__btn {
+		width: 100%;
+		max-width: 360px;
+		margin-bottom: 10px;
+		@include breakpoint(sm) {
+			width: auto;
+			max-width: none;
+			margin: 0 10px;
+		}
+	}
 }
 
 .home-highlights {
-    .row {
-        margin-top: -$home__card--margin;
-    }
+	.row {
+		margin-top: -$home__card--margin;
+	}
 }
 
 .card--home {
-    position: relative;
-    z-index: 1;
+	position: relative;
+	z-index: 1;
 
-    &__contents {
-        height: auto;
-        font-size: 14px;
-        font-family: $alt--font-face;
-        margin-top: 20px;
-        text-align: center;
-        position: relative;
-        @include breakpoint(lg) {
-            height: 300px;
-        }
-        @include breakpoint(sm) {
-            font-size: 16px;
-        }
-    }
+	&__contents {
+		height: auto;
+		font-size: 14px;
+		font-family: $alt--font-face;
+		margin-top: 20px;
+		text-align: center;
+		position: relative;
+		@include breakpoint(lg) {
+			height: 300px;
+		}
+		@include breakpoint(sm) {
+			font-size: 16px;
+		}
+	}
 }
 
 .home-recap {
 
-    &__team, &__score {
-        vertical-align: middle;
-    }
+	&__team, &__score {
+		vertical-align: middle;
+	}
 
-    &__team {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        @include breakpoint(md) {
-            width: 80px;
-            height: 80px;
-        }
-    }
+	&__team {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		@include breakpoint(md) {
+			width: 80px;
+			height: 80px;
+		}
+	}
 
-    &__score { 
-        display: inline-block;
-        text-transform: uppercase;
-        margin: 0 20px;
-        @include breakpoint(md) {
-            margin: 0 40px;
-        }
-    }
+	&__score { 
+		display: inline-block;
+		text-transform: uppercase;
+		margin: 0 20px;
+		@include breakpoint(md) {
+			margin: 0 40px;
+		}
+	}
 
-    &__gamemode,
-    &__points {
-        display: block;
-    }
+	&__gamemode,
+	&__points {
+		display: block;
+	}
 
-    &__gamemode {}
+	&__gamemode {}
 
-    &__points {
-        font-size: 24px;
-        letter-spacing: 5px;
-        @include breakpoint(md) {
-            font-size: 48px;
-        }
-    }
+	&__points {
+		font-size: 24px;
+		letter-spacing: 5px;
+		@include breakpoint(md) {
+			font-size: 48px;
+		}
+	}
 
-    &__matchup {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        margin: 10px auto 0;
-        @include breakpoint(sm) {
-            width: 80%;
-        }
-        
-        li {
-            margin-top: 20px;  
-        }
-    }
+	&__matchup {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		margin: 10px auto 0;
+		@include breakpoint(sm) {
+			width: 80%;
+		}
+		
+		li {
+			margin-top: 20px;  
+		}
+	}
 
-    &__players {
-        list-style: none;
+	&__players {
+		list-style: none;
 
-        &--blue {
-          text-align: left;
-        }
+		&--blue {
+		  text-align: left;
+		}
 
-        &--red {
-          text-align: right;
-        }
-    }
+		&--red {
+		  text-align: right;
+		}
+	}
 
-    &__pos {
-        list-style: none;
-        text-align: center;
+	&__pos {
+		list-style: none;
+		text-align: center;
 
-        .recap__html { color: $html--color; }
-        .recap__css { color: $css--color; }
-        .recap__js { color: $js--color; }
-    }
+		.recap__html { color: $html--color; }
+		.recap__css { color: $css--color; }
+		.recap__js { color: $javascript--color; }
+	}
 
-    &__btn { margin-top: 40px; }
+	&__btn { margin-top: 40px; }
 }
 
 .home-blog {
   
-    &__blogs {
-        list-style: none;
-    }
+	&__blogs {
+		list-style: none;
+	}
 
-    &__blog {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 30px;
-        &:last-of-type { margin-bottom: 0; }
-    }
+	&__blog {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 30px;
+		&:last-of-type { margin-bottom: 0; }
+	}
 
-    &__thumb {
-        width: 100px;
-        height: 56px;
-        overflow: hidden;
-        @include breakpoint(lg) {
-            width: 135px;
-            height: 76px;
-        }
+	&__thumb {
+		width: 100px;
+		height: 56px;
+		overflow: hidden;
+		@include breakpoint(lg) {
+			width: 135px;
+			height: 76px;
+		}
 
-        img {
-            width: 100%;
-            height: auto;
-            vertical-align: top;
-        }
-    }
+		img {
+			width: 100%;
+			height: auto;
+			vertical-align: top;
+		}
+	}
 
-    &__text {
-        width: calc(100% - 100px - 20px);
-        text-align: left;
-        @include breakpoint(lg) {
-            width: calc(100% - 135px - 20px);
-        }
-    }
+	&__text {
+		width: calc(100% - 100px - 20px);
+		text-align: left;
+		@include breakpoint(lg) {
+			width: calc(100% - 135px - 20px);
+		}
+	}
 
-    &__title {
-        font-size: 18px;
-    }
+	&__title {
+		font-size: 18px;
+	}
 
-    &__meta,
-    &__desc {
-        display: block;
-        font-family: $base--font-face;
-        font-size: 14px;
-    }
+	&__meta,
+	&__desc {
+		display: block;
+		font-family: $base--font-face;
+		font-size: 14px;
+	}
 
-    &__meta {
-        color: $brand-text-muted--color;
-        margin-bottom: 5px;
-    }
+	&__meta {
+		color: $base-font--color_muted;
+		margin-bottom: 5px;
+	}
 
-    &__desc {
-        font-size: 15px;
-    }
+	&__desc {
+		font-size: 15px;
+	}
 
-    &__btn { margin-top: 40px; }
+	&__btn { margin-top: 40px; }
 }
 
-
-
-
-
-/* ==========================================================================
-02. Mobile
-========================================================================== */
+/*  ========================================================================
+	02. Mobile
+	======================================================================== */
 
 
 @include breakpoint(xs-only) {
 
 }
 
-/* ==========================================================================
-03. Tablet
-========================================================================== */
+/*  ========================================================================
+	03. Tablet
+	======================================================================== */
 
 @include breakpoint(sm) {
 
 }
 
-/* ==========================================================================
-04. Desktop
-========================================================================== */
+/*  ========================================================================
+	04. Desktop
+	======================================================================== */
 
 @include breakpoint(md) {
 

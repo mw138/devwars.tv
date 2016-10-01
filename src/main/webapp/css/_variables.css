@@ -1,65 +1,85 @@
-/* Name:            Variables
+/* Name:			Variables
 
 Contents:
 	01. Colors
-		01.1 Brand Colors
-		01.2 Tutorial Colors
-		01.3 Base Colors
+		01.1 DevWars Colors
+		01.2 Brand Colors
+		01.3 Tutorial Colors
+		01.4 Standard Colors
 	02. Responsive
 	03. Type 
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
 $file__element--property_modifier 					: ;
 
-/* ==========================================================================
-	01.1 Brand Colors
-========================================================================== */
+/*  ========================================================================
+	01.1 DevWars Colors
+	======================================================================== */
 
-$brand-primary--color 								: #03a9f4;
-$brand-secondary--color 							: #e91e63;
-$brand-tertiary--color 								: mix($brand-primary--color, $brand-secondary--color, 50%);
+$brand-primary--color								: #03a9f4;
+$brand-secondary--color								: #e91e63;
+$brand-tertiary--color								: mix($brand-primary--color, $brand-secondary--color, 50%);
 
 $brand-primary--background							: #212121;
-$brand-secondary--background 						: #303030;
-$brand-tertiary--background 						: #424242;
-$brand-quaternary--background                       : #4b4b4b;
+$brand-secondary--background						: #303030;
+$brand-tertiary--background							: #424242;
+$brand-quaternary--background						: #4b4b4b;
 
-$divider--color                                     : #555555;
+$base-font--color 									: #fff;
+$base-font--color_muted								: rgba($base-font--color, .3);
+$base-font--color_disabled							: rgba($base-font--color, .5);
 
-$brand-text-primary--color                          : #FFFFFF;
-$brand-text-muted--color                            : transparentize(#FFFFFF, 0.3);
-$brand-text-disabled--color                         : transparentize(#FFFFFF, 0.5);
+$body--background 									: $brand-secondary--background;
 
+$devbit--color										: #f8bf3f;
 
-$devbit--color 										: #f8bf3f;
+$divider--color										: #555;
 
-/* ==========================================================================
-	01.2 Tutorial Colors
-========================================================================== */
+/*  ========================================================================
+	01.2 Brand Colors
+	======================================================================== */
 
-$tutorials__angular--color 							: #e03237;
-$tutorials__bower--color 							: #ef5734;
-$tutorials__css--color  							: #6a528f;
-$tutorials__grunt--color 							: #e48632;
-$tutorials__gulp--color 							: #cf4646;
-$tutorials__html--color 							: #ec622d;
-$tutorials__java--color 							: #bf8520;
-$tutorials__javascript--color 						: #f4e46c;
-$tutorials__jquery--color 							: #0769ad;
-$tutorials__node--color 							: #8CC84b;
-$tutorials__php--color 								: #6172a6;
-$tutorials__react--color 							: #00d8ff;
-$tutorials__ruby--color 							: #85211c;
-$tutorials__ruby-on-rails--color 					: #c00;
-$tutorials__sublime--color 							: #ff8100;
-$tutorials__typescript--color 						: #35879b;
+$facebook--color									: #0b5998;
+$twitter--color										: #4099ff;
+$google--color										: #da4835;
+$youtube--color										: #e52d27;
+$reddit--color										: #ff4500;
+$twitch--color										: #6441a5;
+$slack--color										: #e9a820;
+$cloud9--color										: #1aa6da;
+$github--color										: #4183c4;
+$linkedin--color									: #0077b5;
+$codepen--color										: #fff;
+$website--color										: #fff;
+$email--color										: #fff;
 
-/* ==========================================================================
-	01.3 Base Colors
-========================================================================== */
+/*  ========================================================================
+	01.3 Tutorial Colors
+	======================================================================== */
+
+$angular--color 									: #e03237;
+$bower--color 										: #ef5734;
+$css--color  										: #0ebeff;
+$grunt--color 										: #e48632;
+$gulp--color 										: #cf4646;
+$html--color 										: #ff7200;
+$java--color 										: #bf8520;
+$javascript--color 									: #e5ff0e;
+$jquery--color 										: #0769ad;
+$node--color 										: #8CC84b;
+$php--color 										: #6172a6;
+$react--color 										: #00d8ff;
+$ruby--color 										: #85211c;
+$ruby-on-rails--color 								: #c00;
+$sublime--color 									: #ff8100;
+$typescript--color 									: #35879b;
+
+/*  ========================================================================
+	01.4 Standard Colors
+	========================================================================== */
 
 $red--color 										: #e74c3c;
 $yellow--color										: #f1c40f;
@@ -69,108 +89,80 @@ $blue--color 										: #3498db;
 $orange--color										: #e67e22;
 $grey--color 										: #7f8c8d;
 $black--color 										: #000;
-$white--color                                       : #FFF;
+$white--color                                       : #fff;
 
-$negative--color 									: $red--color;
 $positive--color 									: $green--color;
+$negative--color 									: $red--color;
 
-$base-font--color 									: #fff;
-$body--background 									: $brand-secondary--background;
-
-$html--color                                        : #ff7200;
-$css--color                                         : #0ebeff;
-$js--color                                          : #e5ff0e;
-
-$youtube--color                                     : #CD201F;
-
-/* ==========================================================================
+/*  ========================================================================
 	02. Globals
-========================================================================== */
+	======================================================================== */
 
-$global__gutter                                    : 20px;
-$global__ribbon                                    : 300px;
+$global__gutter										: 20px;
+$global__ribbon										: 300px;
 
-/* ==========================================================================
-    03. Responsive
-========================================================================== */
+/* ========================================================================
+	03. Responsive
+	======================================================================== */
 
 $responsive__sm										: 768px;
 $responsive__md										: 1080px;
 $responsive__lg										: 1300px;
 
+/* ========================================================================
+	04. Spacing
+	======================================================================== */
 
-/* ==========================================================================
-    04. Spacing
-========================================================================== */
+$base-space											: 40px;
 
-$base-space  										: 40px;
+$xxxs-space											: $base-space / 16;
+$xxs-space											: $base-space / 8;
+$xs-space											: $base-space / 4;
+$s-space											: $base-space / 2;
+$m-space											: $base-space;
+$l-space											: $base-space * 2;
+$xl-space											: $base-space * 4;
+$xxl-space											: $base-space * 8;
+$xxxl-space											: $base-space * 16;
 
-$xxxs-space                                         : $base-space / 16;
-$xxs-space                                          : $base-space / 8;
-$xs-space                                           : $base-space / 4;
-$s-space                                            : $base-space / 2;
-$m-space                                            : $base-space;
-$l-space                                            : $base-space * 2;
-$xl-space                                           : $base-space * 4;
-$xxl-space                                          : $base-space * 8;
-$xxxl-space                                         : $base-space * 16;
+$sm-space											: $base-space - $xs-space;
+$ms-space											: $base-space + $s-space;
+$ml-space											: $base-space + $l-space;
 
-$sm-space                                           : $base-space - $xs-space;
-$ms-space                                           : $base-space + $s-space;
-$ml-space                                           : $base-space + $l-space;
+/*  ========================================================================
+	05. Type
+	======================================================================== */
 
+$base--font-face									: 'Open Sans', sans-serif;
+$alt--font-face										: 'Montserrat', sans-serif;
+$sans--font-face									: Arial, Verdana, Helvetica, sans-serif;
 
-/* ==========================================================================
-	05. Typebrand
-========================================================================== */
-
-$base--font-face 									: 'Open Sans', sans-serif;
-$alt--font-face 									: 'Montserrat', sans-serif;
-$sans--font-face 									: Arial, Verdana, Helvetica, sans-serif;
-
-$base--line-height 									: normal;
-$base--font-size 									: 18px;
+$base--line-height									: normal;
+$base--font-size									: 18px;
 
 $headings--color 									: $base-font--color;
 
-$h1--transform              						: uppercase;
-$h1--font-weight            						: bold;
+$h1--transform										: uppercase;
+$h1--font-weight									: bold;
 $h1--font-family									: $alt--font-face;
-$h1--font-size               						: 72px;
+$h1--font-size										: 72px;
 
-$h2--transform              						: none;
-$h2--font-weight            						: bold;
+$h2--transform										: none;
+$h2--font-weight									: bold;
 $h2--font-family									: $alt--font-face;
-$h2--font-size               						: 35px;
+$h2--font-size										: 35px;
 
-$h3--font-weight            						: bold;
+$h3--font-weight									: bold;
 $h3--font-size										: 20px;
 
-$h4--font-weight            						: bold;
-$h4--font-size               						: 20px;
+$h4--font-weight									: bold;
+$h4--font-size										: 20px;
 
-$h5--font-weight            						: bold;
-$h5--font-size               						: 20px;
+$h5--font-weight									: bold;
+$h5--font-size										: 20px;
 
-$h6--font-weight            						: bold;
-$h6--font-size               						: 20px;
+$h6--font-weight									: bold;
+$h6--font-size										: 20px;
 
 $link--color 										: $brand-primary--color;
-$link--color_hover 									: #fff;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$link--color_hover 									: $brand-secondary--color;

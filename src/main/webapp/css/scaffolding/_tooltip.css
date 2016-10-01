@@ -1,22 +1,21 @@
-/* Name:            Tooltips
+/* Name:			Tooltips
 
 Contents:
-	01.
+	01. Standard tooltip
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
-$tooltip--padding                  					: 10px;
-$tooltip--width                    					: 80%;
-$tooltip--font-size                					: 12px;
-$tooltip--color                   					: #fff;
-$tooltip--accent	               					: $brand-primary--color;
-$tooltip--background               					: $brand-primary--background;
+$tooltip--padding									: 10px;
+$tooltip--width										: 80%;
+$tooltip--font-size									: 12px;
+$tooltip--accent									: $brand-primary--color;
+$tooltip--background								: $brand-primary--background;
 
-/* ==========================================================================
-	01.
-========================================================================== */
+/*  ========================================================================
+	01. Standard tooltip
+	======================================================================== */
 
 .tooltip {
 	position: absolute;
@@ -26,7 +25,6 @@ $tooltip--background               					: $brand-primary--background;
 	width: $tooltip--width;
 	padding: $tooltip--padding;
 	font-size: $tooltip--font-size;
-	color: $tooltip--color;
 	background: $tooltip--background;
 	border-bottom: 3px solid $tooltip--accent;
 	opacity: 0;

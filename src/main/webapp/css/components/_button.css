@@ -1,70 +1,59 @@
-/* Name:            btns
+/*  Name:			btns
 
 Contents:
 	01. Default
-		01.1 Build Button Variants
-		01.2 Build Outline Button Variants
+		01.1 Build Basic Button Variants
+	02. Other Variants
+		02.1 Buttno Link
+		02.2 Button Disabled
+		02.3 Button Sizes
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
+$btn--padding										: 14px 25px;
+$btn--text-transform								: uppercase;
+$btn--font-size										: 14px;
+$btn--font-weight									: 600;
 
-$btn--padding 									: 0 25px;
-$btn--text-transform 							: uppercase;
-$btn--line-height 								: 45px;
-$btn--font-size 							    : 14px;
-$btn--font-weight 								: 600;
+$btn--color											: #fff;
+$btn--background									: $brand-primary--color;
 
-$btn--color 								    : #fff;
-$btn--background 								: $brand-primary--color;
+$btn__secondary--color								: #fff;
+$btn__secondary--background							: $brand-secondary--color;
 
-$btn__primary--color							: #fff;
-$btn__primary--background						: $brand-primary--color;
+$btn__positive--color								: #fff;
+$btn__positive--background							: $positive--color;
 
-$btn__secondary--color							: #fff;
-$btn__secondary--background						: $brand-secondary--color;
+$btn__negative--color								: #fff;
+$btn__negative--background							: $negative--color;
 
-$btn__positive--color 							: #fff;
-$btn__positive--background 						: $positive--color;
-
-$btn__negative--color 							: #fff;
-$btn__negative--background 						: $negative--color;
-
-$btn__disabled--color 							: $black--color;
-$btn__disabled--background 						: $grey--color;
-
-$btn__gray--color 							    : #fff;
-$btn__gray--background 						    : lightgray;
+$btn__disabled--color								: $black--color;
+$btn__disabled--background							: $grey--color;
 
 $btn--variants: (
-    btn-primary $btn__primary--background $btn__primary--color,
-    btn-secondary $btn__secondary--background $btn__secondary--color ,
-    btn-positive $btn__positive--background $btn__positive--color ,
-    btn-negative $btn__negative--background $btn__negative--color ,
-    btn-disabled $btn__disabled--background $btn__disabled--color ,
-    btn-gray $btn__gray--background $btn__gray--color ,
-    btn-youtube $youtube--color #fff
+	btn-secondary $btn__secondary--background $btn__secondary--color,
+	btn-positive $btn__positive--background $btn__positive--color,
+	btn-negative $btn__negative--background $btn__negative--color,
+	btn-youtube $youtube--color contrast($youtube--color)
 );
 
 $btn-outline--variants: (
-    btn-outline-primary $btn__primary--background white,
-    btn-outline-secondary $btn__secondary--background white,
-    btn-outline-positive $btn__positive--background white,
-    btn-outline-negative $btn__negative--background white,
-    btn-outline-disabled $btn__disabled--background white,
-    btn-outline-white $white--color black,
-    btn-outline-gray $btn__gray--background black
+	btn-outline-secondary $btn__secondary--background #fff,
+	btn-outline-positive $btn__positive--background #fff,
+	btn-outline-negative $btn__negative--background #fff,
+	btn-outline-disabled $btn__disabled--background #fff,
+	btn-outline-white $white--color #000,
 );
 
-/* ========================================================================
+/*  ========================================================================
 	01. Default
- ========================================================================== */
+	======================================================================== */
 
 .btn {
 	display: inline-block;
 	vertical-align: middle;
-	box-sizing: border-box;
 	cursor: pointer;
 	outline: none;
 	border: 1px solid transparent;
@@ -73,145 +62,80 @@ $btn-outline--variants: (
 	font-style: normal;
 	margin: 0;
 	padding: $btn--padding;
-	height: $btn--line-height;
-	line-height: $btn--line-height;
+	line-height: 1;
 	text-transform: $btn--text-transform;
 	color: $btn--color;
 	background-color: $btn--background;
 	font-size: $btn--font-size;
-    font-weight: $btn--font-weight;
-    user-select: none;
-	transition: all 0.25s ease-in-out;
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	font-weight: $btn--font-weight;
+	transition: all .25s;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	
 	&:hover {
-		color: contrast($btn--background);
+		color: $btn--color;
 		background-color: lighten($btn--background, 10%);
 	}
-    
-    &,
-    &:active,
-    &.active {
-        background-image: none;
-        outline: 0;
-        &:focus,
-        &.focus {
-            outline: 0;
-        }
-    }
-
-    &:focus,
-    &.focus {
-        text-decoration: none;
-    }
-
-    &.disabled,
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.65;
-    }
 }
 
-.btn-link {
-    font-weight: normal;
-    color: $brand-primary--color;
-    border-radius: 0;
-
-    &,
-    &:active,
-    &.active,
-    &:disabled {
-        background-color: transparent;
-        box-shadow: none;
-    }
-
-    &,
-    &:focus,
-    &:active {
-        border-color: transparent;
-    }
-
-    &:disabled {
-    }
-
-    &:hover {
-        text-decoration: underline;
-    }
-}
-
-
-/* ========================================================================
+/*  ========================================================================
 	01.1 Build Button Variants
- ========================================================================== */
+	======================================================================== */
 
-.btn {
-	@each $btn-type in $btn--variants {
-		&.#{nth($btn-type, 1)} {
-            background-color: #{nth($btn-type, 2)};
-		    color: #{nth($btn-type, 3)};
-		
-			&:hover {
-				color: #{nth($btn-type, 3)};
-				background-color: lighten(nth($btn-type, 2), 10%);
-			}
+@each $btn-type in $btn--variants {
+
+	.#{nth($btn-type, 1)} {
+		background-color: #{nth($btn-type, 2)};
+		color: #{nth($btn-type, 3)};
+	
+		&:hover {
+			color: #{nth($btn-type, 3)};
+			background-color: lighten(nth($btn-type, 2), 10%);
 		}
 	}
 }
 
+@each $btn-type in $btn-outline--variants {
 
-/* ========================================================================
-01.1 Build Outline Button Variants
-========================================================================== */
+	.#{nth($btn-type, 1)} {
+		background-color: transparent;
+		border-color: #{nth($btn-type, 2)};
+		color: #{nth($btn-type, 2)};
 
-.btn {
-    @each $btn-type in $btn-outline--variants {
-        &.#{nth($btn-type, 1)} {
-            background-image: none;
-            background-color: transparent;
-            border-color: #{nth($btn-type, 2)};
-            color: #{nth($btn-type, 2)};
-
-            &:hover {
-                color: #{nth($btn-type, 3)};
-                background-color:  nth($btn-type, 2);
-                border-color: nth($btn-type, 2);
-            }
-        }
-    }
+		&:hover {
+			color: #{nth($btn-type, 3)};
+			background-color:  nth($btn-type, 2);
+			border-color: nth($btn-type, 2);
+		}
+	}
 }
 
+/*  ========================================================================
+	02.1 Button Link
+	======================================================================== */
 
-/* ==========================================================================
-02. Button Modifiers
-========================================================================== */
+.btn.btn-link {
+	font-weight: normal;
+	color: $brand-primary--color;
+	background: transparent;
+	text-decoration: underline;
+}
+
+/*  ========================================================================
+	02.2 Button Disabled
+	======================================================================== */
+
+
+.btn.btn-disabled {
+	opacity: 0.65;
+	pointer-events: none;
+}
+
+/*  ========================================================================
+	02.3 Button Sizes
+	======================================================================== */
 
 .btn-sm {
-    font-weight: $btn--font-weight;
 }
 
 .btn-lg {
-    font-weight: $btn--font-weight;
-}
-
-a.btn.disabled,
-fieldset[disabled] a.btn {
-    pointer-events: none;
-}
-
-a.btn {
-    text-decoration: none;
-}
-
-.btn-block {
-    display: block;
-    width: 100%;
-}
-
-// Specificity overrides
-input[type="submit"],
-input[type="reset"],
-input[type="btn"] {
-    &.btn-block {
-        width: 100%;
-    }
 }

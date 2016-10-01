@@ -3,8 +3,7 @@ html {
 	line-height: $base--line-height;
 	font-size: $base--font-size;
 	font-family: $base--font-face;
-	-ms-text-size-adjust: 100%;
-	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -28,6 +27,25 @@ body {
 		right: 0;
 		height: 500px;
 		background: $brand-secondary--background;
+	}
+	
+	::-webkit-scrollbar{
+		width: 5px;
+	}
+
+	::-webkit-scrollbar-track-piece{
+		background-color: $brand-tertiary--background;
+	}
+
+	::-webkit-scrollbar-thumb{
+		background-color: $grey--color;
+		outline: 2px solid $grey--color;
+		outline-offset: -2px;
+		border: .1px solid $grey--color;
+	}
+
+	::-webkit-scrollbar-thumb:hover{
+		background-color: lighten($grey--color, 10%);
 	}
 }
 
@@ -92,7 +110,6 @@ input::-moz-focus-inner {
 input[type="checkbox"],
 input[type="radio"] {
 	padding: 0;
-	box-sizing: border-box;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

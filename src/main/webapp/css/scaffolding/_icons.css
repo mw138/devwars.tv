@@ -1,12 +1,13 @@
-/* Name:            Icons
+/* Name:			Icons
 
 Contents:
-	01. Icon Import
-	02. Icon Styles
+	01. Icon import
+	02. Icon styles
+	03. Generate icon styles
 
 Variables
 $file__element--property_modifier
-========================================================================== */
+============================================================================ */
 
 $icon--font-face 									: 'DevWars Brand Icons';
 $icon--font-size 									: 16px;
@@ -39,9 +40,39 @@ $icon__settings										: '\e012';
 $icon__record										: '\e013';
 $icon__comment										: '\e014';
 
-/* ==========================================================================
-	01. Icon Import
-========================================================================== */
+$icon--set: (
+	facebook $icon__facebook,
+	twitter $icon__twitter,
+	twitch $icon__twitch,
+	google $icon__google,
+	cloud9 $icon__cloud9,
+	slack $icon__slack,
+	github $icon__github,
+	youtube $icon__youtube,
+	linkedin $icon__linkedin,
+	reddit $icon__reddit,
+	codepen $icon__codepen,
+	website $icon__website,
+	email $icon__email,
+	podcast $icon__podcast,
+	search $icon__search,
+	devbit $icon__devbit,
+	user $icon__user,
+	team $icon__team,
+	games $icon__games,
+	tutorial $icon__tutorial,
+	blog $icon__blog,
+	chevron $icon__chevron,
+	check $icon__check,
+	cross $icon__cross,
+	settings $icon__settings,
+	record $icon__record,
+	comment $icon__comment
+);
+
+/*  ========================================================================
+	01. Icon import
+	======================================================================== */
 
 @charset "UTF-8";
 
@@ -55,25 +86,9 @@ $icon__comment										: '\e014';
 	font-style: normal;
 }
 
-@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css);
-
-/* ==========================================================================
-	01. Icon Styles
-========================================================================== */
-
-.icon-styles {
-	display: inline-block;
-	speak: none;
-	vertical-align: middle;
-	text-transform: none;
-	line-height: normal;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	font-family: $icon--font-face;
-}
+/*  ========================================================================
+	01. Icon styles
+	======================================================================== */
 
 .icon {
 	display: inline-block;
@@ -81,16 +96,32 @@ $icon__comment										: '\e014';
 	vertical-align: middle;
 	line-height: normal;
 	font-size: $icon--font-size;
+
+	&:before {
+		display: inline-block;
+		speak: none;
+		vertical-align: middle;
+		text-transform: none;
+		line-height: normal;
+		font-style: normal;
+		font-variant: normal;
+		font-weight: normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		font-family: $icon--font-face;
+	}
 }
 
-.icon:before {
-	@extend .icon-styles;
-}
+/*  ========================================================================
+	03. Generate icon styles
+	======================================================================== */
 
-/* ==========================================================================
-02. Font Awesome
-========================================================================== */
+@each $icon in $icon--set {
 
-.fa {
-    
+	.icon-#{nth($icon, 1)} {
+
+		&:before {
+			content: nth($icon, 2);
+		}
+	}
 }

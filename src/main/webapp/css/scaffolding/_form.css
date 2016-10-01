@@ -1,58 +1,58 @@
-/* Name:            Forms
+/* Name:			Forms
 
 Contents:
-	01.
+	01. Forms
+	02. Inputs
 
 Variables
 $file__element--property_modifier
-========================================================================== */
-$form__control--height                                     : null;
-$form__control--line-height                                : null;
+============================================================================ */
 
 
 
-/* ==========================================================================
-	01.
-========================================================================== */
+/*  ========================================================================
+	01. Forms
+	======================================================================== */
 
 .form-group {
-    margin-bottom: $grid__gutter--width-sm * 2;
+	margin-bottom: $grid__gutter--width-sm * 2;
 }
 
 .form-control {
-    display: block;
-    width: 100%;
-    padding: .5rem .75rem;
-    font-size: 1rem;
-    line-height: 1.25;
-    color: $brand-text-primary--color;
-    background-color: transparent;
-    background-image: none;
-    background-clip: padding-box;
-    border: none;
-    border-bottom: 1px solid $brand-text-disabled--color;
-    outline: none;
-    transition: all 50ms ease-in-out;
-    
-    &:focus {
-        border-color: $brand-primary--color;
-        border-width: 2px;
-        margin-bottom: 0;
-    }
+	display: block;
+	width: 100%;
+	padding: .5rem .75rem;
+	font-size: 1rem;
+	line-height: 1.25;
+	background-color: transparent;
+	background-image: none;
+	background-clip: padding-box;
+	border: none;
+	border-bottom: 1px solid $base-font--color_disabled;
+	outline: none;
+	transition: all 50ms ease-in-out;
+	
+	&:focus {
+		border-color: $brand-primary--color;
+		border-width: 2px;
+		margin-bottom: 0;
+	}
 }
 
 .select--clear {
-    color: $brand-text-primary--color;
-    background: transparent;
-    border: none;
-    font-family: $alt--font-face;
-    text-transform: uppercase;
-    font-weight: bold;
-    outline: none;
-    
-    option {
-        background-color: $white--color;
-        color: $black--color;
-    }
+	background: transparent;
+	border: none;
+	font-family: $alt--font-face;
+	text-transform: uppercase;
+	font-weight: bold;
+	outline: none;
+	
+	option {
+		background-color: $white--color;
+		color: $black--color;
+	}
 }
 
+/*  ========================================================================
+	01. Inputs
+	======================================================================== */

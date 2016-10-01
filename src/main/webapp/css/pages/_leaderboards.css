@@ -1,7 +1,7 @@
-/* Name:            The Leaderboards Page
+/* Name:			The Leaderboards Page
 
 Contents:
-	01.
+	01. Main
 
 Variables
 $file__element--property_modifier
@@ -14,66 +14,67 @@ $file__element--property_modifier
 ========================================================================== */
 
 .leaderboard {
-    width: 100%;
-    font-size: (12em / 100);
-    text-align: left;
-    
-    thead {
-        text-transform: uppercase;
-        color: $brand-text-muted--color;
-    }
-    
-    tbody {
-        font-weight: bold;
-        
-        tr {
-            &:hover {
-                background-color: $brand-quaternary--background;
-            }
-        }
-    }
-    
-    th,
-    td {
-        padding: 20px 0;
-        border-bottom: 1px solid $divider--color;
-    }
-    
-    th {
-        padding-bottom: 30px;
-    }
-    
-    &__rank {
-        .rank__icon {
-            padding-left: 20px;
-            font-size: 15px;
-            &--increase { color: $positive--color; }
-            &--neutral { color: $blue--color; font-size: 12px; }
-            &--decrease { color: $negative--color; }
-        }
-    }
-    
-    &__avatar,
-    &__user {
-        vertical-align: middle;
-    }
-    
-    &__avatar {
-        height: 50px;
-        width: 50px;
-        margin-right: 20px;
-        border-radius: 50%;
-        overflow: hidden;
-        
-        img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-    }
-    
-    &__user {}
-    
-    
-    
+	width: 100%;
+	font-size: (12em / 100);
+	text-align: left;
+	
+	thead {
+		text-transform: uppercase;
+		color: $base-font--color_muted;
+	}
+	
+	tbody {
+		font-weight: bold;
+		
+		tr {
+			&:hover {
+				background-color: $brand-quaternary--background;
+			}
+		}
+	}
+	
+	th,
+	td {
+		padding: 20px 0;
+		border-bottom: 1px solid $divider--color;
+	}
+	
+	th {
+		padding-bottom: 30px;
+	}
+
+	.icon-facebook:before {
+		content: $icon__facebook;
+	}
+	
+	&__rank {
+		.rank__icon {
+			padding-left: 20px;
+			font-size: 15px;
+			&--increase { color: $positive--color; }
+			&--neutral { color: $blue--color; font-size: 12px; }
+			&--decrease { color: $negative--color; }
+		}
+	}
+	
+	&__avatar,
+	&__user {
+		vertical-align: middle;
+	}
+	
+	&__avatar {
+		height: 50px;
+		width: 50px;
+		margin-right: 20px;
+		border-radius: 50%;
+		overflow: hidden;
+		
+		img {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+	}
+	
+	&__user {}
 }

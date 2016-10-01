@@ -1,33 +1,47 @@
-/* Name:            Card
+/* Name:			Ribbons
 
 Contents:
 01. Ribbon
 
 Variables
 $file__element--property_modifier
-========================================================================== */
-$ribbon--height                                     : 300px;
-$ribbon--color 										: #213E56;
+============================================================================ */
 
+$ribbon--height										: 300px;
+$ribbon--background 								: #213E56;
 
-/* ==========================================================================
-01. Ribbon
-========================================================================== */
+$tutorials: (
+	angular $angular--color,
+	bower $bower--color,
+	css $css--color,
+	grunt $grunt--color,
+	gulp $gulp--color,
+	html $html--color,
+	java $java--color,
+	javascript $javascript--color,
+	jquery $jquery--color,
+	node $node--color,
+	php $php--color,
+	react $react--color,
+	ruby $ruby--color,
+	ror $ruby-on-rails--color,
+	sublime $sublime--color,
+	typescript $typescript--color
+);
+
+/*  ========================================================================
+	01. Ribbon
+	======================================================================== */
 
 .ribbon {
     width: 100%;
     height: $ribbon--height;
-    background-color: $ribbon--color;
+    background-color: $ribbon--background;
+
+	@each $tutorial in $tutorials {
+
+		&.#{nth($tutorial, 1)} {
+			background-color: #{darken(nth($tutorial, 2), 10%)};
+		}
+	}
 }
-
-@include breakpoint(sm) {
-
-
-}
-
-@include breakpoint(md) {
-
-
-}
-
-
