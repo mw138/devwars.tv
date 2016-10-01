@@ -10,7 +10,7 @@ $file__element--property_modifier
 $tooltip--padding									: 10px;
 $tooltip--width										: 80%;
 $tooltip--font-size									: 12px;
-$tooltip--accent									: $brand-primary--color;
+$tooltip--accent									: $brand-primary;
 $tooltip--background								: $bg-color-1;
 
 /*  ========================================================================

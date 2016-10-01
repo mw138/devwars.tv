@@ -31,7 +31,7 @@ $file__element--property_modifier
 	&__inner {
 		min-height: 234px;
 		padding: (15em / 100);
-		border-top: 3px solid $brand-secondary--color;
+		border-top: 3px solid $brand-secondary;
 		background: $bg-color-3;
 	}
 
@@ -88,7 +88,7 @@ $file__element--property_modifier
 		&--total {
 			height: 100%;
 			width: 30%;
-			background: $brand-primary--color;
+			background: $brand-primary;
 		}
 	}
 }

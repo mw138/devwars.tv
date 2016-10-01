@@ -33,7 +33,7 @@ $file__element--property_modifier
 	transition: all 50ms ease-in-out;
 	
 	&:focus {
-		border-color: $brand-primary--color;
+		border-color: $brand-primary;
 		border-width: 2px;
 		margin-bottom: 0;
 	}

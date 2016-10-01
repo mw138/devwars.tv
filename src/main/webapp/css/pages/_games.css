@@ -54,14 +54,14 @@ $games-avatar-size									: 50px;
 	
 	&__gamemode {
 		padding: $xxxs-space $xxs-space;
-		border: 1px solid $brand-primary--color;
+		border: 1px solid $brand-primary;
 		margin-right: $xxs-space;
-		color: $brand-primary--color;
+		color: $brand-primary;
 		font-size: 10px;
 		
 		&--classic {
-			border: 1px solid $brand-primary--color;
-			color: $brand-primary--color;
+			border: 1px solid $brand-primary;
+			color: $brand-primary;
 		}
 		&--zen {
 			border: 1px solid $green--color;
@@ -215,25 +215,25 @@ $games-avatar-size									: 50px;
 .games-team--blue {
 	
 	.games-team__header {
-		background: linear-gradient(to right, transparent 60%, $brand-primary--color);
-		border-color: $brand-primary--color;
+		background: linear-gradient(to right, transparent 60%, $brand-primary);
+		border-color: $brand-primary;
 	}
 	
-	.games-team__name { color: $brand-primary--color; }
-	.games-player__avatar { border-color: $brand-primary--color; }
+	.games-team__name { color: $brand-primary; }
+	.games-player__avatar { border-color: $brand-primary; }
 }
 
 .games-team--red {
 	
 	.games-team__header {
-		background: linear-gradient(to left, transparent 60%, $brand-secondary--color);
-		border-color: $brand-secondary--color;
+		background: linear-gradient(to left, transparent 60%, $brand-secondary);
+		border-color: $brand-secondary;
 	}
 	
-	.games-team__name { color: $brand-secondary--color; }
+	.games-team__name { color: $brand-secondary; }
 	
 	.games-player { text-align: right; }
-	.games-player__avatar { border-color: $brand-secondary--color; }
+	.games-player__avatar { border-color: $brand-secondary; }
 }
 
 

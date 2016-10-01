@@ -19,9 +19,9 @@ $file__element--property_modifier 					: ;
 	01.1 DevWars Colors
 	======================================================================== */
 
-$brand-primary--color								: #03a9f4;
-$brand-secondary--color								: #e91e63;
-$brand-tertiary--color								: mix($brand-primary--color, $brand-secondary--color, 50%);
+$brand-primary        								: #03a9f4;
+$brand-secondary    								: #e91e63;
+$brand-tertiary        								: mix($brand-primary, $brand-secondary, 50%);
 
 $bg-color-1                							: #212121;
 $bg-color-2                    						: #303030;
@@ -164,5 +164,5 @@ $h5--font-size										: 20px;
 $h6--font-weight									: bold;
 $h6--font-size										: 20px;
 
-$link--color 										: $brand-primary--color;
-$link--color_hover 									: $brand-secondary--color;
+$link--color 										: $brand-primary;
+$link--color_hover 									: $brand-secondary;

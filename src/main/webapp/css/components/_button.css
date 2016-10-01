@@ -18,10 +18,10 @@ $btn--font-size										: 14px;
 $btn--font-weight									: 600;
 
 $btn--color											: #fff;
-$btn--background									: $brand-primary--color;
+$btn--background									: $brand-primary;
 
 $btn__secondary--color								: #fff;
-$btn__secondary--background							: $brand-secondary--color;
+$btn__secondary--background							: $brand-secondary;
 
 $btn__positive--color								: #fff;
 $btn__positive--background							: $positive--color;
@@ -116,7 +116,7 @@ $btn-outline--variants: (
 
 .btn.btn-link {
 	font-weight: normal;
-	color: $brand-primary--color;
+	color: $brand-primary;
 	background: transparent;
 	text-decoration: underline;
 }

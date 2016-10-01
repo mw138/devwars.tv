@@ -55,7 +55,7 @@ $list-item__spacing 								: 20px;
 
 	.list-item {
 		padding: $list-item__spacing $list-item__spacing 0;
-		background: $brand-primary--color;		
+		background: $brand-primary;		
 
 		&__read-more {
 			padding: $list-item__spacing 0;
