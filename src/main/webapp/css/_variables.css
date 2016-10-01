@@ -3,9 +3,9 @@
 Contents:
 	01. Colors
 		01.1 DevWars Colors
-		01.2 Brand Colors
-		01.3 Tutorial Colors
-		01.4 Standard Colors
+        01.2 Standard Colors
+        01.3 Tutorial Colors
+		01.4 Brand Colors
 	02. Responsive
 	03. Type 
 
@@ -16,8 +16,8 @@ $file__element--property_modifier
 $file__element--property_modifier 					: ;
 
 /*  ========================================================================
-	01.1 DevWars Colors
-	======================================================================== */
+01.1 DevWars Colors
+======================================================================== */
 
 $brand-primary        								: #03a9f4;
 $brand-secondary    								: #e91e63;
@@ -40,29 +40,26 @@ $body-bg         									: $bg-color-2;
 $base-font-color 									: #fff;
 
 
+/*  ========================================================================
+01.2 Standard Colors
+======================================================================== */
+
+$red-color 										    : #e74c3c;
+$yellow-color										: #f1c40f;
+$purple-color										: #8e44ad;
+$green-color 										: #2ecc71;
+$blue-color 										: #3498db;
+$orange-color										: #e67e22;
+$grey-color 										: #7f8c8d;
+$black-color 										: #000;
+$white-color                                        : #fff;
+
+$positive-color 									: $green-color;
+$negative-color 									: $red-color;
 
 /*  ========================================================================
-	01.2 Brand Colors
-	======================================================================== */
-
-$facebook-color									    : #0b5998;
-$twitter-color										: #4099ff;
-$google-color										: #da4835;
-$youtube-color										: #e52d27;
-$reddit-color										: #ff4500;
-$twitch-color										: #6441a5;
-$slack-color										: #e9a820;
-$cloud9-color										: #1aa6da;
-$github-color										: #4183c4;
-$linkedin-color									    : #0077b5;
-$codepen-color										: #fff;
-$website-color										: #fff;
-$email-color										: #fff;
-
-
-/*  ========================================================================
-	01.3 Tutorial Colors
-	======================================================================== */
+01.3 Technology Colors
+======================================================================== */
 
 $angular-color 								    	: #e03237;
 $bower-color 										: #ef5734;
@@ -83,34 +80,63 @@ $typescript-color 									: #35879b;
 
 
 /*  ========================================================================
-	01.4 Standard Colors
-	========================================================================== */
+01.4 Brand Colors
+======================================================================== */
 
-$red-color 										    : #e74c3c;
-$yellow-color										: #f1c40f;
-$purple-color										: #8e44ad;
-$green-color 										: #2ecc71;
-$blue-color 										: #3498db;
-$orange-color										: #e67e22;
-$grey-color 										: #7f8c8d;
-$black-color 										: #000;
-$white-color                                        : #fff;
-
-$positive-color 									: $green-color;
-$negative-color 									: $red-color;
+$facebook-color									    : #0b5998;
+$twitter-color										: #4099ff;
+$google-color										: #da4835;
+$youtube-color										: #e52d27;
+$reddit-color										: #ff4500;
+$twitch-color										: #6441a5;
+$slack-color										: #e9a820;
+$cloud9-color										: #1aa6da;
+$github-color										: #4183c4;
+$linkedin-color									    : #0077b5;
+$codepen-color										: #fff;
+$website-color										: #fff;
+$email-color										: #fff;
 
 
 /*  ========================================================================
-	02. Globals
-	======================================================================== */
+02. Grid
+======================================================================== */
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 544px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px
+);
+
+$container-max-widths: (
+    sm: 576px,
+    md: 720px,
+    lg: 940px,
+    xl: 1140px
+);
+
+$grid-columns										: 12;
+$grid-gutter-width						    		: 10px;
+$grid-gutter-part						    		: $grid-gutter-width / 2;
+
+$grid__container--sm								: 728px;
+$grid__container--md								: 940px;
+$grid__container--lg								: 1200px;
+
+
+/*  ========================================================================
+02. Globals
+======================================================================== */
 
 $global__gutter										: 20px;
 $global__ribbon										: 300px;
 
 
 /* ========================================================================
-	03. Responsive
-	======================================================================== */
+03. Responsive
+======================================================================== */
 
 $responsive__sm										: 768px;
 $responsive__md										: 1080px;
@@ -118,8 +144,8 @@ $responsive__lg										: 1300px;
 
 
 /* ========================================================================
-	04. Spacing
-	======================================================================== */
+04. Spacing
+======================================================================== */
 
 $base-space											: 40px;
 
@@ -139,8 +165,8 @@ $ml-space											: $base-space + $l-space;
 
 
 /*  ========================================================================
-	05. Type
-	======================================================================== */
+05. Type
+======================================================================== */
 
 $base-font-face									    : 'Open Sans', sans-serif;
 $alt-font-face										: 'Montserrat', sans-serif;

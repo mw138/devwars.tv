@@ -36,7 +36,7 @@ $games-avatar-size									: 50px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: $grid__gutter--width-xs;
+	padding: $grid-gutter-width;
 	border-bottom: 1px solid $divider-color;
 	background-color: $bg-color-1;
 	cursor: pointer;

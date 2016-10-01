@@ -15,7 +15,7 @@ $file__element--property_modifier
 	======================================================================== */
 
 .form-group {
-	margin-bottom: $grid__gutter--width-sm * 2;
+	margin-bottom: $grid-gutter-width * 2;
 }
 
 .form-control {

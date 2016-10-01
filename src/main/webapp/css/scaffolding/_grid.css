@@ -10,20 +10,13 @@ Variables
 $file__element--property_modifier
 ============================================================================ */
 
-$grid__columns										: 12;
-$grid__gutter--width-xs								: 10px;
-$grid__gutter--width-sm								: 10px;
-
-$grid__container--sm								: 728px;
-$grid__container--md								: 940px;
-$grid__container--lg								: 1200px;
 
 /*  ========================================================================
 	01. Containers
 	======================================================================== */
 
 .container {
-	margin: $grid__gutter--width-xs ($grid__gutter--width-xs * 2) 0;
+	margin: $grid-gutter-width ($grid-gutter-width * 2) 0;
 }
 
 .container-fluid {
@@ -62,8 +55,8 @@ $grid__container--lg								: 1200px;
 	======================================================================== */
 
 .row {
-	margin-left: -$grid__gutter--width-sm;
-	margin-right: -$grid__gutter--width-sm;
+	margin-left: -$grid-gutter-width;
+	margin-right: -$grid-gutter-width;
 
 	&:after {
 		content: '';
@@ -82,8 +75,8 @@ $grid__container--lg								: 1200px;
 
 [class*=col-] {
 	float: left;
-	padding-left: $grid__gutter--width-sm;
-	padding-right: $grid__gutter--width-sm;
+	padding-left: $grid-gutter-width;
+	padding-right: $grid-gutter-width;
 	width: 100%;
 }
 
@@ -93,40 +86,40 @@ $grid__container--lg								: 1200px;
 
 @include breakpoint(xs-only) {
 
-	@for $i from 1 through $grid__columns {
+	@for $i from 1 through $grid-columns {
 		
 		.col-xs-#{$i} {
-			width: percentage($i / $grid__columns);
+			width: percentage($i / $grid-columns);
 		}
 	}
 }
 
 @include breakpoint(sm) {
 
-	@for $i from 1 through $grid__columns {
+	@for $i from 1 through $grid-columns {
 		
 		.col-sm-#{$i} {
-			width: percentage($i / $grid__columns);
+			width: percentage($i / $grid-columns);
 		}
 	}
 }
 		
 @include breakpoint(md) {
 	
-	@for $i from 1 through $grid__columns {
+	@for $i from 1 through $grid-columns {
 		
 		.col-md-#{$i} {
-			width: percentage($i / $grid__columns);
+			width: percentage($i / $grid-columns);
 		}
 	}
 }
 
 @include breakpoint(lg) {
 	
-	@for $i from 1 through $grid__columns {
+	@for $i from 1 through $grid-columns {
 		
 		.col-lg-#{$i} {
-			width: percentage($i / $grid__columns);
+			width: percentage($i / $grid-columns);
 		}
 	}
 }
