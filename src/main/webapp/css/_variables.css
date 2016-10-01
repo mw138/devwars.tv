@@ -179,6 +179,25 @@ $h5-font-size										: 20px;
 $h6-font-weight									    : bold;
 $h6-font-size										: 20px;
 
+$display1-size                                      : 6rem;
+$display1-weight                                    : 300;
+
+$display2-size                                      : 5.5rem;
+$display2-weight                                    : 300;
+
+$display3-size                                      : 4.5rem;
+$display3-weight                                    : 300;
+
+$display4-size                                      : 3.5rem;
+$display4-weight                                    : 300;
+
+$display5-size                                      : 2.5rem;
+$display5-weight                                    : 300;
+
+$display6-size                                      : 2rem;
+$display6-weight                                    : 300;
+
+
 $link-color 										: $brand-primary;
 $link-color-hover 									: $brand-secondary;
 
