@@ -1,8 +1,7 @@
 /* Name:			Page Headings
 
 Contents:
-	01. Base styles
-	02. Generate heading
+	01. Heading
 
 Variables
 $file__element--property_modifier
@@ -11,8 +10,8 @@ $file__element--property_modifier
 
 
 /*  ========================================================================
-	01. Base styles
-	======================================================================== */
+01. Heading
+======================================================================== */
 
 .heading {
 	width: 100%;
@@ -22,53 +21,5 @@ $file__element--property_modifier
 	
 	h1 {
 		font-size: 42px;
-	}
-}
-
-/*  ========================================================================
-	01. Generate headings
-	======================================================================== */
-
-.headings {
-	display: flex;
-	align-items: center;
-	height: 70px;
-
-	h1 {
-		text-align: center;
-		font-size: 26px;
-	}
-}
-
-@include breakpoint(sm) {
-
-	.headings {
-		height: 100px;
-
-		h1 {
-			font-size: 36px;
-		}
-	}
-}
-
-@include breakpoint(md) {
-
-	.headings {
-		height: 150px;
-
-		h1 {
-			font-size: 50px;
-		}
-	}
-}
-
-@include breakpoint(lg) {
-
-	.headings {
-		height: 230px;
-
-		h1 {
-			font-size: 72px;
-		}
 	}
 }
