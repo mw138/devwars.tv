@@ -6,8 +6,10 @@ Contents:
         01.2 Standard Colors
         01.3 Tutorial Colors
 		01.4 Brand Colors
-	02. Responsive
-	03. Type 
+	02. Grid
+	03. Spacing 
+	04. Type 
+	05. Globals 
 
 Variables
 $file__element--property_modifier
@@ -103,11 +105,10 @@ $email-color										: #fff;
 ======================================================================== */
 
 $grid-breakpoints: (
-    xs: 0,
-    sm: 544px,
-    md: 768px,
-    lg: 992px,
-    xl: 1200px
+    xs: 544px,
+    sm: 768px,
+    md: 992px,
+    lg: 1200px
 );
 
 $container-max-widths: (
@@ -121,30 +122,9 @@ $grid-columns										: 12;
 $grid-gutter-width						    		: 10px;
 $grid-gutter-part						    		: $grid-gutter-width / 2;
 
-$grid__container--sm								: 728px;
-$grid__container--md								: 940px;
-$grid__container--lg								: 1200px;
-
-
-/*  ========================================================================
-02. Globals
-======================================================================== */
-
-$global__gutter										: 20px;
-$global__ribbon										: 300px;
-
 
 /* ========================================================================
-03. Responsive
-======================================================================== */
-
-$responsive__sm										: 768px;
-$responsive__md										: 1080px;
-$responsive__lg										: 1300px;
-
-
-/* ========================================================================
-04. Spacing
+03. Spacing
 ======================================================================== */
 
 $base-space											: 40px;
@@ -165,7 +145,7 @@ $ml-space											: $base-space + $l-space;
 
 
 /*  ========================================================================
-05. Type
+04. Type
 ======================================================================== */
 
 $base-font-face									    : 'Open Sans', sans-serif;
@@ -203,8 +183,12 @@ $link-color 										: $brand-primary;
 $link-color-hover 									: $brand-secondary;
 
 
+/*  ========================================================================
+05. Globals
+======================================================================== */
 
-
+$global__gutter										: 20px;
+$global__ribbon										: 300px;
 
 
 

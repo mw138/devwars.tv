@@ -32,21 +32,21 @@ $file__element--property_modifier
 
 	.container {
 		margin: 0 auto;
-		width: $grid__container--sm;
+        width: map-get($container-max-widths, md);
 	}
 }
 
 @include breakpoint(md) {
 
 	.container {
-		width: $grid__container--md;
+        width: map-get($container-max-widths, lg);
 	}
 }
 
 @include breakpoint(lg) {
 
 	.container {
-		width: $grid__container--lg;
+        width: map-get($container-max-widths, xl);
 	}
 }
 
