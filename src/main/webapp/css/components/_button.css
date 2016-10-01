@@ -34,16 +34,12 @@ $btn__negative--background 						: $negative--color;
 $btn__disabled--color 							: $black--color;
 $btn__disabled--background 						: $grey--color;
 
-$btn__gray--color 							    : #fff;
-$btn__gray--background 						    : lightgray;
-
 $btn--variants: (
     btn-primary $btn__primary--background $btn__primary--color,
-    btn-secondary $btn__secondary--background $btn__secondary--color ,
-    btn-positive $btn__positive--background $btn__positive--color ,
-    btn-negative $btn__negative--background $btn__negative--color ,
-    btn-disabled $btn__disabled--background $btn__disabled--color ,
-    btn-gray $btn__gray--background $btn__gray--color ,
+    btn-secondary $btn__secondary--background $btn__secondary--color,
+    btn-positive $btn__positive--background $btn__positive--color,
+    btn-negative $btn__negative--background $btn__negative--color,
+    btn-disabled $btn__disabled--background $btn__disabled--color,
     btn-youtube $youtube--color #fff
 );
 
@@ -53,8 +49,7 @@ $btn-outline--variants: (
     btn-outline-positive $btn__positive--background white,
     btn-outline-negative $btn__negative--background white,
     btn-outline-disabled $btn__disabled--background white,
-    btn-outline-white $white--color black,
-    btn-outline-gray $btn__gray--background black
+    btn-outline-white $white--color black
 );
 
 /* ========================================================================
