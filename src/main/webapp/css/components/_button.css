@@ -29,22 +29,25 @@ $btn__positive--background							: $positive--color;
 $btn__negative--color								: #fff;
 $btn__negative--background							: $negative--color;
 
-$btn__disabled--color								: $black--color;
-$btn__disabled--background							: $grey--color;
+$btn__disabled--color 								: $black--color;
+$btn__disabled--background 							: $grey--color;
 
 $btn--variants: (
-	btn-secondary $btn__secondary--background $btn__secondary--color,
-	btn-positive $btn__positive--background $btn__positive--color,
-	btn-negative $btn__negative--background $btn__negative--color,
-	btn-youtube $youtube--color contrast($youtube--color)
+    btn-primary $btn__primary--background $btn__primary--color,
+    btn-secondary $btn__secondary--background $btn__secondary--color,
+    btn-positive $btn__positive--background $btn__positive--color,
+    btn-negative $btn__negative--background $btn__negative--color,
+    btn-disabled $btn__disabled--background $btn__disabled--color,
+    btn-youtube $youtube--color #fff
 );
 
 $btn-outline--variants: (
-	btn-outline-secondary $btn__secondary--background #fff,
-	btn-outline-positive $btn__positive--background #fff,
-	btn-outline-negative $btn__negative--background #fff,
-	btn-outline-disabled $btn__disabled--background #fff,
-	btn-outline-white $white--color #000,
+    btn-outline-primary $btn__primary--background white,
+    btn-outline-secondary $btn__secondary--background white,
+    btn-outline-positive $btn__positive--background white,
+    btn-outline-negative $btn__negative--background white,
+    btn-outline-disabled $btn__disabled--background white,
+    btn-outline-white $white--color black
 );
 
 /*  ========================================================================
