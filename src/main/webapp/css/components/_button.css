@@ -33,7 +33,6 @@ $btn__disabled--color 								: $black--color;
 $btn__disabled--background 							: $grey--color;
 
 $btn--variants: (
-    btn-primary $btn__primary--background $btn__primary--color,
     btn-secondary $btn__secondary--background $btn__secondary--color,
     btn-positive $btn__positive--background $btn__positive--color,
     btn-negative $btn__negative--background $btn__negative--color,
@@ -42,7 +41,6 @@ $btn--variants: (
 );
 
 $btn-outline--variants: (
-    btn-outline-primary $btn__primary--background white,
     btn-outline-secondary $btn__secondary--background white,
     btn-outline-positive $btn__positive--background white,
     btn-outline-negative $btn__negative--background white,

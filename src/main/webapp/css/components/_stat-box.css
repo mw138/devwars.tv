@@ -32,7 +32,7 @@ $file__element--property_modifier
 		min-height: 234px;
 		padding: (15em / 100);
 		border-top: 3px solid $brand-secondary--color;
-		background: $brand-tertiary--background;
+		background: $bg-color-3;
 	}
 
 	&__title {
@@ -83,7 +83,7 @@ $file__element--property_modifier
 
 	&__xp-bar {
 		height: 25px;
-		background: $brand-primary--background;
+		background: $bg-color-1;
 
 		&--total {
 			height: 100%;

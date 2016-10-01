@@ -28,7 +28,7 @@ $file__element--property_modifier
 		
 		tr {
 			&:hover {
-				background-color: $brand-quaternary--background;
+				background-color: $bg-color-4;
 			}
 		}
 	}

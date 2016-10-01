@@ -26,7 +26,7 @@ body {
 		left: 0;
 		right: 0;
 		height: 500px;
-		background: $brand-secondary--background;
+		background: $bg-color-2;
 	}
 	
 	::-webkit-scrollbar{
@@ -34,7 +34,7 @@ body {
 	}
 
 	::-webkit-scrollbar-track-piece{
-		background-color: $brand-tertiary--background;
+		background-color: $bg-color-3;
 	}
 
 	::-webkit-scrollbar-thumb{

@@ -45,10 +45,10 @@ $social--sets:  (
 		.#{nth($social-type, 1)} {
 
 			a {
-				background: #{nth($social-type, 2)};	
+				background-color: #{nth($social-type, 2)};	
 
 				&:hover {
-					background: darken(nth($social-type, 2), 10%);
+					background-color: darken(nth($social-type, 2), 10%);
 				}
 			}
 		}
@@ -80,11 +80,11 @@ $social--sets:  (
 
 				a {
 					color: #{nth($social-type, 2)};	
-					background: $brand-primary--background;
+					background-color: transparent;
 
 					&:hover {
 						color: darken(nth($social-type, 2), 10%);
-						background: $brand-primary--background;
+						background-color: transparent;
 					}
 				}
 			}

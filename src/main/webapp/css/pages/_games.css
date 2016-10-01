@@ -25,7 +25,7 @@ $games-avatar-size									: 50px;
 
 .games-sidebar {
 	height: 100vh;
-	background-color: $brand-secondary--background;
+	background-color: $bg-color-2;
 	position: fixed;
 	left: 0;
 	overflow-y: auto;
@@ -38,11 +38,11 @@ $games-avatar-size									: 50px;
 	align-items: center;
 	padding: $grid__gutter--width-xs;
 	border-bottom: 1px solid $divider--color;
-	background-color: $brand-primary--background;
+	background-color: $bg-color-1;
 	cursor: pointer;
 	
 	&:hover {
-		background-color: $brand-secondary--background;
+        background-color: $bg-color-2;
 	}
 	
 	&__meta {}

@@ -24,7 +24,7 @@ $file__element--property_modifier
 	display: block;
 	margin-bottom: 20px;
 	border-top: 3px solid $brand-secondary--color;
-	background-color: $brand-tertiary--background;
+	background-color: $bg-color-3;
 
 	a {
 		text-decoration: none;

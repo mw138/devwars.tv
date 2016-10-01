@@ -11,7 +11,7 @@ $tooltip--padding									: 10px;
 $tooltip--width										: 80%;
 $tooltip--font-size									: 12px;
 $tooltip--accent									: $brand-primary--color;
-$tooltip--background								: $brand-primary--background;
+$tooltip--background								: $bg-color-1;
 
 /*  ========================================================================
 	01. Standard tooltip

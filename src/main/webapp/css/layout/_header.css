@@ -14,7 +14,7 @@ $file__element--property_modifier
 ============================================================================ */
 
 $header__topbar--line-height						: 40px;
-$header__topbar--background							: $brand-primary--background;
+$header__topbar--background							: $bg-color-1;
 $header__background 								: $black--color;
 
 $header__nav-item--color							: $base-font--color;
@@ -242,8 +242,8 @@ $header__nav-item--font-size						: 14px;
 		width: 65%;
 		right: -65%;
 		min-height: 100%;
-		background: $brand-tertiary--background;
-		border-left: 6px solid lighten($brand-tertiary--background, 10%);
+        background: $bg-color-3;
+		border-left: 6px solid lighten($bg-color-3, 10%);
 		transition: right .6s;
 	}
 
