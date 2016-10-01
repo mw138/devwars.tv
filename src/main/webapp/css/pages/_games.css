@@ -37,7 +37,7 @@ $games-avatar-size									: 50px;
 	justify-content: space-between;
 	align-items: center;
 	padding: $grid__gutter--width-xs;
-	border-bottom: 1px solid $divider--color;
+	border-bottom: 1px solid $divider-color;
 	background-color: $bg-color-1;
 	cursor: pointer;
 	
@@ -64,12 +64,12 @@ $games-avatar-size									: 50px;
 			color: $brand-primary;
 		}
 		&--zen {
-			border: 1px solid $green--color;
-			color: $green--color;
+			border: 1px solid $green-color;
+			color: $green-color;
 		}
 		&--coffee {
-			border: 1px solid $yellow--color;
-			color: $yellow--color;
+			border: 1px solid $yellow-color;
+			color: $yellow-color;
 		}
 	}
 	
@@ -85,7 +85,7 @@ $games-avatar-size									: 50px;
 	}
 	
 	&__youtube {
-		color: $youtube--color;
+		color: $youtube-color;
 	}
 
 }
@@ -115,9 +115,9 @@ $games-avatar-size									: 50px;
 			font-weight: bold;
 		}
 		
-		.html-color { color: $html--color; }
-		.css-color { color: $css--color; }
-		.js-color { color: $javascript--color; }
+		.html-color { color: $html-color; }
+		.css-color { color: $css-color; }
+		.js-color { color: $javascript-color; }
 	}
 }
 
@@ -181,7 +181,7 @@ $games-avatar-size									: 50px;
 	
 	&__win {
 		padding: 0 $s-space;
-		color: $positive--color;
+		color: $positive-color;
 		font-weight: bold;
 		font-size: 18px;
 	}

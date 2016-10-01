@@ -15,14 +15,14 @@ $file__element--property_modifier
 
 $header__topbar--line-height						: 40px;
 $header__topbar--background							: $bg-color-1;
-$header__background 								: $black--color;
+$header__background 								: $black-color;
 
-$header__nav-item--color							: $base-font--color;
-$header__nav-item--color_hover						: $link--color;
+$header__nav-item--color							: $base-font-color;
+$header__nav-item--color_hover						: $link-color;
 $header__nav-item--background_hover					: transparent;
 $header__nav-item--line-height						: 90px;
 $header__nav-item--text-transform					: uppercase;
-$header__nav-item--font-family						: $alt--font-face;
+$header__nav-item--font-family						: $alt-font-face;
 $header__nav-item--font-size						: 14px;
 
 /*  ========================================================================
@@ -31,10 +31,10 @@ $header__nav-item--font-size						: 14px;
 
 .header {
 	background: $header__background;
-	transition: all .6s;
+	transition: all 0.6s;
 
 	&__bottom-bar {
-		margin: 0 20px;
+		margin: 0 $s-space;
 
 		.row {
 			display: flex;
@@ -53,7 +53,7 @@ $header__nav-item--font-size						: 14px;
 		img {
 			display: block;
 			max-height: 50px;
-			transition: all .25s;
+			transition: all 0.25s;
 		}
 	}
 }
@@ -61,7 +61,7 @@ $header__nav-item--font-size						: 14px;
 @include breakpoint(xs-only) {
 
 	header {
-		padding-top: 40px;
+		padding-top: $m-space;
 	}
 
 	.header {
@@ -83,7 +83,7 @@ $header__nav-item--font-size						: 14px;
 @include breakpoint(sm) {
 
 	header {
-		padding-bottom: 110px;
+        padding-bottom: $xl-space;
 
 		.container {
 			width: auto;
@@ -91,7 +91,7 @@ $header__nav-item--font-size						: 14px;
 
 		.row {
 			margin: 0;
-			padding: 0 40px;
+			padding: 0 $m-space;
 		}
 	}
 
@@ -107,7 +107,7 @@ $header__nav-item--font-size						: 14px;
 			height: $header__topbar--line-height;
 			line-height: $header__topbar--line-height;
 			background: $header__topbar--background;
-			transition: all .25s;
+			transition: all 0.25s;
 		}
 
 		.twitch-notification {
@@ -116,8 +116,8 @@ $header__nav-item--font-size						: 14px;
 			word-spacing: 3px;
 			text-transform: uppercase;
 			text-decoration: none;
-			color: $base-font--color;
-			font-family: $alt--font-face;
+			color: $base-font-color;
+			font-family: $alt-font-face;
 			font-size: 14px;
 
 			span {
@@ -130,7 +130,7 @@ $header__nav-item--font-size						: 14px;
 				vertical-align: top;
 				margin: 0 5px 0 0;
 				line-height: $header__topbar--line-height;
-				color: $twitch--color;
+				color: $twitch-color;
 
 				&:before {
 					position: relative;
@@ -148,7 +148,7 @@ $header__nav-item--font-size						: 14px;
 					height: 5px;
 					transform: translate(-50%,-50%);
 					border-radius: 50%;
-					box-shadow: 0 0 0 0 #F0F0F0, 0 0 0 0 rgba($red--color, .7);
+					box-shadow: 0 0 0 0 #F0F0F0, 0 0 0 0 rgba($red-color, 07);
 					animation: pulse 2s infinite cubic-bezier(.66,.33,0,1);
 				}
 			}
@@ -156,7 +156,7 @@ $header__nav-item--font-size						: 14px;
 			&--live {
 
 				.icon {
-					color: $red--color;
+					color: $red-color;
 
 					&:before {
 						content: $icon__record;
@@ -244,7 +244,7 @@ $header__nav-item--font-size						: 14px;
 		min-height: 100%;
         background: $bg-color-3;
 		border-left: 6px solid lighten($bg-color-3, 10%);
-		transition: right .6s;
+		transition: right 0.6s;
 	}
 
 	ul {

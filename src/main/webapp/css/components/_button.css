@@ -12,40 +12,41 @@ Variables
 $file__element--property_modifier
 ============================================================================ */
 
-$btn--padding										: 14px 25px;
-$btn--text-transform								: uppercase;
-$btn--font-size										: 14px;
-$btn--font-weight									: 600;
+$btn-padding										: $xs-space $s-space;
+$btn-text-transform								    : uppercase;
+$btn-font-size										: 14px;
+$btn-font-weight									: 600;
 
-$btn--color											: #fff;
-$btn--background									: $brand-primary;
+$btn-color											: #fff;
+$btn-bg								         	    : $brand-primary;
 
-$btn__secondary--color								: #fff;
-$btn__secondary--background							: $brand-secondary;
+$btn-secondary-bg			        				: $brand-secondary;
+$btn-secondary-color								: #fff;
 
-$btn__positive--color								: #fff;
-$btn__positive--background							: $positive--color;
+$btn-positive-bg        							: $positive-color;
+$btn-positive-color 								: #fff;
 
-$btn__negative--color								: #fff;
-$btn__negative--background							: $negative--color;
+$btn-negative-bg							        : $negative-color;
+$btn-negative-color								    : #fff;
 
-$btn__disabled--color 								: $black--color;
-$btn__disabled--background 							: $grey--color;
+$btn-disabled-bg 							        : $grey-color;
+$btn-disabled-color 								: $black-color;
+
 
 $btn--variants: (
-    btn-secondary $btn__secondary--background $btn__secondary--color,
-    btn-positive $btn__positive--background $btn__positive--color,
-    btn-negative $btn__negative--background $btn__negative--color,
-    btn-disabled $btn__disabled--background $btn__disabled--color,
-    btn-youtube $youtube--color #fff
+    btn-secondary $btn-secondary-bg $btn-secondary-color,
+    btn-positive $btn-positive-bg $btn-positive-color,
+    btn-negative $btn-negative-bg $btn-negative-color,
+    btn-disabled $btn-disabled-bg $btn-disabled-color,
+    btn-youtube $youtube-color #fff
 );
 
 $btn-outline--variants: (
-    btn-outline-secondary $btn__secondary--background white,
-    btn-outline-positive $btn__positive--background white,
-    btn-outline-negative $btn__negative--background white,
-    btn-outline-disabled $btn__disabled--background white,
-    btn-outline-white $white--color black
+    btn-outline-secondary $btn-secondary-bg white,
+    btn-outline-positive $btn-positive-bg white,
+    btn-outline-negative $btn-negative-bg white,
+    btn-outline-disabled $btn-disabled-bg white,
+    btn-outline-white $white-color black
 );
 
 /*  ========================================================================
@@ -62,19 +63,19 @@ $btn-outline--variants: (
 	text-align: center;
 	font-style: normal;
 	margin: 0;
-	padding: $btn--padding;
+	padding: $btn-padding;
 	line-height: 1;
-	text-transform: $btn--text-transform;
-	color: $btn--color;
-	background-color: $btn--background;
-	font-size: $btn--font-size;
-	font-weight: $btn--font-weight;
+	text-transform: $btn-text-transform;
+	color: $btn-color;
+	background-color: $btn-bg;
+	font-size: $btn-font-size;
+	font-weight: $btn-font-weight;
 	transition: all .25s;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	
 	&:hover {
-		color: $btn--color;
-		background-color: lighten($btn--background, 10%);
+		color: $btn-color;
+		background-color: lighten($btn-bg, 10%);
 	}
 }
 

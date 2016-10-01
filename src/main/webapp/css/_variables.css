@@ -28,71 +28,77 @@ $bg-color-2                    						: #303030;
 $bg-color-3                							: #424242;
 $bg-color-4                    						: #4b4b4b;
 
-$base-font--color 									: #fff;
-$base-font--color_muted								: rgba($base-font--color, .3);
-$base-font--color_disabled							: rgba($base-font--color, .5);
+$text-color-primary                                 : #fff;
+$text-color-secondary                               : rgba(#fff, 0.9);
+$text-color-muted                                   : rgba(#fff, 0.7);
+$text-color-disabled                                : rgba(#fff, 0.5);
+$divider-color										: rgba(#fff, 0.12);
 
-$body--background 									: $bg-color-2;
+$devbit-color										: #f8bf3f;
 
-$devbit--color										: #f8bf3f;
+$body-bg         									: $bg-color-2;
+$base-font-color 									: #fff;
 
-$divider--color										: #555;
+
 
 /*  ========================================================================
 	01.2 Brand Colors
 	======================================================================== */
 
-$facebook--color									: #0b5998;
-$twitter--color										: #4099ff;
-$google--color										: #da4835;
-$youtube--color										: #e52d27;
-$reddit--color										: #ff4500;
-$twitch--color										: #6441a5;
-$slack--color										: #e9a820;
-$cloud9--color										: #1aa6da;
-$github--color										: #4183c4;
-$linkedin--color									: #0077b5;
-$codepen--color										: #fff;
-$website--color										: #fff;
-$email--color										: #fff;
+$facebook-color									    : #0b5998;
+$twitter-color										: #4099ff;
+$google-color										: #da4835;
+$youtube-color										: #e52d27;
+$reddit-color										: #ff4500;
+$twitch-color										: #6441a5;
+$slack-color										: #e9a820;
+$cloud9-color										: #1aa6da;
+$github-color										: #4183c4;
+$linkedin-color									    : #0077b5;
+$codepen-color										: #fff;
+$website-color										: #fff;
+$email-color										: #fff;
+
 
 /*  ========================================================================
 	01.3 Tutorial Colors
 	======================================================================== */
 
-$angular--color 									: #e03237;
-$bower--color 										: #ef5734;
-$css--color  										: #0ebeff;
-$grunt--color 										: #e48632;
-$gulp--color 										: #cf4646;
-$html--color 										: #ff7200;
-$java--color 										: #bf8520;
-$javascript--color 									: #e5ff0e;
-$jquery--color 										: #0769ad;
-$node--color 										: #8CC84b;
-$php--color 										: #6172a6;
-$react--color 										: #00d8ff;
-$ruby--color 										: #85211c;
-$ruby-on-rails--color 								: #c00;
-$sublime--color 									: #ff8100;
-$typescript--color 									: #35879b;
+$angular-color 								    	: #e03237;
+$bower-color 										: #ef5734;
+$css-color  										: #0ebeff;
+$grunt-color 										: #e48632;
+$gulp-color 										: #cf4646;
+$html-color 										: #ff7200;
+$java-color 										: #bf8520;
+$javascript-color 									: #e5ff0e;
+$jquery-color 										: #0769ad;
+$node-color 										: #8CC84b;
+$php-color 										    : #6172a6;
+$react-color 										: #00d8ff;
+$ruby-color 										: #85211c;
+$ruby-on-rails-color 								: #c00;
+$sublime-color 								    	: #ff8100;
+$typescript-color 									: #35879b;
+
 
 /*  ========================================================================
 	01.4 Standard Colors
 	========================================================================== */
 
-$red--color 										: #e74c3c;
-$yellow--color										: #f1c40f;
-$purple--color										: #8e44ad;
-$green--color 										: #2ecc71;
-$blue--color 										: #3498db;
-$orange--color										: #e67e22;
-$grey--color 										: #7f8c8d;
-$black--color 										: #000;
-$white--color                                       : #fff;
+$red-color 										    : #e74c3c;
+$yellow-color										: #f1c40f;
+$purple-color										: #8e44ad;
+$green-color 										: #2ecc71;
+$blue-color 										: #3498db;
+$orange-color										: #e67e22;
+$grey-color 										: #7f8c8d;
+$black-color 										: #000;
+$white-color                                        : #fff;
 
-$positive--color 									: $green--color;
-$negative--color 									: $red--color;
+$positive-color 									: $green-color;
+$negative-color 									: $red-color;
+
 
 /*  ========================================================================
 	02. Globals
@@ -101,6 +107,7 @@ $negative--color 									: $red--color;
 $global__gutter										: 20px;
 $global__ribbon										: 300px;
 
+
 /* ========================================================================
 	03. Responsive
 	======================================================================== */
@@ -108,6 +115,7 @@ $global__ribbon										: 300px;
 $responsive__sm										: 768px;
 $responsive__md										: 1080px;
 $responsive__lg										: 1300px;
+
 
 /* ========================================================================
 	04. Spacing
@@ -129,40 +137,50 @@ $sm-space											: $base-space - $xs-space;
 $ms-space											: $base-space + $s-space;
 $ml-space											: $base-space + $l-space;
 
+
 /*  ========================================================================
 	05. Type
 	======================================================================== */
 
-$base--font-face									: 'Open Sans', sans-serif;
-$alt--font-face										: 'Montserrat', sans-serif;
-$sans--font-face									: Arial, Verdana, Helvetica, sans-serif;
+$base-font-face									    : 'Open Sans', sans-serif;
+$alt-font-face										: 'Montserrat', sans-serif;
+$sans-font-face			    						: Arial, Verdana, Helvetica, sans-serif;
 
-$base--line-height									: normal;
-$base--font-size									: 18px;
+$base-line-height									: normal;
+$base-font-size							    		: 18px;
 
-$headings--color 									: $base-font--color;
+$headings-color 									: $base-font-color;
 
-$h1--transform										: uppercase;
-$h1--font-weight									: bold;
-$h1--font-family									: $alt--font-face;
-$h1--font-size										: 72px;
+$h1-transform										: uppercase;
+$h1-font-weight									    : bold;
+$h1-font-family									    : $alt-font-face;
+$h1-font-size										: 72px;
 
-$h2--transform										: none;
-$h2--font-weight									: bold;
-$h2--font-family									: $alt--font-face;
-$h2--font-size										: 35px;
+$h2-transform										: none;
+$h2-font-weight									    : bold;
+$h2-font-family									    : $alt-font-face;
+$h2-font-size										: 35px;
 
-$h3--font-weight									: bold;
-$h3--font-size										: 20px;
+$h3-font-weight									    : bold;
+$h3-font-size										: 20px;
 
-$h4--font-weight									: bold;
-$h4--font-size										: 20px;
+$h4-font-weight									    : bold;
+$h4-font-size										: 20px;
 
-$h5--font-weight									: bold;
-$h5--font-size										: 20px;
+$h5-font-weight									    : bold;
+$h5-font-size										: 20px;
 
-$h6--font-weight									: bold;
-$h6--font-size										: 20px;
+$h6-font-weight									    : bold;
+$h6-font-size										: 20px;
 
-$link--color 										: $brand-primary;
-$link--color_hover 									: $brand-secondary;
+$link-color 										: $brand-primary;
+$link-color-hover 									: $brand-secondary;
+
+
+
+
+
+
+
+
+

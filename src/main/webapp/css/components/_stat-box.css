@@ -313,12 +313,12 @@ $file__element--property_modifier
 			&--xp {
 				text-transform: uppercase;
 				width: 12%;
-				color: $green--color;
+				color: $green-color;
 			}
 
 			&--devbits {
 				width: 18%;
-				color: $devbit--color;
+				color: $devbit-color;
 			}
 		}
 	}

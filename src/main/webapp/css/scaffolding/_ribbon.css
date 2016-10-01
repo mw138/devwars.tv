@@ -7,26 +7,26 @@ Variables
 $file__element--property_modifier
 ============================================================================ */
 
-$ribbon--height										: 300px;
-$ribbon--background 								: #213E56;
+$ribbon-height										: 300px;
+$ribbon-background 								    : #213E56;
 
 $tutorials: (
-	angular $angular--color,
-	bower $bower--color,
-	css $css--color,
-	grunt $grunt--color,
-	gulp $gulp--color,
-	html $html--color,
-	java $java--color,
-	javascript $javascript--color,
-	jquery $jquery--color,
-	node $node--color,
-	php $php--color,
-	react $react--color,
-	ruby $ruby--color,
-	ror $ruby-on-rails--color,
-	sublime $sublime--color,
-	typescript $typescript--color
+	angular $angular-color,
+	bower $bower-color,
+	css $css-color,
+	grunt $grunt-color,
+	gulp $gulp-color,
+	html $html-color,
+	java $java-color,
+	javascript $javascript-color,
+	jquery $jquery-color,
+	node $node-color,
+	php $php-color,
+	react $react-color,
+	ruby $ruby-color,
+	ror $ruby-on-rails-color,
+	sublime $sublime-color,
+	typescript $typescript-color
 );
 
 /*  ========================================================================
@@ -35,8 +35,8 @@ $tutorials: (
 
 .ribbon {
     width: 100%;
-    height: $ribbon--height;
-    background-color: $ribbon--background;
+    height: $ribbon-height;
+    background-color: $ribbon-background;
 
 	@each $tutorial in $tutorials {
 

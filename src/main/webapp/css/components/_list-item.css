@@ -7,7 +7,7 @@ Variables
 $file__element--property_modifier
 ============================================================================ */
 
-$list-item__spacing 								: 20px;
+$list-item-spacing 								: $s-space;
 
 /*  ========================================================================
 	01. List items
@@ -16,8 +16,8 @@ $list-item__spacing 								: 20px;
 .list-item {
 	position: relative;
 	display: block;
-	margin-bottom: $list-item__spacing;
-	min-height: $list-item__spacing;
+	margin-bottom: $list-item-spacing;
+	min-height: $list-item-spacing;
 	font-size: 100px;
 
 	a {
@@ -35,7 +35,7 @@ $list-item__spacing 								: 20px;
 		display: block;
 		text-shadow: 1px 1px #000;
 		font-weight: bold;
-		font-family: $alt--font-face;
+		font-family: $alt-font-face;
 		
 	}
 
@@ -54,11 +54,11 @@ $list-item__spacing 								: 20px;
 @include breakpoint(xs-only) {
 
 	.list-item {
-		padding: $list-item__spacing $list-item__spacing 0;
+		padding: $list-item-spacing $list-item-spacing 0;
 		background: $brand-primary;		
 
 		&__read-more {
-			padding: $list-item__spacing 0;
+			padding: $list-item-spacing 0;
 		}
 	}
 }
@@ -93,7 +93,7 @@ $list-item__spacing 								: 20px;
 			right: 0;
 			bottom: 0;
 			left: 0;
-			padding: 30px;
+			padding: $m-space;
 		}
 
 		&__title {
@@ -110,8 +110,8 @@ $list-item__spacing 								: 20px;
 				right: 0;
 				bottom: 0;
 				left: 0;
-				background: rgba($black--color, 0.4);
-				transition: all .4s;
+				background: rgba($black-color, 0.4);
+				transition: all 0.4s;
 			}
 		}
 	}
@@ -128,7 +128,7 @@ $list-item__spacing 								: 20px;
 		}
 
 		&__read-more {
-			padding-bottom: 20px;
+			padding-bottom: $s-space;
 		}
 
 		&:hover {
@@ -138,7 +138,7 @@ $list-item__spacing 								: 20px;
 			}
 
 			a:before {
-				background: rgba($black--color, 0.2);
+				background: rgba($black-color, 0.2);
 			}
 		}
 	}
@@ -158,7 +158,7 @@ $list-item__spacing 								: 20px;
 		}
 
 		&__read-more {
-			padding: 30px 40px;
+			padding: $sm-space $m-space;
 		}
 	}
 }

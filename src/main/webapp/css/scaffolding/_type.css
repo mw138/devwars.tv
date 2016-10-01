@@ -24,41 +24,41 @@ h5,
 h6 {
 	margin: 0;
 	line-height: normal;
-	color: $headings--color;
+	color: $headings-color;
 }
 
 h1 {
-	text-transform: $h1--transform;
-	font-weight: $h1--font-weight;
-	font-family: $h1--font-family;
-	font-size: $h1--font-size;
+	text-transform: $h1-transform;
+	font-weight: $h1-font-weight;
+	font-family: $h1-font-family;
+	font-size: $h1-font-size;
 }
 
 h2 {
-	text-transform: $h2--transform;
-	font-weight: $h2--font-weight;
-	font-family: $h2--font-family;
-	font-size: $h2--font-size;
+	text-transform: $h2-transform;
+	font-weight: $h2-font-weight;
+	font-family: $h2-font-family;
+	font-size: $h2-font-size;
 }
 
 h3 {
-	font-weight: $h3--font-weight;
-	font-size: $h3--font-size;
+	font-weight: $h3-font-weight;
+	font-size: $h3-font-size;
 }
 
 h4 {
-	font-weight: $h4--font-weight;
-	font-size: $h4--font-size;
+	font-weight: $h4-font-weight;
+	font-size: $h4-font-size;
 }
 
 h5 {
-	font-weight: $h5--font-weight;
-	font-size: $h5--font-size;
+	font-weight: $h5-font-weight;
+	font-size: $h5-font-size;
 }
 
 h6 {
-	font-weight: $h6--font-weight;
-	font-size: $h6--font-size;
+	font-weight: $h6-font-weight;
+	font-size: $h6-font-size;
 }
 
 /*  =========================================================================
@@ -74,12 +74,12 @@ p {
 	======================================================================== */
 
 a {
-	color: $link--color;
+	color: $link-color;
 	background: transparent;
 
 	&:hover {
 		text-decoration: none;
-		color: $link--color_hover;
+		color: $link-color-hover;
 	}
 
 	&:active,

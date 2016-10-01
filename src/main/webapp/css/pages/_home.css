@@ -10,8 +10,8 @@ Variables
 $file__element--property_modifier
 ============================================================================ */
 
-$home__hero--height									: 500px;
-$home__card--margin									: 80px;
+$home-hero-height									: 500px;
+$home-card-margin									: $l-space;
 
 /*  ========================================================================
 	01. Main
@@ -19,7 +19,7 @@ $home__card--margin									: 80px;
 
 .hero {
 	width: 100%;
-	height: $home__hero--height;
+	height: $home-hero-height;
 	background-image: url('/assets/image/hero-bg.jpg');
 	background-size: cover;
 	text-align: center;
@@ -29,7 +29,7 @@ $home__card--margin									: 80px;
 		@extend %absolute-vertical;
 		width: 100%;
 		z-index: 1;
-		margin-top: -($home__card--margin / 2);
+		margin-top: -($home-card-margin / 2);
 		padding: 0 $global__gutter;
 		left: 0;
 	}
@@ -42,7 +42,7 @@ $home__card--margin									: 80px;
 
 	&__title {
 		font-size: 32px;
-		margin-bottom: 10px;
+		margin-bottom: $xs-space;
 		@include breakpoint(md) {
 			font-size: 42px;
 		}
@@ -50,8 +50,8 @@ $home__card--margin									: 80px;
 
 	&__subtitle {
 		font-size: 24px;
-		margin-bottom: 40px;
-		color: $base-font--color_muted;
+		margin-bottom: $m-space;
+		color: $text-color-muted;
 	}
 
 	&__btn {
@@ -61,14 +61,14 @@ $home__card--margin									: 80px;
 		@include breakpoint(sm) {
 			width: auto;
 			max-width: none;
-			margin: 0 10px;
+			margin: 0 $xs-space;
 		}
 	}
 }
 
 .home-highlights {
 	.row {
-		margin-top: -$home__card--margin;
+		margin-top: -$home-card-margin;
 	}
 }
 
@@ -79,8 +79,8 @@ $home__card--margin									: 80px;
 	&__contents {
 		height: auto;
 		font-size: 14px;
-		font-family: $alt--font-face;
-		margin-top: 20px;
+		font-family: $alt-font-face;
+		margin-top: $s-space;
 		text-align: center;
 		position: relative;
 		@include breakpoint(lg) {
@@ -111,9 +111,9 @@ $home__card--margin									: 80px;
 	&__score { 
 		display: inline-block;
 		text-transform: uppercase;
-		margin: 0 20px;
+		margin: 0 $s-space;
 		@include breakpoint(md) {
-			margin: 0 40px;
+			margin: 0 $m-space;
 		}
 	}
 
@@ -136,7 +136,7 @@ $home__card--margin									: 80px;
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		margin: 10px auto 0;
+		margin: $xs-space auto 0;
 		@include breakpoint(sm) {
 			width: 80%;
 		}
@@ -162,12 +162,12 @@ $home__card--margin									: 80px;
 		list-style: none;
 		text-align: center;
 
-		.recap__html { color: $html--color; }
-		.recap__css { color: $css--color; }
-		.recap__js { color: $javascript--color; }
+		.recap__html { color: $html-color; }
+		.recap__css { color: $css-color; }
+		.recap__js { color: $javascript-color; }
 	}
 
-	&__btn { margin-top: 40px; }
+	&__btn { margin-top: $m-space; }
 }
 
 .home-blog {
@@ -179,7 +179,7 @@ $home__card--margin									: 80px;
 	&__blog {
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 30px;
+		margin-bottom: $sm-space;
 		&:last-of-type { margin-bottom: 0; }
 	}
 
@@ -200,10 +200,10 @@ $home__card--margin									: 80px;
 	}
 
 	&__text {
-		width: calc(100% - 100px - 20px);
+        width: calc(100% - 100px - #{$s-space});
 		text-align: left;
 		@include breakpoint(lg) {
-			width: calc(100% - 135px - 20px);
+            width: calc(100% - 135px - #{$s-space});
 		}
 	}
 
@@ -214,20 +214,20 @@ $home__card--margin									: 80px;
 	&__meta,
 	&__desc {
 		display: block;
-		font-family: $base--font-face;
+		font-family: $base-font-face;
 		font-size: 14px;
 	}
 
 	&__meta {
-		color: $base-font--color_muted;
-		margin-bottom: 5px;
+		color: $text-color-muted;
+		margin-bottom: $xxs-space;
 	}
 
 	&__desc {
 		font-size: 15px;
 	}
 
-	&__btn { margin-top: 40px; }
+	&__btn { margin-top: $m-space; }
 }
 
 /*  ========================================================================

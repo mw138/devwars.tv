@@ -28,7 +28,7 @@ $file__element--property_modifier
 	background-image: none;
 	background-clip: padding-box;
 	border: none;
-	border-bottom: 1px solid $base-font--color_disabled;
+	border-bottom: 1px solid $text-color-disabled;
 	outline: none;
 	transition: all 50ms ease-in-out;
 	
@@ -42,14 +42,14 @@ $file__element--property_modifier
 .select--clear {
 	background: transparent;
 	border: none;
-	font-family: $alt--font-face;
+	font-family: $alt-font-face;
 	text-transform: uppercase;
 	font-weight: bold;
 	outline: none;
 	
 	option {
-		background-color: $white--color;
-		color: $black--color;
+		background-color: $white-color;
+		color: $black-color;
 	}
 }
 

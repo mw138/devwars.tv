@@ -17,7 +17,7 @@ $file__element--property_modifier
 @keyframes pulse {
 
 	to {
-		box-shadow: 0 0 0 12px transparent, 0 0 0 24px rgba($red--color,  0);
+		box-shadow: 0 0 0 12px transparent, 0 0 0 24px rgba($red-color,  0);
 	}
 }
 

@@ -8,19 +8,19 @@ $file__element--property_modifier
 ============================================================================ */
 
 $social--sets:  (
-	facebook $facebook--color,
-	twitter $twitter--color,
-	google $google--color,
-	youtube $youtube--color,
-	reddit $reddit--color,
-	twitch $twitch--color,
-	slack $slack--color,
-	cloud9 $cloud9--color,
-	github $github--color,
-	linkedin $linkedin--color,
-	codepen $codepen--color,
-	website $website--color,
-	email $email--color
+	facebook $facebook-color,
+	twitter $twitter-color,
+	google $google-color,
+	youtube $youtube-color,
+	reddit $reddit-color,
+	twitch $twitch-color,
+	slack $slack-color,
+	cloud9 $cloud9-color,
+	github $github-color,
+	linkedin $linkedin-color,
+	codepen $codepen-color,
+	website $website-color,
+	email $email-color
 );
 
 /*  ========================================================================
@@ -36,7 +36,7 @@ $social--sets:  (
 
 	li {
 		display: inline-block;
-		margin: 0 3px;
+		margin: 0 $xxs-space;
 		line-height: 26px;
 	}
 
@@ -60,7 +60,7 @@ $social--sets:  (
 		width: 26px;
 		border-radius: 5px;
 		color: #fff;
-		transition: all .25s;
+		transition: all 0.25s;
 	}
 
 	.icon {

@@ -20,7 +20,7 @@ $file__element--property_modifier
 	
 	thead {
 		text-transform: uppercase;
-		color: $base-font--color_muted;
+        color: $text-color-muted;
 	}
 	
 	tbody {
@@ -35,12 +35,12 @@ $file__element--property_modifier
 	
 	th,
 	td {
-		padding: 20px 0;
-		border-bottom: 1px solid $divider--color;
+		padding: $s-space 0;
+		border-bottom: 1px solid $divider-color;
 	}
 	
 	th {
-		padding-bottom: 30px;
+		padding-bottom: $sm-space;
 	}
 
 	.icon-facebook:before {
@@ -51,9 +51,9 @@ $file__element--property_modifier
 		.rank__icon {
 			padding-left: 20px;
 			font-size: 15px;
-			&--increase { color: $positive--color; }
-			&--neutral { color: $blue--color; font-size: 12px; }
-			&--decrease { color: $negative--color; }
+			&--increase { color: $positive-color; }
+			&--neutral { color: $blue-color; font-size: 12px; }
+			&--decrease { color: $negative-color; }
 		}
 	}
 	
@@ -65,7 +65,7 @@ $file__element--property_modifier
 	&__avatar {
 		height: 50px;
 		width: 50px;
-		margin-right: 20px;
+		margin-right: $s-space;
 		border-radius: 50%;
 		overflow: hidden;
 		
