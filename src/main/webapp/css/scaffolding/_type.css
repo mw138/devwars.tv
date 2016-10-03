@@ -105,12 +105,13 @@ p {
 ======================================================================== */
 
 a {
-	color: $link-color;
 	background: transparent;
+    text-decoration: none;
+    color: $link-color;
 
 	&:hover {
-		text-decoration: none;
-		color: $link-color-hover;
+        text-decoration: underline;
+		color: $link-color-hover; 
 	}
 
 	&:active,
