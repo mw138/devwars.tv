@@ -20,6 +20,7 @@ import BlogListing from './pages/blog-listing/blog-listing.module';
 
 // Layout
 import header from './components/header/header.module';
+import footer from './components/footer/footer.module';
 
 // Blog
 import ListItem from './components/list-item/list-item.module';
