@@ -120,13 +120,13 @@ Contents:
 	// 	@media (max-width: ($responsive__md - 1))
 	// 	{ @content }		
 	// }
-	// @else if $point == xs-only {
-	// 	@media (max-width: ($responsive__sm - 1))
-	// 	{ @content }
-	// }
+	@else if $point == xs-only {
+        @media (max-width: (map-get($grid-breakpoints, sm) - 1))
+		{ @content }
+	}
 }
 
-// @include breakpoint(xs-only) {}
+@include breakpoint(xs-only) {}
 // @include breakpoint(sm-max) {}
 @include breakpoint(sm) {}
 @include breakpoint(md) {}

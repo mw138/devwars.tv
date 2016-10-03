@@ -59,11 +59,6 @@ $header__nav-item--font-size						: 14px;
 }
 
 @include breakpoint(xs-only) {
-
-	header {
-		padding-top: $m-space;
-	}
-
 	.header {
 
 		.logo {
@@ -83,7 +78,7 @@ $header__nav-item--font-size						: 14px;
 @include breakpoint(sm) {
 
 	header {
-        padding-bottom: $xl-space;
+        padding-bottom: 70px;
 
 		.container {
 			width: auto;
@@ -190,7 +185,7 @@ $header__nav-item--font-size						: 14px;
 @include breakpoint(md) {
 
 	header {
-		padding-bottom: 130px
+		padding-bottom: 130px;
 	}
 
 	.header {
