@@ -66,6 +66,10 @@ $home-card-margin									: $l-space;
 	}
 }
 
+.home-title {
+    text-align: center;
+}
+
 .home-highlights {
 	.row {
 		margin-top: -$home-card-margin;
@@ -229,6 +233,68 @@ $home-card-margin									: $l-space;
 
 	&__btn { margin-top: $m-space; }
 }
+
+
+
+.home-submissions {
+    padding: $m-space 0;
+    background-color: $bg-color-1;
+    &__title {}
+}
+
+.submission-reel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $m-space 0;
+    
+    &__entry {
+        width: 80%;
+        margin: 0 $xxs-space;
+
+        &--featured {
+            width: 100%;
+        }
+    }
+    
+    &__meta {
+        text-align: center;
+    }
+    
+    &__user {
+        display: block;
+    }
+    
+    &__stat-box {
+        margin: 0 $xxs-space;    
+    }
+    
+    &__value,
+    &__icon {
+        vertical-align: middle;
+        display: inline-block;
+        font-size: 13px;
+    }
+    
+    &__icon {
+        margin-right: $xxxs-space;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*  ========================================================================
 	02. Mobile
