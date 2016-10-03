@@ -12,7 +12,7 @@ Variables
 $file__element--property_modifier
 ============================================================================ */
 
-$btn-padding										: $xs-space $s-space;
+$btn-padding										: 15px 30px;
 $btn-text-transform								    : uppercase;
 $btn-font-size										: 14px;
 $btn-font-weight									: 600;
@@ -117,9 +117,13 @@ $btn-outline--variants: (
 
 .btn.btn-link {
 	font-weight: normal;
-	color: $brand-primary;
+	color: $base-font-color;
 	background: transparent;
-	text-decoration: underline;
+    font-weight: 600;
+    
+    &:hover {
+        color: $text-color-muted;
+    }
 }
 
 /*  ========================================================================
