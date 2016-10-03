@@ -80,12 +80,11 @@ $games-avatar-size									: 50px;
 		
 	}
 	
-	&__icons {
-		font-size: 24px;
-	}
+    &__icons {}
 	
 	&__youtube {
-		color: $youtube-color;
+        color: $youtube-color;
+        font-size: 24px;
 	}
 
 }
