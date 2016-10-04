@@ -16,10 +16,12 @@ $file__element--property_modifier
 	======================================================================== */
 
 .container {
+    @extend %clearfix;
 	margin: $grid-gutter-width ($grid-gutter-width * 2) 0;
 }
 
 .container-fluid {
+    @extend %clearfix;
 	width: 100%;
 }
 

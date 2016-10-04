@@ -71,9 +71,9 @@ $home-card-margin									: $l-space;
 }
 
 .home-highlights {
-	.row {
-		margin-top: -$home-card-margin;
-	}
+    padding-bottom: $m-space;
+    margin-top: -$home-card-margin;
+    background-color: $bg-color-2;
 }
 
 .card--home {
