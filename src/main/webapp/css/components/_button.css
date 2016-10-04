@@ -5,8 +5,9 @@ Contents:
 		01.1 Build Basic Button Variants
 	02. Other Variants
 		02.1 Buttno Link
-		02.2 Button Disabled
-		02.3 Button Sizes
+		02.2 Buttno Icon
+		02.3 Button Disabled
+		02.4 Button Sizes
 
 Variables
 $file__element--property_modifier
@@ -130,7 +131,24 @@ $btn-outline--variants: (
 }
 
 /*  ========================================================================
-	02.2 Button Disabled
+02.2 Button Icon
+======================================================================== */
+
+.btn.btn-icon {
+    .icon,
+    span {
+        vertical-align: middle;
+        display: inline-block;
+    }
+    
+    .icon {
+        margin-right: $xxs-space;
+    }
+}
+
+
+/*  ========================================================================
+	02.3 Button Disabled
 	======================================================================== */
 
 
@@ -140,7 +158,7 @@ $btn-outline--variants: (
 }
 
 /*  ========================================================================
-	02.3 Button Sizes
+	02.4 Button Sizes
 	======================================================================== */
 
 .btn-sm {
