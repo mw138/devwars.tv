@@ -42,11 +42,12 @@ $btn--variants: (
 );
 
 $btn-outline--variants: (
-    btn-outline-secondary $btn-secondary-bg white,
-    btn-outline-positive $btn-positive-bg white,
-    btn-outline-negative $btn-negative-bg white,
-    btn-outline-disabled $btn-disabled-bg white,
-    btn-outline-white $white-color black
+    btn-outline-primary $btn-bg #fff,
+    btn-outline-secondary $btn-secondary-bg #fff,
+    btn-outline-positive $btn-positive-bg #fff,
+    btn-outline-negative $btn-negative-bg #fff,
+    btn-outline-disabled $btn-disabled-bg #fff,
+    btn-outline-white $white-color #fff
 );
 
 /*  ========================================================================
@@ -78,6 +79,8 @@ $btn-outline--variants: (
 		background-color: lighten($btn-bg, 10%);
 	}
 }
+
+
 
 /*  ========================================================================
 	01.1 Build Button Variants
