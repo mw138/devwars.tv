@@ -26,17 +26,27 @@ $file__element--property_modifier
     &__title {
         margin-bottom: $s-space;
     }
+    
     &__btn {}
 }
 
 .sitemap {
-    padding: $m-space 0;
     display: flex;
     justify-content: space-between;
+    padding: $m-space 0;
+    
+    @include breakpoint(xs-only) {
+        display: block;
+        text-align: center;
+    }
     
     &__list {
         list-style: none;
         font-size: 14px;
+        
+        @include breakpoint(xs-only) {
+            margin-bottom: $m-space;
+        }
     }
     
     &__list-item {
@@ -52,6 +62,10 @@ $file__element--property_modifier
         &--icon {
             display: flex;
             justify-content: space-between;
+            
+            @include breakpoint(xs-only) {
+                display: inline-block;
+            }
         }
     }
     
@@ -59,7 +73,12 @@ $file__element--property_modifier
         color: $text-color-secondary;
     }
     
-    .icon { font-size: 24px; }
+    .icon {
+        font-size: 24px;
+        @include breakpoint(xs-only) {
+            margin: 0 $xs-space;
+        }
+    }
 }
 
 
