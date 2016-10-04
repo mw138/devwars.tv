@@ -10,5 +10,100 @@ $file__element--property_modifier
 
 
 /*  ========================================================================
-	01.
-	======================================================================== */
+01. Footer
+======================================================================== */
+
+.footer {
+    background-color: $bg-color-1;
+}
+
+.newsletter-opt {
+    padding: $m-space 0;
+    border-top: 3px solid $brand-secondary;
+    background-color: $bg-color-2;
+    text-align: center;
+    
+    &__title {
+        margin-bottom: $s-space;
+    }
+    &__btn {}
+}
+
+.sitemap {
+    padding: $m-space 0;
+    display: flex;
+    justify-content: space-between;
+    
+    &__list {
+        list-style: none;
+        font-size: 14px;
+    }
+    
+    &__list-item {
+        margin-bottom: $xxs-space;
+        
+        &:first-of-type {
+            border-bottom: 1px solid $brand-secondary;
+            padding-bottom: $xxs-space;
+            margin-bottom: $xs-space;
+            text-transform: uppercase;
+        }
+        
+        &--icon {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    
+    &__link {
+        color: $text-color-secondary;
+    }
+    
+    .icon { font-size: 24px; }
+}
+
+
+.footer-bottom {
+    margin-top: $s-space;
+    font-size: 12px;
+
+    &__inner {
+        @extend %clearfix;
+        padding: $s-space 0;
+        border-top: 1px solid $divider-color;
+        margin-top: $s-space;
+    }
+    
+    &__copyright {
+        float: left;
+    }
+    
+    &__list-item {
+        &:not(:first-of-type) {
+            &:before {
+                content: "|";
+                margin: 0 $xxs-space;
+                vertical-align: middle;
+                display: inline-block;
+                color: $text-color-muted;
+            }
+        }
+    }
+    
+    &__links {
+        float: right;
+    }
+    
+    &__link {
+        color: $text-color-muted;
+        vertical-align: middle;
+        display: inline-block;
+    }
+}
+
+
+
+
+
+
+
